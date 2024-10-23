@@ -3,73 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IS Project</title>
+    <title>Document</title>
+    <link rel="stylesheet" href="/public/css/theme.css">
+
     <style>
-        html, body {
-            height: 100%;
+        .header{
+            background-color: var(--primary-color);
+            height: 50%;
         }
-        *{
-            margin: 0;
+        .svg {
+            fill: var(--primary-color);
         }
-        .container {
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            animation: changeColor 3s infinite;
-            animation-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1);
+        .active {
+            color: var(--accent-color) !important;
         }
-
-        @keyframes changeColor {
-            0% {
-                color: black;
-                background-color: white;
-            }
-            50% {
-                color: white;
-                background-color: black;
-            }
-            100% {
-                color: black;
-                background-color: white;
-            }
-        }
-        .loader {
-            font-size: 2em;
-            font-weight: 900;
-            font-family: sans-serif;
-        }
-        .loader span {
-            display: inline-flex;
-        }
-        .loader span:nth-child(2) {
-            letter-spacing: -1em;
-            overflow: hidden;
-            animation: reveal 1500ms cubic-bezier(0.645, 0.045, 0.355, 1) infinite
-            alternate;
-            animation-delay: 2S;
-        }
-        @keyframes reveal {
-            0%,
-            100% {
-                opacity: 0.5;
-                letter-spacing: -1em;
-            }
-            50% {
-                opacity: 1;
-                letter-spacing: 0em;
-            }
-        }
-
+        
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="loader">
-            <span>&lt;</span>
-            <span>COMING SOON</span>
-            <span>/&gt;</span>
+    <div class="header">
+        <div class="nav p-4 flex justify-between items-center">
+            <a class="text-3xl font-bold text-white" href="/">
+                <!-- <img class="h-9" src="logo.png" alt="logo"> -->
+                Logo
+            </a>
+            <div class="flex-1 justify-center items-center flex">
+                <a class="text-white active" href="/">Home</a>
+                <a class="text-white space-x-12" href="/">Admisiones</a>
+                <a class="text-white space-x-12" href="/">Students</a>
+                <a class="text-white space-x-12" href="/">Administration</a>
+            </div>
+            <a class="text-white px-4 py-2 bg-blue-500 font-bold rounded" href="#">
+                Login
+            </a>
+        </div>
+        <div class="banner">
+            
         </div>
     </div>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path class="svg" fill-opacity="1" d="M0,96L80,96C160,96,320,96,480,122.7C640,149,800,203,960,192C1120,181,1280,107,1360,69.3L1440,32L1440,0L1360,0C1280,0,1120,0,960,0C800,0,640,0,480,0C320,0,160,0,80,0L0,0Z"></path></svg>
+    <section>
+
+    </section>
 </body>
 </html>
