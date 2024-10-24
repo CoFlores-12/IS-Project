@@ -3,11 +3,19 @@
     --primary-color: #2970ff;
     --accent-color: #3625d1;
     --text: #000000;
-    
-    /* Dark Mode */
-    --background-dark: #1B1B1B;
-    --text-dark: #ffffff;
-        
+    --bg: #fff;
+    --shadow: #0000001e;  
+}
+
+/* dark mode */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --primary-color: #2970ff;
+        --accent-color: #3625d1;
+        --text: #ffffff;
+        --bg: #242424;
+        --shadow: #694d4d1e;  
+    }
 }
 
 /* General */
@@ -19,6 +27,8 @@ html, body {
     margin: 0;
     padding: 0;
     height: 100%;
+    background-color: var(--bg);
+    color: var(--text);
 }
 
 /* Flexbox */
@@ -79,6 +89,9 @@ html, body {
 /* Tamaño */
 .w-full { width: 100%; }
 .h-full { height: 100%; }
+.max-h-100 {max-height: 100%;}
+.max-w-100 {max-width: 100%;}
+.max-w-90 {max-width: 90%;}
 
 /* Margin */
 .m-1 { margin: 0.25rem; }
@@ -96,29 +109,27 @@ html, body {
 /* text color */
 .text-white { color: #ffffff; }
 
+/* text slign */
+.text-center { text-align: center; }
+
 /* hover */
 .transition { transition: all 0.2s ease-in-out; }
-.hover\:bg-blue-600:hover { background-color: #3182ce; }
-.hover\:bg-red-600:hover { background-color: #c53030; }
-.hover\:shadow-lg:hover { box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05); }
+.hover\:bg-blue-600:hover { background-color: var(--accent-color); }
+
+.shadow-lg { box-shadow: 0 10px 15px var(--shadow), 0 4px 6px var(--shadow); }
 
 .space-x-12 { margin-left: 3rem; }
 
-.bg-blue-500 { background-color: #3625d1; }
-.bg-blue-600 { background-color: #3182ce; }
-.bg-red-500 { background-color: #f56565; }
-.bg-green-500 { background-color: #48bb78; }
-.bg-gray-200 { background-color: #edf2f7; }
+.bg-blue { background-color: var(--accent-color); }
+.bg-red { background-color: #f56565; }
+.bg-green { background-color: #48bb78; }
+.bg-gray { background-color: #edf2f7; }
 
+
+.box-sizing-border {
+    box-sizing: border-box;
+}
 /* Etiquetas */
 a{
     text-decoration: none;
-}
-
-/* dark mode */
-@media (prefers-color-scheme: dark) {
-    body {
-        background-color: var(--background-dark);
-        color: var(--text-dark);
-    }
 }
