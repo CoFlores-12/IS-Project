@@ -19,7 +19,7 @@
         --text: #ffffff;
         --text-inverter: #000;
         --bg: #242424;
-        --shadow: #694d4d1e;  
+        --shadow: #5655551e;  
         --bg-aux: #464646;
         --secondary-color: rgba(101, 108, 115, 0.75);
         --border-color: #f8f9fa;
@@ -127,7 +127,7 @@ html, body {
 .transition { transition: all 0.2s ease-in-out; }
 .hover\:bg-blue-600:hover { background-color: var(--accent-color); }
 
-.shadow-lg { box-shadow: 0 10px 15px var(--shadow), 0 4px 6px var(--shadow); }
+.shadow-lg-th { box-shadow: 0 10px 15px var(--shadow), 0 4px 6px var(--shadow) ; }
 
 .space-x-12 { margin-left: 3rem; }
 
@@ -150,3 +150,7 @@ a{
 .btn-outline { border-color: var(--border-color) !important; }
 .text-inverter { color: var(--text-inverter);}
 .bg-aux { background-color: var(--bg-aux);}
+.card {
+    background-color: var(--bg-aux) !important;
+    color: var(--text) !important;
+}
