@@ -1,0 +1,29 @@
+.main {
+    background-color: var(--bg-aux);
+    height: 100%;
+}
+.courses {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto; 
+}
+.courses::-webkit-scrollbar {
+    display: none; 
+    background-color: transparent;
+}
+.card-course {
+    height: 150px;
+    aspect-ratio: 1/1;
+    background-color: var(--bg) !important;
+    border: none;
+    flex: 0 0 auto;
+}
+.progress {
+    height: 5px;
+}
+.card-body {
+    padding: .5rem !important;
+    display: flex;
+    flex-direction: column;
+}
+.card-body > .name {flex: 4;}
