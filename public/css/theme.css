@@ -3,8 +3,12 @@
     --primary-color: #2970ff;
     --accent-color: #3625d1;
     --text: #000000;
+    --text-inverter: #fff;
     --bg: #fff;
     --shadow: #0000001e;  
+    --bg-aux: #f0f0f0;
+    --secondary-color: rgba(91, 95, 99, 0.75);
+    --border-color: #1c1c1c;
 }
 
 /* dark mode */
@@ -13,8 +17,15 @@
         --primary-color: #2970ff;
         --accent-color: #3625d1;
         --text: #ffffff;
+        --text-inverter: #000;
         --bg: #242424;
         --shadow: #694d4d1e;  
+        --bg-aux: #464646;
+        --secondary-color: rgba(101, 108, 115, 0.75);
+        --border-color: #f8f9fa;
+    }
+    a {
+        color: var(--text) !important;
     }
 }
 
@@ -27,8 +38,8 @@ html, body {
     margin: 0;
     padding: 0;
     height: 100%;
-    background-color: var(--bg);
-    color: var(--text);
+    background-color: var(--bg) !important;
+    color: var(--text) !important;
 }
 
 /* Flexbox */
@@ -133,3 +144,8 @@ html, body {
 a{
     text-decoration: none;
 }
+
+.text {color: var(--text) !important;}
+.text-secundary {color: var(--secondary-color) !important;}
+.btn-outline { border-color: var(--border-color) !important; }
+.text-inverter { color: var(--text-inverter);}
