@@ -175,16 +175,16 @@
             </section>
         </main>
         <!-- Footer-->
-        <footer class=" py-4 mt-auto">
+        <footer class=" py-4 mt-auto bg-aux">
             <div class="container px-5">
                 <div class="row align-items-center justify-content-between flex-column flex-sm-row">
-                    <div class="col-auto"><div class="small m-0 text-white">Copyright &copy; IS Project 2024</div></div>
+                    <div class="col-auto"><div class="small m-0">Copyright &copy; IS Project 2024</div></div>
                     <div class="col-auto">
-                        <a class="link-light small" href="#!">Privacy</a>
-                        <span class="text-white mx-1">&middot;</span>
-                        <a class="link-light small" href="#!">Terms</a>
-                        <span class="text-white mx-1">&middot;</span>
-                        <a class="link-light small" href="#!">Contact</a>
+                        <a class="link text small" href="#!">Privacy</a>
+                        <span class="text mx-1">&middot;</span>
+                        <a class="link text small" href="#!">Terms</a>
+                        <span class="text mx-1">&middot;</span>
+                        <a class="link text small" href="#!">Contact</a>
                     </div>
                 </div>
             </div>

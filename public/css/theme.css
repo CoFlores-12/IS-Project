@@ -149,3 +149,4 @@ a{
 .text-secundary {color: var(--secondary-color) !important;}
 .btn-outline { border-color: var(--border-color) !important; }
 .text-inverter { color: var(--text-inverter);}
+.bg-aux { background-color: var(--bg-aux);}
