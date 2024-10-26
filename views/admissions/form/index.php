@@ -12,18 +12,18 @@
 <body>
     <div class="main min-h-full flex bg-aux justify-center items-center p-4">
         
-        <form class="needs-validation bg rounded p-4" novalidate>
+        <form class="needs-validation bg rounded p-4" novalidate method="POST" action="/api/post/admissions/form.php"  enctype="multipart/form-data">
             <div class="form-row flex">
                 <div class="col mb-3">
                     <label for="validationCustom01">First name</label>
-                    <input type="text" class="form-control" id="validationCustom01" placeholder="First name"  required>
+                    <input name="name" type="text" class="form-control" id="validationCustom01" placeholder="First name"  required>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
                 </div>
                 <div class="col mb-3">
                     <label for="validationCustom02">Last name</label>
-                    <input type="text" class="form-control" id="validationCustom02" placeholder="Last name" required>
+                    <input name="lastName" type="text" class="form-control" id="validationCustom02" placeholder="Last name" required>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
@@ -32,7 +32,7 @@
             <div class="row mb-4">
                 <div class="form-group">
                     <label for="mainCareer">Select main career</label>
-                    <select class="form-control" id="mainCareer">
+                    <select name="mainCareer" class="form-control" id="mainCareer">
                         <option value="">Open this select menu</option>
                         <option value="1">One</option>
                         <option value="2">Two</option>
@@ -41,7 +41,7 @@
                 </div>
                 <div class="form-group">
                     <label for="secondaryCareer">Select secondary career</label>
-                    <select class="form-control  form-control-sm" id="secondaryCareer">
+                    <select name="secondaryCareer" class="form-control  form-control-sm" id="secondaryCareer">
 
                         <option value="">Open this select menu</option>
                         <option value="1">One</option>
@@ -53,20 +53,20 @@
             <div class="row mb-4">
                 <div class="form-group">
                     <label for="identity">identity</label>
-                    <input type="text" class="form-control" id="identity" placeholder="XXXX-XXXX-XXXXX" maxlength="15" required>
+                    <input name="identity" type="text" class="form-control" id="identity" placeholder="XXXX-XXXX-XXXXX" maxlength="15" required>
                 </div>
             </div>
             <div class="form-row flex">
                 <div class="col mb-3">
                     <label for="phone">Phone</label>
-                    <input type="text" class="form-control" id="phone" placeholder="XXXX-XXXX" maxlength="9" required>
+                    <input name="phone" type="text" class="form-control" id="phone" placeholder="XXXX-XXXX" maxlength="9" required>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
                 </div>
                 <div class="col mb-3">
                     <label for="validationCustom02">Email</label>
-                    <input type="email" class="form-control" id="email" placeholder="email@example.com" required>
+                    <input name="email" type="email" class="form-control" id="email" placeholder="email@example.com" required>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
@@ -76,7 +76,7 @@
                 <div class="form-group row">
                     <label for="certify" class="col">High school certificate photo.</label>
                     <div class="col">
-                        <input type="file" class="form-control-file" id="certify" required>
+                        <input name="certify" type="file" class="form-control-file" id="certify" required>
                         <div class="invalid-feedback">Example invalid custom file feedback</div>
                     </div>
                 </div>
@@ -84,7 +84,7 @@
             <div class="row mb-4">
                 <div class="form-group">
                     <label for="regionalCenter">Select regional center</label>
-                    <select class="form-control custom-select" id="regionalCenter">
+                    <select name="regionalCenter" class="form-control custom-select" id="regionalCenter">
                         <option value="">Open this select menu</option>
                         <option value="1">One</option>
                         <option value="2">Two</option>
