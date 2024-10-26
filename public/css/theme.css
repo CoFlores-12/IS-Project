@@ -220,6 +220,10 @@ html, body {
 a{
     text-decoration: none;
 }
+input, select {
+    background-color: var(--bg-aux) !important;
+    border: none !important;
+}
 
 .text {color: var(--text) !important;}
 .text-secondary {color: var(--secondary-color) !important;}

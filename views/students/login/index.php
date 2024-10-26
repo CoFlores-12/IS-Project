@@ -11,7 +11,23 @@
         <link rel="stylesheet" href="/public/bootstrap-5.3.3-dist/css/bootstrap.min.css">
 </head>
 <body>
-<section class="h-full flex justify-center items-center">
+  
+<nav class="navbar navbar-expand-lg">
+                <div class="container px-5">
+                    <a class="navbar-brand" href="index.html">LOGO</a>
+                    <button class="navbar-toggler text" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><i class="bi bi-list"></i></button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                            <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/views/admissions/form/index.php">Admissions</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/views/students/login/index.php">Students</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/">Administration</a></li>
+                            
+                        </ul>
+                    </div>
+                </div>
+</nav>
+<section class=" mt-4 flex justify-center items-center">
   <div class="container-fluid">
     <div class="row flex justify-center items-center h-full">
       <div class="col-md-9 col-lg-6 col-xl-5 flex justify-center items-center mb-4">
