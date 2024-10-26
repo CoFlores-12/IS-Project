@@ -99,6 +99,7 @@ html, body {
 /* Tamaño */
 .w-full { width: 100%; }
 .h-full { height: 100%; }
+.min-h-full { min-height: 100%;}
 .max-h-100 {max-height: 100%;}
 .max-w-100 {max-width: 100%;}
 .max-w-90 {max-width: 90%;}
@@ -210,7 +211,7 @@ html, body {
 .bg-gray-700 { background-color: #374151; }
 .bg-gray-800 { background-color: #1f2937; }
 .bg-gray-900 { background-color: #111827; }
-
+.bg{background-color: var(--bg);}
 .box-sizing-border {box-sizing: border-box;}
 /* Etiquetas */
 a{
