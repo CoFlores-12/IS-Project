@@ -12,14 +12,14 @@
     background-color: transparent;
 }
 .card-course {
-    height: 150px;
+    height: 200px;
     aspect-ratio: 1/1;
     background-color: var(--bg) !important;
     border: none;
     flex: 0 0 auto;
 }
 .progress {
-    height: 5px;
+    height: 10px;
 }
 .card-body {
     padding: .5rem !important;
@@ -27,3 +27,8 @@
     flex-direction: column;
 }
 .card-body > .name {flex: 4;}
+
+#offcanvasExample {
+    background-color: var(--bg);
+    color: var(--text);
+}

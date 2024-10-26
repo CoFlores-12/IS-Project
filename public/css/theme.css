@@ -1,12 +1,12 @@
 /* Varibales */
 :root {
-    --primary-color: #2970ff;
-    --accent-color: #3625d1;
+    --primary-color: #176b87;
+    --accent-color: #86b6f6;
     --text: #000000;
     --text-inverter: #fff;
     --bg: #fff;
     --shadow: #0000001e;  
-    --bg-aux: #f0f0f0;
+    --bg-aux: #F5F7FD;
     --secondary-color: rgb(179, 188, 197);
     --border-color: #1c1c1c;
 }
@@ -14,8 +14,8 @@
 /* dark mode */
 @media (prefers-color-scheme: dark) {
     :root {
-        --primary-color: #2970ff;
-        --accent-color: #3625d1;
+        --primary-color: #176b87;
+        --accent-color: #86b6f6;
         --text: #ffffff;
         --text-inverter: #000;
         --bg: #242424;
@@ -134,6 +134,9 @@ html, body {
 
 .space-x-12 { margin-left: 3rem; }
 
+.bg {background-color: var(--bg) !important;}
+.bg-aux {background-color: var(--bg-aux);}
+
 .bg-blue { background-color: var(--accent-color); }
 .bg-red { background-color: #f56565; }
 .bg-green { background-color: #48bb78; }
@@ -218,7 +221,7 @@ a{
 }
 
 .text {color: var(--text) !important;}
-.text-secundary {color: var(--secondary-color) !important;}
+.text-secondary {color: var(--secondary-color) !important;}
 .btn-outline { border-color: var(--border-color) !important; }
 .text-inverter { color: var(--text-inverter);}
 .bg-aux { background-color: var(--bg-aux);}
