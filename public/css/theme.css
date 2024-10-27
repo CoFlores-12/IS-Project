@@ -244,3 +244,6 @@ input, select {
     background-color: var(--bg) !important;
     transition: 0.2s all linear;
 }
+.btn:hover {
+    color: #fff !important;
+}
