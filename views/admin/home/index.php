@@ -119,25 +119,25 @@
             </div>
             <div class="row p-4">
                 <div class="col">
-                    <div class="card shadow rounded m-2 bg p-2">
+                    <div class="card bg-aux shadow rounded m-2  p-2">
                         <span>Teachers</span>
                         <strong>67</strong>
                     </div>
                 </div>
                 <div class="col">
-                    <div class="card shadow rounded m-2 bg p-2">
+                    <div class="card shadow rounded m-2 bg-aux p-2">
                         <span>Students</span>
                         <strong>1830</strong>
                     </div>
                 </div>
                 <div class="col">
-                    <div class="card shadow rounded m-2 bg p-2">
+                    <div class="card shadow rounded m-2 bg-aux p-2">
                         <span>Careers</span>
                         <strong>12</strong>
                     </div>
                 </div>
                 <div class="col">
-                    <div class="card shadow rounded m-2 bg p-2">
+                    <div class="card shadow rounded m-2 bg-aux p-2">
                         <span>Regional centers</span>
                         <strong>2</strong>
                     </div>
@@ -145,7 +145,7 @@
             </div>
 
             <div class="row p-4">
-                <div class="card rounded p-2">
+                <div class="card bg-aux rounded p-2">
                     <div class="card-header flex justify-between items-center">
                         <span>Admissions <span class="text-xxs text-secondary">(26/10/2024 - 30/10/2024)</span></span>
                         <div class="actions">

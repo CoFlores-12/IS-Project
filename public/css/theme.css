@@ -20,7 +20,7 @@
         --text-inverter: #000;
         --bg: #242424;
         --shadow: #5655551e;  
-        --bg-aux: #464646;
+        --bg-aux: #343434;
         --secondary-color: rgba(101, 108, 115, 0.75);
         --border-color: #f8f9fa;
     }
@@ -38,7 +38,7 @@ html, body {
     margin: 0;
     padding: 0;
     height: 100%;
-    background-color: var(--bg-aux) !important;
+    background-color: var(--bg) !important;
     color: var(--text) !important;
 }
 
@@ -136,7 +136,7 @@ html, body {
 .space-x-12 { margin-left: 3rem; }
 
 .bg {background-color: var(--bg) !important;}
-.bg-aux {background-color: var(--bg-aux);}
+.bg-aux {background-color: var(--bg-aux) !important;}
 
 .bg-blue { background-color: var(--accent-color); }
 .bg-red { background-color: #f56565; }
@@ -224,6 +224,11 @@ a{
 input, select {
     background-color: var(--bg-aux) !important;
     border: none !important;
+    color: var(--text) !important;
+}
+
+input::placeholder {
+    color: var(--text) !important;
 }
 
 .text {color: var(--text) !important;}
@@ -232,7 +237,6 @@ input, select {
 .text-inverter { color: var(--text-inverter);}
 .bg-aux { background-color: var(--bg-aux);}
 .card {
-    background-color: var(--bg) !important;
     color: var(--text) !important;
 }
 
