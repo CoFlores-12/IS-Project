@@ -43,7 +43,7 @@
           </div>
 
           <div class="text-center text-lg-start mt-4 pt-2">
-            <a href="/views/students/home/index.php">
+            <a href="/views/admin/home/index.php">
               <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-lg"
               style="padding-left: 2.5rem; padding-right: 2.5rem;">Login</button>
             </a>

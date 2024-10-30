@@ -10,21 +10,7 @@
     <link rel="stylesheet" href="/public/bootstrap-5.3.3-dist/css/bootstrap.min.css">
 </head>
 <body>
-<nav class="navbar navbar-expand-lg">
-                <div class="container px-5">
-                    <a class="navbar-brand" href="index.html">LOGO</a>
-                    <button class="navbar-toggler text" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><i class="bi bi-list"></i></button>
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                            <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
-                            <li class="nav-item"><a class="nav-link" href="/views/admissions/form/index.php">Admissions</a></li>
-                            <li class="nav-item"><a class="nav-link" href="/views/students/login/index.php">Students</a></li>
-                            <li class="nav-item"><a class="nav-link" href="/">Administration</a></li>
-                            
-                        </ul>
-                    </div>
-                </div>
-            </nav>
+<?php include './../../../src/components/navbar.php'; ?>
     <div class="main min-h-full flex bg-aux justify-center items-center p-4">
         
         <form class="needs-validation bg rounded p-4" novalidate method="POST" action="/api/post/admissions/form.php"  enctype="multipart/form-data">
