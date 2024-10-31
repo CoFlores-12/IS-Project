@@ -1,44 +1,36 @@
 <?php
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
+    $user = 'daav690@gmail.com';
+    $password = 'bhrg fstt gwav kssy'; // Cambiar por la contraseña real o una contraseña de aplicación
 
-require './../../../vendor/autoload.php';
 
-function enviarCorreoMicrosoft365($de, $para, $asunto, $mensaje) {
-    $mail = new PHPMailer(true);
+    $aspirantes = [
+        [
+            'nombre' => 'Daniel Avila',
+            'correo' => 'daavilav@unah.hn',
+            'estatus' => 'aprobado'
+        ],
+        [
+            'nombre' => 'Cesar Flores',
+            'correo' => 'obethflores2014@gmail.com',
+            'estatus' => 'reprobado :('
+        ]
+        
+    ];
+    include '../../../src/modules/mails.php';
 
-    try {
-        // Configuración del servidor SMTP de Microsoft 365
-        $mail->isSMTP();
-        $mail->Host = 'smtp.office365.com';
-        $mail->SMTPAuth = true;
-        $mail->Username = '@unah.hn'; // Tu correo institucional
-        $mail->Password = ''; // Tu contraseña o contraseña de aplicación
-        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-        $mail->Port = 587;
+    $mail = new Mails($user, $password);
 
-        // Configuración del correo
-        $mail->setFrom($de, 'Nombre del Remitente');
-        $mail->addAddress($para); // Destinatario
 
-        $mail->isHTML(true);
-        $mail->Subject = $asunto;
-        $mail->Body = $mensaje;
-        $mail->AltBody = strip_tags($mensaje); // Mensaje en texto plano
-
-        // Enviar el correo
-        $mail->send();
-        return "Correo enviado correctamente.";
-    } catch (Exception $e) {
-        return "Error al enviar el correo: {$mail->ErrorInfo}";
+    foreach ($aspirantes as $applicant) {
+        $name = $applicant['nombre'];
+        $mailAspirant = $applicant['correo'];
+        $status = $applicant['estatus'];
+        $affair = "Estatus de Examen de Admisión";
+        $message = "Hola $name,<br><br>Tu estatus de examen de admisión es: <strong>$status</strong>.<br><br>Saludos,<br>Equipo de Admisiones.";
+    
+        $resultado = $mail->sendEmail($user, $mailAspirant, $affair, $message);
+        echo $resultado . "<br>"; // Muestra el resultado de cada envío
     }
-}
 
-// Uso del ejemplo
-$de = "cofloresf@unah.hn";
-$para = "obethflores2014@gmail.com";
-$asunto = "Prueba de correo SMTP con Microsoft 365";
-$mensaje = "<h1>Este es un mensaje de prueba</h1><p>Enviado desde una cuenta institucional de Microsoft 365 usando PHPMailer.</p>";
-
-echo enviarCorreoMicrosoft365($de, $para, $asunto, $mensaje);
 ?>
+
