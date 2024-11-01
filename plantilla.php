@@ -9,9 +9,6 @@
 </head>
 <body>
 
-    <?php
-        echo getenv('serverDB'); 
-    ?>
 
     <script src="/public/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
 </body>
