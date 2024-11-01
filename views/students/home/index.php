@@ -37,7 +37,7 @@
                         
                     </button>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">My profile</a></li>
+                        <li><a class="dropdown-item" href="/views/students/profile/index.php?studentId=12">My profile</a></li>
                         <li><a class="dropdown-item" href="#">Messages</a></li>
                         <li><a class="dropdown-item" href="#">requests</a></li>
                         <li><hr class="dropdown-divider"></li>
