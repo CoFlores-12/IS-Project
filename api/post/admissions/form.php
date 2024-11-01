@@ -8,7 +8,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (isset($_FILES['certify']) && $_FILES['certify']['error'] === UPLOAD_ERR_OK) {
         $originalFileName = $_FILES['certify']['name'];
-        $uploadFile = '../../../uploads/' . basename($_FILES['certify']['name']);
+
+        $fileExtension = pathinfo($originalFileName, PATHINFO_EXTENSION);
+    
+        $newFileName = 'certify_' . str_replace("-", "", $_POST['identity']) . '.' . $fileExtension;
+    
+        $uploadFile = '../../../uploads/' . $newFileName;
         if (move_uploaded_file($_FILES['certify']['tmp_name'], $uploadFile)) {
 
             // 1. Validar el primer nombre y apellido
@@ -60,26 +65,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 return;
             }
 
-            return;
-            //Guardar Datos
             include '../../../src/modules/database.php';
 
             $conn = (new Database())->getConnection();
 
-            $identityNumber = $_POST['identity'];
+            $identityNumber =str_replace("-", "", $_POST['identity']) ;
             $firstName = $_POST['name'];
             $lastName = $_POST['lastName'];
-            $phone = $_POST['phone'];
+            $phone = str_replace("-", "", $_POST['phone']);
             $email = $_POST['email'];
             $preferredCareer = $_POST['mainCareer'];
             $secondaryCareer = $_POST['secondaryCareer'];
             $regionalCenter = $_POST['regionalCenter'];
 
-            $sql = "INSERT INTO Applicant (identity_number, first_name, last_name, phone, email, preferred_career, secondary_career, regional_center, document_photo)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            $sql = "insert into `Persons`(person_id,first_name,last_name,phone,personal_email,center_id )values (?,?,?,?,?,?);";
+            $conn->execute_query($sql, [$identityNumber,$firstName,$lastName,$phone,$email,$regionalCenter]);
 
-            $conn->execute_query($sql, [$identityNumber, $firstName, $lastName, $phone, $email, $preferredCareer, $secondaryCareer, $regionalCenter, $originalFileName]);
-
+            $sql = "insert into `Applicant` (person_id, preferend_career_id, secondary_career_id, certify, status)values(?,?,?,?,?);";
+            $conn->execute_query($sql, [$identityNumber, $preferredCareer, $secondaryCareer, $originalFileName, 'Pendient']);
 
             echo 'Datos ingresados <a href="/">Regresar</a>';
         } else {

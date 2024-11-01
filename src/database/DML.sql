@@ -1,5 +1,19 @@
+SET FOREIGN_KEY_CHECKS = 0;
+DROP TABLE `Applicant`;
+DROP TABLE `Applicant_result`;
+DROP TABLE `Careers`;
+DROP TABLE `Classes`;
+DROP TABLE `ClassesXCareer`;
+DROP TABLE `Exams`;
+DROP TABLE `ExamsXCareer`;
+DROP TABLE `Faculty`;
+DROP TABLE `Persons`;
+DROP TABLE `Regional_center`;
+DROP TABLE `Students`;
+
+SET FOREIGN_KEY_CHECKS = 1;
 CREATE TABLE Regional_center (
-    center_id INT PRIMARY KEY,
+    center_id INT PRIMARY KEY AUTO_INCREMENT,
     center_name VARCHAR(100) NOT NULL
 );
 
@@ -14,12 +28,12 @@ CREATE TABLE Persons (
 );
 
 CREATE TABLE Faculty (
-    faculty_id INT PRIMARY KEY,
+    faculty_id INT PRIMARY KEY AUTO_INCREMENT,
     faculty_name VARCHAR(100) NOT NULL
 );
 
 CREATE TABLE Careers (
-    career_id INT PRIMARY KEY,
+    career_id INT PRIMARY KEY AUTO_INCREMENT,
     career_name VARCHAR(100) NOT NULL,
     time_stm TINYINT,
     faculty_id INT,
@@ -60,7 +74,7 @@ CREATE TABLE Applicant (
     person_id VARCHAR(20), -- (identity_number)
     preferend_career_id INT,
     secondary_career_id INT,
-    certify VARCHAR(50),
+    certify VARCHAR(255),
     inscription_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     status VARCHAR(50),
     PRIMARY KEY (person_id),
@@ -79,7 +93,7 @@ CREATE TABLE Applicant_result (
 );
 
 CREATE TABLE Students (
-    account_number INT PRIMARY KEY AUTO_INCREMENT,
+    account_number VARCHAR(11) NOT NULL  PRIMARY KEY,
     person_id VARCHAR(20), -- (identity_number)
     password VARCHAR(255) NOT NULL, 
     institute_email VARCHAR(100) UNIQUE,
