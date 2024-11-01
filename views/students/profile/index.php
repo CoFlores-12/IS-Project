@@ -69,7 +69,7 @@ $studentId = $_GET['studentId'];
                           <h6 class="mb-0">Student ID</h6>
                         </div>
                         <div class="col-sm-9 text-secondary">
-                            <input type="text" readonly class="readonly-input" value="<?php echo $studentId ?>">
+                            <input type="text" readonly class="readonly-input" data-key="id" value="<?php echo $studentId ?>">
                         </div>
                       </div>
                       <hr>
@@ -78,7 +78,7 @@ $studentId = $_GET['studentId'];
                           <h6 class="mb-0">Full Name</h6>
                         </div>
                         <div class="col-sm-9 text-secondary">
-                            <input type="text" readonly class="readonly-input" value="John Doe">
+                            <input type="text" readonly class="readonly-input" data-key="fullName" value="John Doe">
                         </div>
                       </div>
                       <hr>
@@ -87,7 +87,7 @@ $studentId = $_GET['studentId'];
                           <h6 class="mb-0">Email</h6>
                         </div>
                         <div class="col-sm-9 text-secondary">
-                            <input type="text" readonly class="readonly-input" value="johndoe@unah.hn">
+                            <input type="text" readonly class="readonly-input"  data-key="email" data-key="id" value="johndoe@unah.hn">
                         </div>
                       </div>
                       <hr>
@@ -96,7 +96,7 @@ $studentId = $_GET['studentId'];
                           <h6 class="mb-0">Phone</h6>
                         </div>
                         <div class="col-sm-9 text-secondary">
-                            <input type="text" readonly class="readonly-input" value="3487-9723">
+                            <input type="text" readonly class="readonly-input"  data-key="phone" value="3487-9723">
                         </div>
                       </div>
                       <hr>
@@ -105,7 +105,7 @@ $studentId = $_GET['studentId'];
                           <h6 class="mb-0">Address</h6>
                         </div>
                         <div class="col-sm-9 text-secondary">
-                            <input type="text" readonly class="readonly-input" value="Tegucigalpa, HN">
+                            <input type="text" readonly class="readonly-input"  data-key="direction" value="Tegucigalpa, HN">
                         </div>
                       </div>
                       <hr>
@@ -113,7 +113,7 @@ $studentId = $_GET['studentId'];
                         <div class="col-sm-12" id="buttons-group">
                           <?php
                             if ($studentId == $idTest) {
-                              echo '<a id="btnEditProfile" class="btn btn-info" target="__blank">Edit</a>';
+                              echo '<a id="btnEditProfile" class="btn btn-info" target="__blank">Edit</a> <button id="saveButton" class="btn text-white btn-primary hidden">Save</button>';
                               
                             }
                           ?>
@@ -155,16 +155,27 @@ $studentId = $_GET['studentId'];
     <script>
       let buttonsGroup = document.getElementById('buttons-group'); 
       let btnEditProfile = document.getElementById('btnEditProfile'); 
+      let saveButton = document.getElementById('saveButton'); 
       
       btnEditProfile.addEventListener('click', (e)=>{
         let inputs = document.querySelectorAll('.readonly-input');
-        btnEditProfile.style.display = 'none';
+        btnEditProfile.classList.add('hidden');
         inputs.forEach(input => {
           input.readOnly = false;
           input.classList.add('bg');
         });
-        buttonsGroup.innerHTML = '<button class="btn text-white btn-primary" target="__blank">Save</a>'
+        saveButton.classList.remove('hidden');
       })
+
+      saveButton.addEventListener('click', function() {
+            const inputs = document.querySelectorAll('input[data-key]');
+            const dataKeyValues = Array.from(inputs).reduce((acc, input) => {
+                acc[input.dataset.key] = input.value;
+                return acc;
+            }, {});
+
+            console.log(dataKeyValues);
+        });
 
     </script>
 </body>
