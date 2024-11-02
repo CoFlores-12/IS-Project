@@ -19,11 +19,11 @@ class Mails {
         $this->mail->Port = 587;
     }
 
-    public function sendEmail($de, $mailAspirant, $affair, $message) {
+    public function sendEmail($to, $email, $affair, $message) {
         try {
             
-            $this->mail->setFrom($de, 'Sistema de Admisiones');
-            $this->mail->addAddress($mailAspirant); 
+            $this->mail->setFrom($to);
+            $this->mail->addAddress($email); 
             
             $this->mail->isHTML(true);
             $this->mail->Subject = $affair;
