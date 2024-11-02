@@ -139,24 +139,7 @@
                 </div>
             </div>
 
-            <div class="row p-4">
-                <div class="card bg-aux rounded p-2">
-                    <div class="card-header flex justify-between items-center">
-                        <span>Admissions <span class="text-xxs text-secondary">(26/10/2024 - 30/10/2024)</span></span>
-                        <div class="actions">
-                            <button class="btn text-primary btn-outline-primary">
-                                Import scores <i class="bi bi-arrow-bar-down"></i>
-                            </button>
-                            <a class="btn text-success btn-outline-success" href="/api/get/admin/admittedStudents.php">
-                                Export Admitteds <i class="bi bi-arrow-bar-up"></i>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        List
-                    </div>
-                </div>
-            </div>
+            
         </div>
     </div>
     <script src="/public/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>

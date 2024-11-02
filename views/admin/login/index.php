@@ -27,13 +27,13 @@
 
           <!-- Email input -->
           <div data-mdb-input-init class="form-outline mb-4">
-            <input type="email" id="form3Example3" class="form-control form-control-lg"
+            <input type="email" id="email" class="form-control form-control-lg"
               placeholder="Enter a email address" />
           </div>
 
           <!-- Password input -->
           <div data-mdb-input-init class="form-outline mb-3">
-            <input type="password" id="form3Example4" class="form-control form-control-lg"
+            <input type="password" id="password" class="form-control form-control-lg"
               placeholder="Enter password" />
           </div>
 
@@ -43,10 +43,8 @@
           </div>
 
           <div class="text-center text-lg-start mt-4 pt-2">
-            <a href="/views/admin/home/index.php">
-              <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-lg"
+              <button id="loginButton" type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-lg"
               style="padding-left: 2.5rem; padding-right: 2.5rem;">Login</button>
-            </a>
           </div>
 
         </form>
@@ -55,5 +53,35 @@
   </div>
 </section>
 <script src="/public/bootstrap-5.3.3-dist/js/bootstrap.min.js"></script>
+<script>
+  const loginButton = document.getElementById('loginButton');
+  loginButton.addEventListener('click', function(){
+    loginButton.disabled = true;
+    loginButton.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Loading...`;
+    fetch('/api/post/admin/login.php', {
+        method: 'POST',
+        body: new URLSearchParams({
+            email: document.getElementById('email').value,
+            password: document.getElementById('password').value
+        })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Error in request: ' + response);
+        }
+        return response.json();
+    })
+    .then(data => {
+        location.href = data.route;
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        loginButton.disabled = false;
+        loginButton.innerHTML = 'Login';
+        alert('error: ' + error.message);
+    });
+    
+  })
+</script>
 </body>
 </html>
