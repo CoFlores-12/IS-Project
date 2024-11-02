@@ -1,18 +1,3 @@
-SET FOREIGN_KEY_CHECKS = 0;
-DROP TABLE `Applicant`;
-DROP TABLE `Applicant_result`;
-DROP TABLE `Careers`;
-DROP TABLE `Classes`;
-DROP TABLE `ClassesXCareer`;
-DROP TABLE `Exams`;
-DROP TABLE `ExamsXCareer`;
-DROP TABLE `Faculty`;
-DROP TABLE `Persons`;
-DROP TABLE `Regional_center`;
-DROP TABLE `Students`;
-DROP TABLE `Administrators`;
-SET FOREIGN_KEY_CHECKS = 1;
-
 
 CREATE TABLE Regional_center (
     center_id INT PRIMARY KEY AUTO_INCREMENT,
@@ -181,4 +166,5 @@ BEGIN
 END //
 
 DELIMITER ;
+
 
