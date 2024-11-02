@@ -1,3 +1,16 @@
+<?php
+include './../../../src/modules/database.php';
+
+$db = (new Database())->getConnection();
+$regionalCenters = $db->execute_query("SELECT * FROM Regional_center");
+$Carrers = $db->execute_query("SELECT * FROM Careers");
+$careersArray = [];
+while ($career = $Carrers->fetch_assoc()) {
+    $careersArray[] = $career;
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,7 +23,7 @@
     <link rel="stylesheet" href="/public/bootstrap-5.3.3-dist/css/bootstrap.min.css">
 </head>
 <body>
-<?php include './../../../src/components/navbar.php'; ?>
+    <?php include './../../../src/components/navbar.php'; ?>
     <div class="main min-h-full flex bg-aux justify-center items-center p-4">
         
         <form class="needs-validation bg rounded p-4" novalidate method="POST" action="/api/post/admissions/form.php"  enctype="multipart/form-data">
@@ -52,18 +65,24 @@
                 <div class="form-group">
                     <select name="mainCareer" class="form-control" id="mainCareer">
                         <option value="">Select main career</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
+                        <?php
+                            foreach ($careersArray as $career) {
+                                echo '<option value="'.$career['career_id'].'">'.$career['career_name'].'</option>';
+                            }
+
+                        ?>
                     </select>
                 </div>
                 <div class="form-group mt-2">
                     <select name="secondaryCareer" class="form-control  form-control-sm" id="secondaryCareer">
 
                         <option value="">Select secondary career</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
+                        <?php
+                            foreach ($careersArray as $career) {
+                                echo '<option value="'.$career['career_id'].'">'.$career['career_name'].'</option>';
+                            }
+
+                        ?>
                     </select>
                 </div>
             </div>
@@ -80,9 +99,11 @@
                 <div class="form-group">
                     <select name="regionalCenter" class="form-control custom-select" id="regionalCenter">
                         <option value="">Select regional center</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
+                        <?php
+                            while ($center = $regionalCenters->fetch_assoc()) {
+                                echo '<option value="'.$center['center_id'].'">'.$center['center_name'].'</option>';
+                            }
+                        ?>
                     </select>
                 </div>
             </div>

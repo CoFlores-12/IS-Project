@@ -1,34 +1,44 @@
 <?php
-    $user = 'daav690@gmail.com';
-    $password = 'bhrg fstt gwav kssy'; // Cambiar por la contraseña real o una contraseña de aplicación
-
-
-    $aspirantes = [
-        [
-            'nombre' => 'Daniel Avila',
-            'correo' => 'daavilav@unah.hn',
-            'estatus' => 'aprobado'
-        ],
-        [
-            'nombre' => 'Cesar Flores',
-            'correo' => 'obethflores2014@gmail.com',
-            'estatus' => 'reprobado :('
-        ]
-        
-    ];
     include '../../../src/modules/mails.php';
+    include '../../../src/modules/database.php';
+    
+    if (file_exists(__DIR__ . '../../../../.env')) {
+        require __DIR__ . '../../../../vendor/autoload.php';
+        Dotenv\Dotenv::createUnsafeImmutable(__DIR__ . '../../../../')->load();
+    }
 
-    $mail = new Mails($user, $password);
+    $mail = new Mails(getenv('emailUser'), getenv('emailPassword'));
+
+    $conn = (new Database())->getConnection();
+
+    $query = "SELECT 
+                p.first_name, 
+                p.last_name, 
+                p.personal_email, 
+                a.status,
+                e.exam_name,
+                ar.result
+                FROM 
+                    Applicant a
+                JOIN 
+                    Persons p ON a.person_id = p.person_id
+                LEFT JOIN 
+                    Applicant_result ar ON a.person_id = ar.identity_number
+                LEFT JOIN 
+                    Exams e ON ar.exam_code = e.exam_code;
+                ";
+
+    $result = $conn->execute_query($query);
 
 
-    foreach ($aspirantes as $applicant) {
-        $name = $applicant['nombre'];
-        $mailAspirant = $applicant['correo'];
-        $status = $applicant['estatus'];
+    foreach ($result as $applicant) {
+        $name = $applicant['first_name'];
+        $mailAspirant = $applicant['personal_email'];
+        $status = $applicant['status'];
         $affair = "Estatus de Examen de Admisión";
         $message = "Hola $name,<br><br>Tu estatus de examen de admisión es: <strong>$status</strong>.<br><br>Saludos,<br>Equipo de Admisiones.";
     
-        $resultado = $mail->sendEmail($user, $mailAspirant, $affair, $message);
+        $resultado = $mail->sendEmail(getenv('emailUser'), $mailAspirant, $affair, $message);
         echo $resultado . "<br>"; // Muestra el resultado de cada envío
     }
 

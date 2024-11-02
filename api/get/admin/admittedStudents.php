@@ -1,15 +1,16 @@
 <?php
 
 header('Content-Type: text/csv');
-header('Content-Disposition: attachment; filename="estudiantes_admitidos.csv"');
+header('Content-Disposition: attachment; filename="admitteds.csv"');
 
-//TODO: get students from database
-$students = [
-    ['ID', 'Nombre', 'Apellido', 'Correo Electrónico'],
-    [1, 'Juan', 'Pérez', 'juan.perez@example.com'],
-    [2, 'María', 'González', 'maria.gonzalez@example.com'],
-    [3, 'Carlos', 'López', 'carlos.lopez@example.com']
-];
+include '../../../src/modules/database.php';
+$conn = (new Database())->getConnection();
+
+$result = $conn->execute_query("SELECT * FROM Applicant WHERE status = 'Admitted'");
+$students = [];
+while ($student = $result->fetch_assoc()) {
+    $students[] = $student;
+}
 
 $output = fopen('php://output', 'w');
 
