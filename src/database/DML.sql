@@ -71,13 +71,13 @@ CREATE TABLE ClassesXCareer (
 );
 
 CREATE TABLE Applicant (
+    applicant_id INT PRIMARY KEY AUTO_INCREMENT,
     person_id VARCHAR(20), -- (identity_number)
     preferend_career_id INT,
     secondary_career_id INT,
     certify VARCHAR(255),
     inscription_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     status VARCHAR(50),
-    PRIMARY KEY (person_id),
     FOREIGN KEY (person_id) REFERENCES Persons(person_id),
     FOREIGN KEY (preferend_career_id) REFERENCES Careers(career_id),
     FOREIGN KEY (secondary_career_id) REFERENCES Careers(career_id)

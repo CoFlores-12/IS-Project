@@ -113,7 +113,7 @@
         <div class="container-fluid">
             <div class=" flex p-2 justify-between items-center">
                 <h4 class="text">Dashboard</h4>
-                <div class="vuttons">
+                <div class="buttons">
                     <button class="btn bg-custom-primary text-white"  data-bs-toggle="modal" data-bs-target="#newUserModal">Add User</button>
                 </div>
             </div>
@@ -138,7 +138,7 @@
                 </div>
                 <div class="col">
                     <div class="card shadow rounded m-2 bg-aux p-2">
-                        <span>Regional centers</span>
+                        <span>Regional Center</span>
                         <strong>2</strong>
                     </div>
                 </div>
