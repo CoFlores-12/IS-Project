@@ -5,7 +5,6 @@ include '../../../src/modules/mails.php';
 
 $conn = (new Database())->getConnection();
 
-    
 if (file_exists(__DIR__ . '../../../../.env')) {
     require __DIR__ . '../../../../vendor/autoload.php';
     Dotenv\Dotenv::createUnsafeImmutable(__DIR__ . '../../../../')->load();
@@ -17,13 +16,12 @@ $mail = new Mails(getenv('emailUser'), getenv('emailPassword'));
 $sql = "SELECT DISTINCT p.person_id, p.first_name, p.last_name, p.personal_email
         FROM Applicant a
         JOIN Persons p ON a.person_id = p.person_id
-        WHERE a.status = 'accepted'";
+        WHERE a.status = 'Admitted'";
 
 $result = $conn->execute_query($sql);
 
-//TODO: generate email & password
-
-function generatePassword($length = 8) {
+function generatePassword() {
+    $length = 8;
     $characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     
     $password = '';
@@ -40,6 +38,8 @@ function generateEmail($firstName, $lastName) {
 
     $baseEmail = $firstInitial . $lastNameLower . '@unah.edu';
     $email = $baseEmail;
+
+    $conn = (new Database())->getConnection();
 
     if (emailExists($conn, $email)) {
         $firstInitials = strtolower(substr($firstName, 0, 2));
@@ -62,7 +62,7 @@ function emailExists($conn, $email) {
     }    
     return false; 
 }
-
+    
 foreach ($result as $student) {
     $first_name = $student['first_name'];
     $personal_email = $student['personal_email'];
@@ -70,12 +70,12 @@ foreach ($result as $student) {
     $person_id = $student['person_id'];
 
     $password = generatePassword();
-    $instituteEmail = generateEmail($name, $lastName);
-    $numberAccount = 20191030337;
+    $instituteEmail = generateEmail($first_name, $last_name);
+    $numberAccount = 20191031239;
 
     $passphrase = getenv('password');
 
-    $sql = "INSERT INTO Students (account_number, person_id, password, institute_email) VALUES (?, ?, ENCRYPTBYPASSPHRASE(?, ?), ?)";
+    $sql = "INSERT INTO Students (account_number, person_id, password, institute_email) VALUES (?, ?, AES_ENCRYPT(?, ?), ?)";
 
     $conn->execute_query($sql, [$numberAccount, $person_id, $passphrase, $password, $instituteEmail]);
 
@@ -84,7 +84,6 @@ foreach ($result as $student) {
 
     $resultado = $mail->sendEmail(getenv('emailUser'), $personal_email, $affair, $message);
 
-    echo $first_name . "<br>";
 }
 
 ?>

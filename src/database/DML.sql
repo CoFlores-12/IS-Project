@@ -97,7 +97,7 @@ CREATE TABLE Applicant_result (
 CREATE TABLE Students (
     account_number VARCHAR(11) NOT NULL  PRIMARY KEY,
     person_id VARCHAR(20), -- (identity_number)
-    password VARCHAR(255) NOT NULL, 
+    password VARBINARY(255) NOT NULL, 
     institute_email VARCHAR(100) UNIQUE,
     direction VARCHAR(255),
     photos JSON,
