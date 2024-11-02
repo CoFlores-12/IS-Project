@@ -10,8 +10,10 @@ DROP TABLE `Faculty`;
 DROP TABLE `Persons`;
 DROP TABLE `Regional_center`;
 DROP TABLE `Students`;
-
+DROP TABLE `Administrators`;
 SET FOREIGN_KEY_CHECKS = 1;
+
+
 CREATE TABLE Regional_center (
     center_id INT PRIMARY KEY AUTO_INCREMENT,
     center_name VARCHAR(100) NOT NULL
@@ -71,13 +73,13 @@ CREATE TABLE ClassesXCareer (
 );
 
 CREATE TABLE Applicant (
+    applicant_id INT PRIMARY KEY AUTO_INCREMENT,
     person_id VARCHAR(20), -- (identity_number)
     preferend_career_id INT,
     secondary_career_id INT,
     certify VARCHAR(255),
     inscription_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     status VARCHAR(50),
-    PRIMARY KEY (person_id),
     FOREIGN KEY (person_id) REFERENCES Persons(person_id),
     FOREIGN KEY (preferend_career_id) REFERENCES Careers(career_id),
     FOREIGN KEY (secondary_career_id) REFERENCES Careers(career_id)
@@ -100,3 +102,12 @@ CREATE TABLE Students (
     direction VARCHAR(255),
     FOREIGN KEY (person_id) REFERENCES Persons(person_id)
 );
+
+CREATE TABLE Administrators (
+    employee_number INT PRIMARY KEY AUTO_INCREMENT,
+    person_id VARCHAR(20),
+    role VARCHAR(25),
+    password VARCHAR(255) NOT NULL, 
+    institute_email VARCHAR(100) UNIQUE,
+    FOREIGN KEY (person_id) REFERENCES Persons(person_id)
+)

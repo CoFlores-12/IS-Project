@@ -3,43 +3,47 @@ if ($_SERVER['REQUEST_METHOD'] != 'POST') {
     echo "<h3>Request invalid</h3>";
    
 } 
+include '../../../src/modules/database.php';
+$conn = (new Database())->getConnection();
 
-echo "<h3>Parámetros POST recibidos:</h3>";
-    echo "<pre>";
-    print_r($_POST); 
-    echo "</pre>";
-    
-//get data from POST
 $name = $_POST['name'];
 $lastName = $_POST['lastName'];
 $identity = $_POST['identity'];
 $phone = $_POST['phone'];
 $email = $_POST['email'];
-$role = $_POST['role'];
-$employeeNumber = $_POST['employeeNumber'];
+$role = 'Teacher';
 
-//TODO: generate user_id, email & password
+$sql = "INSERT INTO `Persons`(person_id,first_name,last_name,phone,personal_email ) VALUES (?,?,?,?,?);";
+$conn->execute_query($sql, [$identity,$name,$lastName,$phone,$email]);
 
-$servername = "localhost";
-$username = "usuario";
-$password_db = "contraseña";
-$dbname = "nombre_base_datos";
+//TODO: generate email & password
 
-$conn = new mysqli($servername, $username, $password_db, $dbname);
+function generatePassword($length = 8) {
+    $characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    
+    $password = '';
+    for ($i = 0; $i < $length; $i++) {
+        $password .= $characters[rand(0, strlen($characters) - 1)];
+    }
 
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+    return $password;
 }
+function generateEmail($firstName, $lastName) {
+    $firstInitial = strtolower(substr($firstName, 0, 1));
+    $lastNameLower = strtolower($lastName);
+    
+    $email = $firstInitial . $lastNameLower . '@unah.edu';
+    
+    return $email;
+}
+$password = generatePassword();
+$instituteEmail = generateEmail($name, $lastName);
 
-$sql = "INSERT INTO User (user_id, identity_number, first_name, last_name, personal_email, institutional_email, phone, role, password)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-
-//TODO: execute query
-
+$sql = "insert into `Administrators` (person_id, role, password, institute_email) values(?, ?, ?, ?)";
+$conn->execute_query($sql, [$identity, $role, $password, $instituteEmail]);
 //TODO: send email with a credential to the new user
 
-//TODO: send feedback to the user
+echo 'User Created! <a href="#" onclick="history.back(); return false;">Go Back</a>'
 
 
 ?>
