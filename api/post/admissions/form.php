@@ -92,7 +92,7 @@ if (isset($_FILES['certify']) && $_FILES['certify']['error'] === UPLOAD_ERR_OK) 
 
             if (is_null($status) || $status === 'Not Admitted') {
                 $sql = "INSERT INTO `Applicant` (person_id, preferend_career_id, secondary_career_id, certify, status) VALUES (?, ?, ?, ?, ?)";
-                $conn->execute_query($sql, [$identityNumber, $preferredCareer, $secondaryCareer, $originalFileName, 'Pendient']);
+                $conn->execute_query($sql, [$identityNumber, $preferredCareer, $secondaryCareer, $newFileName, 'Pendient']);
             }else {
                 echo 'The applicant cannot register because his or her status is '.$status.'.  <a href="/">Go Back</a>';
                 return;

@@ -16,17 +16,12 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content bg">
       <div class="modal-header bg">
-        <h5 class="modal-title text" id="staticBackdropLabel">New User</h5>
+        <h5 class="modal-title text" id="staticBackdropLabel">New Teacher</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
       <form class="needs-validation bg rounded p-4" novalidate method="POST" action="/api/post/admin/addUser.php"  enctype="multipart/form-data">
             <input type="text" name="role" hidden readonly value="Teacher">
-            <div class="row mb-4">
-                <div class="form-group">
-                    <input name="employeeNumber" type="text" class="form-control" id="employeeNumber" placeholder="Employee Number" maxlength="15" required>
-                </div>
-            </div>
             <div class="form-row flex gap-4">
                 <div class="col mb-3">
                     <input name="name" type="text" class="form-control" id="validationCustom01" placeholder="First name"  required>

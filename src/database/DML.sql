@@ -10,8 +10,10 @@ DROP TABLE `Faculty`;
 DROP TABLE `Persons`;
 DROP TABLE `Regional_center`;
 DROP TABLE `Students`;
-
+DROP TABLE `Administrators`;
 SET FOREIGN_KEY_CHECKS = 1;
+
+
 CREATE TABLE Regional_center (
     center_id INT PRIMARY KEY AUTO_INCREMENT,
     center_name VARCHAR(100) NOT NULL
@@ -100,3 +102,12 @@ CREATE TABLE Students (
     direction VARCHAR(255),
     FOREIGN KEY (person_id) REFERENCES Persons(person_id)
 );
+
+CREATE TABLE Administrators (
+    employee_number INT PRIMARY KEY AUTO_INCREMENT,
+    person_id VARCHAR(20),
+    role VARCHAR(25),
+    password VARCHAR(255) NOT NULL, 
+    institute_email VARCHAR(100) UNIQUE,
+    FOREIGN KEY (person_id) REFERENCES Persons(person_id)
+)
