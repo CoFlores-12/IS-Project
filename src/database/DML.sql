@@ -100,7 +100,10 @@ CREATE TABLE Students (
     password VARCHAR(255) NOT NULL, 
     institute_email VARCHAR(100) UNIQUE,
     direction VARCHAR(255),
-    FOREIGN KEY (person_id) REFERENCES Persons(person_id)
+    photos JSON,
+    career_id INT,
+    FOREIGN KEY (person_id) REFERENCES Persons(person_id),
+    FOREIGN KEY (career_id) REFERENCES Careers(career_id)
 );
 
 CREATE TABLE Administrators (
