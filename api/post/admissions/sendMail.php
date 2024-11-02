@@ -39,7 +39,7 @@
         $message = "Hola $name,<br><br>Tu estatus de examen de admisión es: <strong>$status</strong>.<br><br>Saludos,<br>Equipo de Admisiones.";
     
         $resultado = $mail->sendEmail(getenv('emailUser'), $mailAspirant, $affair, $message);
-        echo $resultado . "<br>"; // Muestra el resultado de cada envío
+        echo $resultado . "<br>"; 
     }
 
 ?>

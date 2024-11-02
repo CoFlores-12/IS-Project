@@ -32,9 +32,9 @@ class Mails {
 
            
             $this->mail->send();
-            return "Correo enviado correctamente.";
+            return "Mail sent successfully.";
         } catch (Exception $e) {
-            return "Error al enviar el correo: {$this->mail->ErrorInfo}";
+            return "Error sending email: {$this->mail->ErrorInfo}";
         }
     }
 }
