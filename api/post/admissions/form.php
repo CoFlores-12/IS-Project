@@ -83,14 +83,14 @@ if (isset($_FILES['certify']) && $_FILES['certify']['error'] === UPLOAD_ERR_OK) 
 
         
         try {
-            $sql = "INSERT IGNORE INTO `Persons`(person_id,first_name,last_name,phone,personal_email,center_id ) VALUES (?,?,?,?,?,?);";
-            $conn->execute_query($sql, [$identityNumber,$firstName,$lastName,$phone,$email,$regionalCenter]);
             
             $sql = "SELECT status FROM Applicant WHERE person_id = ? AND (status = 'Admitted' OR status = 'Pendient')";
             $result = $conn->execute_query($sql, [$identityNumber]);
             $status = $result->fetch_assoc()['status'] ?? null;
-
+            
             if (is_null($status) || $status === 'Not Admitted') {
+                $sql = "INSERT IGNORE INTO `Persons`(person_id,first_name,last_name,phone,personal_email,center_id ) VALUES (?,?,?,?,?,?);";
+                $conn->execute_query($sql, [$identityNumber,$firstName,$lastName,$phone,$email,$regionalCenter]);
                 $sql = "INSERT INTO `Applicant` (person_id, preferend_career_id, secondary_career_id, certify, status) VALUES (?, ?, ?, ?, ?)";
                 $conn->execute_query($sql, [$identityNumber, $preferredCareer, $secondaryCareer, $newFileName, 'Pendient']);
             }else {
