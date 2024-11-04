@@ -71,7 +71,7 @@ foreach ($result as $student) {
 
     $password = generatePassword();
     $instituteEmail = generateEmail($first_name, $last_name);
-    $numberAccount = 20191031239;
+    $numberAccount = 20191030337;
 
     $passphrase = getenv('password');
 
