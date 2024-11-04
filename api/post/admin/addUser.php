@@ -1,8 +1,10 @@
 <?php
+//validate method of request
 if ($_SERVER['REQUEST_METHOD'] != 'POST') {
     echo "<h3>Request invalid</h3>";
    
 } 
+
 include '../../../src/modules/database.php';
 $conn = (new Database())->getConnection();
 
@@ -62,5 +64,6 @@ $message = "Hi $first_name,<br><br>Your institute email is: <strong>$instituteEm
 
 $resultado = $mail->sendEmail(getenv('emailUser'), $email, $affair, $message);
 
+$conn->close();
 echo 'User Created! <a href="#" onclick="history.back(); return false;">Go Back</a>'
 ?>

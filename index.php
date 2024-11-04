@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <meta name="author" content="cofloresf@unah.hn">
+        <meta name="version" content="0.1.0">
+        <meta name="date" content="29/10/2014">
+        <meta name="description" content="Landing page of IS-Project">
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta name="description" content="" />
-        <meta name="author" content="" />
         <title>IS Project</title>
         <link rel="stylesheet" href="/public/css/theme.css">
         <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
@@ -174,9 +176,7 @@
                 </div>
             </div>
         </footer>
-        <!-- Bootstrap core JS-->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-        <!-- Core theme JS-->
-        <script src="/public/bootstrap-5.3.3-dist/js/bootstrap.min.js"></script>
+        
+        <script src="/public/bootstrap-5.3.3-dist/js/bootstrap.bundle.js"></script>
     </body>
 </html>

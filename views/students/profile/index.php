@@ -37,6 +37,9 @@ $isMyUser = $idTest == $account_number;
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="author" content="cofloresf@unah.hn">
+    <meta name="version" content="0.1.0">
+    <meta name="date" content="02/11/2014">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="/public/css/theme.css">
