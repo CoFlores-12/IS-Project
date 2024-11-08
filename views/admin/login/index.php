@@ -67,9 +67,11 @@
             password: document.getElementById('password').value
         })
     })
-    .then(response => {
+    .then(async response => {
         if (!response.ok) {
-            throw new Error('Error in request: ' + response);
+            let text = await response.text();
+            
+            throw new Error('Error in request: ' + text);
         }
         return response.json();
     })
@@ -77,7 +79,6 @@
         location.href = data.route;
     })
     .catch(error => {
-        console.error('Error:', error);
         loginButton.disabled = false;
         loginButton.innerHTML = 'Login';
         alert('error: ' + error.message);

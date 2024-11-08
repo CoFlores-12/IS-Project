@@ -83,7 +83,7 @@
                         <li><a class="dropdown-item" href="#">Messages</a></li>
                         <li><a class="dropdown-item" href="#">requests</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="/">Logout <i class="bi bi-box-arrow-right"></i></a></li>
+                        <li><a class="dropdown-item" href="/api/get/logout.php">Logout <i class="bi bi-box-arrow-right"></i></a></li>
                     </ul>
                  </div>
             </div>

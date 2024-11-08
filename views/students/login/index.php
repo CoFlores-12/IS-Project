@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta name="author" content="cofloresf@unah.hn">
-    <meta name="version" content="0.1.0">
-    <meta name="date" content="30/10/2014">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login | Students</title>
-    <link rel="stylesheet" href="/public/css/theme.css">
-    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
-    <link rel="stylesheet" href="/public/bootstrap-5.3.3-dist/css/bootstrap.min.css">
+    <title>Login - Students</title>
+    <meta name="author" content="cofloresf@unah.hn">
+        <meta name="version" content="0.1.0">
+        <meta name="date" content="30/10/2014">
+        <link rel="stylesheet" href="/public/css/theme.css">
+        <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+        <link rel="stylesheet" href="/public/bootstrap-5.3.3-dist/css/bootstrap.min.css">
 </head>
 <body>
   
@@ -29,13 +29,13 @@
 
           <!-- Email input -->
           <div data-mdb-input-init class="form-outline mb-4">
-            <input type="email" id="form3Example3" class="form-control form-control-lg"
+            <input type="email" id="email" class="form-control form-control-lg"
               placeholder="Enter a email address" />
           </div>
 
           <!-- Password input -->
           <div data-mdb-input-init class="form-outline mb-3">
-            <input type="password" id="form3Example4" class="form-control form-control-lg"
+            <input type="password" id="password" class="form-control form-control-lg"
               placeholder="Enter password" />
           </div>
 
@@ -45,10 +45,8 @@
           </div>
 
           <div class="text-center text-lg-start mt-4 pt-2">
-            <a href="/views/students/home/index.php">
-              <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-lg"
+              <button id="loginButton" type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-lg"
               style="padding-left: 2.5rem; padding-right: 2.5rem;">Login</button>
-            </a>
           </div>
 
         </form>
@@ -57,5 +55,36 @@
   </div>
 </section>
 <script src="/public/bootstrap-5.3.3-dist/js/bootstrap.min.js"></script>
+<script>
+  const loginButton = document.getElementById('loginButton');
+  loginButton.addEventListener('click', function(){
+    loginButton.disabled = true;
+    loginButton.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Loading...`;
+    fetch('/api/post/students/login.php', {
+        method: 'POST',
+        body: new URLSearchParams({
+            email: document.getElementById('email').value,
+            password: document.getElementById('password').value
+        })
+    })
+    .then(async response => {
+        if (!response.ok) {
+            let text = await response.text();
+            
+            throw new Error('Error in request: ' + text);
+        }
+        return response.json();
+    })
+    .then(data => {
+        location.href = data.route;
+    })
+    .catch(error => {
+        loginButton.disabled = false;
+        loginButton.innerHTML = 'Login';
+        alert('error: ' + error.message);
+    });
+    
+  })
+</script>
 </body>
 </html>

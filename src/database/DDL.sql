@@ -210,3 +210,38 @@ END //
 DELIMITER ;
 
 
+
+DELIMITER //
+
+CREATE PROCEDURE loginStudent (
+    IN in_identifier VARCHAR(100),      
+    IN in_password VARCHAR(255),       
+    OUT is_authenticated BOOLEAN,       
+    OUT out_id VARCHAR(25)   
+)
+BEGIN
+    DECLARE secret_key VARCHAR(255);     
+    DECLARE db_password VARBINARY(255);   
+
+    SET is_authenticated = FALSE;
+    SET out_id = '';
+
+    SELECT JSON_UNQUOTE(JSON_EXTRACT(data, '$.phraseEncrypt'))
+    INTO secret_key
+    FROM Config
+    WHERE config_id = 1;
+
+    SELECT password, person_id INTO db_password, out_id
+    FROM `Students`
+    WHERE (institute_email = in_identifier OR account_number = in_identifier);
+
+    IF db_password IS NOT NULL AND AES_DECRYPT(db_password, secret_key) = in_password THEN
+        SET is_authenticated = TRUE;
+    ELSE
+        SET out_id = ''; 
+    END IF;
+END //
+
+DELIMITER ;
+
+
