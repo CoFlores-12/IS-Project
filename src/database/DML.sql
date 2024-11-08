@@ -16,4 +16,15 @@ INSERT INTO `Persons`(person_id, first_name, last_name) VALUES ('admin', 'admin'
 
 INSERT INTO `StatusApplicant` (status_id, description) VALUES (0, 'Pendient');
 INSERT INTO `StatusApplicant` (status_id, description) VALUES (1, 'Admitted');
-INSERT INTO `StatusApplicant` (status_id, description) VALUES (3, 'Not Admitted');
+INSERT INTO `StatusApplicant` (status_id, description) VALUES (2, 'Not Admitted');
+
+INSERT INTO `Roles` (role_id, `type`, route) VALUES (0, "Administrator", 'admin');
+INSERT INTO `Roles` (role_id, `type`, route) VALUES (1, "Admissions", 'admissions');
+INSERT INTO `Roles` (role_id, `type`, route) VALUES (2, "Register Agent", 'register');
+INSERT INTO `Roles` (role_id, `type`, route) VALUES (3, "Department Head", 'teacher');
+INSERT INTO `Roles` (role_id, `type`, route) VALUES (4, "Coordinator", 'techer');
+INSERT INTO `Roles` (role_id, `type`, route) VALUES (5, "Teacher", 'teacher');
+
+CALL `CreateAdministrator`('admin', 0, 'admin', 'admin');
+CALL `CreateAdministrator`('admisiones', 1, 'admisiones', 'admisiones@unah.hn');
+CALL `CreateAdministrator`('registro', 2, 'registro', 'registro@unah.hn');

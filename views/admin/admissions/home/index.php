@@ -3,13 +3,13 @@ include './../../../../src/modules/database.php';
 
 $db = (new Database())->getConnection();
 
-$result = $db->execute_query("SELECT COUNT(*) AS count FROM Applicant WHERE status != 'Not Admitted'");
+$result = $db->execute_query("SELECT COUNT(*) AS count FROM Applicant WHERE status_id != 2");
 $applicant = $result->fetch_assoc()['count'];
 
 $result = $db->execute_query("SELECT COUNT(*) AS count FROM Students");
 $students = $result->fetch_assoc()['count'];
 
-$result = $db->execute_query("SELECT COUNT(*) AS count FROM Applicant WHERE status = 'Admitted'");
+$result = $db->execute_query("SELECT COUNT(*) AS count FROM Applicant WHERE status_id = 1");
 $admitted = $result->fetch_assoc()['count'];
 ?>
 

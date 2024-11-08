@@ -12,7 +12,7 @@ DROP TABLE `Faculty`;
 DROP TABLE `Persons`;
 DROP TABLE `Regional_center`;
 DROP TABLE `Students`;
-DROP TABLE `Administrators`;
+DROP TABLE `Employees`;
 SET FOREIGN_KEY_CHECKS = 1;
 
 CREATE TABLE Regional_center (
@@ -127,15 +127,15 @@ CREATE TABLE Roles (
     role_id TINYINT PRIMARY KEY,
     type VARCHAR(20) --(jefe, coordinador, docente, etc)
     route VARCHAR(20) --(admin, teacher, etc)
-)
-CREATE TABLE Administrators (
+);
+CREATE TABLE Employees (
     employee_number INT PRIMARY KEY AUTO_INCREMENT,
     person_id VARCHAR(20),
     role_id TINYINT,
     password VARBINARY(255) NOT NULL, 
     institute_email VARCHAR(100) UNIQUE,
     FOREIGN KEY (person_id) REFERENCES Persons(person_id),
-    Foreign Key (role) REFERENCES Roles(role_id)
+    Foreign Key (role_id) REFERENCES Roles(role_id)
 )
 
 CREATE TABLE Config (
@@ -161,7 +161,7 @@ BEGIN
 
     START TRANSACTION;
 
-    INSERT INTO Administrators (person_id, role, password, institute_email)
+    INSERT INTO `Employees` (person_id, role_id, password, institute_email)
     VALUES (
         in_person_id,
         in_role,
@@ -178,7 +178,8 @@ CREATE PROCEDURE LoginAdministrator (
     IN in_identifier VARCHAR(100),      
     IN in_password VARCHAR(255),       
     OUT is_authenticated BOOLEAN,       
-    OUT out_role VARCHAR(25)            
+    OUT out_role VARCHAR(25),
+    OUT out_route VARCHAR(25)        
 )
 BEGIN
     DECLARE secret_key VARCHAR(255);     
@@ -186,14 +187,17 @@ BEGIN
 
     SET is_authenticated = FALSE;
     SET out_role = '0';
+    SET out_route = '';
 
     SELECT JSON_UNQUOTE(JSON_EXTRACT(data, '$.phraseEncrypt'))
     INTO secret_key
     FROM Config
     WHERE config_id = 1;
 
-    SELECT password, role INTO db_password, out_role
-    FROM Administrators
+    SELECT A.password, B.type, B.route INTO db_password, out_role, out_route
+    FROM `Employees` A
+    INNER JOIN `Roles` B
+    ON A.role_id = B.role_id
     WHERE (institute_email = in_identifier OR employee_number = in_identifier);
 
     IF db_password IS NOT NULL AND AES_DECRYPT(db_password, secret_key) = in_password THEN

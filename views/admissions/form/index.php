@@ -3,11 +3,6 @@ include './../../../src/modules/database.php';
 
 $db = (new Database())->getConnection();
 $regionalCenters = $db->execute_query("SELECT * FROM Regional_center");
-$Carrers = $db->execute_query("SELECT * FROM Careers");
-$careersArray = [];
-while ($career = $Carrers->fetch_assoc()) {
-    $careersArray[] = $career;
-}
 
 ?>
 
@@ -27,6 +22,13 @@ while ($career = $Carrers->fetch_assoc()) {
 </head>
 <body>
     <?php include './../../../src/components/navbar.php'; ?>
+    <div class="modal fade flex justify-center items-center" id="loadingModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered  flex justify-center items-center">
+            <div class="spinner-border" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    </div>
     <div class="main min-h-full flex bg-aux justify-center items-center p-4">
         
         <form class="needs-validation bg rounded p-4" novalidate method="POST" action="/api/post/admissions/form.php"  enctype="multipart/form-data">
@@ -64,28 +66,30 @@ while ($career = $Carrers->fetch_assoc()) {
                     </div>
                 </div>
             </div>
-            <div class="row mb-4">
+            <div class="row mt-4 mb-2">
                 <div class="form-group">
-                    <select name="mainCareer" class="form-control" id="mainCareer">
-                        <option value="">Select main career</option>
+                    <select name="regionalCenter" class="form-control custom-select" id="regionalCenter">
+                        <option value="">Select regional center</option>
                         <?php
-                            foreach ($careersArray as $career) {
-                                echo '<option value="'.$career['career_id'].'">'.$career['career_name'].'</option>';
+                            while ($center = $regionalCenters->fetch_assoc()) {
+                                echo '<option value="'.$center['center_id'].'">'.$center['center_name'].'</option>';
                             }
-
                         ?>
                     </select>
                 </div>
+            </div>
+            <div class="row mb-4">
+                <div class="form-group">
+                    <select name="mainCareer" class="form-control" id="mainCareer" disabled>
+                        <option value="">Select main career</option>
+                        
+                    </select>
+                </div>
                 <div class="form-group mt-2">
-                    <select name="secondaryCareer" class="form-control  form-control-sm" id="secondaryCareer">
+                    <select name="secondaryCareer" class="form-control  form-control-sm" id="secondaryCareer" disabled>
 
                         <option value="">Select secondary career</option>
-                        <?php
-                            foreach ($careersArray as $career) {
-                                echo '<option value="'.$career['career_id'].'">'.$career['career_name'].'</option>';
-                            }
-
-                        ?>
+                       
                     </select>
                 </div>
             </div>
@@ -98,93 +102,12 @@ while ($career = $Carrers->fetch_assoc()) {
                     </div>
                 </div>
             </div>
-            <div class="row mb-4">
-                <div class="form-group">
-                    <select name="regionalCenter" class="form-control custom-select" id="regionalCenter">
-                        <option value="">Select regional center</option>
-                        <?php
-                            while ($center = $regionalCenters->fetch_assoc()) {
-                                echo '<option value="'.$center['center_id'].'">'.$center['center_name'].'</option>';
-                            }
-                        ?>
-                    </select>
-                </div>
-            </div>
+           
             <button class="btn btn-primary" type="submit">Submit form</button>
         </form>
 
     </div>
-    <script src="/public/bootstrap-5.3.3-dist/js/bootstrap.min.js"></script>
-    <script>
-    (function() {
-    'use strict';
-    window.addEventListener('load', function() {
-        var forms = document.getElementsByClassName('needs-validation');
-        var validation = Array.prototype.filter.call(forms, function(form) {
-        form.addEventListener('submit', function(event) {
-            if (form.checkValidity() === false) {
-                event.preventDefault();
-                event.stopPropagation();
-            }
-            form.classList.add('was-validated');
-        }, false);
-        });
-
-
-       
-
-        document.getElementById('phone').addEventListener('input', function (e) {
-            let input = e.target;
-            let value = input.value.replace(/\D/g, '');
-            if (value.length > 0 && !/[389]/.test(value[0])) {
-                value = '';
-            }
-
-            let formattedValue = '';
-            if (value.length > 0) {
-                formattedValue = value.substring(0, 4);
-            }
-            if (value.length > 4) {
-                formattedValue += '-' + value.substring(4, 8);
-            }
-
-            input.value = formattedValue;
-        });
-
-        document.getElementById('identity').addEventListener('input', function (e) {
-            let input = e.target;
-            let value = input.value.replace(/\D/g, ''); 
-            let formattedValue = '';
-
-            if (value.length > 0) {
-                formattedValue = value.substring(0, 4); 
-            }
-            if (value.length > 4) {
-                formattedValue += '-' + value.substring(4, 8); 
-            }
-            if (value.length > 8) {
-                formattedValue += '-' + value.substring(8, 13); 
-            }
-
-            input.value = formattedValue;
-        });
-
-        document.getElementById('email').addEventListener('input', function (e) {
-            const emailInput = e.target;
-            const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-
-            if (emailPattern.test(emailInput.value)) {
-                emailInput.classList.remove('is-invalid');
-                emailInput.classList.add('is-valid');
-            } else {
-                emailInput.classList.remove('is-valid');
-                emailInput.classList.add('is-invalid');
-            }
-        });
-    }, false);
-    })();
-
-    
-    </script>
+    <script src="/public/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/public/js/formAdmissions.js"></script>
 </body>
 </html>

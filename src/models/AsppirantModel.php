@@ -113,32 +113,57 @@ class Aspirant
         }
 
         try {
-            $sql = "SELECT status FROM Applicant WHERE person_id = ? AND (status = 'Admitted' OR status = 'Pendient')";
+            $sql = "SELECT status_id, counter FROM Applicant WHERE person_id = ? AND (status_id = 1 OR status_id = 0 OR status_id = 2)";
             $result = $conn->execute_query($sql, [$this->identity]);
-            $status = $result->fetch_assoc()['status'] ?? null;
+            $row = $result->fetch_assoc();
+            $status = $row['status_id'] ?? null;
+            $counter = $row['counter'] ?? 0;
 
-            if (is_null($status) || $status === 'Not Admitted') {
-                $sql = "INSERT IGNORE INTO `Persons` (person_id, first_name, last_name, phone, personal_email, center_id) 
-                        VALUES (?, ?, ?, ?, ?, ?)";
-                $conn->execute_query($sql, [
-                    $this->identity,
-                    $this->firstName,
-                    $this->lastName,
-                    $this->phone,
-                    $this->email,
-                    $this->regionalCenter
-                ]);
-
-                $sql = "INSERT INTO `Applicant` (person_id, preferend_career_id, secondary_career_id, certify, status) 
-                        VALUES (?, ?, ?, ?, 'Pendient')";
-                $conn->execute_query($sql, [
-                    $this->identity,
-                    $this->mainCareer,
-                    $this->secondaryCareer,
-                    $certifyFileName
-                ]);
-                return true;
+            if ($counter >= 3) {
+                $this->errors['counter'] = "The applicant cannot register because the counter has reached the maximum limit of 3.";
+                return false;
+            }
+        
+            if (is_null($status) || $status === 2) {
+                if ($status === 2) {
+                    // Incrementar el contador y cambiar `status_id` a 0
+                    $counter++;
+                    $sql = "UPDATE Applicant 
+                    SET counter = ?, status_id = 0, preferend_career_id = ?, secondary_career_id = ?
+                    WHERE person_id = ?";
+                    $conn->execute_query($sql, [
+                        $counter,
+                        $this->mainCareer,
+                        $this->secondaryCareer,
+                        $this->identity
+                    ]);
+                    return true;
+                } else {
+                    // Insertar en `Persons` si no existe previamente
+                    $sql = "INSERT IGNORE INTO `Persons` (person_id, first_name, last_name, phone, personal_email, center_id) 
+                            VALUES (?, ?, ?, ?, ?, ?)";
+                    $conn->execute_query($sql, [
+                        $this->identity,
+                        $this->firstName,
+                        $this->lastName,
+                        $this->phone,
+                        $this->email,
+                        $this->regionalCenter
+                    ]);
+        
+                    // Insertar en `Applicant` con status_id 0
+                    $sql = "INSERT INTO `Applicant` (person_id, preferend_career_id, secondary_career_id, certify, status_id) 
+                            VALUES (?, ?, ?, ?, 0)";
+                    $conn->execute_query($sql, [
+                        $this->identity,
+                        $this->mainCareer,
+                        $this->secondaryCareer,
+                        $certifyFileName
+                    ]);
+                    return true;
+                }
             } else {
+                $status = $status == 0 ? 'Pending' : 'Admitted';
                 $this->errors['status'] = "The applicant cannot register because their status is $status.";
                 return false;
             }
@@ -149,6 +174,7 @@ class Aspirant
                 throw $e;
             }
         }
+        
 
         return false;
     }
