@@ -14,3 +14,6 @@ INSERT INTO `Persons`(person_id, first_name, last_name) VALUES ('admisiones', 'a
 INSERT INTO `Persons`(person_id, first_name, last_name) VALUES ('registro', 'registro', "user");
 INSERT INTO `Persons`(person_id, first_name, last_name) VALUES ('admin', 'admin', "user");
 
+INSERT INTO `StatusApplicant` (status_id, description) VALUES (0, 'Pendient');
+INSERT INTO `StatusApplicant` (status_id, description) VALUES (1, 'Admitted');
+INSERT INTO `StatusApplicant` (status_id, description) VALUES (3, 'Not Admitted');

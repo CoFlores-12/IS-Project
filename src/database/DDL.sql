@@ -93,6 +93,8 @@ CREATE TABLE Applicant (
     inscription_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     status_id TINYINT,
     counter TINYINT DEFAULT 1,
+    approved_pref BIT DEFAULT 0,
+    approved_sec BIT DEFAULT 0,
     FOREIGN KEY (person_id) REFERENCES Persons(person_id),
     FOREIGN KEY (preferend_career_id) REFERENCES Careers(career_id),
     FOREIGN KEY (secondary_career_id) REFERENCES Careers(career_id),
