@@ -1,3 +1,11 @@
+<?php 
+session_start();
+
+$role = $_SESSION['role'];
+$_SESSION['request'] = 'admin';
+
+include '../../../../src/components/sessionValidation.php';
+?>
 <?php
 include './../../../../src/modules/database.php';
 
@@ -93,7 +101,7 @@ $admitted = $result->fetch_assoc()['count'];
                         <li><a class="dropdown-item" href="#">Messages</a></li>
                         <li><a class="dropdown-item" href="#">requests</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="/">Logout <i class="bi bi-box-arrow-right"></i></a></li>
+                        <li><a class="dropdown-item" href="/api/get/logout.php">Logout <i class="bi bi-box-arrow-right"></i></a></li>
                     </ul>
                  </div>
             </div>
