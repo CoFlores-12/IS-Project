@@ -68,12 +68,17 @@ function generateAccountNumber() {
     $conn = (new Database())->getConnection();
 
     $year = date("Y");        
-    $proceso = 103;       
-  
+    
+    $sql = "SELECT indicator FROM Periods WHERE year=".$year;
+
+    $result = $conn->execute_query($sql);
+
+     $row = $result->fetch_assoc();
+     $indicator = $row['indicator'];
   
     $years = str_pad($year, 4, "0", STR_PAD_LEFT);       
 
-    $processAdmission = str_pad($proceso, 3, "0", STR_PAD_LEFT); 
+    $processAdmission = "10".str_pad($indicator, 1, "0", STR_PAD_LEFT); 
 
     $query = "SELECT COUNT(*) AS students 
                 FROM Students 
