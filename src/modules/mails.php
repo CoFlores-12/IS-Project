@@ -2,11 +2,15 @@
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-require './../../../vendor/autoload.php';
+require '../../../vendor/autoload.php';
 
 class Mails {
     private $mail;
 
+    /**
+     * Builder that configures PHPMailer to send mail using SMTP.
+     * Load sender credentials and SMTP configuration from a .env file.
+     */
     public function __construct($user, $password) {
         $this->mail = new PHPMailer(true);
         
@@ -19,6 +23,15 @@ class Mails {
         $this->mail->Port = 587;
     }
 
+    /**
+     * Send an email to a specific recipient.
+     *
+     * @param string $from Sender's email address.
+     * @param string $to Email address of the recipient.
+     * @param string $subject Email subject.
+     * @param string $body Message body in HTML format.
+     * @return string 
+     */
     public function sendEmail($to, $email, $affair, $message) {
         try {
             
