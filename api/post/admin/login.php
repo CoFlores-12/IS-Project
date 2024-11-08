@@ -16,6 +16,8 @@ $role = $row['role'];
 $route = $row['route'];
 
 if ($is_authenticated) {
+    session_start();
+    $_SESSION['role'] = $role;
     echo json_encode(["route" => "/views/admin/".$route."/home/index.php"]);
 } else {
     http_response_code(404);
