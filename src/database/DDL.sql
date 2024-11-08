@@ -143,6 +143,60 @@ CREATE TABLE Config (
     data JSON
 )
 
+CREATE TABLE `Periods` (
+  `period_id` int PRIMARY KEY AUTO_INCREMENT,
+  `indicator` tinyint,
+  `year` SMALLINT,
+  `active` bit
+);
+
+CREATE TABLE `Building` (
+  `building_id` int PRIMARY KEY AUTO_INCREMENT,
+  `building_name` varchar(20),
+  `center_id` int,
+  Foreign Key (center_id) REFERENCES Regional_center(center_id)
+);
+
+CREATE TABLE `Classroom` (
+  `classroom_id` int PRIMARY KEY AUTO_INCREMENT,
+  `classroom_name` varchar(20),
+  `building_id` int,
+  `capacity` tinyint,
+  Foreign Key (building_id) REFERENCES Building(building_id)
+);
+
+CREATE TABLE `Section` (
+  `section_id` int PRIMARY KEY AUTO_INCREMENT,
+  `class_id` int,
+  `hour_start` smallint,
+  `hour_end` smallint,
+  `period_id` int,
+  `classroom_id` int,
+  Foreign Key (class_id) REFERENCES Classes(class_id),
+  Foreign Key (period_id) REFERENCES Periods(period_id),
+  Foreign Key (classroom_id) REFERENCES Classroom(classroom_id)
+);
+
+CREATE TABLE `Obs` (
+    obs_id TINYINT PRIMARY KEY,
+    obs_name VARCHAR(20)
+)
+
+CREATE TABLE `History` (
+    history_id INT PRIMARY KEY AUTO_INCREMENT,
+    section_id INT,
+    student_id VARCHAR(11),
+    score TINYINT,
+    obs_id TINYINT,
+    Foreign Key (section_id) REFERENCES Section(section_id),
+    Foreign Key (student_id) REFERENCES Students(account_number),
+    Foreign Key (obs_id) REFERENCES Obs(obs_id)
+)
+
+
+
+
+
 DELIMITER //
 
 CREATE PROCEDURE CreateAdministrator (

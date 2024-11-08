@@ -33,7 +33,7 @@
       <div class="modal-body">
         <div class="row p">
             <div class="col-9 flex justify-center items-center">
-                <input type="text" id="inputHistory" class="w-full" placeholder="Enter Account Number of Student">
+                <input type="text" id="inputHistory" class="w-full" placeholder="Enter Account Number, identity or email of Student">
             </div>
             <div class="col-3">
                 <button id="btnSearchHistory" class="btn bg-custom-primary text-white">Search</button>
@@ -107,6 +107,35 @@
             historyBody.innerHTML = `<center><div class="spinner-grow text-secondary" role="status">
                                         <span class="visually-hidden">Loading...</span>
                                     </div>`
+
+            fetch('/api/get/admin/studentHistory.php?student_identifier='+inputHistory.value)
+            .then((response)=>{return response.json()})
+            .then((response)=>{
+                let table = `<table class="table bg-aux mt-2">
+                                <thead>
+                                    <tr class="bg-aux text">
+                                    <th class="bg-aux text" scope="col">Code</th>
+                                    <th class="bg-aux text" scope="col">Class</th>
+                                    <th class="bg-aux text" scope="col">Score</th>
+                                    <th class="bg-aux text" scope="col">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>`; 
+                response.forEach(classHistory => {
+                    table += `<tr class="bg-aux">
+                            <th class="bg-aux text" scope="row">${classHistory['class_code']}</th>
+                            <td class="bg-aux text">${classHistory['class_name']}</td>
+                            <td class="bg-aux text">${classHistory['score']}</td>
+                            <td class="bg-aux text">-</td>
+                        </tr>`
+                });
+
+                table += `</tbody></table>`;
+                historyBody.innerHTML = table
+            })
+            .catch(()=>{
+                alert('Student not found')
+            })
         })
     </script>
 </body>
