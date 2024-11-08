@@ -46,6 +46,31 @@
     </div>
   </div>
 </div>
+
+<div class="modal fade" id="changePassword" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog bg modal-lg">
+    <div class="modal-content bg">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Reset Password</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row p">
+            <div class="col-9 flex justify-center items-center">
+                <input type="text" id="inputTeacher" class="w-full" placeholder="Enter the employee number, identification or institutional email of the teacher">
+            </div>
+            <div class="col-3">
+                <button id="btnSearcTeacher" class="btn bg-custom-primary text-white">Search</button>
+            </div>
+        </div>
+        <div id="resetBody">
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="main">
         <div class="offcanvas offcanvas-start bg" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
             <div class="offcanvas-header justify-between">
@@ -63,7 +88,9 @@
                         <a href="#" class="list-group-item list-group-item-action bg list-group-item-indent">View Requests</a>
 
                     <div class="list-group-item list-group-title list-group-item-primary text bg-aux fw-bold mt-2">Teachers</div>
-                        <a href="#" class="list-group-item list-group-item-action bg list-group-item-indent">Reset Password</a>
+                         <button type="button" class="text list-group-item list-group-item-action bg list-group-item-indent" data-bs-toggle="modal" data-bs-target="#changePassword">
+                            Reset Password
+                        </button>
                 </div>
             </div>
         </div>
@@ -98,45 +125,6 @@
         </div>
     </div>
     <script src="/public/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        let btnSearchHistory = document.getElementById('btnSearchHistory');
-        let historyBody = document.getElementById('historyBody');
-        let inputHistory = document.getElementById('inputHistory');
-        btnSearchHistory.addEventListener('click', ()=>{
-            if (inputHistory.value === '') {return; }
-            historyBody.innerHTML = `<center><div class="spinner-grow text-secondary" role="status">
-                                        <span class="visually-hidden">Loading...</span>
-                                    </div>`
-
-            fetch('/api/get/admin/studentHistory.php?student_identifier='+inputHistory.value)
-            .then((response)=>{return response.json()})
-            .then((response)=>{
-                let table = `<table class="table bg-aux mt-2">
-                                <thead>
-                                    <tr class="bg-aux text">
-                                    <th class="bg-aux text" scope="col">Code</th>
-                                    <th class="bg-aux text" scope="col">Class</th>
-                                    <th class="bg-aux text" scope="col">Score</th>
-                                    <th class="bg-aux text" scope="col">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>`; 
-                response.forEach(classHistory => {
-                    table += `<tr class="bg-aux">
-                            <th class="bg-aux text" scope="row">${classHistory['class_code']}</th>
-                            <td class="bg-aux text">${classHistory['class_name']}</td>
-                            <td class="bg-aux text">${classHistory['score']}</td>
-                            <td class="bg-aux text">-</td>
-                        </tr>`
-                });
-
-                table += `</tbody></table>`;
-                historyBody.innerHTML = table
-            })
-            .catch(()=>{
-                alert('Student not found')
-            })
-        })
-    </script>
+    <script src="/public/js/departametHead.js"></script>
 </body>
 </html>
