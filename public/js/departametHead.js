@@ -91,3 +91,62 @@ let btnSearchHistory = document.getElementById('btnSearchHistory');
                 alert('Error, something went wrong')
             })
         }
+
+
+
+
+        /*lo nuevo */
+
+        let btnNewClass = document.getElementById('newClass');
+        let newClassBody = document.getElementById('newClassBody');
+        let btnNewSection = document.getElementById('btnNewSection');
+        let newSectionClass = document.getElementById('newSectionClass');
+
+        let classes = document.getElementById('classes');
+        let teachers = document.getElementById('teachers');
+        let classrooms = document.getElementById('classrooms');
+        let schedule = document.getElementById('schedule');
+        let available_spaces = document.getElementById('available_spaces');
+        
+
+        newSectionClass.addEventListener('click', ()=>{
+            
+            if (classes.value === '') {return; }
+            if (teachers.value === '') {return; }
+            if (classrooms.value === '') {return; }
+            if (schedule.value === '') {return; }
+            if (available_spaces.value === '') {return; }
+
+
+            console.log(teachers.value,available_spaces.value )
+
+            newClassBody.innerHTML = `
+                                        <tr>
+                                            <td>${classes.options[classes.selectedIndex].text}</td>
+                                            <td>${teachers.options[teachers.selectedIndex].text}</td>
+                                            <td>${classrooms.options[classrooms.selectedIndex].text}</td>
+                                            <td>${schedule.value}</td>
+                                            <td>${available_spaces.value}</td>
+                                        </tr>
+                                    `; 
+
+                       
+                    
+                                    fetch('/api/get/admin/newSection.php')
+                                    .then((response)=>{return response.json()})
+                                    .then((response)=>{
+                        
+                                        
+                                    })
+                                    .catch(()=>{
+                                        alert('Teacher not found')
+                                    })
+
+             
+            
+
+        })
+
+        
+
+    

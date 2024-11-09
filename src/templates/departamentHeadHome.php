@@ -71,6 +71,51 @@
   </div>
 </div>
 
+
+<div class="modal fade" id="newSection" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog bg modal-lg">
+    <div class="modal-content bg">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Add new section</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row p">
+
+        <label class="mb-1">Classes:</label>
+        <select class="form-select mb-3" id="classes">
+            <option value="" selected>Select...</option>
+        </select>
+
+        <label class="mb-1">Teachers:</label>
+        <select class="form-select mb-3" id="teachers">
+            <option value="" selected>Select...</option>
+        </select>
+
+        <label class="mb-1">Classrooms:</label>
+        <select class="form-select mb-3" id="classrooms">
+            <option value="" selected>Select...</option>
+        </select>
+
+        <label class="mb-1">Schedule:</label>
+        <select class="form-select mb-3" id="schedule">
+            <option value="" selected>Select...</option>
+        </select>
+
+        <label class="mb-1">Available Spaces:</label>
+            <input type="number" id="available_spaces" name="cupo" min="1" max="100" placeholder="Select..." value="">
+            
+        <button type="button" class="btn btn-success mt-4 btn-sm" id="btnNewSection">Success</button>
+        </div>
+
+        <div id="newClassBody">
+                
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="main">
         <div class="offcanvas offcanvas-start bg" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
             <div class="offcanvas-header justify-between">
@@ -90,6 +135,11 @@
                     <div class="list-group-item list-group-title list-group-item-primary text bg-aux fw-bold mt-2">Teachers</div>
                          <button type="button" class="text list-group-item list-group-item-action bg list-group-item-indent" data-bs-toggle="modal" data-bs-target="#changePassword">
                             Reset Password
+                        </button>
+                </div>
+                <div class="list-group-item list-group-title list-group-item-primary text bg-aux fw-bold mt-2">Classes</div>
+                         <button type="button" class="text list-group-item list-group-item-action bg list-group-item-indent" data-bs-toggle="modal" data-bs-target="#newSection" id="newSectionClass">
+                             Add new section
                         </button>
                 </div>
             </div>

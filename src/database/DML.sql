@@ -47,3 +47,8 @@ ON A.section_id = S.section_id
 INNER JOIN `Classes` C
 ON S.class_id = C.class_id
 WHERE B.account_number = '20201000005' OR B.person_id = '0801202400005' OR B.institute_email = 'estudiantes@unah.hn'
+
+
+/*new*/
+INSERT INTO `Departments`(`department_name`) VALUES ("Ingenieria");
+
