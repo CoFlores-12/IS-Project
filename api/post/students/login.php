@@ -12,12 +12,13 @@ $result = $conn->query("SELECT @is_authenticated AS is_authenticated, @out_id AS
 
 $row = $result->fetch_assoc();
 $is_authenticated = $row['is_authenticated'];
-$role = $row['out_id'];
+$id = $row['out_id'];
 
 if ($is_authenticated) {
     session_start();
     $_SESSION['role'] = 'student';
     $_SESSION['route'] = 'student';
+    $_SESSION['studentID'] = $id;
     echo json_encode(["route" => "/views/students/home/index.php"]);
 } else {
     http_response_code(404);

@@ -54,7 +54,7 @@ include '../../../src/components/sessionValidation.php';
                 </button>
             </div>
             <div class="offcanvas-body">
-                <span id="btnModalRequests">
+                <span id="btnModalRequests" class="cursor-pointer">
                     Create Request
                 </span>
             
