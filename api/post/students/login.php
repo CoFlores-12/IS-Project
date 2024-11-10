@@ -16,6 +16,7 @@ $role = $row['out_id'];
 
 if ($is_authenticated) {
     session_start();
+    $_SESSION['role'] = 'student';
     $_SESSION['route'] = 'student';
     echo json_encode(["route" => "/views/students/home/index.php"]);
 } else {

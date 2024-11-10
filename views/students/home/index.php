@@ -21,6 +21,30 @@ include '../../../src/components/sessionValidation.php';
     <link rel="stylesheet" href="/public/css/homeStudents.css">
 </head>
 <body>
+
+<!-- Modal Requests -->
+<div class="modal fade" id="modalRequests" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content bg">
+      <div class="modal-header bg">
+        <h5 class="modal-title text" id="staticBackdropLabel">Create Request</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <select name="requestType" class="form-control mb-2" id="requestType">
+            <option value="">Select request type</option>
+            <option value="1">Remedial Exam Fee</option>
+            <option value="2">Class Cancellation</option>
+            <option value="3">Career Change</option>
+            <option value="4">Campus Change</option>
+        </select>
+        <div id="dataForRequest">
+            
+        </div>
+    </div>
+    </div>
+  </div>
+</div>
     <div class="main">
         <div class="offcanvas offcanvas-start bg" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
             <div class="offcanvas-header justify-between">
@@ -30,8 +54,10 @@ include '../../../src/components/sessionValidation.php';
                 </button>
             </div>
             <div class="offcanvas-body">
-                
-                
+                <span id="btnModalRequests">
+                    Create Request
+                </span>
+            
             </div>
         </div>
         <div class="header p-2 text-inverter bg">
@@ -125,5 +151,6 @@ include '../../../src/components/sessionValidation.php';
     </div>
 
     <script src="/public/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/public/js/homeStudent.js"></script>
 </body>
 </html>
