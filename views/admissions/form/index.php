@@ -22,6 +22,27 @@ $regionalCenters = $db->execute_query("SELECT * FROM Regional_center");
 </head>
 <body>
     <?php include './../../../src/components/navbar.php'; ?>
+    <div class="buttons">
+        <button class="btn bg-custom-primary text-white"  data-bs-toggle="modal" data-bs-target="#csvUploadModal">Upload Admission Results</button>
+    </div>
+    <!-- Modal CSV Upload
+    <div class="modal fade" id="csvUploadModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg">
+            <div class="modal-header bg">
+                <h5 class="modal-title text" id="staticBackdropLabel">Upload a CSV with the admissions results</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/api/post/admin/uploadCSV.php" method="post" enctype="multipart/form-data">
+                    <label for="file">Select a CSV file:</label>
+                    <input type="file" name="file" id="file" accept=".csv">
+                    <button type="submit" name="submit">Upload and Import</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    Modal CSV Upload -->
     <div class="modal fade flex justify-center items-center" id="loadingModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered  flex justify-center items-center">
             <div class="spinner-border" role="status">
