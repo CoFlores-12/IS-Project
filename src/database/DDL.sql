@@ -319,4 +319,84 @@ END //
 
 DELIMITER ;
 
+ALTER TABLE `Applicant_result` MODIFY `obs` VARCHAR(20);
+
+DELIMITER //
+
+CREATE PROCEDURE validate_obs_paa()
+BEGIN
+    DECLARE done INT DEFAULT 0;
+
+    -- Variables para los datos de applicant_result
+    DECLARE identity_num VARCHAR(20);
+    DECLARE exam_result FLOAT;
+    
+    -- Variables para los datos relacionados
+    DECLARE preferred_career INT;
+    DECLARE secondary_career INT;
+    DECLARE min_point_career1 FLOAT;
+    DECLARE min_point_career2 FLOAT;
+    
+    -- Cursor para recorrer la tabla applicant_result
+    DECLARE applicant_cursor CURSOR FOR
+        SELECT identity_number, result_exam FROM Applicant_result;
+
+    -- Handler para el fin del cursor
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
+
+    -- Abrir el cursor
+    OPEN applicant_cursor;
+
+    -- Bucle para recorrer cada fila del cursor
+    read_loop: LOOP
+        FETCH applicant_cursor INTO identity_num, exam_result;
+        IF done THEN
+            LEAVE read_loop;
+        END IF;
+
+        -- Recuperar las carreras preferida y secundaria del applicant
+        SELECT preferend_career_id, secondary_career_id
+        INTO preferred_career, secondary_career
+        FROM Applicant
+        WHERE person_id = identity_num;
+
+        -- Recuperar min_point para preferred_career
+        SELECT min_point INTO min_point_career1
+        FROM ExamsXCareer
+        WHERE career_id = preferred_career AND exam_code = 'PAA';
+
+        -- Validar con preferred_career
+        IF exam_result >= min_point_career1 THEN
+            UPDATE Applicant_result
+            SET obs = 'Aprovado Carrera 1'
+            WHERE identity_number = identity_num AND exam_code = 'PAA';
+            ITERATE read_loop; -- Salta a la siguiente iteración
+        END IF;
+
+        -- Recuperar min_point para secondary_career
+        SELECT min_point INTO min_point_career2
+        FROM ExamsXCareer
+        WHERE career_id = secondary_career AND exam_code = 'PAA';
+
+        -- Validar con secondary_career
+        IF exam_result >= min_point_career2 THEN
+            UPDATE Applicant_result
+            SET obs = 'Aprovado Carrera 2'
+            WHERE identity_number = identity_num AND exam_code = 'PAA';
+            ITERATE read_loop; -- Salta a la siguiente iteración
+        END IF;
+
+        -- Si ninguna de las condiciones se cumplió, marcar como "No Aprovado"
+        UPDATE Applicant_result
+        SET obs = 'No Aprovado'
+        WHERE identity_number = identity_num AND exam_code = 'PAA';
+    END LOOP;
+
+    -- Cerrar el cursor
+    CLOSE applicant_cursor;
+END //
+
+DELIMITER ;
+
+CALL validate_obs_paa();
 
