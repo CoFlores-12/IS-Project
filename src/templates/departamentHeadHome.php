@@ -81,7 +81,7 @@
       </div>
       <div class="modal-body">
         <div class="row p">
-
+      
         <label class="mb-1">Classes:</label>
         <select class="form-select mb-3" id="classes">
             <option value="" selected>Select...</option>
@@ -99,7 +99,20 @@
 
         <label class="mb-1">Schedule:</label>
         <select class="form-select mb-3" id="schedule">
-            <option value="" selected>Select...</option>
+                <option value="" selected>Select...</option>
+                <option value="07:00ini-08:00fin">07:00ini-08:00fin</option>
+                <option value="08:00ini-09:00fin">08:00ini-09:00fin</option>
+                <option value="09:00ini-10:00fin">09:00ini-10:00fin</option>
+                <option value="10:00ini-11:00fin">10:00ini-11:00fin</option>
+                <option value="11:00ini-12:00fin">11:00ini-12:00fin</option>
+                <option value="12:00ini-13:00fin">12:00ini-13:00fin</option>
+                <option value="13:00ini-14:00fin">13:00ini-14:00fin</option>
+                <option value="14:00ini-15:00fin">14:00ini-15:00fin</option>
+                <option value="15:00ini-16:00fin">15:00ini-16:00fin</option>
+                <option value="16:00ini-17:00fin">16:00ini-17:00fin</option>
+                <option value="17:00ini-18:00fin">17:00ini-18:00fin</option>
+                <option value="18:00ini-19:00fin">18:00ini-19:00fin</option>
+                <option value="19:00ini-20:00fin">19:00ini-20:00fin</option>
         </select>
 
         <label class="mb-1">Available Spaces:</label>

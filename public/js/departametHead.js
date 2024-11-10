@@ -107,44 +107,53 @@ let btnSearchHistory = document.getElementById('btnSearchHistory');
         let classrooms = document.getElementById('classrooms');
         let schedule = document.getElementById('schedule');
         let available_spaces = document.getElementById('available_spaces');
+        let facultyID = document.getElementById('facultyID');
+        
         
 
         newSectionClass.addEventListener('click', ()=>{
-            
-            if (classes.value === '') {return; }
-            if (teachers.value === '') {return; }
-            if (classrooms.value === '') {return; }
-            if (schedule.value === '') {return; }
-            if (available_spaces.value === '') {return; }
+            fetch('/api/get/admin/searchFieldsDepartments.php')
+            .then((response)=>{return response.json()})
+            .then((data)=>{
+                 console.log(data)  
+                 
+                 if (data.clases && Array.isArray(data.clases)) {
+                    data.clases.forEach(clase => {
+                        const option = document.createElement('option');
+                        option.value = clase.class_id; // Valor de la opción
+                        option.textContent = clase.class_name; // Texto visible de la opción
+                        classes.appendChild(option);
+                    });
+                } else {
+                    console.error('No se encontró la propiedad "classes" o no es un array válido');
+                }
 
+                if (data.teachers && Array.isArray(data.teachers)) {
+                    data.teachers.forEach(teacher => {
+                        const option = document.createElement('option');
+                        option.value = teacher.employee_number; // Valor de la opción
+                        option.textContent = teacher.first_name+" "+teacher.last_name; // Texto visible de la opción
+                        teachers.appendChild(option);
+                    });
+                } else {
+                    console.error('No se encontró la propiedad "classes" o no es un array válido');
+                }
+                 
+                if (data.classroom && Array.isArray(data.classroom)) {
+                    data.classroom.forEach(classroom => {
+                        const option = document.createElement('option');
+                        option.value = classroom.classroom_id; // Valor de la opción
+                        option.textContent = classroom.classroom_name+" / "+classroom.building_name+" / "+classroom.center_name; // Texto visible de la opción
+                        classrooms.appendChild(option);
+                    });
+                } else {
+                    console.error('No se encontró la propiedad "classes" o no es un array válido');
+                }
 
-            console.log(teachers.value,available_spaces.value )
-
-            newClassBody.innerHTML = `
-                                        <tr>
-                                            <td>${classes.options[classes.selectedIndex].text}</td>
-                                            <td>${teachers.options[teachers.selectedIndex].text}</td>
-                                            <td>${classrooms.options[classrooms.selectedIndex].text}</td>
-                                            <td>${schedule.value}</td>
-                                            <td>${available_spaces.value}</td>
-                                        </tr>
-                                    `; 
-
-                       
-                    
-                                    fetch('/api/get/admin/newSection.php')
-                                    .then((response)=>{return response.json()})
-                                    .then((response)=>{
-                        
-                                        
-                                    })
-                                    .catch(()=>{
-                                        alert('Teacher not found')
-                                    })
-
-             
-            
-
+            })
+            .catch(()=>{
+               alert('Teacher not found')
+            })
         })
 
         

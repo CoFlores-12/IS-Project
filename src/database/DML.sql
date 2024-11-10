@@ -52,3 +52,24 @@ WHERE B.account_number = '20201000005' OR B.person_id = '0801202400005' OR B.ins
 /*new*/
 INSERT INTO `Departments`(`department_name`) VALUES ("Ingenieria");
 
+INSERT INTO ClassesXCareer (class_id, career_id, req) VALUES (1, 1, '{"id_clase": 1, "id_clase_2": 2}');
+
+
+SELECT * FROM `Careers` JOIN `ClassesXCareer` ON `Careers`.class_id = `ClassesXCareer`.class_id
+
+SELECT 
+    C.class_id,
+    C.class_name,
+    C.uv,
+    C.class_code
+FROM 
+    Classes C
+JOIN 
+    ClassesXCareer CC ON C.class_id = CC.class_id
+JOIN 
+    Careers CR ON CC.career_id = CR.career_id
+JOIN 
+    Departments D ON CR.department_id = D.department_id
+WHERE 
+    D.department_id = 1;
+

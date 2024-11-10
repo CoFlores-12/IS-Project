@@ -6,11 +6,12 @@ $password = $_POST['password'];
 include '../../../src/modules/database.php';
 $conn = (new Database())->getConnection();
 
-$sql = "CALL LoginAdministrator(?, ?, @is_authenticated, @out_role, @out_route, @out_employee_number);";
+$sql = "CALL LoginAdministrator1(?, ?, @is_authenticated, @out_role, @out_route, @out_employee_number);";
 $result = $conn->execute_query($sql, [$email, $password]);
-$result = $conn->query("SELECT @is_authenticated AS is_authenticated, @out_role AS role, @out_route as route, @out_employee_number as departmentid ");
+$result = $conn->query("SELECT @is_authenticated AS is_authenticated, @out_role AS role, @out_route as route, @out_employee_number as departmentid");
 
 $row = $result->fetch_assoc();
+
 $is_authenticated = $row['is_authenticated'];
 $role = $row['role'];
 $route = $row['route'];

@@ -73,7 +73,7 @@
     CREATE TABLE ClassesXCareer (
         class_id INT,
         career_id INT,
-        req JSON,
+        req JSON, 
         PRIMARY KEY (class_id, career_id),
         FOREIGN KEY (class_id) REFERENCES Classes(class_id),
         FOREIGN KEY (career_id) REFERENCES Careers(career_id)
@@ -202,6 +202,11 @@
     ALTER TABLE Employees
     ADD COLUMN department_id INT,
     ADD FOREIGN KEY (department_id) REFERENCES Departments(department_id);
+
+    ALTER TABLE Careers
+    ADD COLUMN department_id INT,
+    ADD FOREIGN KEY (department_id) REFERENCES Departments(department_id);
+
     /*end modifications for the employee's department*/
 
     DELIMITER //
@@ -309,3 +314,44 @@
     DELIMITER ;
 
 
+
+/*borrar luego*/
+CREATE PROCEDURE LoginAdministrator1 (
+        IN in_identifier VARCHAR(100),      
+        IN in_password VARCHAR(255),       
+        OUT is_authenticated BOOLEAN,       
+        OUT out_role VARCHAR(25),
+        OUT out_route VARCHAR(25),
+        OUT out_employee_number INT       
+    )
+    BEGIN
+        DECLARE secret_key VARCHAR(255);     
+        DECLARE db_password VARBINARY(255);
+
+        SET is_authenticated = FALSE;
+        SET out_role = '0';
+        SET out_route = '';
+        SET out_employee_number = NULL;
+
+        SELECT JSON_UNQUOTE(JSON_EXTRACT(data, '$.phraseEncrypt'))
+        INTO secret_key
+        FROM Config
+        WHERE config_id = 1;
+
+        SELECT A.password, B.type, B.route, A.employee_number INTO db_password, out_role, out_route, out_employee_number
+        FROM `Employees` A
+        INNER JOIN `Roles` B
+        ON A.role_id = B.role_id
+        WHERE (institute_email = in_identifier OR A.employee_number = in_identifier);
+
+        IF db_password IS NOT NULL AND AES_DECRYPT(db_password, secret_key) = in_password THEN
+            SET is_authenticated = TRUE;
+        ELSE
+            SET out_role = '0'; 
+        END IF;
+    END //
+
+    DELIMITER ;
+
+
+ 
