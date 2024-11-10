@@ -13,6 +13,7 @@ DROP TABLE `Persons`;
 DROP TABLE `Regional_center`;
 DROP TABLE `Students`;
 DROP TABLE `Employees`;
+DROP TABLE `Requests`;
 SET FOREIGN_KEY_CHECKS = 1;
 
 CREATE TABLE Regional_center (
@@ -193,7 +194,27 @@ CREATE TABLE `History` (
     Foreign Key (obs_id) REFERENCES Obs(obs_id)
 )
 
+CREATE TABLE RequestTypes (
+  request_type_id TINYINT PRIMARY key AUTO_INCREMENT,
+  title VARCHAR(50)
+);
 
+CREATE TABLE `Requests` (
+  `request_id` int PRIMARY KEY AUTO_INCREMENT,
+  `student_id` VARCHAR(11) not NULL,
+  `request_type_id` TINYINT,
+  `date` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  `status` BIT,
+  `comments` TEXT,
+  `response` TEXT,
+  `evidence` MEDIUMBLOB,
+  `career_change_id` int,
+  `campus_change_id` int,
+  Foreign Key (request_type_id) REFERENCES RequestTypes(request_type_id),
+  Foreign Key (student_id) REFERENCES Students(account_number),
+  Foreign Key (career_change_id) REFERENCES Careers(career_id),
+  Foreign Key (campus_change_id) REFERENCES Regional_center(center_id)
+);
 
 
 
@@ -285,7 +306,7 @@ BEGIN
     FROM Config
     WHERE config_id = 1;
 
-    SELECT password, person_id INTO db_password, out_id
+    SELECT password, account_number INTO db_password, out_id
     FROM `Students`
     WHERE (institute_email = in_identifier OR account_number = in_identifier);
 

@@ -39,11 +39,7 @@ INSERT INTO `Students` (account_number, person_id, institute_email, password) VA
 
 INSERT INTO `Classroom`(`classroom_id`,`classroom_name`,`building_id`,`capacity`) VALUES (1, 'FI-403', 1, 15);
 
-SELECT C.class_code, C.class_name, A.score FROM History A
-INNER JOIN Students B
-ON A.student_id = B.account_number
-INNER JOIN `Section` S
-ON A.section_id = S.section_id
-INNER JOIN `Classes` C
-ON S.class_id = C.class_id
-WHERE B.account_number = '20201000005' OR B.person_id = '0801202400005' OR B.institute_email = 'estudiantes@unah.hn'
+INSERT INTO `RequestTypes`(request_type_id, title) VALUES (1,'Remedial Exam Fee');
+INSERT INTO `RequestTypes`(request_type_id, title) VALUES (2,'Class Cancellation');
+INSERT INTO `RequestTypes`(request_type_id, title) VALUES (3,'Career Change');
+INSERT INTO `RequestTypes`(request_type_id, title) VALUES (4,'Campus Change');

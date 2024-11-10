@@ -41,7 +41,6 @@
 
           <div class="flex justify-between items-center">
             
-            <a href="#!" class="text">Forgot password?</a>
           </div>
 
           <div class="text-center text-lg-start mt-4 pt-2">
