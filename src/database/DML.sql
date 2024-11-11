@@ -43,3 +43,38 @@ INSERT INTO `RequestTypes`(request_type_id, title) VALUES (1,'Remedial Exam Fee'
 INSERT INTO `RequestTypes`(request_type_id, title) VALUES (2,'Class Cancellation');
 INSERT INTO `RequestTypes`(request_type_id, title) VALUES (3,'Career Change');
 INSERT INTO `RequestTypes`(request_type_id, title) VALUES (4,'Campus Change');
+
+SELECT C.class_code, C.class_name, A.score FROM History A
+INNER JOIN Students B
+ON A.student_id = B.account_number
+INNER JOIN `Section` S
+ON A.section_id = S.section_id
+INNER JOIN `Classes` C
+ON S.class_id = C.class_id
+WHERE B.account_number = '20201000005' OR B.person_id = '0801202400005' OR B.institute_email = 'estudiantes@unah.hn'
+
+
+/*new*/
+INSERT INTO `Departments`(`department_name`) VALUES ("Ingenieria");
+
+INSERT INTO ClassesXCareer (class_id, career_id, req) VALUES (1, 1, '{"id_clase": 1, "id_clase_2": 2}');
+
+
+SELECT * FROM `Careers` JOIN `ClassesXCareer` ON `Careers`.class_id = `ClassesXCareer`.class_id
+
+SELECT 
+    C.class_id,
+    C.class_name,
+    C.uv,
+    C.class_code
+FROM 
+    Classes C
+JOIN 
+    ClassesXCareer CC ON C.class_id = CC.class_id
+JOIN 
+    Careers CR ON CC.career_id = CR.career_id
+JOIN 
+    Departments D ON CR.department_id = D.department_id
+WHERE 
+    D.department_id = 1;
+
