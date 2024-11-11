@@ -199,13 +199,17 @@
         department_name VARCHAR(100) NOT NULL
     );
 
+    
     ALTER TABLE Employees
     ADD COLUMN department_id INT,
     ADD FOREIGN KEY (department_id) REFERENCES Departments(department_id);
 
-    ALTER TABLE Careers
-    ADD COLUMN department_id INT,
-    ADD FOREIGN KEY (department_id) REFERENCES Departments(department_id);
+    ALTER TABLE Section
+    ADD COLUMN employee_number INT,
+    ADD COLUMN quotas INT,
+    ADD COLUMN days VARCHAR(25),   -- //TODO: tinene que quedar en 25
+    ADD FOREIGN KEY (employee_number) REFERENCES Employees(employee_number);
+
 
     /*end modifications for the employee's department*/
 
@@ -239,46 +243,6 @@
     END //
 
     DELIMITER //
-
-    CREATE PROCEDURE LoginAdministrator (
-        IN in_identifier VARCHAR(100),      
-        IN in_password VARCHAR(255),       
-        OUT is_authenticated BOOLEAN,       
-        OUT out_role VARCHAR(25),
-        OUT out_route VARCHAR(25),
-        OUT out_employee_number INT       
-    )
-    BEGIN
-        DECLARE secret_key VARCHAR(255);     
-        DECLARE db_password VARBINARY(255);
-        DECLARE out_employee_number INT;   
-
-        SET is_authenticated = FALSE;
-        SET out_role = '0';
-        SET out_route = '';
-        SET out_employee_number = NULL;
-
-        SELECT JSON_UNQUOTE(JSON_EXTRACT(data, '$.phraseEncrypt'))
-        INTO secret_key
-        FROM Config
-        WHERE config_id = 1;
-
-        SELECT A.password, B.type, B.route,  A.employee_number INTO db_password, out_role, out_route, out_employee_number
-        FROM `Employees` A
-        INNER JOIN `Roles` B
-        ON A.role_id = B.role_id
-        WHERE (institute_email = in_identifier OR employee_number = in_identifier);
-
-        IF db_password IS NOT NULL AND AES_DECRYPT(db_password, secret_key) = in_password THEN
-            SET is_authenticated = TRUE;
-        ELSE
-            SET out_role = '0'; 
-        END IF;
-    END //
-
-    DELIMITER ;
-
-
 
     DELIMITER //
 
@@ -316,7 +280,7 @@
 
 
 /*borrar luego*/
-CREATE PROCEDURE LoginAdministrator1 (
+CREATE PROCEDURE LoginAdministrator (
         IN in_identifier VARCHAR(100),      
         IN in_password VARCHAR(255),       
         OUT is_authenticated BOOLEAN,       
@@ -352,6 +316,14 @@ CREATE PROCEDURE LoginAdministrator1 (
     END //
 
     DELIMITER ;
+
+    SELECT s.hour_start, s.hour_end, p.indicator AS period, p.year, s.class_id, c.class_name
+FROM Section s
+JOIN Periods p ON s.period_id = p.period_id
+JOIN Classes c ON c.class_id = s.class_id
+WHERE s.classroom_id = 1
+ORDER BY p.year, p.indicator, s.hour_start;
+
 
 
  

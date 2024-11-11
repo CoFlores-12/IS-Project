@@ -80,6 +80,24 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
+        
+        <input type="file" name="" accept=".csv" id="file">
+        <button type="button" class="btn bg-custom-primary mt-4 form-control text">upload file</button>
+        <hr class="my-2">
+        <button type="button" id="newSectionManualBtn" class="btn btn-primary mt-4 form-control">Manual</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="newSectionManual" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog bg modal-lg">
+    <div class="modal-content bg">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Add new section</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
         <div class="row p">
       
         <label class="mb-1">Classes:</label>
@@ -96,26 +114,41 @@
         <select class="form-select mb-3" id="classrooms">
             <option value="" selected>Select...</option>
         </select>
+        <div class="days">
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
+            <label class="form-check-label" for="inlineCheckbox1">Mon</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">
+            <label class="form-check-label" for="inlineCheckbox2">Tue</label>
+          </div>          
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">
+            <label class="form-check-label" for="inlineCheckbox2">Wed</label>
+          </div>          
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">
+            <label class="form-check-label" for="inlineCheckbox2">Thur</label>
+          </div>          
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">
+            <label class="form-check-label" for="inlineCheckbox2">Fri</label>
+          </div>          
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">
+            <label class="form-check-label" for="inlineCheckbox2">Sat</label>
+          </div>          
+      </div>
 
         <label class="mb-1">Schedule:</label>
-        <select class="form-select mb-3" id="schedule">
-                <option value="" selected>Select...</option>
-                <option value="07:00ini-08:00fin">07:00ini-08:00fin</option>
-                <option value="08:00ini-09:00fin">08:00ini-09:00fin</option>
-                <option value="09:00ini-10:00fin">09:00ini-10:00fin</option>
-                <option value="10:00ini-11:00fin">10:00ini-11:00fin</option>
-                <option value="11:00ini-12:00fin">11:00ini-12:00fin</option>
-                <option value="12:00ini-13:00fin">12:00ini-13:00fin</option>
-                <option value="13:00ini-14:00fin">13:00ini-14:00fin</option>
-                <option value="14:00ini-15:00fin">14:00ini-15:00fin</option>
-                <option value="15:00ini-16:00fin">15:00ini-16:00fin</option>
-                <option value="16:00ini-17:00fin">16:00ini-17:00fin</option>
-                <option value="17:00ini-18:00fin">17:00ini-18:00fin</option>
-                <option value="18:00ini-19:00fin">18:00ini-19:00fin</option>
-                <option value="19:00ini-20:00fin">19:00ini-20:00fin</option>
-        </select>
+        <div class="row">
+          <div class="col-6"><input class="form-control" type="number" name="" min="700" max="1900" id="hourStart"></div>
+          <div class="col-6"><input class="form-control" type="number" name="" min="" max="2000" id="hourEnd"></div>
+        </div>
+        
 
-        <label class="mb-1">Available Spaces:</label>
+        <label class="mb-1">Available Spaces (maximum student capacity):</label>
             <input type="number" id="available_spaces" name="cupo" min="1" max="100" placeholder="Select..." value="">
             
         <button type="button" class="btn btn-success mt-4 btn-sm" id="btnNewSection">Success</button>
@@ -151,7 +184,7 @@
                         </button>
                 </div>
                 <div class="list-group-item list-group-title list-group-item-primary text bg-aux fw-bold mt-2">Classes</div>
-                         <button type="button" class="text list-group-item list-group-item-action bg list-group-item-indent" data-bs-toggle="modal" data-bs-target="#newSection" id="newSectionClass">
+                         <button type="button" class="text list-group-item list-group-item-action bg list-group-item-indent"  id="newSectionClass">
                              Add new section
                         </button>
                 </div>

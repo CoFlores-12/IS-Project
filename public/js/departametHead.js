@@ -1,5 +1,5 @@
 let btnSearchHistory = document.getElementById('btnSearchHistory');
-        let historyBody = document.getElementById('historyBody');
+let historyBody = document.getElementById('historyBody');
         let inputHistory = document.getElementById('inputHistory');
         btnSearchHistory.addEventListener('click', ()=>{
             if (inputHistory.value === '') {return; }
@@ -92,11 +92,6 @@ let btnSearchHistory = document.getElementById('btnSearchHistory');
             })
         }
 
-
-
-
-        /*lo nuevo */
-
         let btnNewClass = document.getElementById('newClass');
         let newClassBody = document.getElementById('newClassBody');
         let btnNewSection = document.getElementById('btnNewSection');
@@ -105,57 +100,137 @@ let btnSearchHistory = document.getElementById('btnSearchHistory');
         let classes = document.getElementById('classes');
         let teachers = document.getElementById('teachers');
         let classrooms = document.getElementById('classrooms');
-        let schedule = document.getElementById('schedule');
         let available_spaces = document.getElementById('available_spaces');
         let facultyID = document.getElementById('facultyID');
         
-        
+        let hourStart = document.getElementById('hourStart');
+        let hourEnd = document.getElementById('hourEnd');
+        let newSectionManualBtn = document.getElementById('newSectionManualBtn');
+        let newSectionManual = document.getElementById('newSectionManual');
+        let newSection = document.getElementById('newSection');
+        let modalNewSection = new bootstrap.Modal(newSection);
+        let modalNewSectionManual = new bootstrap.Modal(newSectionManual);
+
+        //TODO: create event to send file csv with section
 
         newSectionClass.addEventListener('click', ()=>{
+            modalNewSection.show();
+        });
+        newSectionManualBtn.addEventListener('click', (e)=>{
+            e.target.innerHTML = `<div class="spinner-border" role="status">
+                </div>`
+            e.target.disabled = true;
+            classes.value = '';
+            teachers.value = ''
+            classrooms.value =''
+            
+            available_spaces.value = ''
+
             fetch('/api/get/admin/searchFieldsDepartments.php')
             .then((response)=>{return response.json()})
-            .then((data)=>{
-                 console.log(data)  
+            .then((data)=>{ 
                  
                  if (data.clases && Array.isArray(data.clases)) {
+                    classes.innerHTML = '<option value="" selected>Select...</option>';
                     data.clases.forEach(clase => {
                         const option = document.createElement('option');
-                        option.value = clase.class_id; // Valor de la opción
-                        option.textContent = clase.class_name; // Texto visible de la opción
+                        option.value = clase.class_id;
+                        option.textContent = clase.class_name; 
                         classes.appendChild(option);
                     });
                 } else {
-                    console.error('No se encontró la propiedad "classes" o no es un array válido');
+                    console.error('That field was not found in the array');
                 }
 
                 if (data.teachers && Array.isArray(data.teachers)) {
+                    teachers.innerHTML = '<option value="" selected>Select...</option>';
                     data.teachers.forEach(teacher => {
                         const option = document.createElement('option');
-                        option.value = teacher.employee_number; // Valor de la opción
-                        option.textContent = teacher.first_name+" "+teacher.last_name; // Texto visible de la opción
+                        option.value = teacher.employee_number; 
+                        option.textContent = teacher.first_name+" "+teacher.last_name; 
                         teachers.appendChild(option);
                     });
                 } else {
-                    console.error('No se encontró la propiedad "classes" o no es un array válido');
+                    console.error('That field was not found in the array');
                 }
                  
                 if (data.classroom && Array.isArray(data.classroom)) {
+                    classrooms.innerHTML = '<option value="" selected>Select...</option>';
                     data.classroom.forEach(classroom => {
                         const option = document.createElement('option');
-                        option.value = classroom.classroom_id; // Valor de la opción
-                        option.textContent = classroom.classroom_name+" / "+classroom.building_name+" / "+classroom.center_name; // Texto visible de la opción
+                        option.value = classroom.classroom_id; 
+                        option.textContent = classroom.classroom_name+" / "+classroom.building_name+" / "+classroom.center_name; 
+                        option.dataset.capacity = classroom.classroom_capacity;
                         classrooms.appendChild(option);
                     });
                 } else {
-                    console.error('No se encontró la propiedad "classes" o no es un array válido');
+                    console.error('That field was not found in the array');
                 }
+
+                classrooms.addEventListener('change', (event) => {
+                    const selectedOption = event.target.selectedOptions[0];
+                    const capacity = selectedOption ? selectedOption.dataset.capacity : ''; 
+                
+                    if (capacity) {
+                        available_spaces.value = capacity; 
+                    } else {
+                        available_spaces.value = '';
+                    }
+                });
+
+                modalNewSectionManual.show();
+                e.target.innerHTML = `Manual`
+                e.target.disabled = false;
 
             })
             .catch(()=>{
                alert('Teacher not found')
             })
+        });
+
+        
+
+        hourStart.addEventListener('change', (e)=>{
+            //TODO: validation
+            const value = e.target.value;
+            console.log(value);
+            
+            hourEnd.min = value+100;
         })
 
+        btnNewSection.addEventListener('click', ()=>{
+            if (classes.value === '') { return; }
+            if (teachers.value === '') { return; }
+            if (classrooms.value === '') { return; }
+            if (schedule.value === '') { return; }
+            if (available_spaces.value === '') { return; }
+
+            console.log(classes.value, "  - ", teachers.value, "  - ",classrooms.value, "  - ",schedule.value, "  - ",available_spaces.value);
+
+
+            //TODO: validation inputs y create JSON with data
+            fetch('/api/post/admin/addSection.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    classId: classes.value,
+                    starttime: 1200,
+                    endtime: 1300,
+                    classroomId: classrooms.value
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message);
+                } else {
+                    console.error(data.message);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        })
         
 
     
