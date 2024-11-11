@@ -2,7 +2,7 @@
 session_start();
 
 $role = $_SESSION['role'];
-$_SESSION['request'] = 'admin';
+$_SESSION['request'] = 'admissions';
 
 include '../../../../src/components/sessionValidation.php';
 ?>

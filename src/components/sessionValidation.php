@@ -3,5 +3,6 @@
 if (!isset($_SESSION['route']) || 
     !isset($_SESSION['request']) || 
     $_SESSION['route'] != $_SESSION['request']) {
-        header('Location: /api/get/logout.php');
+        //header('Location: /api/get/logout.php');
+        echo $_SESSION['route'] . $_SESSION['request'];
 }
