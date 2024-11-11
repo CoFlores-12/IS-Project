@@ -16,7 +16,7 @@ $mail = new Mails(getenv('emailUser'), getenv('emailPassword'));
 $sql = "SELECT DISTINCT p.person_id, p.first_name, p.last_name, p.personal_email
         FROM Applicant a
         JOIN Persons p ON a.person_id = p.person_id
-        WHERE a.status = 'Admitted'";
+        WHERE a.status_id = 1";
 
 $result = $conn->execute_query($sql);
 
@@ -62,6 +62,43 @@ function emailExists($conn, $email) {
     }    
     return false; 
 }
+
+function generateAccountNumber() {
+
+    $conn = (new Database())->getConnection();
+
+    $year = date("Y");        
+    
+    $sql = "SELECT indicator FROM Periods WHERE year=".$year;
+
+    $result = $conn->execute_query($sql);
+
+     $row = $result->fetch_assoc();
+     $indicator = $row['indicator'];
+  
+    $years = str_pad($year, 4, "0", STR_PAD_LEFT);       
+
+    $processAdmission = "10".str_pad($indicator, 1, "0", STR_PAD_LEFT); 
+
+    $query = "SELECT COUNT(*) AS students 
+                FROM Students 
+                WHERE SUBSTRING(account_number, 1, 4) = ? 
+                AND SUBSTRING(account_number, 5, 3) = ?";
+    
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("ss", $years, $processAdmission);
+    $stmt->execute();
+    $stmt->bind_result($students);
+    $stmt->fetch();
+    $stmt->close();
+
+    $newSequential = str_pad(($students + 1), 4, "0", STR_PAD_LEFT);
+
+    $numberAccount = $years . $processAdmission . $newSequential;
+
+    return $numberAccount;
+}
+
     
 foreach ($result as $student) {
     $first_name = $student['first_name'];
@@ -71,7 +108,7 @@ foreach ($result as $student) {
 
     $password = generatePassword();
     $instituteEmail = generateEmail($first_name, $last_name);
-    $numberAccount = 20191030337;
+    $numberAccount = generateAccountNumber();
 
     $passphrase = getenv('password');
 
