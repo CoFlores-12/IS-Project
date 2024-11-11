@@ -75,7 +75,7 @@ include '../../../../src/components/sessionValidation.php';
 <!-- Modal New User -->
 
 
-    <!-- Modal CSV Upload -->
+    <!-- Modal CSV Upload 
     <div class="modal fade" id="csvUploadModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content bg">
@@ -92,7 +92,7 @@ include '../../../../src/components/sessionValidation.php';
             </div>
         </div>
     </div>
-    <!-- Modal CSV Upload -->
+    Modal CSV Upload -->
 
 <div class="main">
         <div class="offcanvas offcanvas-start bg" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
