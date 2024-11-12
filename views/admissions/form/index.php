@@ -104,7 +104,7 @@ $regionalCenters = $db->execute_query("SELECT * FROM Regional_center");
 
             <div class="row mb-4">
                 <div class="form-group">
-                    <input name="identity" type="text" class="form-control" placeholder="Identity Number" maxlength="15" required>
+                    <input name="identity" id="identity" type="text" class="form-control" placeholder="Identity Number" maxlength="15" required>
                 </div>
             </div>
 
