@@ -13,13 +13,6 @@ if (file_exists(__DIR__ . '../../../../.env')) {
 $mail = new Mails(getenv('emailUser'), getenv('emailPassword'));
 
 
-$sql = "SELECT DISTINCT p.person_id, p.first_name, p.last_name, p.personal_email
-        FROM Applicant a
-        JOIN Persons p ON a.person_id = p.person_id
-        WHERE a.status_id = 1";
-
-$result = $conn->execute_query($sql);
-
 function generatePassword() {
     $length = 8;
     $characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -64,7 +57,6 @@ function emailExists($conn, $email) {
 }
 
 function generateAccountNumber() {
-
     $conn = (new Database())->getConnection();
 
     $year = date("Y");        
@@ -99,28 +91,90 @@ function generateAccountNumber() {
     return $numberAccount;
 }
 
+
+$sql = "SELECT JSON_UNQUOTE(JSON_EXTRACT(data, '$.phraseEncrypt')) AS phraseEncrypt FROM Config WHERE config_id = 1";
+$result = $conn->query($sql);
+
+if ($result && $row = $result->fetch_assoc()) {
+    $passphrase = $row['phraseEncrypt'];  
+} 
+
+$data = json_decode(file_get_contents('php://input'), true); 
+
+if (isset($data['csvData'])) {
+    $csvContent = $data['csvData']; 
+
+    $rows = explode("\n", $csvContent);
+    $parsedData = [];
+    $headers = [];
+
+    if (!empty($rows[0])) {
+        $headers = str_getcsv($rows[0]);  
+    }
+
+    foreach (array_slice($rows, 1) as $row) {
+        if (!empty($row)) {
+            $line = str_getcsv($row);
+            if (count($line) == count($headers)) {
+                $parsedData[] = array_combine($headers, $line);
+            }
+        }
+    }
+
+    foreach ($parsedData as $student) {
+        $person_id = $student['person_id'];
+        $first_name = $student['first_name'];
+        $last_name = $student['last_name'];
+        $personal_email = $student['personal_email'];
+
+        $preferend_career_id = $student['preferend_career_id'];
+        $secondary_career_id = $student['secondary_career_id'];
+        $approved_pref = $student['approved_pref'];
+        $approved_sec = $student['approved_sec'];
+
+        if ($approved_pref == 1 && $approved_sec == 1) {
+            $carrer = $preferend_career_id;
+        } elseif ($approved_pref == 1) {
+            $carrer = $preferend_career_id;
+        } elseif ($approved_sec == 1) {
+            $carrer = $secondary_career_id;
+        } 
+                  
+        $password = generatePassword();
+        $instituteEmail = generateEmail($first_name, $last_name);
+        $numberAccount = generateAccountNumber();
+
+        $photosArray = ["default.jpg"]; 
+        $photosJson = json_encode($photosArray);
+
+        $sql = "INSERT INTO Students(account_number, person_id, password, institute_email, photos, career_id) VALUES (?, ?, AES_ENCRYPT(?, ?), ?, ?, ?)";
+
+        $conn->execute_query($sql, [$numberAccount, $person_id, $passphrase, $password, $instituteEmail, $photosJson, $carrer]);
+
+
+        $affair = "Credenciales de usuario";
+        $message = `
+        <p>Saludos, <strong>{$first_name}</strong> <strong>{$last_name}</strong>,</p>
+
+            <p>A continuación te mostramos los resultados de tus exámenes:</p>
+            
+            <ol>
+                <li>Carrera principal: <strong>{$approved_pref}</strong></li>
+                <li>Carrera secundaria: <strong>{$approved_sec}</strong></li>
+            </ol>
+        `;
     
-foreach ($result as $student) {
-    $first_name = $student['first_name'];
-    $personal_email = $student['personal_email'];
-    $last_name = $student['last_name'];
-    $person_id = $student['person_id'];
+        $resultado = $mail->sendEmail(getenv('emailUser'), $personal_email, $affair, $message);
+    }
 
-    $password = generatePassword();
-    $instituteEmail = generateEmail($first_name, $last_name);
-    $numberAccount = generateAccountNumber();
-
-    $passphrase = getenv('password');
-
-    $sql = "INSERT INTO Students (account_number, person_id, password, institute_email) VALUES (?, ?, AES_ENCRYPT(?, ?), ?)";
-
-    $conn->execute_query($sql, [$numberAccount, $person_id, $passphrase, $password, $instituteEmail]);
-
-    $affair = "Credenciales de usuario";
-    $message = "Hola $first_name,<br><br>Tu Correo Institucional es: <strong>$instituteEmail</strong>.<br><br>Tu Contraseña del sistema es: <strong>$password</strong>.<br><br><br>Tu numero de cuenta es: <strong>$password</strong>.<br><br>Saludos,<br>Bienvenido/a.";
-
-    $resultado = $mail->sendEmail(getenv('emailUser'), $personal_email, $affair, $message);
-
+    echo json_encode([
+        "success" => true,
+        "message" => "CSV processed successfully.",
+        "data" => $parsedData
+    ]);
+} else {
+    echo json_encode(["success" => false, "message" => "No CSV data received."]);
 }
+
 
 ?>

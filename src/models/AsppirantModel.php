@@ -193,7 +193,21 @@ class Aspirant
      * @return mixed
      */
     public static function getAdmitted($conn){
-        return $conn->execute_query("SELECT * FROM Applicant WHERE status = 'Admitted'");
+        return $conn->execute_query("SELECT 
+                                        P.person_id,
+                                        P.first_name,
+                                        P.last_name,
+                                        P.personal_email,
+                                        A.preferend_career_id,
+                                        A.secondary_career_id,
+                                        A.approved_pref,
+                                        A.approved_sec
+                                    FROM 
+                                        Applicant A
+                                    JOIN 
+                                        Persons P ON A.person_id = P.person_id
+                                    WHERE 
+                                        A.status_id = 1;");
     }
 }
 ?>

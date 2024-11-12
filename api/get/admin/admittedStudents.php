@@ -15,7 +15,7 @@ while ($student = $result->fetch_assoc()) {
 }
 //ge=nerate output file
 $output = fopen('php://output', 'w');
-
+fputcsv($output, ['person_id','first_name','last_name','personal_email','preferend_career_id','secondary_career_id','approved_pref','approved_sec']);
 foreach ($students as $student) {
     fputcsv($output, $student);
 }

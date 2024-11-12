@@ -324,6 +324,21 @@ JOIN Classes c ON c.class_id = s.class_id
 WHERE s.classroom_id = 1
 ORDER BY p.year, p.indicator, s.hour_start;
 
+SELECT 
+    P.person_id,
+    P.first_name,
+    P.last_name,
+    P.personal_email,
+    A.preferend_career_id,
+    A.secondary_career_id,
+    A.approved_pref,
+    A.approved_sec
+FROM 
+    Applicant A
+JOIN 
+    Persons P ON A.person_id = P.person_id
+WHERE 
+    A.status_id = 1;
 
 
  
