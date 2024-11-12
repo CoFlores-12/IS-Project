@@ -82,9 +82,24 @@ include '../../../../src/components/sessionValidation.php';
 <!-- Modal New User -->
 
 
-
-
-
+    <!-- Modal CSV Upload 
+    <div class="modal fade" id="csvUploadModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg">
+            <div class="modal-header bg">
+                <h5 class="modal-title text" id="staticBackdropLabel">Upload a CSV with the admissions results</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/api/post/admin/uploadCSV.php" method="post" enctype="multipart/form-data">
+                    <label for="file">Select a CSV file:</label>
+                    <input type="file" name="file" id="file" accept=".csv">
+                    <button type="submit" name="submit">Upload and Import</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    Modal CSV Upload -->
 
 <div class="main">
         <div class="offcanvas offcanvas-start bg" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
@@ -125,6 +140,7 @@ include '../../../../src/components/sessionValidation.php';
                 <h4 class="text">Dashboard</h4>
                 <div class="buttons">
                     <button class="btn bg-custom-primary text-white" id="addUserBtn">Add User</button>
+                    <button class="btn bg-custom-primary text-white"  data-bs-toggle="modal" data-bs-target="#csvUploadModal">Upload Admission Results</button>
                 </div>
             </div>
             <div class="row p-4">
