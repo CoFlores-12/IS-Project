@@ -172,7 +172,7 @@ $admitted = $result->fetch_assoc()['count'];
         document.querySelector('#addExamnBtn').addEventListener('click', function () {
             var modalAddExam = new bootstrap.Modal(document.getElementById('addExamModal'));
             modalAddExam.show();
-            fetch('/api/get/public/ExamsAndCareers.php')
+            fetch('/api/get/public/examsAndCareers.php')
             .then((response)=>{return response.json()})
             .then((response)=>{
                 
