@@ -71,8 +71,8 @@ window.addEventListener('load', function() {
     document.getElementById('regionalCenter').addEventListener('change', function (e) {
         MyModalLoading.show();
         mainCareer.disabled = true;
-        mainCareer.innerHTML = `<option value="">Select regional center</option>`
-        secondaryCareer.innerHTML = `<option value="">Select regional center</option>`
+        mainCareer.innerHTML = `<option value="">Select main career</option>`
+        secondaryCareer.innerHTML = `<option value="">Select secondary career</option>`
         secondaryCareer.disabled = true;
         if (e.target.value == '') {
             MyModalLoading.hide();
