@@ -22,9 +22,7 @@ $regionalCenters = $db->execute_query("SELECT * FROM Regional_center");
 <body>
     <?php include './../../../src/components/navbar.php'; ?>
 
-    <div class="container mt-4">
-        <button class="btn bg-custom-primary text-white" data-bs-toggle="modal" data-bs-target="#csvUploadModal">Upload Admission Results</button>
-    </div>
+     
 
     <!-- Modal CSV Upload -->
     <div class="modal fade" id="csvUploadModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -112,7 +110,7 @@ $regionalCenters = $db->execute_query("SELECT * FROM Regional_center");
 
             <div class="form-row d-flex gap-4">
                 <div class="col-3 mb-3">
-                    <input name="phone" type="text" class="form-control" placeholder="Phone number" maxlength="9" required>
+                    <input name="phone" id="phone" type="text" class="form-control" placeholder="Phone number" maxlength="9" required>
                     <div class="valid-feedback">Looks good!</div>
                 </div>
                 <div class="col mb-3">
