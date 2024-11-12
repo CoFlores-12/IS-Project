@@ -20,7 +20,7 @@ sendButton.addEventListener("click", () => {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                csvData: csvContent // Enviamos el contenido CSV como una cadena
+                csvData: csvContent
             })
         })
         .then(response => response.json())
@@ -34,5 +34,5 @@ sendButton.addEventListener("click", () => {
         .catch(error => console.error('Error:', error));
     };
 
-    reader.readAsText(file); // Lee el archivo CSV como texto
+    reader.readAsText(file); 
 });

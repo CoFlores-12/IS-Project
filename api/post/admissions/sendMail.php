@@ -15,17 +15,22 @@
                 p.first_name, 
                 p.last_name, 
                 p.personal_email, 
-                a.status,
+                sa.description AS status,  
                 e.exam_name,
-                ar.result
-                FROM 
-                    Applicant a
-                JOIN 
-                    Persons p ON a.person_id = p.person_id
-                LEFT JOIN 
-                    Applicant_result ar ON a.person_id = ar.identity_number
-                LEFT JOIN 
-                    Exams e ON ar.exam_code = e.exam_code;
+                MAX(ar.result_exam) AS result_exam  -- O usar cualquier tipo de agregación si es necesario
+            FROM 
+                Applicant a
+            JOIN 
+                Persons p ON a.person_id = p.person_id
+            LEFT JOIN 
+                Applicant_result ar ON a.person_id = ar.identity_number
+            LEFT JOIN 
+                Exams e ON ar.exam_code = e.exam_code
+            LEFT JOIN 
+                StatusApplicant sa ON a.status_id = sa.status_id
+            GROUP BY 
+                p.person_id, p.first_name, p.last_name, p.personal_email, sa.description, e.exam_name;
+
                 ";
 
     $result = $conn->execute_query($query);

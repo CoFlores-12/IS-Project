@@ -2,6 +2,25 @@ document.getElementById('goToNextTask').addEventListener('click', function () {
     // Obtiene todas las modales abiertas actualmente
     var modals = document.querySelectorAll('.modal.show');
 
+    fetch('https://tuservidor.com/api/ejecutar_funcion.php', {
+        method: 'POS', 
+        headers: {
+            'Content-Type': 'application/json'  
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`Error  : ${response.statusText}`);
+        }
+        return response.text(); 
+    })
+    .then(data => {
+        console.log('The emails were sent successfully:', data); 
+    })
+    .catch(error => {
+        console.error('mistake:', error);
+    });
+
     // Cierra cada modal
     modals.forEach(modal => {
         var modalInstance = bootstrap.Modal.getInstance(modal);
