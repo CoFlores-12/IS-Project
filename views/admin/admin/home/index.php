@@ -13,7 +13,7 @@ include '../../../../src/components/sessionValidation.php';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin | Home</title>
     <link rel="stylesheet" href="/public/css/theme.css">
-    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+    <link rel="icon" type="image/png" href="/public/images/logo.png" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
     <link rel="stylesheet" href="/public/bootstrap-5.3.3-dist/css/bootstrap.min.css">
 </head>
@@ -32,13 +32,13 @@ include '../../../../src/components/sessionValidation.php';
             <input type="text" name="role" hidden readonly value="Teacher">
             <div class="form-row flex gap-4">
                 <div class="col mb-3">
-                    <input name="name" type="text" class="form-control" id="validationCustom01" placeholder="First name"  required>
+                    <input name="name" type="text" class="form-control" id="validationCustom01" placeholder="Names"  required>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
                 </div>
                 <div class="col mb-3">
-                    <input name="lastName" type="text" class="form-control" id="validationCustom02" placeholder="Last name" required>
+                    <input name="lastName" type="text" class="form-control" id="validationCustom02" placeholder="Surnames" required>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
@@ -61,6 +61,13 @@ include '../../../../src/components/sessionValidation.php';
                     <div class="valid-feedback">
                         Looks good!
                     </div>
+                </div>
+            </div>
+            <div class="row mb-4">
+                <div class="form-group">
+                    <select class="for-control bg-aux w-full p-2" name="departament" id="departamentSelect">
+                    <option value="">Select department...</option>
+                    </select>
                 </div>
             </div>
         </div>
@@ -117,7 +124,7 @@ include '../../../../src/components/sessionValidation.php';
             <div class=" flex p-2 justify-between items-center">
                 <h4 class="text">Dashboard</h4>
                 <div class="buttons">
-                    <button class="btn bg-custom-primary text-white"  data-bs-toggle="modal" data-bs-target="#newUserModal">Add User</button>
+                    <button class="btn bg-custom-primary text-white" id="addUserBtn">Add User</button>
                 </div>
             </div>
             <div class="row p-4">
@@ -167,8 +174,23 @@ include '../../../../src/components/sessionValidation.php';
         });
     }, false);
     })();
-
     
+    const newUserModal = document.getElementById('newUserModal');
+    const newUserModalBS = new bootstrap.Modal(newUserModal)
+    const addUserBtn = document.getElementById('addUserBtn');
+    const departamentSelect = document.getElementById('departamentSelect');
+
+    addUserBtn.addEventListener('click', ()=>{
+        newUserModalBS.show();
+        fetch('/api/get/public/allDepartaments.php')
+        .then((response) => {return response.json()})
+        .then((response) => {
+            departamentSelect.innerHTML = '<option value="">Select department...</option>';
+            response.forEach(department => {
+                departamentSelect.innerHTML += `<option value="${department.department_id}">${department.department_name}</option>`;
+            });
+        })
+    })
     </script>
 </body>
 </html>
