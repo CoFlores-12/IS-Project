@@ -114,7 +114,7 @@ $regionalCenters = $db->execute_query("SELECT * FROM Regional_center");
                     <div class="valid-feedback">Looks good!</div>
                 </div>
                 <div class="col mb-3">
-                    <input name="email" type="email" class="form-control" placeholder="Email" required>
+                    <input name="email" id="email" type="email" class="form-control" placeholder="Email" required>
                     <div class="valid-feedback">Looks good!</div>
                 </div>
             </div>
