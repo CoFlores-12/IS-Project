@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin | Home</title>
+    <title>Departament Head | Home</title>
     <link rel="stylesheet" href="/public/css/theme.css">
-    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+    <link rel="icon" type="image/png" href="/public/images/logo.png" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
     <link rel="stylesheet" href="/public/bootstrap-5.3.3-dist/css/bootstrap.min.css">
     <style>
@@ -172,21 +172,37 @@
             </div>
             <div class="offcanvas-body">
                 <div class="list-group">
-                    <div class="list-group-item list-group-title list-group-item- bg-aux text fw-bold">Students</div>
-                        <button type="button" class="text list-group-item list-group-item-action bg list-group-item-indent" data-bs-toggle="modal" data-bs-target="#historyStudent">
-                            View History
-                        </button>
-                        <a href="#" class="list-group-item list-group-item-action bg list-group-item-indent">View Requests</a>
-
-                    <div class="list-group-item list-group-title list-group-item-primary text bg-aux fw-bold mt-2">Teachers</div>
-                         <button type="button" class="text list-group-item list-group-item-action bg list-group-item-indent" data-bs-toggle="modal" data-bs-target="#changePassword">
-                            Reset Password
-                        </button>
-                </div>
-                <div class="list-group-item list-group-title list-group-item-primary text bg-aux fw-bold mt-2">Classes</div>
-                         <button type="button" class="text list-group-item list-group-item-action bg list-group-item-indent"  id="newSectionClass">
-                             Add new section
-                        </button>
+                  <a class="text bg aux text-decoration-none" data-bs-toggle="collapse" href="#collapseStudents" role="button" aria-expanded="false" aria-controls="collapseStudents">
+                    <div class="list-group-item list-group-title list-group-item- bg-aux text fw-bold">
+                        Students
+                      </div>
+                    </a>
+                          <div class="collapse" id="collapseStudents">
+                            <button type="button" class="text list-group-item list-group-item-action bg list-group-item-indent" data-bs-toggle="modal" data-bs-target="#historyStudent">
+                                View History
+                            </button>
+                            <a href="#" class="list-group-item list-group-item-action bg list-group-item-indent">View Requests</a>
+                          </div>
+                    <a class="text bg aux text-decoration-none my-2" data-bs-toggle="collapse" href="#collapseTeachers" role="button" aria-expanded="false" aria-controls="collapseTeachers">
+                      <div class="list-group-item list-group-title list-group-item- bg-aux text fw-bold">
+                        Teachers
+                      </div>
+                    </a>
+                          <div class="collapse" id="collapseTeachers">
+                            <button type="button" class="text list-group-item list-group-item-action bg list-group-item-indent" data-bs-toggle="modal" data-bs-target="#changePassword">
+                               Reset Password
+                            </button>
+                          </div>
+                    <a class="text bg aux text-decoration-none" data-bs-toggle="collapse" href="#collapseClasses" role="button" aria-expanded="false" aria-controls="collapseClasses">
+                      <div class="list-group-item list-group-title list-group-item- bg-aux text fw-bold">
+                        Classes
+                      </div>
+                    </a>
+                          <div class="collapse" id="collapseClasses">
+                            <button type="button" class="text list-group-item list-group-item-action bg list-group-item-indent"  id="newSectionClass">
+                                   Add new section
+                             </button>
+                          </div>
                 </div>
             </div>
         </div>

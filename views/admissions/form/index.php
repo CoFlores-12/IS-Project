@@ -10,12 +10,12 @@ $regionalCenters = $db->execute_query("SELECT * FROM Regional_center");
 <head>
     <meta charset="UTF-8">
     <meta name="author" content="cofloresf@unah.hn">
-    <meta name="version" content="0.1.0">
+    <meta name="version" content="0.2.0">
     <meta name="date" content="29/10/2014">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulario de Admisión</title>
     <link rel="stylesheet" href="/public/css/theme.css">
-    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+    <link rel="icon" type="image/png" href="/public/images/logo.png" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
     <link rel="stylesheet" href="/public/bootstrap-5.3.3-dist/css/bootstrap.min.css">
 </head>
@@ -91,12 +91,16 @@ $regionalCenters = $db->execute_query("SELECT * FROM Regional_center");
         <form class="needs-validation bg rounded p-4" novalidate method="POST" action="/api/post/admissions/form.php" enctype="multipart/form-data">
             <div class="form-row d-flex gap-4">
                 <div class="col mb-3">
-                    <input name="name" type="text" class="form-control" placeholder="First name" required>
-                    <div class="valid-feedback">Looks good!</div>
+                    <input name="name" type="text" class="form-control" id="validationCustom01" placeholder="Names"  required>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
                 </div>
                 <div class="col mb-3">
-                    <input name="lastName" type="text" class="form-control" placeholder="Last name" required>
-                    <div class="valid-feedback">Looks good!</div>
+                    <input name="lastName" type="text" class="form-control" id="validationCustom02" placeholder="Surnames" required>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
                 </div>
             </div>
 
