@@ -3,6 +3,24 @@ include './../../../src/modules/database.php';
 
 $db = (new Database())->getConnection();
 $regionalCenters = $db->execute_query("SELECT * FROM Regional_center");
+$sql = "SELECT JSON_UNQUOTE(JSON_EXTRACT(data, '$.registrationPeriod')) as RP
+        FROM Config
+        WHERE config_id = 1;";
+$times = $db->execute_query($sql,[]);
+$result = $times->fetch_assoc();
+$data = json_decode($result['RP'], true);
+
+$startTime = new DateTime($data['startTime']);
+$endTime = new DateTime($data['endTime']);
+$currentTime = new DateTime();
+
+echo $currentTime <= $startTime ;
+
+
+if ($currentTime < $startTime || $currentTime > $endTime) {
+    echo "non-active registration period";
+    return;
+}
 ?>
 
 <!DOCTYPE html>
@@ -85,7 +103,7 @@ $regionalCenters = $db->execute_query("SELECT * FROM Regional_center");
     </div>
 
     <!-- Formulario principal -->
-    <div class="container mt-5">
+    <div class="main min-h-full flex bg-aux justify-center items-center p-4">
         <form class="needs-validation bg rounded p-4" novalidate method="POST" action="/api/post/admissions/form.php" enctype="multipart/form-data">
             <div class="form-row d-flex gap-4">
                 <div class="col mb-3">
