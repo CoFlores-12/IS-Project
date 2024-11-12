@@ -148,7 +148,7 @@ $regionalCenters = $db->execute_query("SELECT * FROM Regional_center");
                     <label for="certify" class="col-3">High school certificate.</label>
                     <div class="col">
                         <input name="certify" accept="image/*" type="file" class="form-control-file" id="certify" required>
-                        <div class="invalid-feedback">Example invalid custom file feedback</div>
+                        <div class="invalid-feedback">File no upload</div>
                     </div>
                 </div>
             </div>
