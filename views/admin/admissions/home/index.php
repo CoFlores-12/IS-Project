@@ -90,6 +90,65 @@ $admitted = $result->fetch_assoc()['count'];
 </div>
 <!-- Modal Add Exam -->
 
+    <!-- Modal CSV Upload -->
+    <div class="modal fade" id="csvUploadModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content bg">
+                <div class="modal-header bg">
+                    <h5 class="modal-title text" id="staticBackdropLabel">Upload a CSV with the admissions results</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="csvUploadForm" method="post" enctype="multipart/form-data">
+                        <label for="file">Select a CSV file:</label>
+                        <input type="file" name="file" id="file" accept=".csv" required>
+                        <button type="submit" name="submit" class="btn btn-primary mt-2">Upload and Import</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Upload Result Message -->
+    <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content bg">
+                <div class="modal-header bg">
+                    <h5 class="modal-title text" id="successModalLabel">Upload Status</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p id="successMessage"></p>
+                    <button id="nextActionBtn" class="btn btn-primary">Validate Applicant Results</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para éxito de validación -->
+    <div class="modal fade" id="finalSuccessModal" tabindex="-1" aria-labelledby="finalSuccessModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content bg">
+                <div class="modal-header bg">
+                    <h5 class="modal-title text" id="finalSuccessModalLabel">Task Completed</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>The validation of admission results has been successful.</p>
+                    <button id="goToNextTask" class="btn btn-success">E-mail Results</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Modal -->
+    <div class="modal fade" id="loadingModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="spinner-border" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    </div>
 
 <div class="main">
         <div class="offcanvas offcanvas-start bg" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
@@ -102,6 +161,7 @@ $admitted = $result->fetch_assoc()['count'];
             <div class="offcanvas-body">
                 
                 <button id="addExamnBtn" class="w-full bg-aux text btn rounded">Add Exam</button>
+                <button id="csvUploadBtn" class="w-full bg-aux text btn rounded mt-3" data-bs-toggle="modal" data-bs-target="#csvUploadModal">Upload Exam Results</button>
             </div>
         </div>
         <div class="header p-2 text-inverter bg">
@@ -160,6 +220,9 @@ $admitted = $result->fetch_assoc()['count'];
         </div>
     </div>
     <script src="/public/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/public/js/csvUploadForm.js"></script>
+    <script src="/public/js/applicantResultValidation.js"></script>
+    <script src="/public/js/emailApplicantResult.js"></script>
     <script>
         document.querySelector('#cardApplicant').addEventListener('click', function () {
             var modal = new bootstrap.Modal(document.getElementById('applicantModal'));

@@ -40,59 +40,6 @@ if ($currentTime < $startTime || $currentTime > $endTime) {
 <body>
     <?php include './../../../src/components/navbar.php'; ?>
 
-     
-
-    <!-- Modal CSV Upload -->
-    <div class="modal fade" id="csvUploadModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content bg">
-                <div class="modal-header bg">
-                    <h5 class="modal-title text" id="staticBackdropLabel">Upload a CSV with the admissions results</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="csvUploadForm" method="post" enctype="multipart/form-data">
-                        <label for="file">Select a CSV file:</label>
-                        <input type="file" name="file" id="file" accept=".csv" required>
-                        <button type="submit" name="submit" class="btn btn-primary mt-2">Upload and Import</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal Upload Result Message -->
-    <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content bg">
-                <div class="modal-header bg">
-                    <h5 class="modal-title text" id="successModalLabel">Upload Status</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p id="successMessage"></p>
-                    <button id="nextActionBtn" class="btn btn-primary">Validate Applicant Results</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal para éxito de validación -->
-    <div class="modal fade" id="finalSuccessModal" tabindex="-1" aria-labelledby="finalSuccessModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content bg">
-                <div class="modal-header bg">
-                    <h5 class="modal-title text" id="finalSuccessModalLabel">Task Completed</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p>The validation of admission results has been successful.</p>
-                    <button id="goToNextTask" class="btn btn-success">E-mail Results</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Loading Modal -->
     <div class="modal fade" id="loadingModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -177,8 +124,5 @@ if ($currentTime < $startTime || $currentTime > $endTime) {
 
     <script src="/public/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
     <script src="/public/js/formAdmissions.js"></script>
-    <script src="/public/js/csvUploadForm.js"></script>
-    <script src="/public/js/applicantResultValidation.js"></script>
-    <script src="/public/js/emailApplicantResult.js"></script>
 </body>
 </html>
