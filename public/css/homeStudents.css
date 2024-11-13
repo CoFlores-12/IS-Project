@@ -32,3 +32,11 @@
     background-color: var(--bg);
     color: var(--text);
 }
+#table,#tableSections{
+    width: 100%;
+}
+td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
+.selected {
+    background-color: var(--primary-color);
+    color: #FFF;
+}

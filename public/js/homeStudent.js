@@ -1,8 +1,14 @@
 let btnModalRequests = document.getElementById('btnModalRequests');
+let btnModalEnrollment = document.getElementById('btnModalEnrollment');
+let cancelEnrollmentBtn = document.getElementById('cancelEnrollmentBtn');
+let addEnrollmentBtn = document.getElementById('addEnrollmentBtn');
 let modalRequests = document.getElementById('modalRequests');
+let modalEnrollment = document.getElementById('modalEnrolment');
 let requestType = document.getElementById('requestType');
 let dataForRequest = document.getElementById('dataForRequest');
+let formDataEnrollment = document.getElementById('form-data');
 let modalRequestsBS = new bootstrap.Modal(modalRequests);
+let modalEnrollmentBS = new bootstrap.Modal(modalEnrollment);
 let optionsBody = async (value) => {
     let body = `<textarea name="comments" placeholder="Justify" id="comments" class="form-control bg-aux my-4 text"></textarea>`;
     switch (value) {
@@ -45,6 +51,83 @@ let optionsBody = async (value) => {
 
 btnModalRequests.addEventListener('click', (e)=>{
     modalRequestsBS.show();
+})
+btnModalEnrollment.addEventListener('click', (e)=>{
+    modalEnrollmentBS.show();
+    getClasses();
+})
+
+var selected;
+
+function highlight(e) {
+    if (selected[0]) selected[0].className = '';
+    e.target.parentNode.className = 'selected';
+    fnselect();
+}
+
+function fnselect(){
+    var element = document.querySelectorAll('.selected');
+    let tableSections = document.getElementById('tableSections');
+    if(element[0]!== undefined){ 
+        tableSections.innerHTML = '<center><div class="spinner-border text m-4" role="status"></div></center>';
+    
+        fetch('/api/get/students/getSections.php?class_id='+element[0].getAttribute('data-class-id'))
+        .then((res) => {return res.json()})
+        .then((res) =>{
+            var html = `<tr disabled>
+                        <td>Section</td>
+                        <td>Quotas</td>
+                        <td>Days</td>`;
+            res.forEach(element => {
+                html += `<tr data-class-id="${element.section_id}">
+                        <td>${element.hour_start}</td>
+                        <td>${element.quotas}</td>
+                        <td>${element.days}</td>
+                        <td>${element.first_name} ${element.last_name}</td>
+                    </tr>`;
+            });
+            html += `<hr>`;
+            tableSections.innerHTML= html;
+        })
+    }
+}
+
+function getClasses() {
+    formDataEnrollment.innerHTML = '<center><div class="spinner-border text m-4" role="status"></div></center>';
+    
+    fetch('/api/get/students/getClasses.php')
+    .then((res) => {return res.json()})
+    .then((res) =>{
+        var html = `<table id="table">`;
+        res.forEach(element => {
+            html += `<tr data-class-id="${element.class_id}">
+                    <td>${element.class_code}</td>
+                    <td>${element.class_name}</td>
+                    <td>${element.uv}</td>
+                </tr>`;
+        });
+        html += `</table><hr><table id="tableSections"></table>`;
+        formDataEnrollment.innerHTML= html;
+        var table = document.getElementById('table');
+        selected = table.getElementsByClassName('selected');
+        table.onclick = highlight;
+    })
+}
+
+cancelEnrollmentBtn.addEventListener('click', (e)=>{
+    e.target.classList.add('active');
+    e.target.classList.add('bg-aux');
+    addEnrollmentBtn.classList.remove('active');
+    addEnrollmentBtn.classList.remove('bg-aux');
+    formDataEnrollment.innerHTML = '<center><div class="spinner-border text m-4" role="status"></div></center>';
+    
+})
+addEnrollmentBtn.addEventListener('click', (e)=>{
+    e.target.classList.add('active');
+    e.target.classList.add('bg-aux');
+    cancelEnrollmentBtn.classList.remove('active');
+    cancelEnrollmentBtn.classList.remove('bg-aux');
+    getClasses();
 })
 
 requestType.addEventListener('change', async (e)=>{
