@@ -199,6 +199,14 @@
         department_name VARCHAR(100) NOT NULL
     );
 
+    CREATE TABLE Enroll (
+        section_id INT,
+        student_id VARCHAR(11),
+        is_waitlist BIT, 
+        Foreign Key (section_id) REFERENCES Section(section_id),
+        Foreign Key (student_id) REFERENCES Students(account_number)
+    )
+
     
     ALTER TABLE Employees
     ADD COLUMN department_id INT,
@@ -209,9 +217,6 @@
     ADD COLUMN quotas INT,
     ADD COLUMN days VARCHAR(25),   -- //TODO: tinene que quedar en 25
     ADD FOREIGN KEY (employee_number) REFERENCES Employees(employee_number);
-
-
-    /*end modifications for the employee's department*/
 
     DELIMITER //
 

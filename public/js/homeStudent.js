@@ -7,8 +7,14 @@ let modalEnrollment = document.getElementById('modalEnrolment');
 let requestType = document.getElementById('requestType');
 let dataForRequest = document.getElementById('dataForRequest');
 let formDataEnrollment = document.getElementById('form-data');
+let enrollBtn = document.getElementById('enrollBtn');
+let toast = document.getElementById('toast');
+let toastBody = document.getElementById('toastBody');
+let toastTitle = document.getElementById('toastTitle');
+let toastBS = new bootstrap.Toast(toast)
 let modalRequestsBS = new bootstrap.Modal(modalRequests);
 let modalEnrollmentBS = new bootstrap.Modal(modalEnrollment);
+
 let optionsBody = async (value) => {
     let body = `<textarea name="comments" placeholder="Justify" id="comments" class="form-control bg-aux my-4 text"></textarea>`;
     switch (value) {
@@ -58,15 +64,27 @@ btnModalEnrollment.addEventListener('click', (e)=>{
 })
 
 var selected;
+var selectedSection;
 
 function highlight(e) {
     if (selected[0]) selected[0].className = '';
     e.target.parentNode.className = 'selected';
     fnselect();
 }
+function highlightSection(e) {
+    if (selectedSection[0]) selectedSection[0].className = '';
+    e.target.parentNode.className = 'selected';
+    var element = document.querySelectorAll('.selected');
+    if(element[0]!== undefined){ 
+        enrollBtn.disabled = false
+    }else{
+        enrollBtn.disabled = true
+    }
+}
 
 function fnselect(){
     var element = document.querySelectorAll('.selected');
+    enrollBtn.disabled = true
     let tableSections = document.getElementById('tableSections');
     if(element[0]!== undefined){ 
         tableSections.innerHTML = '<center><div class="spinner-border text m-4" role="status"></div></center>';
@@ -74,20 +92,34 @@ function fnselect(){
         fetch('/api/get/students/getSections.php?class_id='+element[0].getAttribute('data-class-id'))
         .then((res) => {return res.json()})
         .then((res) =>{
+            if (!res.status) {
+                toastTitle.innerHTML ='Enroll Error'
+                toastBody.innerHTML = `<div class="alert alert-danger mb-0" role="alert">
+                    ${res.message}
+                </div>`
+                toastBS.show();
+                tableSections.innerHTML = '';
+                return;
+            }
+
             var html = `<tr disabled>
                         <td>Section</td>
                         <td>Quotas</td>
-                        <td>Days</td>`;
-            res.forEach(element => {
-                html += `<tr data-class-id="${element.section_id}">
+                        <td>Days</td>
+                        <td>Reacher</td>`;
+            res.sections.forEach(element => {
+                html += `<tr data-section-id="${element.section_id}">
                         <td>${element.hour_start}</td>
                         <td>${element.quotas}</td>
                         <td>${element.days}</td>
                         <td>${element.first_name} ${element.last_name}</td>
                     </tr>`;
             });
-            html += `<hr>`;
             tableSections.innerHTML= html;
+            location.href = '#tableSections';
+            selectedSection = tableSections.getElementsByClassName('selected');
+            tableSections.onclick = highlightSection;
+            
         })
     }
 }
@@ -98,7 +130,7 @@ function getClasses() {
     fetch('/api/get/students/getClasses.php')
     .then((res) => {return res.json()})
     .then((res) =>{
-        var html = `<table id="table">`;
+        var html = `<table id="table" class="mt-4">`;
         res.forEach(element => {
             html += `<tr data-class-id="${element.class_id}">
                     <td>${element.class_code}</td>
@@ -200,3 +232,32 @@ function addEvents(key) {
     
     
 }
+
+enrollBtn.addEventListener('click', (e)=>{
+    e.target.innerHTML = `<div class="spinner-border text-white" role="status"></div>`;
+    e.target.disabled = true;
+    const formData = new FormData();
+    formData.append('section_id', selectedSection[0].getAttribute('data-section-id'));
+    fetch('/api/post/students/enrollClass.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then((res)=>{return res.json()})
+    .then((res)=>{
+        e.target.innerHTML = `Enroll`; 
+        if (res.status) {
+            toastTitle.innerHTML ='Enroll succes'
+            toastBody.innerHTML = `<div class="alert alert-success mb-0" role="alert">
+                ${res.message}
+            </div>`
+            toastBS.show();
+            tableSections.innerHTML = '';
+        }else {
+            toastTitle.innerHTML ='Enroll error'
+            toastBody.innerHTML = `<div class="alert alert-danger mb-0" role="alert">
+                ${res.message}
+            </div>`
+            toastBS.show();
+        }
+    })
+})

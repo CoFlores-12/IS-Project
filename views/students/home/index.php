@@ -21,7 +21,18 @@ include '../../../src/components/sessionValidation.php';
     <link rel="stylesheet" href="/public/css/homeStudents.css">
 </head>
 <body>
-
+<div class="toast-container top-0 start-50 translate-middle-x mt-3">
+    <div class="toast border-0" id="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header bg border border-0">
+            <img src="/public/images/logo.png" width="24px" class="rounded me-2" alt="...">
+            <strong class="me-auto text" id="toastTitle"></strong>
+            <small class="text">Just now</small>
+            <button type="button" class="btn-close text" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body bg-aux border border-0" id="toastBody">
+        </div>
+    </div>
+</div>
 <!-- Modal Requests -->
 <div class="modal fade" id="modalRequests" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
@@ -48,7 +59,7 @@ include '../../../src/components/sessionValidation.php';
 
 <!-- Modal Enrollment -->
 <div class="modal fade" id="modalEnrolment" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-xl">
+  <div class="modal-dialog modal-dialog-centered modal-xl  modal-dialog-scrollable">
     <div class="modal-content bg">
           <div class="modal-body">
             <div class="row relative">
@@ -66,6 +77,9 @@ include '../../../src/components/sessionValidation.php';
         <div id="form-data">
             <center><div class="spinner-border text m-4" role="status"></div></center>
         </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn bg-custom-primary text-white" disabled id="enrollBtn">Enroll</button>
     </div>
     </div>
   </div>

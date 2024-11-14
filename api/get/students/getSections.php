@@ -1,7 +1,28 @@
 <?php
 include '../../../src/modules/database.php';
+
+header('Content-Type: application/json');
+
 $db = (new Database())->getConnection();
 $class_id = $_GET['class_id'];
+$response = [];
+$response['status'] = true;
+
+session_start();
+$id = $_SESSION['studentID'];
+$sql = "SELECT * FROM `Enroll` E
+INNER JOIN `Section` S
+ON E.section_id = S.section_id
+WHERE E.student_id = ? AND S.class_id = ?";
+
+$result = $db->execute_query($sql, [$id, $class_id]);
+if ($result->num_rows>0) {
+    $response['status'] = false;
+    $response['message'] = 'Class already registered';
+    echo json_encode($response); 
+    exit;
+}
+
 $Carrers = $db->execute_query("SELECT 
     S.section_id,
     S.hour_start,
@@ -22,6 +43,6 @@ if ($Carrers) {
         $resultArray[] = $row;
     }
 }
+$response['sections'] = $resultArray;
 
-header('Content-Type: application/json');
-echo json_encode($resultArray);
+echo json_encode($response);

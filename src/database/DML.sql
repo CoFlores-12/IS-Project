@@ -123,4 +123,9 @@ INNER JOIN `Employees` E
 ON S.employee_number = `E`.employee_number
 INNER JOIN `Persons` P
 ON E.person_id = P.person_id
-WHERE class_id = 2
+WHERE class_id = 2;
+
+SELECT * FROM `Enroll` E
+INNER JOIN `Section` S
+ON E.section_id = S.section_id
+WHERE E.student_id = 20201000005 AND S.class_id = 1
