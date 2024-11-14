@@ -116,27 +116,27 @@
         </select>
         <div class="days">
         <div class="form-check form-check-inline">
-            <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
+            <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="Mon">
             <label class="form-check-label" for="inlineCheckbox1">Mon</label>
           </div>
           <div class="form-check form-check-inline">
-            <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">
+            <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="Tue">
             <label class="form-check-label" for="inlineCheckbox2">Tue</label>
           </div>          
           <div class="form-check form-check-inline">
-            <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">
+            <input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="Wed">
             <label class="form-check-label" for="inlineCheckbox2">Wed</label>
           </div>          
           <div class="form-check form-check-inline">
-            <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">
+            <input class="form-check-input" type="checkbox" id="inlineCheckbox4" value="Thur">
             <label class="form-check-label" for="inlineCheckbox2">Thur</label>
           </div>          
           <div class="form-check form-check-inline">
-            <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">
+            <input class="form-check-input" type="checkbox" id="inlineCheckbox5" value="Fri">
             <label class="form-check-label" for="inlineCheckbox2">Fri</label>
           </div>          
           <div class="form-check form-check-inline">
-            <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">
+            <input class="form-check-input" type="checkbox" id="inlineCheckbox6" value="Sat">
             <label class="form-check-label" for="inlineCheckbox2">Sat</label>
           </div>          
       </div>

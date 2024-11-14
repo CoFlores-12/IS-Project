@@ -62,19 +62,23 @@ INSERT INTO ClassesXCareer (class_id, career_id, req) VALUES (1, 1, '{"id_clase"
 
 SELECT * FROM `Careers` JOIN `ClassesXCareer` ON `Careers`.class_id = `ClassesXCareer`.class_id
 
-SELECT 
-    C.class_id,
-    C.class_name,
-    C.uv,
-    C.class_code
-FROM 
-    Classes C
-JOIN 
-    ClassesXCareer CC ON C.class_id = CC.class_id
-JOIN 
-    Careers CR ON CC.career_id = CR.career_id
-JOIN 
-    Departments D ON CR.department_id = D.department_id
-WHERE 
-    D.department_id = 1;
+
+INSERT INTO SectionDays (section_id, day) VALUES (17, 'Mon');
+INSERT INTO SectionDays (section_id, day) VALUES (17, 'Wed');
+INSERT INTO SectionDays (section_id, day) VALUES (17, 'Fri');
+
+ SELECT COUNT(*) 
+    FROM Section s
+    JOIN SectionDays sd ON s.section_id = sd.section_id
+    WHERE s.classroom_id = 1
+      AND s.hour_start = 1100       
+      AND s.hour_end = 1200      
+      AND FIND_IN_SET(sd.day, 'Mon') > 0;  
+
+CALL CheckClassroomAvailability(1, 1100, 1200, 'Mon,Wed,Fri', @availability);
+SELECT @availability;
+
+CALL CheckInstructorAvailability(4, 1100, 1200, 'Mon,Wed,Fri', @is_available);
+
+SELECT @is_available; 
 

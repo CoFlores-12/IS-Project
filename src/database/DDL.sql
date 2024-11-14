@@ -172,10 +172,13 @@
     `hour_end` smallint,
     `period_id` int,
     `classroom_id` int,
+    `employee_number` INT,
+    `quotas` INT,
+    `days` VARCHAR(25), 
     Foreign Key (class_id) REFERENCES Classes(class_id),
     Foreign Key (period_id) REFERENCES Periods(period_id),
-    Foreign Key (classroom_id) REFERENCES Classroom(classroom_id)
-    );
+    Foreign Key (classroom_id) REFERENCES Classroom(classroom_id),  
+    Foreign Key (employee_number) REFERENCES Employees(employee_number));
 
     CREATE TABLE `Obs` (
         obs_id TINYINT PRIMARY KEY,
@@ -193,6 +196,13 @@
         Foreign Key (obs_id) REFERENCES Obs(obs_id)
     )
 
+    CREATE TABLE SectionDays (
+        section_id INT,
+        day VARCHAR(3), 
+        FOREIGN KEY (section_id) REFERENCES Section(section_id)
+    );
+
+
     /*modifications for the employee's department*/
     CREATE TABLE Departments (
         department_id INT PRIMARY KEY AUTO_INCREMENT,
@@ -203,13 +213,6 @@
     ALTER TABLE Employees
     ADD COLUMN department_id INT,
     ADD FOREIGN KEY (department_id) REFERENCES Departments(department_id);
-
-    ALTER TABLE Section
-    ADD COLUMN employee_number INT,
-    ADD COLUMN quotas INT,
-    ADD COLUMN days VARCHAR(25),   -- //TODO: tinene que quedar en 25
-    ADD FOREIGN KEY (employee_number) REFERENCES Employees(employee_number);
-
 
     /*end modifications for the employee's department*/
 
@@ -277,9 +280,6 @@
 
     DELIMITER ;
 
-
-
-/*borrar luego*/
 CREATE PROCEDURE LoginAdministrator (
         IN in_identifier VARCHAR(100),      
         IN in_password VARCHAR(255),       
@@ -317,27 +317,65 @@ CREATE PROCEDURE LoginAdministrator (
 
     DELIMITER ;
 
-    SELECT s.hour_start, s.hour_end, p.indicator AS period, p.year, s.class_id, c.class_name
-FROM Section s
-JOIN Periods p ON s.period_id = p.period_id
-JOIN Classes c ON c.class_id = s.class_id
-WHERE s.classroom_id = 1
-ORDER BY p.year, p.indicator, s.hour_start;
 
-SELECT 
-    P.person_id,
-    P.first_name,
-    P.last_name,
-    P.personal_email,
-    A.preferend_career_id,
-    A.secondary_career_id,
-    A.approved_pref,
-    A.approved_sec
-FROM 
-    Applicant A
-JOIN 
-    Persons P ON A.person_id = P.person_id
-WHERE 
-    A.status_id = 1;
+CREATE PROCEDURE CheckClassroomAvailability (
+    IN in_classroom_id INT,       
+    IN in_hour_start SMALLINT,     
+    IN in_hour_end SMALLINT,       
+    IN in_days VARCHAR(25),        
+    OUT is_available BOOLEAN      
+)
+BEGIN
+    DECLARE conflicting_sections INT DEFAULT 0;
 
+    SELECT COUNT(*) 
+    INTO conflicting_sections
+    FROM Section s
+    JOIN SectionDays sd ON s.section_id = sd.section_id
+    WHERE s.classroom_id = in_classroom_id
+      AND s.hour_start = in_hour_start       
+      AND s.hour_end = in_hour_end      
+      AND FIND_IN_SET(sd.day, in_days) > 0;  
+
+    IF conflicting_sections > 0 THEN
+        SET is_available = FALSE;  
+    ELSE
+        SET is_available = TRUE;  
+    END IF;
+
+    SELECT is_available AS classroom_availability;
+END 
+
+DELIMITER //
+
+
+CREATE PROCEDURE CheckInstructorAvailability (
+    IN in_employee_number INT,    
+    IN in_hour_start SMALLINT,     
+    IN in_hour_end SMALLINT,       
+    IN in_days VARCHAR(25),        
+    OUT is_available BOOLEAN       
+)
+BEGIN
+    DECLARE conflicting_teacher INT DEFAULT 0;
+
+    SELECT COUNT(*) 
+    INTO conflicting_teacher
+    FROM Section s
+    JOIN SectionDays sd ON s.section_id = sd.section_id 
+    WHERE s.employee_number = in_employee_number
+    AND s.hour_start = in_hour_start             
+    AND s.hour_end = in_hour_end                  
+    AND FIND_IN_SET(sd.day, in_days) > 0; 
+
+    IF conflicting_teacher > 0 THEN
+        SET is_available = FALSE;
+    ELSE
+        SET is_available = TRUE;  
+    END IF;
+
+    SELECT is_available AS instructor_availability;
+END //
+
+DELIMITER ;
 

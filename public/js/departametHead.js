@@ -111,6 +111,13 @@ let historyBody = document.getElementById('historyBody');
         let modalNewSection = new bootstrap.Modal(newSection);
         let modalNewSectionManual = new bootstrap.Modal(newSectionManual);
 
+        let inlineCheckbox1 = document.getElementById('inlineCheckbox1');
+        let inlineCheckbox2 = document.getElementById('inlineCheckbox2');
+        let inlineCheckbox3 = document.getElementById('inlineCheckbox3');
+        let inlineCheckbox4 = document.getElementById('inlineCheckbox4');
+        let inlineCheckbox5 = document.getElementById('inlineCheckbox5');
+        let inlineCheckbox6 = document.getElementById('inlineCheckbox6');
+
         //TODO: create event to send file csv with section
 
         newSectionClass.addEventListener('click', ()=>{
@@ -192,23 +199,53 @@ let historyBody = document.getElementById('historyBody');
 
         hourStart.addEventListener('change', (e)=>{
             //TODO: validation
-            const value = e.target.value;
-            console.log(value);
-            
-            hourEnd.min = value+100;
+            let value = parseInt(e.target.value, 10);
+
+            // Validar que la hora esté en el rango de 0700 a 1900
+            if (value < 700 || value > 1900) {
+                alert("La hora de inicio debe estar entre 0700 y 1900.");
+                hourEnd.value = ""; // Limpiar hourEnd si está fuera del rango
+                return;
+            }
+        
+            // Formatear la entrada a 4 dígitos
+            let startValue = value.toString().padStart(4, '0');
+        
+            // Calcular la hora de finalización sumándole 100 minutos
+            let endValue = (value + 100).toString().padStart(4, '0');
+        
+            // Asignar los valores formateados
+            hourStart.value = startValue;
+            hourEnd.value = endValue;
         })
 
         btnNewSection.addEventListener('click', ()=>{
+            let checkboxes = [
+                inlineCheckbox1,
+                inlineCheckbox2,
+                inlineCheckbox3,
+                inlineCheckbox4,
+                inlineCheckbox5,
+                inlineCheckbox6
+            ];
+    
+            let selectedValues = checkboxes
+                .filter(checkbox => checkbox.checked) 
+                .map(checkbox => checkbox.value)    
+                .join(',');       
+            
             if (classes.value === '') { return; }
             if (teachers.value === '') { return; }
-            if (classrooms.value === '') { return; }
-            if (schedule.value === '') { return; }
             if (available_spaces.value === '') { return; }
-
-            console.log(classes.value, "  - ", teachers.value, "  - ",classrooms.value, "  - ",schedule.value, "  - ",available_spaces.value);
+            if (hourStart.value === '') { return; }
+            if (hourEnd.value === '') { return; }
+            if (selectedValues === '') { return; }
+    
+            console.log(classes.value, "  - ", teachers.value, "  - ",classrooms.value, " - ",available_spaces.value, " - ", hourStart.value, " - ",hourEnd.value, " - ",selectedValues);
 
 
             //TODO: validation inputs y create JSON with data
+            
             fetch('/api/post/admin/addSection.php', {
                 method: 'POST',
                 headers: {
@@ -216,9 +253,12 @@ let historyBody = document.getElementById('historyBody');
                 },
                 body: JSON.stringify({
                     classId: classes.value,
-                    starttime: 1200,
-                    endtime: 1300,
-                    classroomId: classrooms.value
+                    starttime: hourStart.value,
+                    endtime: hourEnd.value,
+                    classroomId: classrooms.value,
+                    teacherId: teachers.value,
+                    quotas: available_spaces.value, 
+                    days: selectedValues
                 })
             })
             .then(response => response.json())
