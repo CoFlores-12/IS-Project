@@ -19,9 +19,22 @@
             padding-left: 2rem; 
             border: none; 
         }
+        .successAlert {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1050; /* Superior a modales de Bootstrap */
+            width: 80%;
+            max-width: 500px;
+        }
     </style>
 </head>
 <body>
+
+<div class="alert alert-success successAlert" id="alertSuccess" role="alert">
+  Section created successfully.
+</div>
 
 <div class="modal fade" id="historyStudent" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog bg  modal-dialog-scrollable">
@@ -89,7 +102,7 @@
     </div>
   </div>
 </div>
-
+        
 <div class="modal fade" id="newSectionManual" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog bg modal-lg">
     <div class="modal-content bg">
@@ -100,20 +113,26 @@
       <div class="modal-body">
         <div class="row p">
       
-        <label class="mb-1">Classes:</label>
-        <select class="form-select mb-3" id="classes">
-            <option value="" selected>Select...</option>
+        <label class="mb-1" require>Classes:</label>
+        <select class="form-select mb-3" id="classes" required>
+            <option value="" selected >Select...</option>
         </select>
 
         <label class="mb-1">Teachers:</label>
         <select class="form-select mb-3" id="teachers">
             <option value="" selected>Select...</option>
         </select>
-
+        <div class="alert alert-danger" role="alert" id="alertClassroom">
+          Classroom busy at this time, choose another time or day.
+        </div>
         <label class="mb-1">Classrooms:</label>
         <select class="form-select mb-3" id="classrooms">
             <option value="" selected>Select...</option>
         </select>
+        <div class="alert alert-danger" role="alert" id="alertTeacher">
+          Teacher busy at this time, choose another time or day.
+        </div>
+        <label class="mb-1">Mark the days:</label>
         <div class="days">
         <div class="form-check form-check-inline">
             <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="Mon">
@@ -128,7 +147,7 @@
             <label class="form-check-label" for="inlineCheckbox2">Wed</label>
           </div>          
           <div class="form-check form-check-inline">
-            <input class="form-check-input" type="checkbox" id="inlineCheckbox4" value="Thur">
+            <input class="form-check-input" type="checkbox" id="inlineCheckbox4" value="Thu">
             <label class="form-check-label" for="inlineCheckbox2">Thur</label>
           </div>          
           <div class="form-check form-check-inline">
@@ -150,7 +169,6 @@
 
         <label class="mb-1">Available Spaces (maximum student capacity):</label>
             <input type="number" id="available_spaces" name="cupo" min="1" max="100" placeholder="Select..." value="">
-            
         <button type="button" class="btn btn-success mt-4 btn-sm" id="btnNewSection">Success</button>
         </div>
 

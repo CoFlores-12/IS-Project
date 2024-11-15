@@ -174,8 +174,7 @@
     `classroom_id` int,
     `employee_number` INT,
     `quotas` INT,
-    `days` VARCHAR(25), 
-    Foreign Key (class_id) REFERENCES Classes(class_id),
+    Foreign Key (class_id)  REFERENCES Classes(class_id),
     Foreign Key (period_id) REFERENCES Periods(period_id),
     Foreign Key (classroom_id) REFERENCES Classroom(classroom_id),  
     Foreign Key (employee_number) REFERENCES Employees(employee_number));
@@ -195,12 +194,25 @@
         Foreign Key (student_id) REFERENCES Students(account_number),
         Foreign Key (obs_id) REFERENCES Obs(obs_id)
     )
+    /*
 
     CREATE TABLE SectionDays (
         section_id INT,
         day VARCHAR(3), 
         FOREIGN KEY (section_id) REFERENCES Section(section_id)
-    );
+    );*/
+
+    CREATE TABLE SectionDays (
+    section_id INT,
+    Monday TINYINT DEFAULT 0,
+    Tuesday TINYINT DEFAULT 0,
+    Wednesday TINYINT DEFAULT 0,
+    Thursday TINYINT DEFAULT 0,
+    Friday TINYINT DEFAULT 0,
+    Saturday TINYINT DEFAULT 0,
+    PRIMARY KEY (section_id),
+    FOREIGN KEY (section_id) REFERENCES Section(section_id)
+);
 
 
     /*modifications for the employee's department*/
@@ -317,8 +329,7 @@ CREATE PROCEDURE LoginAdministrator (
 
     DELIMITER ;
 
-
-CREATE PROCEDURE CheckClassroomAvailability (
+CREATE DEFINER=`root`@`%` PROCEDURE `CheckClassroomAvailability`(
     IN in_classroom_id INT,       
     IN in_hour_start SMALLINT,     
     IN in_hour_end SMALLINT,       
@@ -335,19 +346,23 @@ BEGIN
     WHERE s.classroom_id = in_classroom_id
       AND s.hour_start = in_hour_start       
       AND s.hour_end = in_hour_end      
-      AND FIND_IN_SET(sd.day, in_days) > 0;  
+      AND (
+          (sd.Monday = 1 AND FIND_IN_SET('Mon', in_days) > 0) OR
+          (sd.Tuesday = 1 AND FIND_IN_SET('Tue', in_days) > 0) OR
+          (sd.Wednesday = 1 AND FIND_IN_SET('Wed', in_days) > 0) OR
+          (sd.Thursday = 1 AND FIND_IN_SET('Thu', in_days) > 0) OR
+          (sd.Friday = 1 AND FIND_IN_SET('Fri', in_days) > 0) OR
+          (sd.Saturday = 1 AND FIND_IN_SET('Sat', in_days) > 0)
+      );
 
     IF conflicting_sections > 0 THEN
-        SET is_available = FALSE;  
+        SET is_available = FALSE;
     ELSE
-        SET is_available = TRUE;  
+        SET is_available = TRUE;
     END IF;
 
     SELECT is_available AS classroom_availability;
-END 
-
-DELIMITER //
-
+END;
 
 CREATE PROCEDURE CheckInstructorAvailability (
     IN in_employee_number INT,    
@@ -364,18 +379,23 @@ BEGIN
     FROM Section s
     JOIN SectionDays sd ON s.section_id = sd.section_id 
     WHERE s.employee_number = in_employee_number
-    AND s.hour_start = in_hour_start             
-    AND s.hour_end = in_hour_end                  
-    AND FIND_IN_SET(sd.day, in_days) > 0; 
+      AND s.hour_start = in_hour_start             
+      AND s.hour_end = in_hour_end                  
+      AND (
+          (sd.Monday = 1 AND FIND_IN_SET('Mon', in_days) > 0) OR
+          (sd.Tuesday = 1 AND FIND_IN_SET('Tue', in_days) > 0) OR
+          (sd.Wednesday = 1 AND FIND_IN_SET('Wed', in_days) > 0) OR
+          (sd.Thursday = 1 AND FIND_IN_SET('Thu', in_days) > 0) OR
+          (sd.Friday = 1 AND FIND_IN_SET('Fri', in_days) > 0) OR
+          (sd.Saturday = 1 AND FIND_IN_SET('Sat', in_days) > 0)
+      );
 
     IF conflicting_teacher > 0 THEN
-        SET is_available = FALSE;
+        SET is_available = FALSE;  
     ELSE
-        SET is_available = TRUE;  
+        SET is_available = TRUE; 
     END IF;
 
     SELECT is_available AS instructor_availability;
 END //
-
-DELIMITER ;
 

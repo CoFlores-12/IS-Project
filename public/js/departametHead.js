@@ -111,6 +111,11 @@ let historyBody = document.getElementById('historyBody');
         let modalNewSection = new bootstrap.Modal(newSection);
         let modalNewSectionManual = new bootstrap.Modal(newSectionManual);
 
+        let alertClassroom = document.getElementById('alertClassroom');
+        let alertTeacher = document.getElementById('alertTeacher');
+        let alertSuccess = document.getElementById('alertSuccess');
+
+        
         let inlineCheckbox1 = document.getElementById('inlineCheckbox1');
         let inlineCheckbox2 = document.getElementById('inlineCheckbox2');
         let inlineCheckbox3 = document.getElementById('inlineCheckbox3');
@@ -219,7 +224,17 @@ let historyBody = document.getElementById('historyBody');
             hourEnd.value = endValue;
         })
 
+        alertClassroom.style.display = 'none';
+        alertTeacher.style.display = 'none';
+
+        alertSuccess.style.display = 'none';
+
         btnNewSection.addEventListener('click', ()=>{
+
+            alertClassroom.style.display = 'none';
+            alertTeacher.style.display = 'none';
+            alertSuccess.style.display = 'none';
+
             let checkboxes = [
                 inlineCheckbox1,
                 inlineCheckbox2,
@@ -243,8 +258,8 @@ let historyBody = document.getElementById('historyBody');
     
             console.log(classes.value, "  - ", teachers.value, "  - ",classrooms.value, " - ",available_spaces.value, " - ", hourStart.value, " - ",hourEnd.value, " - ",selectedValues);
 
-
-            //TODO: validation inputs y create JSON with data
+            btnNewSection.disabled = true;
+            btnNewSection.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Loading...`;
             
             fetch('/api/post/admin/addSection.php', {
                 method: 'POST',
@@ -263,13 +278,44 @@ let historyBody = document.getElementById('historyBody');
             })
             .then(response => response.json())
             .then(data => {
-                if (data.success) {
-                    alert(data.message);
-                } else {
-                    console.error(data.message);
+                if (data.status == 0) {
+                    alertClassroom.style.display = 'block';
+                    alertTeacher.style.display = 'block';
+                    console.log(data.message);
+                } else if (data.status == 1) {
+                    alertClassroom.style.display = 'block';
+                    console.log(data.message);
+                }else if (data.status == 2) {
+                    alertTeacher.style.display = 'block';
+                    console.log(data.message);
+                } 
+                else  {
+                    modalNewSection.hide();
+                    modalNewSectionManual.hide();
+
+                    inlineCheckbox1.checked = false;
+                    inlineCheckbox2.checked = false;
+                    inlineCheckbox3.checked = false;
+                    inlineCheckbox4.checked = false;
+                    inlineCheckbox5.checked = false;
+                    inlineCheckbox6.checked = false;
+
+                    hourStart.value = ""; 
+                    hourEnd.value = ""; 
+
+                    alertSuccess.style.display = 'block';
+                    setTimeout(function() {
+                        alertSuccess.style.display = 'none';
+                      }, 3000); // Ocultar después de 3 segundos
+                    
                 }
+                btnNewSection.disabled = false;
+                btnNewSection.innerHTML = `Success`;
             })
-            .catch(error => console.error('Error:', error));
+            .catch(error => {
+                
+                console.error('Error:', error)}
+            );
         })
         
 

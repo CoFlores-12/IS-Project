@@ -73,12 +73,20 @@ INSERT INTO SectionDays (section_id, day) VALUES (17, 'Fri');
     WHERE s.classroom_id = 1
       AND s.hour_start = 1100       
       AND s.hour_end = 1200      
-      AND FIND_IN_SET(sd.day, 'Mon') > 0;  
+      AND (
+          (sd.Monday = 1 AND FIND_IN_SET('Mon', 'Mon,Wed,Fri') > 0) OR
+          (sd.Tuesday = 1 AND FIND_IN_SET('Tue', 'Mon,Wed,Fri') > 0) OR
+          (sd.Wednesday = 1 AND FIND_IN_SET('Wed', 'Mon,Wed,Fri') > 0) OR
+          (sd.Thursday = 1 AND FIND_IN_SET('Thu', 'Mon,Wed,Fri') > 0) OR
+          (sd.Friday = 1 AND FIND_IN_SET('Fri', 'Mon,Wed,Fri') > 0) OR
+          (sd.Saturday = 1 AND FIND_IN_SET('Sat', 'Mon,Wed,Fri') > 0)
+      );
 
-CALL CheckClassroomAvailability(1, 1100, 1200, 'Mon,Wed,Fri', @availability);
+
+CALL CheckClassroomAvailability(1, 1000, 1100, 'Mon,Wed,Fri', @availability);
 SELECT @availability;
 
-CALL CheckInstructorAvailability(4, 1100, 1200, 'Mon,Wed,Fri', @is_available);
+CALL CheckInstructorAvailability(4, 0900, 1000, 'Mon,Wed,Fri', @is_available);
 
 SELECT @is_available; 
 
