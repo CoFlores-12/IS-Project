@@ -93,10 +93,26 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        
-        <input type="file" name="" accept=".csv" id="file">
-        <button type="button" class="btn bg-custom-primary mt-4 form-control text">upload file</button>
+        <input type="file" name="" accept=".csv" id="csvFile">
+        <button type="button" class="btn bg-custom-primary mt-4 form-control text" id="uploadFile">Upload file</button>
         <hr class="my-2">
+        <div class="table-responsive">
+          <table class="table w-100 table-dark table-striped" id="table">
+            <thead>
+              <tr>
+                <th scope="col">Line</th>
+                <th scope="col">Observation</th>
+
+              </tr>
+            </thead>
+            <tbody>
+
+              
+              
+              
+            </tbody>
+          </table>
+      </div>
         <button type="button" id="newSectionManualBtn" class="btn btn-primary mt-4 form-control">Manual</button>
       </div>
     </div>
@@ -122,16 +138,16 @@
         <select class="form-select mb-3" id="teachers">
             <option value="" selected>Select...</option>
         </select>
-        <div class="alert alert-danger" role="alert" id="alertClassroom">
-          Classroom busy at this time, choose another time or day.
+        <div class="alert alert-danger" role="alert" id="alertTeacher">
+          Teacher busy at this time, choose another time or day.
         </div>
         <label class="mb-1">Classrooms:</label>
         <select class="form-select mb-3" id="classrooms">
             <option value="" selected>Select...</option>
         </select>
-        <div class="alert alert-danger" role="alert" id="alertTeacher">
-          Teacher busy at this time, choose another time or day.
-        </div>
+        <div class="alert alert-danger" role="alert" id="alertClassroom">
+          Classroom busy at this time, choose another time or day.
+        </div>        
         <label class="mb-1">Mark the days:</label>
         <div class="days">
         <div class="form-check form-check-inline">
@@ -168,13 +184,14 @@
         
 
         <label class="mb-1">Available Spaces (maximum student capacity):</label>
-            <input type="number" id="available_spaces" name="cupo" min="1" max="100" placeholder="Select..." value="">
+            <input type="number" id="available_spaces" name="cupo"  placeholder="Select..." value="" min="5" max="100" step="1">
+        <div class="alert alert-danger" role="alert" id="alertCapacity">
+          Incorrect student capacity.
+        </div>   
         <button type="button" class="btn btn-success mt-4 btn-sm" id="btnNewSection">Success</button>
         </div>
 
-        <div id="newClassBody">
-                
-        </div>
+      
       </div>
     </div>
   </div>

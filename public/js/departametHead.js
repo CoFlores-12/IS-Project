@@ -114,14 +114,17 @@ let historyBody = document.getElementById('historyBody');
         let alertClassroom = document.getElementById('alertClassroom');
         let alertTeacher = document.getElementById('alertTeacher');
         let alertSuccess = document.getElementById('alertSuccess');
-
-        
+        let alertCapacity = document.getElementById('alertCapacity');
+   
         let inlineCheckbox1 = document.getElementById('inlineCheckbox1');
         let inlineCheckbox2 = document.getElementById('inlineCheckbox2');
         let inlineCheckbox3 = document.getElementById('inlineCheckbox3');
         let inlineCheckbox4 = document.getElementById('inlineCheckbox4');
         let inlineCheckbox5 = document.getElementById('inlineCheckbox5');
         let inlineCheckbox6 = document.getElementById('inlineCheckbox6');
+
+       
+        
 
         //TODO: create event to send file csv with section
 
@@ -228,12 +231,16 @@ let historyBody = document.getElementById('historyBody');
         alertTeacher.style.display = 'none';
 
         alertSuccess.style.display = 'none';
+        alertCapacity.style.display = 'none';
+
+        
 
         btnNewSection.addEventListener('click', ()=>{
 
             alertClassroom.style.display = 'none';
             alertTeacher.style.display = 'none';
             alertSuccess.style.display = 'none';
+            alertCapacity.style.display = 'none';
 
             let checkboxes = [
                 inlineCheckbox1,
@@ -273,7 +280,8 @@ let historyBody = document.getElementById('historyBody');
                     classroomId: classrooms.value,
                     teacherId: teachers.value,
                     quotas: available_spaces.value, 
-                    days: selectedValues
+                    days: selectedValues,
+                    flag: "manual"
                 })
             })
             .then(response => response.json())
@@ -289,7 +297,10 @@ let historyBody = document.getElementById('historyBody');
                     alertTeacher.style.display = 'block';
                     console.log(data.message);
                 } 
-                else  {
+                else if (data.status == 3) {
+                    alertCapacity.style.display = 'block';
+                    console.log(data.message);
+                }else  {
                     modalNewSection.hide();
                     modalNewSectionManual.hide();
 
@@ -306,7 +317,7 @@ let historyBody = document.getElementById('historyBody');
                     alertSuccess.style.display = 'block';
                     setTimeout(function() {
                         alertSuccess.style.display = 'none';
-                      }, 3000); // Ocultar después de 3 segundos
+                      }, 3000); 
                     
                 }
                 btnNewSection.disabled = false;
@@ -319,4 +330,103 @@ let historyBody = document.getElementById('historyBody');
         })
         
 
-    
+
+    let uploadFile = document.getElementById('uploadFile');
+    let csvFile = document.getElementById('csvFile');
+        
+           
+    var table = document.getElementById('table');
+    table.style.display = 'none'; 
+
+    uploadFile.addEventListener("click", () => {
+        const file = csvFile.files[0];
+
+        if (!file) {
+            alert("Please select a file.");
+            return;
+        }
+
+        table.innerHTML = "";
+
+        uploadFile.disabled = true;
+        uploadFile.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Loading...`;
+
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+            const csvContent = e.target.result;
+
+            fetch('/api/post/admin/addSection.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    csvData: csvContent,
+                    flag: "archive"
+                })
+            })
+            .then(response => response.json())
+            .then(result => {
+                table.style.display = 'block'; 
+
+                
+                for (let key in result) {
+                    if (result.hasOwnProperty(key)) { 
+                        const item = result[key];
+                        console.log(`Line ${item.line}, Status: ${item.status.status}`);
+
+                        switch(item.status.status) {
+                            case 0:
+                                message = `Both the teacher and the classroom are available at this time.`;
+                                className = "alert table-danger";
+                                break;
+                            case 1:
+                                message = `The classroom is occupied at this time.`;
+                                className = "alert alert-danger";
+                                break;
+                            case 2:
+                                message = `The teacher is occupied at this time.`;
+                                className = "alert alert-danger"; 
+                                break;
+                            case 3:
+                                message = `Incorrect student capacity.`;
+                                className = "alert alert-danger"; 
+                                break;
+                            case "success":
+                                message = `Saved correctly.`;
+                                className = "table-success"; 
+                                break;
+                            default:
+                                message = `Data is missing.`;
+                                className = "alert alert-danger"; 
+                                break;
+                        }
+
+                        
+                       let newRow = `
+                        <tr class="${className}">
+                            <th>${item.line}</th>
+                            <td>${message}</td>
+                        </tr>
+                        `;
+
+                        table.innerHTML += newRow
+                    }
+                }
+
+               
+
+            
+                uploadFile.disabled = false;
+                uploadFile.innerHTML = `Upload file`;
+                
+            })
+            .catch(error => console.error('Error:', error));
+        };
+
+        reader.readAsText(file); 
+    });
+
+
+  

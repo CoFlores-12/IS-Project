@@ -90,3 +90,5 @@ CALL CheckInstructorAvailability(4, 0900, 1000, 'Mon,Wed,Fri', @is_available);
 
 SELECT @is_available; 
 
+SELECT capacity FROM Classroom WHERE classroom_id = 1;
+

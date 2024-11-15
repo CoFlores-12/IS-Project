@@ -194,25 +194,19 @@
         Foreign Key (student_id) REFERENCES Students(account_number),
         Foreign Key (obs_id) REFERENCES Obs(obs_id)
     )
-    /*
+    
 
     CREATE TABLE SectionDays (
         section_id INT,
-        day VARCHAR(3), 
+        Monday BIT  DEFAULT 0,
+        Tuesday BIT  DEFAULT 0,
+        Wednesday BIT  DEFAULT 0,
+        Thursday BIT  DEFAULT 0,
+        Friday BIT  DEFAULT 0,
+        Saturday BIT  DEFAULT 0,
+        PRIMARY KEY (section_id),
         FOREIGN KEY (section_id) REFERENCES Section(section_id)
-    );*/
-
-    CREATE TABLE SectionDays (
-    section_id INT,
-    Monday TINYINT DEFAULT 0,
-    Tuesday TINYINT DEFAULT 0,
-    Wednesday TINYINT DEFAULT 0,
-    Thursday TINYINT DEFAULT 0,
-    Friday TINYINT DEFAULT 0,
-    Saturday TINYINT DEFAULT 0,
-    PRIMARY KEY (section_id),
-    FOREIGN KEY (section_id) REFERENCES Section(section_id)
-);
+    );
 
 
     /*modifications for the employee's department*/
