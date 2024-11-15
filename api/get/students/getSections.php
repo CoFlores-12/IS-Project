@@ -26,15 +26,26 @@ if ($result->num_rows>0) {
 $Carrers = $db->execute_query("SELECT 
     S.section_id,
     S.hour_start,
-    S.days,
-    S.quotas,
+    S.quotas - (
+        SELECT COUNT(*) FROM `Enroll` E
+        WHERE E.section_id = S.section_id
+    ) as quotas,
     P.first_name, 
-    P.last_name 
+    P.last_name,
+    CONCAT(
+        CASE WHEN Monday = 1 THEN 'Mo ' ELSE '' END,
+        CASE WHEN Wednesday = 1 THEN 'We ' ELSE '' END,
+        CASE WHEN Friday = 1 THEN 'Fr ' ELSE '' END,
+        CASE WHEN Tuesday = 1 THEN 'Tu ' ELSE '' END,
+        CASE WHEN Thursday = 1 THEN 'Th ' ELSE '' END,
+        CASE WHEN Saturday = 1 THEN 'Sa ' ELSE '' END
+    ) as days
 FROM `Section` S
 INNER JOIN `Employees` E
 ON S.employee_number = `E`.employee_number
 INNER JOIN `Persons` P
 ON E.person_id = P.person_id 
+INNER JOIN `SectionDays` SD ON S.section_id = SD.section_id
 WHERE class_id = ?", [$class_id]);
 
 $resultArray = [];

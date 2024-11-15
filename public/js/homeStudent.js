@@ -8,6 +8,7 @@ let requestType = document.getElementById('requestType');
 let dataForRequest = document.getElementById('dataForRequest');
 let formDataEnrollment = document.getElementById('form-data');
 let enrollBtn = document.getElementById('enrollBtn');
+let cancelBtn = document.getElementById('cancelBtn');
 let toast = document.getElementById('toast');
 let toastBody = document.getElementById('toastBody');
 let toastTitle = document.getElementById('toastTitle');
@@ -65,6 +66,7 @@ btnModalEnrollment.addEventListener('click', (e)=>{
 
 var selected;
 var selectedSection;
+var selectedCancel;
 
 function highlight(e) {
     if (selected[0]) selected[0].className = '';
@@ -79,6 +81,16 @@ function highlightSection(e) {
         enrollBtn.disabled = false
     }else{
         enrollBtn.disabled = true
+    }
+}
+function highlightCancell(e) {
+    if (selectedCancel[0]) selectedCancel[0].className = '';
+    e.target.parentNode.className = 'selected';
+    var element = document.querySelectorAll('.selected');
+    if(element[0]!== undefined){ 
+        cancelBtn.disabled = false
+    }else{
+        cancelBtn.disabled = true
     }
 }
 
@@ -149,16 +161,59 @@ function getClasses() {
 cancelEnrollmentBtn.addEventListener('click', (e)=>{
     e.target.classList.add('active');
     e.target.classList.add('bg-aux');
+    enrollBtn.disabled = true;
+    enrollBtn.classList.add('d-none');
+    cancelBtn.classList.remove('d-none');
+    cancelBtn.disabled = true;
     addEnrollmentBtn.classList.remove('active');
     addEnrollmentBtn.classList.remove('bg-aux');
     formDataEnrollment.innerHTML = '<center><div class="spinner-border text m-4" role="status"></div></center>';
-    
+    fetch('/api/get/students/getClassesEnrolled.php')
+    .then((res)=>{return res.json()})
+    .then((res)=> {
+        var html = `<table id="table" class="my-2">
+        <thead>
+            <tr><th colspan="2"><h5>Enrolled</h5></th></tr>
+        </thead>
+        <tbody  id="tableEnrolled">
+        </tbody>
+        <thead>
+            <tr><th colspan="2"><h5>Wait list</h5></th></tr>
+        </thead>
+        <tbody id="tableWaitList">
+            
+        </tbody>
+        `;
+        formDataEnrollment.innerHTML= html;
+        var tableEnrolled = document.getElementById('tableEnrolled');
+        var tableWaitList = document.getElementById('tableWaitList');
+        res.forEach(element => {
+            if (element.is_waitlist == 0) {
+                tableEnrolled.innerHTML += `<tr data-enrolled-id="${element.enroll_id}">
+                <td>${element.hour_start}</td>
+                <td>${element.class_name}</td>
+                </tr>`;
+            } else {
+                tableWaitList.innerHTML += `<tr data-enrolled-id="${element.enroll_id}">
+                <td>${element.hour_start}</td>
+                <td>${element.class_name}</td>
+                </tr>`;
+            }
+        });
+        var table = document.getElementById('table');
+        selectedCancel = table.getElementsByClassName('selected');
+        table.onclick = highlightCancell;
+    })
 })
 addEnrollmentBtn.addEventListener('click', (e)=>{
     e.target.classList.add('active');
     e.target.classList.add('bg-aux');
     cancelEnrollmentBtn.classList.remove('active');
     cancelEnrollmentBtn.classList.remove('bg-aux');
+    cancelBtn.disabled = true;
+    cancelBtn.classList.add('d-none');
+    enrollBtn.classList.remove('d-none');
+    enrollBtn.disabled = true;
     getClasses();
 })
 
@@ -245,6 +300,7 @@ enrollBtn.addEventListener('click', (e)=>{
     .then((res)=>{return res.json()})
     .then((res)=>{
         e.target.innerHTML = `Enroll`; 
+        e.target.disabled = true; 
         if (res.status) {
             toastTitle.innerHTML ='Enroll succes'
             toastBody.innerHTML = `<div class="alert alert-success mb-0" role="alert">
@@ -259,5 +315,37 @@ enrollBtn.addEventListener('click', (e)=>{
             </div>`
             toastBS.show();
         }
+    })
+})
+cancelBtn.addEventListener('click', (e)=>{
+    e.target.innerHTML = `<div class="spinner-border text-white" role="status"></div>`;
+    e.target.disabled = true;
+    const formData = new URLSearchParams();
+    
+    formData.append('enrolled_id', selectedCancel[0].getAttribute('data-enrolled-id'));
+
+    fetch('/api/delete/students/cancelClass.php', {
+        method: 'DELETE',
+        body: formData
+    })
+    .then((res)=>{return res.json()})
+    .then((res)=>{
+        
+        e.target.innerHTML = `Cancel Class`; 
+        e.target.disabled = true; 
+        if (res.status) {
+            toastTitle.innerHTML ='Cancel class succes'
+            toastBody.innerHTML = `<div class="alert alert-success mb-0" role="alert">
+                ${res.message}
+            </div>`
+            toastBS.show();
+        }else {
+            toastTitle.innerHTML ='Cancel class error'
+            toastBody.innerHTML = `<div class="alert alert-danger mb-0" role="alert">
+                ${res.message}
+            </div>`
+            toastBS.show();
+        }
+        cancelEnrollmentBtn.click();
     })
 })

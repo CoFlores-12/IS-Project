@@ -80,6 +80,7 @@ include '../../../src/components/sessionValidation.php';
     </div>
     <div class="modal-footer">
         <button class="btn bg-custom-primary text-white" disabled id="enrollBtn">Enroll</button>
+        <button class="btn bg-custom-primary text-white d-none" disabled id="cancelBtn">Cancel Class</button>
     </div>
     </div>
   </div>

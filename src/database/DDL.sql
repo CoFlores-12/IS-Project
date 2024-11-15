@@ -200,9 +200,18 @@
     );
 
     CREATE TABLE Enroll (
+        enroll_id INT PRIMARY KEY AUTO_INCREMENT,
         section_id INT,
         student_id VARCHAR(11),
-        is_waitlist BIT, 
+        is_waitlist BIT DEFAULT 0, 
+        is_canceled BIT DEFAULT 0,
+        Foreign Key (section_id) REFERENCES Section(section_id),
+        Foreign Key (student_id) REFERENCES Students(account_number)
+    )
+
+    CREATE TABLE ClassesCanceled (
+        section_id INT,
+        student_id VARCHAR(11),
         Foreign Key (section_id) REFERENCES Section(section_id),
         Foreign Key (student_id) REFERENCES Students(account_number)
     )
