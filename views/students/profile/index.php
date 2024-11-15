@@ -1,6 +1,11 @@
 <?php
 $idTest = 20201001034;
 $account_number = $_GET['account_number'];
+require_once '../../../src/modules/Auth.php';
+
+$requiredRole = 'Student';
+
+AuthMiddleware::checkAccess($requiredRole);
 
 include './../../../src/modules/database.php';
 

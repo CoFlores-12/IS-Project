@@ -1,10 +1,9 @@
 <?php 
-session_start();
+require_once '../../../../src/modules/Auth.php';
 
-$role = $_SESSION['role'];
-$_SESSION['request'] = 'admin';
+$requiredRole = 'Administrator';
 
-include '../../../../src/components/sessionValidation.php';
+AuthMiddleware::checkAccess($requiredRole);
 ?>
 <!DOCTYPE html>
 <html lang="en">

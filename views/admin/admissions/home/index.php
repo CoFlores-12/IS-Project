@@ -1,12 +1,9 @@
 <?php 
-session_start();
+require_once '../../../../src/modules/Auth.php';
 
-$role = $_SESSION['role'];
-$_SESSION['request'] = 'admissions';
+$requiredRole = 'Admissions';
 
-include '../../../../src/components/sessionValidation.php';
-?>
-<?php
+AuthMiddleware::checkAccess($requiredRole);
 include './../../../../src/modules/database.php';
 
 $db = (new Database())->getConnection();
