@@ -31,9 +31,18 @@ AuthMiddleware::checkAccess($requiredRole);
             top: 20px;
             left: 50%;
             transform: translateX(-50%);
-            z-index: 1050; /* Superior a modales de Bootstrap */
+            z-index: 1050; 
             width: 80%;
             max-width: 500px;
+        }
+        .table-no-border {
+            border: none;
+        }
+
+        .table-no-border th, .table-no-border td {
+            border: none;
+            background-color: transparent;
+            color: #fff
         }
     </style>
 </head>
@@ -204,8 +213,94 @@ AuthMiddleware::checkAccess($requiredRole);
   </div>
 </div>
 
+<div class="alert alert-success successAlert" id="alertDelete" role="alert">
+    Deleted successfully
+</div>
+
+<div class="modal fade" id="deleteSectionModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog bg modal-lg">
+    <div class="modal-content bg">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Delete section</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+      <div class="row p">
+            <div class="col-9 flex justify-center items-center">
+                <input type="text" id="inputSection" class="w-full" placeholder="Enter the section ID">
+            </div>
+            <div class="col-3">
+                <button id="btnSearcSection" class="btn bg-custom-primary text-white">Search</button>
+            </div>
+        </div>
+        <div id="sectionBody" class="pt-3">
+        <table class="table w-100 table-dark table-striped" id="tableDeleteSection">
+        <thead>
+                <tr>
+                  <th scope="col">Section ID</th>
+                  <th scope="col">Start time</th>
+                  <th scope="col">End time</th>
+                  <th scope="col">Days</th>
+                  <th scope="col">Classroom</th>
+                  <th scope="col">Quotas</th>
+                  <th scope="col">Action</th>
+                </tr>
+              </thead>
+              
+              <tbody>
+               
+                
+              </tbody>
+            </table>
+            <div class="alert alert-danger" role="alert"  id="alertIdsection">
+              There is no section with that ID
+            </div>
+        </div>
+     
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modalDelete" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog bg modal-lg">
+    <div class="modal-content bg">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Delete section</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+      
+      <div class="container table-no-border mt-2">
+        <table class="table table-bordered" id="tableSecction"> 
+            <tbody>
+                
+               
+            </tbody>
+        </table>
+
+
+        <div class="mb-3">
+        <label for="exampleFormControlTextarea1" class="form-label">Justification</label>
+        <textarea class="form-control" id="justificationInput" rows="3"></textarea>
+      </div>
+      </div>
+      <div>
+        <button type="button" class="btn btn-secondary pr-2" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-danger">Save changes</button>
+      </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
 <div class="main">
-        <div class="offcanvas offcanvas-start bg" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+        <div class="offcanvas offcanvas-start bg dark" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
             <div class="offcanvas-header justify-between">
                 <h5 class="offcanvas-title text" id="offcanvasExampleLabel">Menu</h5>
                 <button type="button" class="btn bg text" data-bs-dismiss="offcanvas" aria-label="Close">
@@ -243,6 +338,11 @@ AuthMiddleware::checkAccess($requiredRole);
                           <div class="collapse" id="collapseClasses">
                             <button type="button" class="text list-group-item list-group-item-action bg list-group-item-indent"  id="newSectionClass">
                                    Add new section
+                             </button>
+                          </div>
+                          <div class="collapse" id="collapseClasses">
+                            <button type="button" class="text list-group-item list-group-item-action bg list-group-item-indent"  id="deleteSection" data-bs-toggle="modal" data-bs-target="#deleteSectionModal">
+                                    Delete section
                              </button>
                           </div>
                 </div>

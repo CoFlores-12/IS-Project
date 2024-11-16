@@ -193,3 +193,41 @@ SELECT
     ) as quotas
 FROM `Section` S
 WHERE section_id = 17;
+
+SELECT 
+    s.section_id,
+    c.class_name,
+    b.building_name,
+    s.hour_start,
+    s.hour_end,
+    s.period_id,
+    s.classroom_id,
+    cr.classroom_name,
+    s.quotas,
+    sd.Monday,
+    sd.Tuesday,
+    sd.Wednesday,
+    sd.Thursday,
+    sd.Friday,
+    sd.Saturday,
+    (SELECT COUNT(*) 
+     FROM Enroll e
+     WHERE e.section_id = s.section_id) AS enrolled_students
+FROM 
+    Section s
+INNER JOIN 
+    SectionDays sd ON s.section_id = sd.section_id
+INNER JOIN 
+    Employees e_section ON s.employee_number = e_section.employee_number
+INNER JOIN 
+    Classes c ON s.class_id = c.class_id
+INNER JOIN 
+    Classroom cr ON s.classroom_id = cr.classroom_id
+INNER JOIN 
+    Building b ON cr.building_id = b.building_id
+WHERE 
+    e_section.department_id = (
+        SELECT department_id
+        FROM Employees e
+        WHERE e.employee_number = 5
+    );

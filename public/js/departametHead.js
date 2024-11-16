@@ -123,11 +123,6 @@ let historyBody = document.getElementById('historyBody');
         let inlineCheckbox5 = document.getElementById('inlineCheckbox5');
         let inlineCheckbox6 = document.getElementById('inlineCheckbox6');
 
-       
-        
-
-        //TODO: create event to send file csv with section
-
         newSectionClass.addEventListener('click', ()=>{
             modalNewSection.show();
         });
@@ -429,4 +424,160 @@ let historyBody = document.getElementById('historyBody');
     });
 
 
+
   
+let btnSearcSection = document.getElementById('btnSearcSection');
+let deleteSection = document.getElementById('deleteSection');
+
+let alertIdsection = document.getElementById('alertIdsection');
+alertIdsection.style.display = 'none';
+
+var tableDeleteSection = document.getElementById('tableDeleteSection');
+const tableSection = tableDeleteSection.querySelector("tbody");
+        
+sections = [];
+
+function showSection(){
+        fetch('/api/get/admin/searchSections.php')
+        .then((res) => {return res.json()})
+        .then((res) =>{
+            let newRow ="";   
+            tableSection.innerHTML = "";
+            sections = res;
+            res.forEach((item) => {
+    
+                newRow = `
+                <tr>
+                    <th>${item.section_id}</th>
+                    <th>${item.hour_start}</th>
+                    <th>${item.hour_end}</th>
+                    <th> ${[
+                    item.Monday && "Monday",
+                    item.Tuesday && "Tuesday",
+                    item.Wednesday && "Wednesday",
+                    item.Thursday && "Thursday",
+                    item.Friday && "Friday",
+                    item.Saturday && "Saturday",
+                ]
+                    .filter(Boolean)
+                    .join(", ")}</th>
+                    <th>${item.classroom_name}</th>
+                    <th>${item.enrolled_students}</th>
+                    <th><button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalDelete" id="delete" onclick="modalVerifyDelete(${item.section_id})">Danger</button></th>
+                </tr>
+                `;
+    
+                tableSection.innerHTML += newRow
+            });
+            
+                    
+        });
+}
+
+let alertDelete = document.getElementById('alertDelete');
+var tableSecction = document.getElementById('tableSecction');
+const tableSectiondelete = tableSecction.querySelector("tbody");
+
+alertDelete.style.display = 'none';
+
+function modalVerifyDelete(id){
+    const foundItem = sections.find(item => item.section_id === id);
+
+    tableSectiondelete.innerHTML = "";
+
+    for (const [key, value] of Object.entries(foundItem)) {
+        if (
+          key !== "Monday" &&
+          key !== "Tuesday" &&
+          key !== "Wednesday" &&
+          key !== "Thursday" &&
+          key !== "Friday" &&
+          key !== "Saturday"
+        ) {
+          const row = `
+            <tr>
+              <td>${key}</td>
+              <td>${value}</td>
+            </tr>
+          `;
+          tableSectiondelete.innerHTML += row;
+        }
+      }
+  
+      // Combine days into a single row
+      const days = [
+        foundItem.Monday ? "Monday" : "",
+        foundItem.Tuesday ? "Tuesday" : "",
+        foundItem.Wednesday ? "Wednesday" : "",
+        foundItem.Thursday ? "Thursday" : "",
+        foundItem.Friday ? "Friday" : "",
+        foundItem.Saturday ? "Saturday" : ""
+      ]
+        .filter(Boolean) // Remove empty strings
+        .join(", ");
+  
+        tableSectiondelete.innerHTML += `
+                                    <tr>
+                                    <td>Days</td>
+                                    <td>${days}</td>
+                                    </tr>
+                                `
+            
+}
+
+function modalDeleteSection(item){
+    fetch('/api/delete/admin/deleteSection.php', {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id: item }) 
+    })
+    .then(response => response.json())
+    .then(data => {
+        alertDelete.style.display = 'block';
+        setTimeout(function() {
+            alertDelete.style.display = 'none';
+          }, 3000); 
+       console.log(data)
+    })
+    .catch(error => {
+      
+    });
+}
+
+deleteSection.addEventListener("click", ()=>{
+    showSection();
+});
+
+        
+btnSearcSection.addEventListener("click", () => {
+    const inputSection = document.getElementById("inputSection").value.trim();
+    alertIdsection.style.display = 'none';
+
+    let found = false;
+
+    console.log("sad")
+
+    if (inputSection === "") {
+        Array.from(tableSection.rows).forEach(row => {
+            row.style.display = "";  
+        });
+    }else{
+        Array.from(tableSection.rows).forEach(row => {
+            row.style.display = "none";
+    
+            const sectionId = row.cells[0].textContent.trim(); 
+    
+            if (sectionId === inputSection) {
+                row.style.display = ""; 
+                found = true;
+            }
+        });
+    }
+
+    if (!found && inputSection !="") {
+        alertIdsection.style.display = 'block';
+    }
+
+});
