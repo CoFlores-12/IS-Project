@@ -3,25 +3,18 @@
 $email = $_POST['email'];
 $password = $_POST['password'];
 
-include '../../../src/modules/database.php';
-$conn = (new Database())->getConnection();
+include_once '../../../src/modules/Auth.php';
 
-$sql = "CALL LoginStudent(?, ?, @is_authenticated, @out_id);";
-$result = $conn->execute_query($sql, [$email, $password]);
-$result = $conn->query("SELECT @is_authenticated AS is_authenticated, @out_id AS out_id");
+$auth = AuthMiddleware::Auth($email, $password, 0);
 
-$row = $result->fetch_assoc();
-$is_authenticated = $row['is_authenticated'];
-$id = $row['out_id'];
-
-if ($is_authenticated) {
-    session_start();
-    $_SESSION['role'] = 'student';
-    $_SESSION['route'] = 'student';
-    $_SESSION['studentID'] = $id;
-    echo json_encode(["route" => "/views/students/home/index.php"]);
-} else {
+if ($auth) {
+    echo json_encode([
+        "status"=> $auth,
+        "route"=>$_SESSION['user']['mainPage']
+    ]);
+}else {
     http_response_code(404);
     echo "invalid credentials";
 }
-
+exit;
+?>
