@@ -1,14 +1,11 @@
 <?php
 header('Content-Type: application/json');
 
-session_start();
-$role = $_SESSION['role'];
+require_once '../../../src/modules/Auth.php';
 
-if ($role != 'Department Head') {
-    http_response_code(404);
-    echo json_encode(['Message' => 'You do not have privileges to do this action']);
-    return;
-}
+$requiredRole = 'Department Head';
+
+AuthMiddleware::checkAccess($requiredRole);
 
 if (!isset($_GET['student_identifier'])) {
     http_response_code(404);

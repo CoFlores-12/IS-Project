@@ -1,16 +1,18 @@
 <?php 
 session_start();
 
-$role = $_SESSION['role'];
-$_SESSION['request'] = 'teacher';
+$role = $_SESSION['user']['role'];
 
-include '../../../../src/components/sessionValidation.php';
+if (!isset($$_SESSION['user'])) {
+    header("Location: /index.php");
+    exit;
+};
 
 if ($role === 'Department Head') {
-    include '../../../../src/templates/departamentHeadHome.php';
+    include 'departamentHeadHome.php';
 }
 if ($role === 'Teacher') {
-    include '../../../../src/templates/TeacherHome.php';
+    include 'TeacherHome.php';
 }
 
 ?>

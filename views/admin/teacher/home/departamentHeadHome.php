@@ -1,4 +1,11 @@
+<?php
+require '../../../../src/modules/Auth.php';
 
+$requiredRole = 'Department Head';
+
+AuthMiddleware::checkAccess($requiredRole);
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

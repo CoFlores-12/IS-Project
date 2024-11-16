@@ -1,10 +1,9 @@
 <?php 
-session_start();
+require_once '../../../../src/modules/Auth.php';
 
-$role = $_SESSION['role'];
-$_SESSION['request'] = 'register';
+$requiredRole = 'Register Agent';
 
-include '../../../../src/components/sessionValidation.php';
+AuthMiddleware::checkAccess($requiredRole);
 ?>
 
 <!DOCTYPE html>

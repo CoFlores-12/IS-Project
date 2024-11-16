@@ -1,4 +1,6 @@
-
+<?php
+$requiredRole = 'Teacher';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
