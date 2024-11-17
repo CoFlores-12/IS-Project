@@ -52,29 +52,41 @@ let historyBody = document.getElementById('historyBody');
             fetch('/api/get/admin/searchTeacher.php?teacher_identifier='+inputTeacher.value)
             .then((response)=>{return response.json()})
             .then((response)=>{
+                let teacher; 
 
-                let teacher = ` 
+                if(response.status == 0){
+                    teacher = ` 
                     <table class="w-full mx-4" border="0">
                     <tbody>
                     <tr>
                         <th>Indentity</th>
-                        <th>${response['first_name']}  ${response['last_name']}</th>
+                        <th>${response.row.first_name}  ${response.row.last_name}</th>
                     </tr>
                     <tr>
                         <td>Phone</td>
-                        <td>${response['phone']}</td>
+                        <td>${response.row.phone}</td>
                       </tr>
                      <tr>
                         <td>Personal email</td>
-                        <td><input type="text" id="newEmail" placeholder="Email" value="${response['personal_email']}"></td>
+                        <td><input type="text" id="newEmail" placeholder="Email" value="${response.row.personal_email}"></td>
                     </tr>
                     </tbody>
                     </table>
                     <div class="d-grid gap-2 col-6 mx-auto mt-4">
-                    <button class="btn btn-primary" type="button" data-bs-target="#change" onclick="change(${response['employee_number']})" >Change Password</button>
+                    <button class="btn btn-primary" type="button" data-bs-target="#change" onclick="change(${response.row.employee_number})" >Change Password</button>
                     </div>`;
+                    resetBody.innerHTML = teacher
+                }
+                if (response.status !== 0) {
+                    teacher = ` 
+                    <div class="alert alert-danger" role="alert">
+                        Incorrect parameters
+                    </div>`;
+                        resetBody.innerHTML = teacher
+                }
                 
-                resetBody.innerHTML = teacher;
+               
+                
             })
             .catch(()=>{
                 alert('Teacher not found')
@@ -486,7 +498,11 @@ alertDelete.style.display = 'none';
 
 var idSectionDelete = null
 
+let modalDelete = document.getElementById('modalDelete');
+let modalDeleteleSection = new bootstrap.Modal(modalDelete);
+
 function modalVerifyDelete(id){
+    modalDeleteleSection.show();
     const foundItem = sections.find(item => item.section_id === id);
     idSectionDelete = id;
     tableSectiondelete.innerHTML = "";
@@ -540,6 +556,8 @@ function modalDeleteSection(item){
     })
     .then(response => response.json())
     .then(data => {
+        
+        modalDeleteleSection.hide();
         alertDelete.style.display = 'block';
         setTimeout(function() {
             alertDelete.style.display = 'none';
@@ -547,7 +565,7 @@ function modalDeleteSection(item){
        console.log(data)
     })
     .catch(error => {
-      
+      console.log(error)
     });
 }
 
@@ -577,9 +595,6 @@ btnSearcSection.addEventListener("click", () => {
     alertIdsection.style.display = 'none';
 
     let found = false;
-
-    console.log("sad")
-
     if (inputSection === "") {
         Array.from(tableSection.rows).forEach(row => {
             row.style.display = "";  
@@ -604,7 +619,7 @@ btnSearcSection.addEventListener("click", () => {
 });
 
 let alertJustication = document.getElementById('alertJustication');
-let modalDelete = new bootstrap.Modal(newSection);
+
 alertJustication.style.display = "none"
 
 saveDeleteSection.addEventListener("click", ()=>{
@@ -614,12 +629,13 @@ saveDeleteSection.addEventListener("click", ()=>{
         alertJustication.style.display = "block"
         return;
     }
+    saveDeleteSection.disabled = true;
+    saveDeleteSection.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Loading...`;
 
     const foundItem = sections.find(item => item.section_id === idSectionDelete);
 
     insertSectionDelete(foundItem.section_id, razon)
     modalDeleteSection(foundItem.section_id)
-  
-    
 })
+
 

@@ -92,7 +92,7 @@ AuthMiddleware::checkAccess($requiredRole);
                 <button id="btnSearcTeacher" class="btn bg-custom-primary text-white">Search</button>
             </div>
         </div>
-        <div id="resetBody">
+        <div id="resetBody" class="pt-3">
 
         </div>
       </div>

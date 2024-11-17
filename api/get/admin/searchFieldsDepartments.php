@@ -1,15 +1,16 @@
 <?php
 header('Content-Type: application/json');
 
-session_start();
-$employeetid = $_SESSION['departmentid'];
-$role = $_SESSION['role'];
 
-if ($role != 'Department Head') {
-    http_response_code(404);
-    echo json_encode(['Message' => 'You do not have privileges to do this action']);
-    return;
-}
+require_once '../../../src/modules/Auth.php';
+
+$requiredRole = 'Department Head';
+
+AuthMiddleware::checkAccess($requiredRole);
+
+
+$employeetid = $_SESSION['user']['employeenumber'];
+
 
 $response = [];
 
@@ -68,7 +69,7 @@ $result = $conn->execute_query($sql, [$departamentid]);
 $classes = [];
 
 while ($row = $result->fetch_assoc()) {
-    $classes[] = $row;  // Agregar cada fila al array
+    $classes[] = $row;  
 }
 
 $response['clases'] = $classes;
@@ -97,7 +98,7 @@ $result = $conn->execute_query($sql, [$departamentid]);
 $teachers = [];
 
 while ($row = $result->fetch_assoc()) {
-    $teachers[] = $row;  // Agregar cada fila al array
+    $teachers[] = $row;  
 }
 
 $response['teachers'] = $teachers;

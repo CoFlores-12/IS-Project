@@ -1,15 +1,14 @@
 <?php
 header('Content-Type: application/json');
 
-session_start();
-$employeetid = $_SESSION['departmentid'];
-$role = $_SESSION['role'];
 
-if ($role != 'Department Head') {
-    http_response_code(404);
-    echo json_encode(['Message' => 'You do not have privileges to do this action']);
-    return;
-}
+require_once '../../../src/modules/Auth.php';
+
+$requiredRole = 'Department Head';
+
+AuthMiddleware::checkAccess($requiredRole);
+
+$employeetid = $_SESSION['user']['employeenumber'];
 
 include '../../../src/modules/database.php';
 $conn = (new Database())->getConnection();

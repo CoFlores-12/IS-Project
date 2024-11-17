@@ -411,3 +411,17 @@ BEGIN
     SELECT is_available AS instructor_availability;
 END //
 
+SELECT Employees.employee_number,
+       Employees.institute_email,
+       Persons.person_id,
+       Persons.first_name,
+       Persons.last_name,
+       Persons.phone,
+       Persons.personal_email
+FROM Employees
+JOIN Persons ON Employees.person_id = Persons.person_id
+JOIN Roles ON Employees.role_id = Roles.role_id
+WHERE (Employees.employee_number = ? 
+       OR Persons.person_id = ? 
+       OR Employees.institute_email = ?)
+  AND Employees.employee_number = ?; -- Filtro para asegurar que solo se traigan empleados del docente autenticado

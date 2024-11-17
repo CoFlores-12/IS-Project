@@ -28,13 +28,13 @@ class AuthMiddleware {
             $user['mainPage'] = '/views/students/home/index.php';
         }else{
             $result = $conn->execute_query("CALL LoginAdministrator(?, ?, @is_authenticated, @out_role, @out_route, @out_employee_number);", [$identifier, $password]);
-            $result = $conn->query("SELECT @is_authenticated AS is_authenticated, @out_role AS role, @out_route as route, @out_employee_number as departmentid");
+            $result = $conn->query("SELECT @is_authenticated AS is_authenticated, @out_role AS role, @out_route as route, @out_employee_number as employeenumber");
 
             $row = $result->fetch_assoc();
             $user['is_authenticated'] = $row['is_authenticated'];
             $user['role'] = $row['role'];
             $user['route'] = $row['route'];
-            $user['departmentid'] = $row['departmentid'];
+            $user['employeenumber'] = $row['employeenumber'];
             $user['mainPage'] = "/views/admin/". $user['route'] ."/home/index.php";
         }
 
