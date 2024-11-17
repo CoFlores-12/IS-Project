@@ -13,7 +13,7 @@ if ($role != 'Department Head') {
 
 include '../../../src/modules/database.php';
 $conn = (new Database())->getConnection();
-/*
+
 if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
     $data = json_decode(file_get_contents("php://input"));
     $section_id = $data->id;  
@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
 }
 
 echo json_encode($result);
-*/
+
 $conn->close();
 
 

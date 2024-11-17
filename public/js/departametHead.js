@@ -478,11 +478,17 @@ let alertDelete = document.getElementById('alertDelete');
 var tableSecction = document.getElementById('tableSecction');
 const tableSectiondelete = tableSecction.querySelector("tbody");
 
+let justificationInput = document.getElementById('justificationInput');
+
+let saveDeleteSection = document.getElementById('saveDeleteSection');
+
 alertDelete.style.display = 'none';
+
+var idSectionDelete = null
 
 function modalVerifyDelete(id){
     const foundItem = sections.find(item => item.section_id === id);
-
+    idSectionDelete = id;
     tableSectiondelete.innerHTML = "";
 
     for (const [key, value] of Object.entries(foundItem)) {
@@ -504,7 +510,6 @@ function modalVerifyDelete(id){
         }
       }
   
-      // Combine days into a single row
       const days = [
         foundItem.Monday ? "Monday" : "",
         foundItem.Tuesday ? "Tuesday" : "",
@@ -513,13 +518,13 @@ function modalVerifyDelete(id){
         foundItem.Friday ? "Friday" : "",
         foundItem.Saturday ? "Saturday" : ""
       ]
-        .filter(Boolean) // Remove empty strings
+        .filter(Boolean)
         .join(", ");
   
         tableSectiondelete.innerHTML += `
                                     <tr>
-                                    <td>Days</td>
-                                    <td>${days}</td>
+                                        <td>Days</td>
+                                        <td>${days}</td>
                                     </tr>
                                 `
             
@@ -544,6 +549,22 @@ function modalDeleteSection(item){
     .catch(error => {
       
     });
+}
+
+function insertSectionDelete(sectionId, reason){
+    fetch("/api/post/admin/sectionCancelled.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            section_id: sectionId,
+            reason: reason,
+        })
+    })
+        .then(response => response.json())
+        .then(data => {
+           
+        })
+        .catch(error => console.error("Error:", error));
 }
 
 deleteSection.addEventListener("click", ()=>{
@@ -581,3 +602,24 @@ btnSearcSection.addEventListener("click", () => {
     }
 
 });
+
+let alertJustication = document.getElementById('alertJustication');
+let modalDelete = new bootstrap.Modal(newSection);
+alertJustication.style.display = "none"
+
+saveDeleteSection.addEventListener("click", ()=>{
+    let razon = justificationInput.value;
+    alertJustication.style.display = "none"
+    if(!razon){
+        alertJustication.style.display = "block"
+        return;
+    }
+
+    const foundItem = sections.find(item => item.section_id === idSectionDelete);
+
+    insertSectionDelete(foundItem.section_id, razon)
+    modalDeleteSection(foundItem.section_id)
+  
+    
+})
+

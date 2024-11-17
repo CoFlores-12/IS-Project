@@ -284,11 +284,14 @@ AuthMiddleware::checkAccess($requiredRole);
         <div class="mb-3">
         <label for="exampleFormControlTextarea1" class="form-label">Justification</label>
         <textarea class="form-control" id="justificationInput" rows="3"></textarea>
+        <div class="alert alert-danger mt-2"  id="alertJustication" role="alert">
+          Necessary Justification
+        </div>
       </div>
       </div>
       <div>
         <button type="button" class="btn btn-secondary pr-2" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-danger">Save changes</button>
+        <button type="button" class="btn btn-danger" id="saveDeleteSection">Save changes</button>
       </div>
 
       </div>

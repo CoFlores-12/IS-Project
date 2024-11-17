@@ -231,6 +231,15 @@
         Foreign Key (section_id) REFERENCES Section(section_id),
         Foreign Key (student_id) REFERENCES Students(account_number)
     )
+
+    CREATE TABLE CancelledSections (
+        cancel_id INT AUTO_INCREMENT PRIMARY KEY,  
+        section_id INT NOT NULL,                    
+        cancel_date DATE NOT NULL,                  
+        reason VARCHAR(255) NULL,                  
+        cancelled_by INT NULL  
+    );
+
 DELIMITER //
 
     CREATE PROCEDURE CreateAdministrator (
