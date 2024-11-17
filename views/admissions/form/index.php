@@ -31,7 +31,7 @@ if ($currentTime < $startTime || $currentTime > $endTime) {
     <meta name="version" content="0.2.0">
     <meta name="date" content="29/10/2014">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulario de Admisión</title>
+    <title>Admissions</title>
     <link rel="stylesheet" href="/public/css/theme.css">
     <link rel="icon" type="image/png" href="/public/images/logo.png" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
@@ -43,9 +43,10 @@ if ($currentTime < $startTime || $currentTime > $endTime) {
     <!-- Loading Modal -->
     <div class="modal fade" id="loadingModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="spinner-border" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
+            <center class="w-full">
+                <div class="spinner-border" role="status">
+                </div>
+            </center>
         </div>
     </div>
 
