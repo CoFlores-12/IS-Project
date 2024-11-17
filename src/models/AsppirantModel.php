@@ -71,28 +71,7 @@ class Aspirant
         return empty($this->errors);
     }
 
-    /**
-     * save certify of aspirant in file system.
-     * @return string name of file saved.
-     */
-    public function saveCertifyFile(){
-        $uploadDir = '../../../uploads/';
-        if (!file_exists($uploadDir)) {
-            mkdir($uploadDir, 0777, true);
-        }
-
-        $fileExtension = pathinfo($this->certifyFile['name'], PATHINFO_EXTENSION);
-        $newFileName = 'certify_' . str_replace("-", "", $this->identity) . '.' . $fileExtension;
-        $uploadPath = $uploadDir . $newFileName;
-
-        if (move_uploaded_file($this->certifyFile['tmp_name'], $uploadPath)) {
-            return $newFileName;
-        } else {
-            $this->errors['certify'] = "Error uploading the file.";
-            return false;
-        }
-    }
-
+    
     /**
      * save Aspirant in database.
      * @param Database connection to database.
@@ -106,11 +85,6 @@ class Aspirant
 
         $this->identity = str_replace("-", "", $this->identity);
         $this->phone = str_replace("-", "", $this->phone);
-        $certifyFileName = $this->saveCertifyFile();
-
-        if (!$certifyFileName) {
-            return false;
-        }
 
         try {
             $sql = "SELECT status_id, counter FROM Applicant WHERE person_id = ? AND (status_id = 1 OR status_id = 0 OR status_id = 2)";
@@ -158,7 +132,7 @@ class Aspirant
                         $this->identity,
                         $this->mainCareer,
                         $this->secondaryCareer,
-                        $certifyFileName
+                        $this->certifyFile
                     ]);
                     return true;
                 }
