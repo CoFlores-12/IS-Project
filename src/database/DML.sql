@@ -179,3 +179,21 @@ SELECT
     ) as quotas
 FROM `Section` S
 WHERE section_id = 17;
+
+SELECT 
+    A.person_id as identity,
+    CONCAT(P.first_name, " ", P.last_name) as full_name,
+    A.preferend_career_id,
+    C.career_name as preferend_career_name,
+    A.secondary_career_id,
+    CS.career_name as secondary_career_name
+from `Applicant` A
+INNER JOIN `Persons` P
+On A.person_id = `P`.person_id
+INNER JOIN `Careers` C
+ON A.preferend_career_id = C.career_id
+INNER JOIN `Careers` CS
+ON A.secondary_career_id = CS.career_id;
+
+SELECT E.exam_code, EC.career_id, E.exam_name FROM `ExamsXCareer` EC
+INNER JOIN `Exams` E ON EC.exam_code = E.exam_code
