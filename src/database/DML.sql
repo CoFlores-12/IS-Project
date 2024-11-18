@@ -247,7 +247,7 @@ INNER JOIN `Careers` CS
 ON A.secondary_career_id = CS.career_id;
 
 SELECT E.exam_code, EC.career_id, E.exam_name FROM `ExamsXCareer` EC
-<<<<<<< HEAD
+
 INNER JOIN `Exams` E ON EC.exam_code = E.exam_code
  A.person_id as identity,
     CONCAT(P.first_name, " ", P.last_name) as full_name,

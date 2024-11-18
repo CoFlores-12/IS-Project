@@ -231,7 +231,6 @@
         Foreign Key (section_id) REFERENCES Section(section_id),
         Foreign Key (student_id) REFERENCES Students(account_number)
     )
-
     CREATE TABLE CancelledSections (
         cancel_id INT AUTO_INCREMENT PRIMARY KEY,  
         section_id INT NOT NULL,                    
@@ -240,7 +239,8 @@
         cancelled_by INT NULL  
     );
 
-     CREATE TABLE Waitlist (
+
+    CREATE TABLE Waitlist (
     waitlist_id INT PRIMARY KEY AUTO_INCREMENT,
     section_id INT,
     description VARCHAR(100),
@@ -258,7 +258,14 @@
     ADD COLUMN department_id INT,
     ADD FOREIGN KEY (department_id) REFERENCES Departments(department_id);
 
-
+    CREATE TABLE PasswordResetTokens (
+    id_passwordResetTokens INT AUTO_INCREMENT PRIMARY KEY,
+    employee_id INT NOT NULL,
+    token VARCHAR(255) NOT NULL UNIQUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
+    expires_at DATETIME NOT NULL,
+    FOREIGN KEY (employee_id) REFERENCES Employees(employee_number)
+);
 
 DELIMITER //
 
@@ -288,8 +295,6 @@ DELIMITER //
 
         COMMIT;
     END //
-
-    DELIMITER //
 
     DELIMITER //
 
