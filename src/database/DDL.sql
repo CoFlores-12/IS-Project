@@ -240,6 +240,17 @@
         cancelled_by INT NULL  
     );
 
+
+CREATE TABLE PasswordResetTokens (
+    id_passwordResetTokens INT AUTO_INCREMENT PRIMARY KEY,
+    employee_id INT NOT NULL,
+    token VARCHAR(255) NOT NULL UNIQUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
+    expires_at DATETIME NOT NULL,
+    FOREIGN KEY (employee_id) REFERENCES Employees(employee_number)
+);
+
+
 DELIMITER //
 
     CREATE PROCEDURE CreateAdministrator (
@@ -268,8 +279,6 @@ DELIMITER //
 
         COMMIT;
     END //
-
-    DELIMITER //
 
     DELIMITER //
 

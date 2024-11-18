@@ -96,12 +96,20 @@ let historyBody = document.getElementById('historyBody');
         function change(ID) {
             const email = document.getElementById("newEmail").value;
 
-            console.log("hola", ID, email);
-           fetch(`/api/put/teacher/ResetPasswordTeacher.php?teacher_identifier=${ID}&email=${email}`)
-            .then((response)=>{return response.json()})
-            .catch(()=>{
-                alert('Error, something went wrong')
+            fetch('/api/post/admin/ResetPasswordTeacher.php', {
+                method: 'POST', 
+                headers: {
+                    'Content-Type': 'application/json', 
+                },
+                body: JSON.stringify({ teacher_identifier: ID, personal_email: email}), 
             })
+                .then(response => {
+                    console.log(response)
+                })
+                .catch(error => {
+                    alert('Error, something went wrong');
+                });
+            
         }
 
         let btnNewClass = document.getElementById('newClass');
