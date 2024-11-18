@@ -16,6 +16,7 @@ AuthMiddleware::checkAccess($requiredRole);
     <link rel="icon" type="image/png" href="/public/images/logo.png" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
     <link rel="stylesheet" href="/public/bootstrap-5.3.3-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/public/css/homeTeacher.css">
     <style>
         .list-group-title {
             border: none !important;
@@ -266,8 +267,6 @@ AuthMiddleware::checkAccess($requiredRole);
                     </button>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="#">My profile</a></li>
-                        <li><a class="dropdown-item" href="#">Messages</a></li>
-                        <li><a class="dropdown-item" href="#">requests</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="/api/get/logout.php">Logout <i class="bi bi-box-arrow-right"></i></a></li>
                     </ul>
@@ -275,12 +274,10 @@ AuthMiddleware::checkAccess($requiredRole);
             </div>
         </div>
         <div class="container-fluid">
-            <div class=" flex p-2 justify-between items-center">
-                <h4 class="text"><?php echo $role; ?></h4>
-               
-            </div>
-           
-            
+          <div class=" flex p-2 justify-between items-center">
+              <h4 class="text"><?php echo $role; ?></h4>
+          </div>
+          <?php include '../../../../src/components/teacherClasses.php'; ?>
         </div>
     </div>
     <script src="/public/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>

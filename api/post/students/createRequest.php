@@ -8,7 +8,7 @@ include '../../../src/modules/database.php';
 $conn = (new Database())->getConnection();
 
 session_start();
-$id = $_SESSION['studentID'];
+$id = $_SESSION['user']['student_id'];
 $request_id = $_POST['request_type_id'];
 $comments = $_POST['comments'];
 

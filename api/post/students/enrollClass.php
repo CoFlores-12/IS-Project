@@ -16,7 +16,7 @@ include '../../../src/modules/database.php';
 $conn = (new Database())->getConnection();
 
 session_start();
-$id = $_SESSION['studentID'];
+$id = $_SESSION['user']['student_id'];
 $section_id = $_POST['section_id'];
 $status = false;
 $message = 'Error in server';

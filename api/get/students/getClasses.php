@@ -2,7 +2,7 @@
 include '../../../src/modules/database.php';
 $db = (new Database())->getConnection();
 session_start();
-$id = $_SESSION['studentID'];
+$id = $_SESSION['user']['student_id'];
 $Carrers = $db->execute_query("SELECT B.*, 
        CASE 
            WHEN A.req IS NULL THEN 1

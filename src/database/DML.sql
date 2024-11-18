@@ -196,4 +196,9 @@ INNER JOIN `Careers` CS
 ON A.secondary_career_id = CS.career_id;
 
 SELECT E.exam_code, EC.career_id, E.exam_name FROM `ExamsXCareer` EC
-INNER JOIN `Exams` E ON EC.exam_code = E.exam_code
+INNER JOIN `Exams` E ON EC.exam_code = E.exam_code;
+
+SELECT section_id, hour_start, class_code, class_name FROM `Section` S
+INNER JOIN `Classes` C
+ON S.class_id = C.class_id
+WHERE employee_number = 4

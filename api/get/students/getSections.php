@@ -9,7 +9,7 @@ $response = [];
 $response['status'] = true;
 
 session_start();
-$id = $_SESSION['studentID'];
+$id = $_SESSION['user']['student_id'];
 $sql = "SELECT * FROM `Enroll` E
 INNER JOIN `Section` S
 ON E.section_id = S.section_id
