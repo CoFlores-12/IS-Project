@@ -201,4 +201,15 @@ INNER JOIN `Exams` E ON EC.exam_code = E.exam_code;
 SELECT section_id, hour_start, class_code, class_name FROM `Section` S
 INNER JOIN `Classes` C
 ON S.class_id = C.class_id
-WHERE employee_number = 4
+WHERE employee_number = 4;
+
+SELECT 
+    A.person_id as identity,
+    CONCAT(P.first_name, " ", P.last_name) as full_name,
+    A.certify
+from `Applicant` A
+INNER JOIN `Persons` P
+On A.person_id = `P`.person_id
+WHERE status_id = 0 AND validated IS NULL;
+
+UPDATE `Applicant` SET validated = NULL;
