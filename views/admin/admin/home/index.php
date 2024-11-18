@@ -132,6 +132,54 @@ AuthMiddleware::checkAccess($requiredRole);
 </div>
 <!-- Modal SRP -->
 
+<!-- Modal for Role Administration -->
+<div class="modal fade" id="roleAdminModal" tabindex="-1" aria-labelledby="roleAdminModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content bg">
+            <div class="modal-header">
+                <h5 class="modal-title" id="roleAdminModalLabel">Role Administration</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-hover text">
+                    <thead>
+                        <tr>
+                            <th>Person ID</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="roleAdminTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal to edit Roles -->
+<div class="modal fade" id="editRoleModal" tabindex="-1" aria-labelledby="editRoleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content bg">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editRoleModalLabel">Edit Role</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editRoleForm">
+                    <div class="mb-3">
+                        <label for="roleDropdown" class="form-label">Select New Role</label>
+                        <select id="roleDropdown" class="form-select"></select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <div class="main">
         <div class="offcanvas offcanvas-start bg" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
@@ -158,7 +206,9 @@ AuthMiddleware::checkAccess($requiredRole);
                             <button type="button" class="text list-group-item list-group-item-action bg list-group-item-indent" data-bs-toggle="modal" data-bs-target="#historyStudent">
                                 exceptional cancellation
                             </button>
-                            
+                            <button id="roleAdministrationBtn" type="button" class="text list-group-item list-group-item-action bg list-group-item-indent" data-bs-toggle="modal" data-bs-target="#roleAdminModal">
+                                role administration
+                            </button>
                           </div>
                     
                     
@@ -223,6 +273,7 @@ AuthMiddleware::checkAccess($requiredRole);
         </div>
     </div>
     <script src="/public/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/public/js/roleAdministration.js"></script>
     <script>
         (function() {
     'use strict';
