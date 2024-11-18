@@ -216,6 +216,19 @@
         Foreign Key (student_id) REFERENCES Students(account_number)
     )
 
+    CREATE TABLE Waitlist (
+    waitlist_id INT PRIMARY KEY AUTO_INCREMENT,
+    section_id INT,
+    description VARCHAR(100),
+    FOREIGN KEY (section_id) REFERENCES Section(section_id)
+    );
+
+    CREATE TABLE StudentsxWaitlist (
+    student_id VARCHAR(11),
+    waitlist_id INT,
+    FOREIGN KEY (student_id) REFERENCES Students(account_number),
+    FOREIGN KEY (waitlist_id) REFERENCES Waitlist(waitlist_id)
+    );
     
     ALTER TABLE Employees
     ADD COLUMN department_id INT,
