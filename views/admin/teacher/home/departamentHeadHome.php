@@ -169,6 +169,43 @@ AuthMiddleware::checkAccess($requiredRole);
   </div>
 </div>
 
+<!-- Modal to search Wait Lists -->
+<div class="modal fade" id="waitlistModal" tabindex="-1" aria-labelledby="waitlistModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg">
+            <div class="modal-header bg">
+                <h5 class="modal-title text" id="waitlistModalLabel">View Wait Lists</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="waitlistForm">
+                    <div class="mb-3">
+                        <label for="classCodeInput" class="form-label">Enter Class Code:</label>
+                        <input type="text" id="classCodeInput" class="form-control" maxlength="20" required>
+                    </div>
+                    <button type="button" id="searchWaitlistBtn" class="btn btn-primary">Search</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal to show waitlist search results -->
+<div class="modal fade" id="resultsModal" tabindex="-1" aria-labelledby="resultsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content bg">
+            <div class="modal-header bg">
+                <h5 class="modal-title text" id="resultsModalLabel">Waitlist Results</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="resultsModalBody">
+                <!-- Aquí se generará la tabla -->
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <div class="main">
         <div class="offcanvas offcanvas-start bg" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
             <div class="offcanvas-header justify-between">
@@ -209,6 +246,9 @@ AuthMiddleware::checkAccess($requiredRole);
                             <button type="button" class="text list-group-item list-group-item-action bg list-group-item-indent"  id="newSectionClass">
                                    Add new section
                              </button>
+                            <button type="button" class="text list-group-item list-group-item-action bg list-group-item-indent" data-bs-toggle="modal" data-bs-target="#waitlistModal">
+                                View wait lists
+                            </button>
                           </div>
                 </div>
             </div>
