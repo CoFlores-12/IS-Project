@@ -34,7 +34,9 @@ class AuthMiddleware {
             $user['is_authenticated'] = $row['is_authenticated'];
             $user['role'] = $row['role'];
             $user['route'] = $row['route'];
+            
             $user['employeenumber'] = $row['employeenumber'];
+
             $user['mainPage'] = "/views/admin/". $user['route'] ."/home/index.php";
         }
 

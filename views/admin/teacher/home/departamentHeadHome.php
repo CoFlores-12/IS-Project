@@ -16,6 +16,7 @@ AuthMiddleware::checkAccess($requiredRole);
     <link rel="icon" type="image/png" href="/public/images/logo.png" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
     <link rel="stylesheet" href="/public/bootstrap-5.3.3-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/public/css/homeTeacher.css">
     <style>
         .list-group-title {
             border: none !important;
@@ -299,7 +300,40 @@ AuthMiddleware::checkAccess($requiredRole);
   </div>
 </div>
 
+<div class="modal fade" id="waitlistModal" tabindex="-1" aria-labelledby="waitlistModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg">
+            <div class="modal-header bg">
+                <h5 class="modal-title text" id="waitlistModalLabel">View Wait Lists</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="waitlistForm">
+                    <div class="mb-3">
+                        <label for="classCodeInput" class="form-label">Enter Class Code:</label>
+                        <input type="text" id="classCodeInput" class="form-control" maxlength="20" required>
+                    </div>
+                    <button type="button" id="searchWaitlistBtn" class="btn btn-primary">Search</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
+<!-- Modal to show waitlist search results -->
+<div class="modal fade" id="resultsModal" tabindex="-1" aria-labelledby="resultsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content bg">
+            <div class="modal-header bg">
+                <h5 class="modal-title text" id="resultsModalLabel">Waitlist Results</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="resultsModalBody">
+                <!-- Aquí se generará la tabla -->
+            </div>
+        </div>
+    </div>
+</div>
 
 
 <div class="main">
@@ -342,6 +376,9 @@ AuthMiddleware::checkAccess($requiredRole);
                             <button type="button" class="text list-group-item list-group-item-action bg list-group-item-indent"  id="newSectionClass">
                                    Add new section
                              </button>
+                            <button type="button" class="text list-group-item list-group-item-action bg list-group-item-indent" data-bs-toggle="modal" data-bs-target="#waitlistModal">
+                                View wait lists
+                            </button>
                           </div>
                           <div class="collapse" id="collapseClasses">
                             <button type="button" class="text list-group-item list-group-item-action bg list-group-item-indent"  id="deleteSection" data-bs-toggle="modal" data-bs-target="#deleteSectionModal">
@@ -364,8 +401,6 @@ AuthMiddleware::checkAccess($requiredRole);
                     </button>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="#">My profile</a></li>
-                        <li><a class="dropdown-item" href="#">Messages</a></li>
-                        <li><a class="dropdown-item" href="#">requests</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="/api/get/logout.php">Logout <i class="bi bi-box-arrow-right"></i></a></li>
                     </ul>
@@ -373,12 +408,10 @@ AuthMiddleware::checkAccess($requiredRole);
             </div>
         </div>
         <div class="container-fluid">
-            <div class=" flex p-2 justify-between items-center">
-                <h4 class="text"><?php echo $role; ?></h4>
-               
-            </div>
-           
-            
+          <div class=" flex p-2 justify-between items-center">
+              <h4 class="text"><?php echo $role; ?></h4>
+          </div>
+          <?php include '../../../../src/components/teacherClasses.php'; ?>
         </div>
     </div>
     <script src="/public/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>

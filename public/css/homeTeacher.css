@@ -1,0 +1,27 @@
+.card-bd {
+    padding: 0 !important;
+    display: flex;
+    flex-direction:column;
+    flex: 1 1 auto;
+}
+.card-bd > .name {
+    flex: 1 1 auto;
+    border-top-left-radius: var(--bs-border-radius) !important;
+    border-top-right-radius: var(--bs-border-radius) !important;
+}
+.card-course {
+    height: 200px;
+    aspect-ratio: 1/1;
+    background-color: var(--bg) !important;
+    border: none;
+    flex: 0 0 auto;
+}
+.courses {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto; 
+}
+.courses::-webkit-scrollbar {
+    display: none; 
+    background-color: transparent;
+}
