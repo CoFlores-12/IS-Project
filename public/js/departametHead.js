@@ -336,6 +336,73 @@ let historyBody = document.getElementById('historyBody');
             );
         })
         
+        document.getElementById('searchWaitlistBtn').addEventListener('click', async () => {
+            const classCode = document.getElementById('classCodeInput').value.trim();
+        
+            if (!classCode) {
+                alert('Please enter a class code.');
+                return;
+            }
+        
+            try {
+                const response = await fetch('/api/get/admin/searchWaitlist.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ class_code: classCode }),
+                });
+        
+                const result = await response.json();
+        
+                if (result.error) {
+                    alert(result.error);
+                    return;
+                }
+        
+                // Generar la tabla con los resultados
+                displayWaitlistResults(result.data);
+            } catch (error) {
+                console.error('Error fetching waitlist data:', error);
+                alert('An error occurred while fetching waitlist data.');
+            }
+        });
+        
+        function displayWaitlistResults(data) {
+            let tableHtml = `
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Class Code</th>
+                            <th>Waitlist ID</th>
+                            <th>Section ID</th>
+                            <th>Hour Start</th>
+                            <th>Hour End</th>
+                            <th>Student Count</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+        
+            data.forEach(row => {
+                tableHtml += `
+                    <tr>
+                        <td>${row.class_code}</td>
+                        <td>${row.waitlist_id}</td>
+                        <td>${row.section_id}</td>
+                        <td>${row.hour_start}</td>
+                        <td>${row.hour_end}</td>
+                        <td>${row.student_count}</td>
+                    </tr>
+                `;
+            });
+        
+            tableHtml += '</tbody></table>';
+        
+            // Mostrar los resultados en una nueva modal
+            document.getElementById('resultsModalBody').innerHTML = tableHtml;
+            const resultsModal = new bootstrap.Modal(document.getElementById('resultsModal'));
+            resultsModal.show();
+        }
+        
 
 
     let uploadFile = document.getElementById('uploadFile');

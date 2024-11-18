@@ -2,13 +2,11 @@
 include '../../../src/modules/database.php';
 $db = (new Database())->getConnection();
 session_start();
-$id = $_SESSION['user']['student_id'];
-$Carrers = $db->execute_query('SELECT S.section_id, E.enroll_id, S.hour_start, C.class_code, C.class_name class_name, is_waitlist  FROM `Enroll` E
-INNER JOIN `Section` S
-ON E.section_id = S.section_id
+$id = $_SESSION['user']['employee_number'];
+$Carrers = $db->execute_query('SELECT section_id, hour_start, class_code, class_name FROM `Section` S
 INNER JOIN `Classes` C
 ON S.class_id = C.class_id
-WHERE E.student_id = ?', [$id]);
+WHERE employee_number = ?', [$id]);
 
 $resultArray = [];
 if ($Carrers) {
