@@ -62,21 +62,35 @@ INSERT INTO ClassesXCareer (class_id, career_id, req) VALUES (1, 1, '{"id_clase"
 
 SELECT * FROM `Careers` JOIN `ClassesXCareer` ON `Careers`.class_id = `ClassesXCareer`.class_id
 
-SELECT 
-    C.class_id,
-    C.class_name,
-    C.uv,
-    C.class_code
-FROM 
-    Classes C
-JOIN 
-    ClassesXCareer CC ON C.class_id = CC.class_id
-JOIN 
-    Careers CR ON CC.career_id = CR.career_id
-JOIN 
-    Departments D ON CR.department_id = D.department_id
-WHERE 
-    D.department_id = 1;
+
+INSERT INTO SectionDays (section_id, day) VALUES (17, 'Mon');
+INSERT INTO SectionDays (section_id, day) VALUES (17, 'Wed');
+INSERT INTO SectionDays (section_id, day) VALUES (17, 'Fri');
+
+ SELECT COUNT(*) 
+    FROM Section s
+    JOIN SectionDays sd ON s.section_id = sd.section_id
+    WHERE s.classroom_id = 1
+      AND s.hour_start = 1100       
+      AND s.hour_end = 1200      
+      AND (
+          (sd.Monday = 1 AND FIND_IN_SET('Mon', 'Mon,Wed,Fri') > 0) OR
+          (sd.Tuesday = 1 AND FIND_IN_SET('Tue', 'Mon,Wed,Fri') > 0) OR
+          (sd.Wednesday = 1 AND FIND_IN_SET('Wed', 'Mon,Wed,Fri') > 0) OR
+          (sd.Thursday = 1 AND FIND_IN_SET('Thu', 'Mon,Wed,Fri') > 0) OR
+          (sd.Friday = 1 AND FIND_IN_SET('Fri', 'Mon,Wed,Fri') > 0) OR
+          (sd.Saturday = 1 AND FIND_IN_SET('Sat', 'Mon,Wed,Fri') > 0)
+      );
+
+
+CALL CheckClassroomAvailability(1, 1000, 1100, 'Mon,Wed,Fri', @availability);
+SELECT @availability;
+
+CALL CheckInstructorAvailability(4, 0900, 1000, 'Mon,Wed,Fri', @is_available);
+
+SELECT @is_available; 
+
+SELECT capacity FROM Classroom WHERE classroom_id = 1;
 
 SELECT B.*, 
        CASE 
@@ -181,6 +195,43 @@ FROM `Section` S
 WHERE section_id = 17;
 
 SELECT 
+    s.section_id,
+    c.class_name,
+    b.building_name,
+    s.hour_start,
+    s.hour_end,
+    s.period_id,
+    s.classroom_id,
+    cr.classroom_name,
+    s.quotas,
+    sd.Monday,
+    sd.Tuesday,
+    sd.Wednesday,
+    sd.Thursday,
+    sd.Friday,
+    sd.Saturday,
+    (SELECT COUNT(*) 
+     FROM Enroll e
+     WHERE e.section_id = s.section_id) AS enrolled_students
+FROM 
+    Section s
+INNER JOIN 
+    SectionDays sd ON s.section_id = sd.section_id
+INNER JOIN 
+    Employees e_section ON s.employee_number = e_section.employee_number
+INNER JOIN 
+    Classes c ON s.class_id = c.class_id
+INNER JOIN 
+    Classroom cr ON s.classroom_id = cr.classroom_id
+INNER JOIN 
+    Building b ON cr.building_id = b.building_id
+WHERE 
+    e_section.department_id = (
+        SELECT department_id
+        FROM Employees e
+        WHERE e.employee_number = 5
+    );
+
     A.person_id as identity,
     CONCAT(P.first_name, " ", P.last_name) as full_name,
     A.preferend_career_id,
@@ -196,6 +247,24 @@ INNER JOIN `Careers` CS
 ON A.secondary_career_id = CS.career_id;
 
 SELECT E.exam_code, EC.career_id, E.exam_name FROM `ExamsXCareer` EC
+
+INNER JOIN `Exams` E ON EC.exam_code = E.exam_code
+ A.person_id as identity,
+    CONCAT(P.first_name, " ", P.last_name) as full_name,
+    A.preferend_career_id,
+    C.career_name as preferend_career_name,
+    A.secondary_career_id,
+    CS.career_name as secondary_career_name
+from `Applicant` A
+INNER JOIN `Persons` P
+On A.person_id = `P`.person_id
+INNER JOIN `Careers` C
+ON A.preferend_career_id = C.career_id
+INNER JOIN `Careers` CS
+ON A.secondary_career_id = CS.career_id;
+
+SELECT E.exam_code, EC.career_id, E.exam_name FROM `ExamsXCareer` EC
+INNER JOIN `Exams` E ON EC.exam_code = E.exam_code
 INNER JOIN `Exams` E ON EC.exam_code = E.exam_code;
 
 SELECT section_id, hour_start, class_code, class_name FROM `Section` S

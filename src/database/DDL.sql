@@ -173,10 +173,12 @@
     `hour_end` smallint,
     `period_id` int,
     `classroom_id` int,
-    Foreign Key (class_id) REFERENCES Classes(class_id),
+    `employee_number` INT,
+    `quotas` INT,
+    Foreign Key (class_id)  REFERENCES Classes(class_id),
     Foreign Key (period_id) REFERENCES Periods(period_id),
-    Foreign Key (classroom_id) REFERENCES Classroom(classroom_id)
-    );
+    Foreign Key (classroom_id) REFERENCES Classroom(classroom_id),  
+    Foreign Key (employee_number) REFERENCES Employees(employee_number));
 
     CREATE TABLE `Obs` (
         obs_id TINYINT PRIMARY KEY,
@@ -193,6 +195,20 @@
         Foreign Key (student_id) REFERENCES Students(account_number),
         Foreign Key (obs_id) REFERENCES Obs(obs_id)
     )
+    
+
+    CREATE TABLE SectionDays (
+        section_id INT,
+        Monday BIT  DEFAULT 0,
+        Tuesday BIT  DEFAULT 0,
+        Wednesday BIT  DEFAULT 0,
+        Thursday BIT  DEFAULT 0,
+        Friday BIT  DEFAULT 0,
+        Saturday BIT  DEFAULT 0,
+        PRIMARY KEY (section_id),
+        FOREIGN KEY (section_id) REFERENCES Section(section_id)
+    );
+
 
     /*modifications for the employee's department*/
     CREATE TABLE Departments (
@@ -216,6 +232,14 @@
         Foreign Key (section_id) REFERENCES Section(section_id),
         Foreign Key (student_id) REFERENCES Students(account_number)
     )
+    CREATE TABLE CancelledSections (
+        cancel_id INT AUTO_INCREMENT PRIMARY KEY,  
+        section_id INT NOT NULL,                    
+        cancel_date DATE NOT NULL,                  
+        reason VARCHAR(255) NULL,                  
+        cancelled_by INT NULL  
+    );
+
 
     CREATE TABLE Waitlist (
     waitlist_id INT PRIMARY KEY AUTO_INCREMENT,
@@ -235,13 +259,16 @@
     ADD COLUMN department_id INT,
     ADD FOREIGN KEY (department_id) REFERENCES Departments(department_id);
 
-    ALTER TABLE Section
-    ADD COLUMN employee_number INT,
-    ADD COLUMN quotas INT,
-    ADD COLUMN days VARCHAR(25),   -- //TODO: tinene que quedar en 25
-    ADD FOREIGN KEY (employee_number) REFERENCES Employees(employee_number);
+    CREATE TABLE PasswordResetTokens (
+    id_passwordResetTokens INT AUTO_INCREMENT PRIMARY KEY,
+    employee_id INT NOT NULL,
+    token VARCHAR(255) NOT NULL UNIQUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
+    expires_at DATETIME NOT NULL,
+    FOREIGN KEY (employee_id) REFERENCES Employees(employee_number)
+);
 
-    DELIMITER //
+DELIMITER //
 
     CREATE PROCEDURE CreateAdministrator (
         IN in_person_id VARCHAR(20),
@@ -269,8 +296,6 @@
 
         COMMIT;
     END //
-
-    DELIMITER //
 
     DELIMITER //
 
@@ -305,9 +330,6 @@
 
     DELIMITER ;
 
-
-
-/*borrar luego*/
 CREATE PROCEDURE LoginAdministrator (
         IN in_identifier VARCHAR(100),      
         IN in_password VARCHAR(255),       
@@ -345,27 +367,87 @@ CREATE PROCEDURE LoginAdministrator (
 
     DELIMITER ;
 
-    SELECT s.hour_start, s.hour_end, p.indicator AS period, p.year, s.class_id, c.class_name
-FROM Section s
-JOIN Periods p ON s.period_id = p.period_id
-JOIN Classes c ON c.class_id = s.class_id
-WHERE s.classroom_id = 1
-ORDER BY p.year, p.indicator, s.hour_start;
+CREATE DEFINER=`root`@`%` PROCEDURE `CheckClassroomAvailability`(
+    IN in_classroom_id INT,       
+    IN in_hour_start SMALLINT,     
+    IN in_hour_end SMALLINT,       
+    IN in_days VARCHAR(25),        
+    OUT is_available BOOLEAN      
+)
+BEGIN
+    DECLARE conflicting_sections INT DEFAULT 0;
 
-SELECT 
-    P.person_id,
-    P.first_name,
-    P.last_name,
-    P.personal_email,
-    A.preferend_career_id,
-    A.secondary_career_id,
-    A.approved_pref,
-    A.approved_sec
-FROM 
-    Applicant A
-JOIN 
-    Persons P ON A.person_id = P.person_id
-WHERE 
-    A.status_id = 1;
+    SELECT COUNT(*) 
+    INTO conflicting_sections
+    FROM Section s
+    JOIN SectionDays sd ON s.section_id = sd.section_id
+    WHERE s.classroom_id = in_classroom_id
+      AND s.hour_start = in_hour_start       
+      AND s.hour_end = in_hour_end      
+      AND (
+          (sd.Monday = 1 AND FIND_IN_SET('Mon', in_days) > 0) OR
+          (sd.Tuesday = 1 AND FIND_IN_SET('Tue', in_days) > 0) OR
+          (sd.Wednesday = 1 AND FIND_IN_SET('Wed', in_days) > 0) OR
+          (sd.Thursday = 1 AND FIND_IN_SET('Thu', in_days) > 0) OR
+          (sd.Friday = 1 AND FIND_IN_SET('Fri', in_days) > 0) OR
+          (sd.Saturday = 1 AND FIND_IN_SET('Sat', in_days) > 0)
+      );
 
+    IF conflicting_sections > 0 THEN
+        SET is_available = FALSE;
+    ELSE
+        SET is_available = TRUE;
+    END IF;
 
+    SELECT is_available AS classroom_availability;
+END;
+
+CREATE PROCEDURE CheckInstructorAvailability (
+    IN in_employee_number INT,    
+    IN in_hour_start SMALLINT,     
+    IN in_hour_end SMALLINT,       
+    IN in_days VARCHAR(25),        
+    OUT is_available BOOLEAN       
+)
+BEGIN
+    DECLARE conflicting_teacher INT DEFAULT 0;
+
+    SELECT COUNT(*) 
+    INTO conflicting_teacher
+    FROM Section s
+    JOIN SectionDays sd ON s.section_id = sd.section_id 
+    WHERE s.employee_number = in_employee_number
+      AND s.hour_start = in_hour_start             
+      AND s.hour_end = in_hour_end                  
+      AND (
+          (sd.Monday = 1 AND FIND_IN_SET('Mon', in_days) > 0) OR
+          (sd.Tuesday = 1 AND FIND_IN_SET('Tue', in_days) > 0) OR
+          (sd.Wednesday = 1 AND FIND_IN_SET('Wed', in_days) > 0) OR
+          (sd.Thursday = 1 AND FIND_IN_SET('Thu', in_days) > 0) OR
+          (sd.Friday = 1 AND FIND_IN_SET('Fri', in_days) > 0) OR
+          (sd.Saturday = 1 AND FIND_IN_SET('Sat', in_days) > 0)
+      );
+
+    IF conflicting_teacher > 0 THEN
+        SET is_available = FALSE;  
+    ELSE
+        SET is_available = TRUE; 
+    END IF;
+
+    SELECT is_available AS instructor_availability;
+END //
+
+SELECT Employees.employee_number,
+       Employees.institute_email,
+       Persons.person_id,
+       Persons.first_name,
+       Persons.last_name,
+       Persons.phone,
+       Persons.personal_email
+FROM Employees
+JOIN Persons ON Employees.person_id = Persons.person_id
+JOIN Roles ON Employees.role_id = Roles.role_id
+WHERE (Employees.employee_number = ? 
+       OR Persons.person_id = ? 
+       OR Employees.institute_email = ?)
+  AND Employees.employee_number = ?; -- Filtro para asegurar que solo se traigan empleados del docente autenticado
