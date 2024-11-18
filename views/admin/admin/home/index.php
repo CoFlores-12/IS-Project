@@ -180,6 +180,44 @@ AuthMiddleware::checkAccess($requiredRole);
     </div>
 </div>
 
+<div class="modal fade" id="modalExceptionalCancellation" tabindex="-1" role="dialog" aria-labelledby="SRP" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content bg">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalCenterTitle">Exceptional class cancellation period</h5>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+            <div class="col-6">
+                <center>
+                    <label for="start-time">Start time</label><br>
+                    <input
+                        type="datetime-local"
+                        id="start-time-exceptional"
+                        name="start-time"/>
+                </center>
+            </div>
+            <div class="col-6">
+                <center>
+                    <label for="end-time">End time</label><br>
+                    <input
+                        type="datetime-local"
+                        id="end-time-exceptional"
+                        name="end-time"/>
+                </center>
+
+            </div>
+        </div>
+        <div class="row">
+            <center>
+                <button id="saveECCBtn" type="button" class="btn bg-custom-primary m-4 text-white">Save</button>
+            </center>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+</div>
 
 <div class="main">
         <div class="offcanvas offcanvas-start bg" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
@@ -203,7 +241,7 @@ AuthMiddleware::checkAccess($requiredRole);
                             <button type="button" class="text list-group-item list-group-item-action bg list-group-item-indent" data-bs-toggle="modal" data-bs-target="#historyStudent">
                                 enrollment
                             </button>
-                            <button type="button" class="text list-group-item list-group-item-action bg list-group-item-indent" data-bs-toggle="modal" data-bs-target="#historyStudent">
+                            <button id="btnExceptionalCancellation" type="button" class="text list-group-item list-group-item-action bg list-group-item-indent" data-bs-toggle="modal" data-bs-target="#modalExceptionalCancellation">
                                 exceptional cancellation
                             </button>
                             <button id="roleAdministrationBtn" type="button" class="text list-group-item list-group-item-action bg list-group-item-indent" data-bs-toggle="modal" data-bs-target="#roleAdminModal">
@@ -328,6 +366,43 @@ AuthMiddleware::checkAccess($requiredRole);
             saveSRPBtn.innerHTML = 'save'
         })
     })
+
+    const modalExceptionalCancellation = document.getElementById('modalExceptionalCancellation');
+    const modalCCE = new bootstrap.Modal(modalExceptionalCancellation)
+    const saveECCBtn = document.getElementById('saveECCBtn');
+    let starExceptional = document.getElementById('start-time-exceptional');
+    let endExceptional = document.getElementById('end-time-exceptional');
+
+
+    saveECCBtn.addEventListener('click', ()=>{
+   
+        saveECCBtn.innerHTML = `<div class="spinner-border text-light" role="status"></div>`;
+
+
+        if(starExceptional.value == "" || endExceptional.value == ""){
+            return
+        }else{
+
+            const formData = new FormData();
+            formData.append('start_time', starExceptional.value);
+            formData.append('end_time', endExceptional.value);
+
+
+            fetch('/api/put/admin/exceptionalCancellation.php',{
+            method: 'POST',
+            body: formData
+            })
+            .then((response)=>{return response})
+            .then((response)=>{
+                modalCCE.hide();
+                saveECCBtn.disabled = false;
+                saveECCBtn.innerHTML = 'save'
+            })
+        }
+
+        
+    })
+
     </script>
 </body>
 </html>
