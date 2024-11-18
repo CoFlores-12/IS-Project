@@ -119,7 +119,7 @@ if ($currentTime < $startTime || $currentTime > $endTime) {
                 </div>
             </div>
 
-            <button class="btn btn-primary" type="submit">Submit form</button>
+            <button class="btn bg-custom-primary form-control text-white" type="submit">Apply</button>
         </form>
     </div>
 
