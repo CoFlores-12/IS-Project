@@ -300,10 +300,6 @@ AuthMiddleware::checkAccess($requiredRole);
   </div>
 </div>
 
-<<<<<<< HEAD
-<!-- Modal to search Wait Lists -->
-=======
->>>>>>> resettingPasswordTeacher
 <div class="modal fade" id="waitlistModal" tabindex="-1" aria-labelledby="waitlistModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content bg">

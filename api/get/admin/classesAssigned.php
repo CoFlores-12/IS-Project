@@ -2,7 +2,7 @@
 include '../../../src/modules/database.php';
 $db = (new Database())->getConnection();
 session_start();
-$id = $_SESSION['user']['employee_number'];
+$id = $_SESSION['user']['employeenumber'];
 $Carrers = $db->execute_query('SELECT section_id, hour_start, class_code, class_name FROM `Section` S
 INNER JOIN `Classes` C
 ON S.class_id = C.class_id
