@@ -41,7 +41,7 @@ let optionsBody = async (value) => {
                 
             } catch (error) {
                 console.error('Error:', error);
-                body += `<div class="alert alert-danger mt-3" role="alert">
+                body = `<div class="alert alert-danger mt-3" role="alert">
                             Error while fetching data
                         </div>`;
             }
