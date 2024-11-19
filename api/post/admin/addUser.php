@@ -13,7 +13,7 @@ $lastName = $_POST['lastName'];
 $identity = str_replace("-", "", $_POST['identity']);
 $phone = str_replace("-", "", $_POST['identity']);
 $email = $_POST['email'];
-$role = 'teacher';
+$role = 5;
 
 $sql = "INSERT INTO `Persons`(person_id,first_name,last_name,phone,personal_email ) VALUES (?,?,?,?,?);";
 $conn->execute_query($sql, [$identity,$name,$lastName,$phone,$email]);
@@ -31,8 +31,8 @@ function generatePassword($length = 8) {
 
 function emailExists($email) {
     global $conn;
-    $sql = "SELECT COUNT(*) AS count FROM Administrators WHERE institute_email = ?";
-    $result = $conn->execute_query($sql, $email);
+    $sql = "SELECT COUNT(*) AS count FROM Employees WHERE institute_email = ?";
+    $result = $conn->execute_query($sql, [$email]);
 
     if ($result) {
         $row = $result->fetch_assoc();
@@ -56,11 +56,18 @@ function generateEmail($firstName, $lastName) {
 $password = generatePassword();
 $instituteEmail = generateEmail($name, $lastName);
 
-$sql = "insert into `Administrators` (person_id, role, password, institute_email) values(?, ?, ?, ?)";
-$conn->execute_query($sql, [$identity, $role, $password, $instituteEmail]);
+$sql = "CALL `CreateAdministrator`(?, 5, ?, ?);";
+$conn->execute_query($sql, [$identity, $password, $instituteEmail]);
 
+include '../../../src/modules/mails.php';
 $affair = "User Created";
-$message = "Hi $first_name,<br><br>Your institute email is: <strong>$instituteEmail</strong>.<br><br>your password is: <strong>$password</strong>.<br><br>welcome.";
+$message = "Hi $name,<br><br>Your institute email is: <strong>$instituteEmail</strong>.<br><br>your password is: <strong>$password</strong>.<br><br>welcome.";
+if (file_exists(__DIR__ . '../../../../.env')) {
+    require __DIR__ . '../../../../vendor/autoload.php';
+    Dotenv\Dotenv::createUnsafeImmutable(__DIR__ . '../../../../')->load();
+ }
+
+$mail = new Mails(getenv('emailUser'), getenv('emailPassword'));
 
 $resultado = $mail->sendEmail(getenv('emailUser'), $email, $affair, $message);
 
