@@ -28,6 +28,16 @@ $admitted = $result->fetch_assoc()['count'];
     <link rel="icon" type="image/png" href="/public/images/logo.png" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
     <link rel="stylesheet" href="/public/bootstrap-5.3.3-dist/css/bootstrap.min.css">
+    <style>
+        #applicantTable,#tableSections, #tableWaitList{
+            width: 100%;
+        }
+        td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
+        .selected {
+            background-color: var(--primary-color);
+            color: #FFF;
+        }
+    </style>
 </head>
 <body>
 
@@ -51,18 +61,44 @@ $admitted = $result->fetch_assoc()['count'];
 
 <!-- Modal Applicant -->
 <div class="modal fade" id="applicantModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
+  <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
     <div class="modal-content bg">
       <div class="modal-header bg">
         <h5 class="modal-title text" id="staticBackdropLabel">Applicants</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <button class="btn text-primary btn-outline-primary">
-            Import scores <i class="bi bi-arrow-bar-down"></i>
-        </button>
-    </a>
+        <div class="filters row align-items-center">
+            <div class="col-3">
+                <label for="" >Filter By:</label>
+            </div>
+            <div class="col">
+                <select class="form-control" name="" id="filterCareer">
+                    <option value="">Career</option>
+                </select>
+            </div>
+            <div class="col">
+                <select class="form-control" name="" id="filterExam">
+                    <option value="">Exam</option>
+                </select>
+            </div>
+        </div>
+        <table id="applicantTable" class="my-2">
+            <thead>
+                <tr>
+                    <td>Identity</td>
+                    <td>Full name</td>
+                    <td>1st Career</td>
+                    <td>2nd Career</td>
+                    <td>Examns</td>
+                </tr>
+            </thead>
+           <tbody id="aspTableBody">
+           </tbody>
+            
+        </table>
     </div>
+    
     </div>
   </div>
 </div>
@@ -221,10 +257,108 @@ $admitted = $result->fetch_assoc()['count'];
     <script src="/public/js/applicantResultValidation.js"></script>
     <script src="/public/js/emailApplicantResult.js"></script>
     <script>
+        const filterCareer = document.getElementById('filterCareer');
+        const filterExam = document.getElementById('filterExam');
+        const aspTableBody = document.getElementById('aspTableBody');
+        const Careers = [];
+        const Exams = [];
         document.querySelector('#cardApplicant').addEventListener('click', function () {
             var modal = new bootstrap.Modal(document.getElementById('applicantModal'));
             modal.show();
+            fetch('/api/get/admin/applicants.php')
+            .then((response)=>{return response.json()})
+            .then((response)=>{
+                console.log(response);
+                
+                aspTableBody.innerHTML = ''
+                response.Asp.reverse().forEach(element => {
+                    const examsForApplicant = response.Exams.filter(exam =>
+                        exam.career_id === element.preferend_career_id ||
+                        exam.career_id === element.secondary_career_id
+                    );
+
+                    const examCodes = examsForApplicant.map(exam => {
+                        if (!Exams.includes(exam.exam_code)) {
+                            Exams.push(exam.exam_code);
+                        }
+                        
+                        return exam.exam_code
+                    }).join(',');
+
+                    if (!Careers.includes(element.preferend_career_name)) {
+                        Careers.push(element.preferend_career_name)
+                    }
+                    if (!Careers.includes(element.secondary_career_name)) {
+                        Careers.push(element.secondary_career_name)
+                    }
+                    aspTableBody.innerHTML += `<tr>
+                                <td>${element.identity}</td>
+                                <td>${element.full_name}</td>
+                                <td>${element.preferend_career_name}</td>
+                                <td>${element.secondary_career_name}</td>
+                                <td>${examCodes}</td>
+                            </tr>`
+                });
+                filterCareer.innerHTML = '<option>Career</option>'
+                Careers.forEach(element => {
+                    filterCareer.innerHTML += `<option>${element}</option>`
+                });
+                filterExam.innerHTML = '<option>Exams</option>'
+                Exams.forEach(element => {
+                    filterExam.innerHTML += `<option>${element}</option>`
+                });
+                
+            })
+
         });
+
+        document.getElementById('filterExam').addEventListener('change', filterByExam);
+document.getElementById('filterCareer').addEventListener('change', filterByCareer);
+
+function filterByExam() {
+    const selectedExam = document.getElementById('filterExam').value.trim();
+    const rows = document.querySelectorAll('#aspTableBody tr');
+    
+    rows.forEach(row => {
+        if (selectedExam == 'Exams') {
+            row.style.display = ''; 
+            return;
+        }
+        const examCell = row.cells[4].textContent.trim(); 
+        
+        if (!selectedExam || examCell.includes(selectedExam)) {
+            row.style.display = ''; 
+        } else {
+            row.style.display = 'none';
+        }
+    });
+    filterByCareer
+}
+
+function filterByCareer() {
+    const selectedCareer = document.getElementById('filterCareer').value.trim();
+    const rows = document.querySelectorAll('#aspTableBody tr');
+    
+    rows.forEach(row => {
+        if (selectedCareer == 'Career') {
+            row.style.display = '';
+            return;
+        }
+        const preferedCareer = row.cells[2].textContent.trim(); 
+        const secondaryCareer = row.cells[3].textContent.trim(); 
+        
+        if (!selectedCareer || 
+            preferedCareer.includes(selectedCareer) || 
+            secondaryCareer.includes(selectedCareer)) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none'; 
+        }
+    });
+}
+
+
+
         document.querySelector('#cardAdmitted').addEventListener('click', function () {
             var modal = new bootstrap.Modal(document.getElementById('admittedModal'));
             modal.show();

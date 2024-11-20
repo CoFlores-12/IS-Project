@@ -21,12 +21,17 @@
 .progress {
     height: 10px;
 }
-.card-body {
-    padding: .5rem !important;
+.card-bd {
+    padding: 0 !important;
     display: flex;
-    flex-direction: column;
+    flex-direction:column;
+    flex: 1 1 auto;
 }
-.card-body > .name {flex: 4;}
+.card-bd > .name {
+    flex: 1 1 auto;
+    border-top-left-radius: var(--bs-border-radius) !important;
+    border-top-right-radius: var(--bs-border-radius) !important;
+}
 
 #offcanvasExample {
     background-color: var(--bg);

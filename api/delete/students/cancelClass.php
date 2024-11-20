@@ -13,7 +13,7 @@ if (!$enrolled_id) {
 }
 
 session_start();
-$id = $_SESSION['studentID'];
+$id = $_SESSION['user']['student_id'];
 
 //conneted to DB
 include '../../../src/modules/database.php';

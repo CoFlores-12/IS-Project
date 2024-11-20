@@ -11,6 +11,7 @@ $requiredRole = 'Teacher';
     <link rel="icon" type="image/png" href="/public/images/logo.png" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
     <link rel="stylesheet" href="/public/bootstrap-5.3.3-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/public/css/homeTeacher.css">
     <style>
         .list-group-title {
             border: none !important;
@@ -64,7 +65,7 @@ $requiredRole = 'Teacher';
                 <h4 class="text"><?php echo $role; ?></h4>
                
             </div>
-           
+            <?php include '../../../../src/components/teacherClasses.php'; ?>
             
         </div>
     </div>
