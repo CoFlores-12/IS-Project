@@ -37,6 +37,7 @@ let optionsBody = async (value) => {
                     body = `<div class="alert alert-danger mt-3" role="alert">
                                 Inactive period
                             </div>`;
+                    return body;
                 }
                 
             } catch (error) {
