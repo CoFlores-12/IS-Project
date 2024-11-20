@@ -4,6 +4,9 @@ require_once '../../../../src/modules/Auth.php';
 $requiredRole = 'Administrator';
 
 AuthMiddleware::checkAccess($requiredRole);
+
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -94,40 +97,7 @@ AuthMiddleware::checkAccess($requiredRole);
 <!-- Modal SRP -->
 <div class="modal fade" id="SRP" tabindex="-1" role="dialog" aria-labelledby="SRP" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content bg">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalCenterTitle">Registration period</h5>
-      </div>
-      <div class="modal-body">
-        <div class="row">
-            <div class="col-6">
-                <center>
-                    <label for="start-time">Start time</label><br>
-                    <input
-                        type="datetime-local"
-                        id="start-time"
-                        name="start-time"/>
-                </center>
-            </div>
-            <div class="col-6">
-                <center>
-                    <label for="end-time">End time</label><br>
-                    <input
-                        type="datetime-local"
-                        id="end-time"
-                        name="end-time"/>
-                </center>
-
-            </div>
-        </div>
-        <div class="row">
-            <center>
-                <button id="saveSRPBtn" type="button" class="btn bg-custom-primary m-4 text-white">Save</button>
-            </center>
-        </div>
-      </div>
-      
-    </div>
+    
   </div>
 </div>
 <!-- Modal SRP -->
@@ -229,15 +199,12 @@ AuthMiddleware::checkAccess($requiredRole);
             </div>
             <div class="offcanvas-body">
                 <div class="list-group">
-                  <a class="text bg aux text-decoration-none" data-bs-toggle="collapse" href="#collapseStudents" role="button" aria-expanded="false" aria-controls="collapseStudents">
+                  <a class="text bg aux text-decoration-none" data-bs-toggle=""  role="button" aria-expanded="false" aria-controls="collapseStudents">
                     <div class="list-group-item list-group-title list-group-item- bg-aux text fw-bold">
                         Settings
                       </div>
                     </a>
-                          <div class="collapse" id="collapseStudents">
-                            <button type="button" class="text list-group-item list-group-item-action bg list-group-item-indent" data-bs-toggle="modal" data-bs-target="#SRP">
-                                registration
-                            </button>
+                          <div class="" id="collapseStudents">
                             <button type="button" class="text list-group-item list-group-item-action bg list-group-item-indent" data-bs-toggle="modal" data-bs-target="#historyStudent">
                                 enrollment
                             </button>
@@ -273,14 +240,11 @@ AuthMiddleware::checkAccess($requiredRole);
             </div>
         </div>
         <div class="container-fluid">
-            <div class=" flex p-2 justify-between items-center">
+            <div class=" flex px-4">
                 <h4 class="text">Dashboard</h4>
-                <div class="buttons">
-
-                    <button id="addUserBtn" class="btn bg-custom-primary text-white"  data-bs-toggle="modal" data-bs-target="#newUserModal">Add User</button>
-                </div>
+                
             </div>
-            <div class="row p-4">
+            <div class="row p-2">
                 <div class="col">
                     <div class="card bg-aux shadow rounded m-2  p-2">
                         <span>Teachers</span>
@@ -303,6 +267,129 @@ AuthMiddleware::checkAccess($requiredRole);
                     <div class="card shadow rounded m-2 bg-aux p-2">
                         <span>Regional Center</span>
                         <strong>2</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row p-2">
+                <div class="col-12 col-md-4">
+                    <div class="card bg-aux">
+                        <div class="card-body">
+                            <h5 class="modal-title" id="exampleModalCenterTitle">Admissions period</h5>
+                            <div class="row my-3">
+                                <div class="col-12 col-md-6">
+                                    <center>
+                                        <label for="start-time">Start time</label><br>
+                                        <input
+                                            type="datetime-local"
+                                            id="start-time"
+                                            class="form-control"
+                                            name="start-time"/>
+                                    </center>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <center>
+                                        <label for="end-time">End time</label><br>
+                                        <input
+                                            type="datetime-local"
+                                            id="end-time"
+                                            class="form-control"
+                                            name="end-time"/>
+                                    </center>
+
+                                </div>
+                            </div>
+                            <div class="row">
+                                <center>
+                                    <button id="saveSRPBtn" type="button" class="btn bg-custom-primary mt-2 text-white">Save</button>
+                                </center>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4">
+                    <div class="card bg-aux">
+                        <div class="card-body">
+                            <h5 class="modal-title" id="exampleModalCenterTitle">Exceptional cancellation period</h5>
+                            <div class="row my-3">
+                                <div class="col-12 col-md-6">
+                                    <center>
+                                        <label for="start-time">Start time</label><br>
+                                        <input
+                                            type="datetime-local"
+                                            id="start-time"
+                                            class="form-control"
+                                            name="start-time"/>
+                                    </center>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <center>
+                                        <label for="end-time">End time</label><br>
+                                        <input
+                                            type="datetime-local"
+                                            id="end-time"
+                                            class="form-control"
+                                            name="end-time"/>
+                                    </center>
+
+                                </div>
+                            </div>
+                            <div class="row">
+                                <center>
+                                    <button id="saveSRPBtn" type="button" class="btn bg-custom-primary mt-2 text-white">Save</button>
+                                </center>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4">
+                    <div class="card bg-aux">
+                        <div class="card-body">
+                            <h5 class="modal-title" id="exampleModalCenterTitle">period</h5>
+                            <div class="row my-3">
+                                <div class="col-12 col-md-6">
+                                    <center>
+                                        <label for="start-time">Start time</label><br>
+                                        <input
+                                            type="datetime-local"
+                                            id="start-time"
+                                            class="form-control"
+                                            name="start-time"/>
+                                    </center>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <center>
+                                        <label for="end-time">End time</label><br>
+                                        <input
+                                            type="datetime-local"
+                                            id="end-time"
+                                            class="form-control"
+                                            name="end-time"/>
+                                    </center>
+
+                                </div>
+                            </div>
+                            <div class="row">
+                                <center>
+                                    <button id="saveSRPBtn" type="button" class="btn bg-custom-primary mt-2 text-white">Save</button>
+                                </center>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row p-2">
+                <div class=" col-12">
+                    <div class="card bg-aux">
+
+                        <div class="card-body">
+                            <div class="flex flex-row justify-between items-center">
+                                <h5 class="text">Users</h5>
+                                <button id="addUserBtn" class="btn bg-custom-primary text-white"  data-bs-toggle="modal" data-bs-target="#newUserModal">Add User</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

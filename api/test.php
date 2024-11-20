@@ -1,8 +1,5 @@
 <?php
-require_once '../src/modules/Auth.php';
+date_default_timezone_set('America/Tegucigalpa');
+$currentDate = new DateTime();
 
-$requiredRole = 'Administrator';
-
-AuthMiddleware::checkAccess($requiredRole);
-
-echo "Bienvenido a la página protegida!";
+print_r($currentDate);
