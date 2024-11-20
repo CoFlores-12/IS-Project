@@ -44,3 +44,20 @@ careerChangeBtn.addEventListener('click', (e)=>{
         careerChangeBody.innerHTML = html + '</tbody></table>';
     })
 })
+
+const toggleAside = document.getElementById('toggleAside');
+const desktopAside = document.getElementById('desktopAside');
+
+function toggleSidebar() {
+    if (desktopAside.classList.contains('d-none')) {
+        desktopAside.classList.remove('d-none');
+        desktopAside.classList.remove('d-md-none');
+        desktopAside.classList.add('d-block');
+    } else {
+        desktopAside.classList.remove('d-block');
+        desktopAside.classList.add('d-md-none');
+        desktopAside.classList.add('d-none');
+    }
+}
+
+toggleAside.addEventListener('click', toggleSidebar);

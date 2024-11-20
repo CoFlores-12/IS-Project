@@ -16,6 +16,7 @@ AuthMiddleware::checkAccess($requiredRole);
     <link rel="icon" type="image/png" href="/public/images/logo.png" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
     <link rel="stylesheet" href="/public/bootstrap-5.3.3-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/public/css/homeTeacher.css">
     <style>
         .list-group-title {
             border: none !important;
@@ -23,6 +24,9 @@ AuthMiddleware::checkAccess($requiredRole);
             outline: none;
         }
         .list-group-item-indent {
+            border: none; 
+        }
+        .list-group-parent {
             padding-left: 2rem; 
             border: none; 
         }
@@ -40,6 +44,7 @@ AuthMiddleware::checkAccess($requiredRole);
           margin: 1.15rem !important;
           cursor: pointer;
         }
+        
         </style>
 </head>
 <body>
@@ -98,59 +103,64 @@ AuthMiddleware::checkAccess($requiredRole);
   </div>
 </div>
 
-<div class="main">
-        <div class="offcanvas offcanvas-start bg" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
-            <div class="offcanvas-header justify-between">
-                <h5 class="offcanvas-title text" id="offcanvasExampleLabel">Menu</h5>
-                <button type="button" class="btn bg text" data-bs-dismiss="offcanvas" aria-label="Close">
-                    <i class="bi bi-x"></i>
-                </button>
-            </div>
-            <div class="offcanvas-body">
-                <div class="list-group">
+<div class="container-fluid row h-full">
+      <div class="col-md-3 d-none d-md-block bg-aux" id="desktopAside">
+              <div class="offcanvas-header py-3 justify-between">
+                  <h5 class="offcanvas-title text" id="offcanvasExampleLabel">Menu</h5>
+                  <button type="button" class="btn" aria-label="Close" onclick="toggleSidebar()">
+                    <i class="bi bi-x-lg"></i>
+                  </button>
+              </div>
+              <div class="list-group">
                   <a class="text bg aux text-decoration-none" data-bs-toggle="collapse" href="#collapseStudents" role="button" aria-expanded="false" aria-controls="collapseStudents">
                     <div class="list-group-item list-group-title list-group-item- bg-aux text fw-bold">
-                        Requests
-                      </div>
-                    </a>
-                          <div class="collapse" id="collapseStudents">
+                        Solicitudes
+                    </div>
+                  </a>
+                          <div class="list-group-parent">
                             <button id="careerChangeBtn" type="button" class="text list-group-item list-group-item-action bg list-group-item-indent">
-                                Career change
+                                Cambio de carrera
+                            </button>
+                            <button id="cancelBtn" type="button" class="text my-2 list-group-item list-group-item-action bg list-group-item-indent">
+                                Cancelación excepcional
+                            </button>
+                            <button id="cBtn" type="button" class="text my-2 list-group-item list-group-item-action bg list-group-item-indent">
+                                Cambio de centro
                             </button>
                             
                           </div>
                     
                 </div>
-            </div>
         </div>
-        <div class="header p-2 text-inverter bg">
-            <div class="flex justify-between">
-                <button class="btn bg text" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
-                    <i class="bi bi-list"></i>
-                </button>
-                
-                <div class="btn-group">
-                    <button type="button" class="btn bg dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img height="40px" width="40px" src='https://avataaars.io/?avatarStyle=Circle&topType=LongHairStraight&accessoriesType=Blank&hairColor=BrownDark&facialHairType=Blank&clotheType=BlazerShirt&eyeType=Default&eyebrowType=Default&mouthType=Default&skinColor=Light'/>
-                        
-                    </button>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">My profile</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="/api/get/logout.php">Logout <i class="bi bi-box-arrow-right"></i></a></li>
-                    </ul>
-                 </div>
-            </div>
-        </div>
-        <div class="container-fluid">
+        <div class="col">
+          <div class="header p-2 text-inverter bg">
+              <div class="flex justify-between">
+                  <button class="btn bg text" type="button" id="toggleAside">
+                      <i class="bi bi-list"></i>
+                  </button>
+                  
+                  <div class="btn-group">
+                      <button type="button" class="btn bg dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                          <img height="40px" width="40px" src='https://avataaars.io/?avatarStyle=Circle&topType=LongHairStraight&accessoriesType=Blank&hairColor=BrownDark&facialHairType=Blank&clotheType=BlazerShirt&eyeType=Default&eyebrowType=Default&mouthType=Default&skinColor=Light'/>
+                          
+                      </button>
+                      <ul class="dropdown-menu">
+                          <li><a class="dropdown-item" href="#">My profile</a></li>
+                          <li><hr class="dropdown-divider"></li>
+                          <li><a class="dropdown-item" href="/api/get/logout.php">Logout <i class="bi bi-box-arrow-right"></i></a></li>
+                      </ul>
+                   </div>
+              </div>
+          </div>
+  
             <div class=" flex p-2 justify-between items-center">
                 <h4 class="text"><?php echo $role; ?></h4>
                
             </div>
-           
+            <?php include '../../../../src/components/teacherClasses.php'; ?>
             
         </div>
-    </div>
+</div>
     <script src="/public/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
     <script src="/public/js/coordinator.js"></script>
 </body>
