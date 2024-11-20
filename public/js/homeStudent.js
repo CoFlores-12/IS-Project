@@ -34,14 +34,14 @@ let optionsBody = async (value) => {
                 if (data.status === true) {
                     body += '<input type="file" name="evidemce"  accept="application/pdf" class="form-control my-4" id="evidence">';
                 } else {
-                    body += `<div class="alert alert-danger mt-3" role="alert">
+                    body = `<div class="alert alert-danger mt-3" role="alert">
                                 Inactive period
                             </div>`;
                 }
                 
             } catch (error) {
                 console.error('Error:', error);
-                body += `<div class="alert alert-danger mt-3" role="alert">
+                body = `<div class="alert alert-danger mt-3" role="alert">
                             Error while fetching data
                         </div>`;
             }
