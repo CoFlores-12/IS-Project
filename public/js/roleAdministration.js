@@ -181,7 +181,7 @@ fetch('/api/get/admin/adminData.php')
     document.getElementById('inputEndR').innerHTML = `
     <input
         type="datetime-local"
-        id="start-time"
+        id="end-time"
         value="${res.registrationPeriod.endTime}"
         class="form-control bg-aux"
         name="start-time"
