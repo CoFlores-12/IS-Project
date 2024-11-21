@@ -103,11 +103,11 @@ AuthMiddleware::checkAccess($requiredRole);
   </div>
 </div>
 
-<div class="container-fluid row h-full">
+<div class="container-fluid row h-full"> 
       <div class="col-md-3 d-none d-md-block bg-aux" id="desktopAside">
               <div class="offcanvas-header py-3 justify-between">
                   <h5 class="offcanvas-title text" id="offcanvasExampleLabel">Menu</h5>
-                  <button type="button" class="btn" aria-label="Close" onclick="toggleSidebar()">
+                  <button type="button" class="btn d-md-none" aria-label="Close" onclick="toggleSidebar()">
                     <i class="bi bi-x-lg"></i>
                   </button>
               </div>
