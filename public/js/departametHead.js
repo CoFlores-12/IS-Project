@@ -41,6 +41,18 @@ let historyBody = document.getElementById('historyBody');
         let btnSearcTeacher = document.getElementById('btnSearcTeacher');
         let resetBody = document.getElementById('resetBody');
         let inputTeacher = document.getElementById('inputTeacher');
+        let btlChangePasswordModal = document.getElementById('changePassword');
+        let alertSuccessEmail = document.getElementById('alertSuccessEmail');
+        
+        alertSuccessEmail.style.display = 'none';
+    
+        let changePassword = document.getElementById('changePassword');
+        let changePasswordModal = new bootstrap.Modal(changePassword);
+
+        btlChangePasswordModal.addEventListener("click", ()=>{
+            changePasswordModal.show();
+        })
+        
 
         btnSearcTeacher.addEventListener('click', ()=>{
             if (inputTeacher.value === '') {return; }
@@ -73,9 +85,16 @@ let historyBody = document.getElementById('historyBody');
                     </tbody>
                     </table>
                     <div class="d-grid gap-2 col-6 mx-auto mt-4">
-                    <button class="btn btn-primary" type="button" data-bs-target="#change" onclick="change(${response.row.employee_number})" >Change Password</button>
+                         <button class="btn btn-primary" id="btnChange" type="button" data-bs-target="#change" onclick="change(${response.row.employee_number})" >Enviar Correo</button>
                     </div>`;
                     resetBody.innerHTML = teacher
+                    btnChange = document.getElementById("btnChange");
+
+                    btnChange.addEventListener("click", ()=>{
+                        btnChange.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Loading...`;
+                        btnChange.disabled = true;
+                    }) 
+
                 }
                 if (response.status !== 0) {
                     teacher = ` 
@@ -85,16 +104,17 @@ let historyBody = document.getElementById('historyBody');
                         resetBody.innerHTML = teacher
                 }
                 
-               
-                
             })
             .catch(()=>{
                 alert('Teacher not found')
             })
         })
+        
 
         function change(ID) {
             const email = document.getElementById("newEmail").value;
+
+           
 
             fetch('/api/post/admin/ResetPasswordTeacher.php', {
                 method: 'POST', 
@@ -104,7 +124,14 @@ let historyBody = document.getElementById('historyBody');
                 body: JSON.stringify({ teacher_identifier: ID, personal_email: email}), 
             })
                 .then(response => {
-                    console.log(response)
+                    changePasswordModal.hide();
+                    alertSuccessEmail.style.display = "block";
+                    setTimeout(function() {
+                        alertSuccessEmail.style.display = 'none';
+                        resetBody.innerHTML = "";
+                        inputTeacher.value = "";
+                      }, 3000);
+
                 })
                 .catch(error => {
                     alert('Error, something went wrong');

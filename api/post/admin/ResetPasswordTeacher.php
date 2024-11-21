@@ -32,7 +32,7 @@ function generatePasswordResetToken() {
 
 $newToken = generatePasswordResetToken();
 $create = date("Y-m-d H:i:s");
-$expiry = date("Y-m-d H:i:s", strtotime("+10 minutes"));
+$expiry = date("Y-m-d H:i:s", strtotime("+2 minutes"));
 
 
 $sql = "INSERT INTO PasswordResetTokens (employee_id, token, created_at, expires_at) VALUES (?, ?, ?, ?)";
@@ -42,7 +42,7 @@ $stmt->execute();
 
 $response = [];
 
-$resetUrl = 'https://is-project.up.railway.app/views/admin/teacher/home/reset.php?token='.urlencode($newToken);
+$resetUrl = 'https://is-project-fixes.up.railway.app/views/admin/teacher/home/reset.php?token='.urlencode($newToken);
 
 $affair = "Cambiar contraseña";
 $message = "Ve al siguiente enlace para cambiar tu contrasenia: <a href='${resetUrl}'>aqui</a>";
