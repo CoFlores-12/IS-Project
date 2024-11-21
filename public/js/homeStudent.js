@@ -426,3 +426,27 @@ function getClassesView() {
     })
 }
 getClassesView();
+
+
+const toggleAside = document.getElementById('toggleAside');
+const desktopAside = document.getElementById('desktopAside');
+
+function toggleSidebar() {
+    if (desktopAside.classList.contains('d-md-block')) {
+        desktopAside.classList.remove('d-md-block');
+        desktopAside.classList.add('d-md-none');
+    } else {
+        desktopAside.classList.remove('d-md-none');
+        desktopAside.classList.add('d-md-block');
+    }
+    if (desktopAside.classList.contains('d-none')) {
+        desktopAside.classList.remove('d-none');
+        desktopAside.classList.add('d-block');
+    } else {
+        desktopAside.classList.remove('d-block');
+        desktopAside.classList.add('d-none');
+    }
+    
+}
+
+toggleAside.addEventListener('click', toggleSidebar);

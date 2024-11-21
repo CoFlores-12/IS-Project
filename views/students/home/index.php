@@ -84,50 +84,68 @@ AuthMiddleware::checkAccess($requiredRole);
     </div>
   </div>
 </div>
-    <div class="main">
-        <div class="offcanvas offcanvas-start bg" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+    <div class="container-fluid row h-full">
+        <div class="offcanvas offcanvas-end bg" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
             <div class="offcanvas-header justify-between">
-                <h5 class="offcanvas-title" id="offcanvasExampleLabel">Menu</h5>
+                <h5 class="offcanvas-title" id="offcanvasExampleLabel">Chats</h5>
                 <button type="button" class="btn bg text" data-bs-dismiss="offcanvas" aria-label="Close">
                     <i class="bi bi-x"></i>
                 </button>
             </div>
             <div class="offcanvas-body">
-                <span id="btnModalRequests" class="cursor-pointer row p-2 rounded bg-aux">
-                    Create Request
-                </span>
-                <span id="btnModalEnrollment" class="cursor-pointer row my-2 p-2 rounded bg-aux">
-                    Enrollment
-                </span>
+                
             
             </div>
         </div>
-        <div class="header p-2 text-inverter bg">
-            <div class="flex justify-between">
-                <button class="btn bg text" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
-                    <i class="bi bi-list"></i>
-                </button>
-                
-                <div class="btn-group">
-                    <button type="button" class="btn bg dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img height="40px" width="40px" src='https://avataaars.io/?avatarStyle=Circle&topType=LongHairStraight&accessoriesType=Blank&hairColor=BrownDark&facialHairType=Blank&clotheType=BlazerShirt&eyeType=Default&eyebrowType=Default&mouthType=Default&skinColor=Light'/>
-                        
-                    </button>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="/views/students/profile/index.php?account_number=<?php echo $_SESSION['user']['student_id'] ?>">My profile</a></li>
-                        <li><a class="dropdown-item" href="#">Messages</a></li>
-                        <li><a class="dropdown-item" href="#">requests</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="/api/get/logout.php">Logout <i class="bi bi-box-arrow-right"></i></a></li>
-                    </ul>
-                 </div>
-            </div>
+
+        <div class="col-md-3 d-none d-md-block bg-aux" id="desktopAside">
+              <div class="offcanvas-header py-3 justify-between">
+                  <h5 class="offcanvas-title text" id="offcanvasExampleLabel">Menu</h5>
+                  <button type="button" class="btn d-md-none" aria-label="Close" onclick="toggleSidebar()">
+                    <i class="bi bi-x-lg"></i>
+                  </button>
+              </div>
+              <div class="list-group">
+                  
+                            <button id="btnModalRequests" type="button" class="text bg btn mb-1">
+                                Crear Solicitud
+                            </button>
+                            <button id="btnModalEnrollment" type="button" class="text bg btn my-1">
+                                Matricula
+                            </button>
+                            
+                            
+                    
+                </div>
         </div>
-        <div class="courses-container">
-            <h5 class="text-md font-bold pt-4 pl-4">Running Course</h5>
-            <div class="courses pl-4 pr-4 pb-4" id="courseRunning">
-                
-                
+        <div class="col">
+            <div class="header p-2 text-inverter bg">
+                <div class="flex justify-between">
+                    <button class="btn bg text" type="button" id="toggleAside">
+                      <i class="bi bi-list"></i>
+                  </button>
+                    
+                    <div class="btn-group">
+                        <button type="button" class="btn bg dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img height="40px" width="40px" src='https://avataaars.io/?avatarStyle=Circle&topType=LongHairStraight&accessoriesType=Blank&hairColor=BrownDark&facialHairType=Blank&clotheType=BlazerShirt&eyeType=Default&eyebrowType=Default&mouthType=Default&skinColor=Light'/>
+                            
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/views/students/profile/index.php?account_number=<?php echo $_SESSION['user']['student_id'] ?>">My profile</a></li>
+                            <li><a class="dropdown-item" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">Messages</a></li>
+                            <li><a class="dropdown-item" href="#">requests</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="/api/get/logout.php">Logout <i class="bi bi-box-arrow-right"></i></a></li>
+                        </ul>
+                     </div>
+                </div>
+            </div>
+            <div class="courses-container">
+                <h5 class="text-md font-bold pt-4 pl-4">Running Course</h5>
+                <div class="courses pl-4 pr-4 pb-4" id="courseRunning">
+                    
+                    
+                </div>
             </div>
         </div>
     </div>

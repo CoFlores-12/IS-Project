@@ -5,8 +5,6 @@ $requiredRole = 'Administrator';
 
 AuthMiddleware::checkAccess($requiredRole);
 
-
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -248,31 +246,31 @@ AuthMiddleware::checkAccess($requiredRole);
                 <div class="col">
                     <div class="card bg-aux shadow rounded m-2  p-2">
                         <span>Teachers</span>
-                        <strong>67</strong>
+                        <div id="Teachers"><p class="card-text placeholder-glow"><span class="placeholder col-6"></span></p></div>
                     </div>
                 </div>
                 <div class="col">
                     <div class="card shadow rounded m-2 bg-aux p-2">
                         <span>Students</span>
-                        <strong>1830</strong>
+                        <div id="Students"><p class="card-text placeholder-glow"><span class="placeholder col-6"></span></p></div>
                     </div>
                 </div>
                 <div class="col">
                     <div class="card shadow rounded m-2 bg-aux p-2">
                         <span>Careers</span>
-                        <strong>12</strong>
+                        <div id="Careers"><p class="card-text placeholder-glow"><span class="placeholder col-6"></span></p></div>
                     </div>
                 </div>
                 <div class="col">
                     <div class="card shadow rounded m-2 bg-aux p-2">
                         <span>Regional Center</span>
-                        <strong>2</strong>
+                        <div id="RegionalCenter"><p class="card-text placeholder-glow"><span class="placeholder col-6"></span></p></div>
                     </div>
                 </div>
             </div>
 
             <div class="row p-2">
-                <div class="col-12 col-md-4">
+                <div class="col-12 col-md-4 my-2">
                     <div class="card bg-aux">
                         <div class="card-body">
                             <h5 class="modal-title" id="exampleModalCenterTitle">Admissions period</h5>
@@ -280,21 +278,17 @@ AuthMiddleware::checkAccess($requiredRole);
                                 <div class="col-12 col-md-6">
                                     <center>
                                         <label for="start-time">Start time</label><br>
-                                        <input
-                                            type="datetime-local"
-                                            id="start-time"
-                                            class="form-control"
-                                            name="start-time"/>
+                                        <div id="inputStartR">
+                                        <p class="card-text placeholder-glow"><span class="placeholder col-12"></span></p>
+                                        </div>
                                     </center>
                                 </div>
                                 <div class="col-12 col-md-6">
                                     <center>
                                         <label for="end-time">End time</label><br>
-                                        <input
-                                            type="datetime-local"
-                                            id="end-time"
-                                            class="form-control"
-                                            name="end-time"/>
+                                        <div id="inputEndR">
+                                        <p class="card-text placeholder-glow"><span class="placeholder col-12"></span></p>
+                                        </div>
                                     </center>
 
                                 </div>
@@ -307,7 +301,7 @@ AuthMiddleware::checkAccess($requiredRole);
                         </div>
                     </div>
                 </div>
-                <div class="col-12 col-md-4">
+                <div class="col-12 col-md-4 my-2">
                     <div class="card bg-aux">
                         <div class="card-body">
                             <h5 class="modal-title" id="exampleModalCenterTitle">Exceptional cancellation period</h5>
@@ -342,7 +336,7 @@ AuthMiddleware::checkAccess($requiredRole);
                         </div>
                     </div>
                 </div>
-                <div class="col-12 col-md-4">
+                <div class="col-12 col-md-4 my-2">
                     <div class="card bg-aux">
                         <div class="card-body">
                             <h5 class="modal-title" id="exampleModalCenterTitle">period</h5>
@@ -400,96 +394,7 @@ AuthMiddleware::checkAccess($requiredRole);
     <script src="/public/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
     <script src="/public/js/roleAdministration.js"></script>
     <script>
-        (function() {
-    'use strict';
-    window.addEventListener('load', function() {
-        var forms = document.getElementsByClassName('needs-validation');
-        var validation = Array.prototype.filter.call(forms, function(form) {
-        form.addEventListener('submit', function(event) {
-            if (form.checkValidity() === false) {
-                event.preventDefault();
-                event.stopPropagation();
-            }
-            form.classList.add('was-validated');
-        }, false);
-        });
-    }, false);
-    })();
-    
-    const newUserModal = document.getElementById('newUserModal');
-    const newUserModalBS = new bootstrap.Modal(newUserModal)
-    const SRPModal = document.getElementById('SRP');
-    const SRPModalBS = new bootstrap.Modal(SRPModal)
-    const addUserBtn = document.getElementById('addUserBtn');
-    const departamentSelect = document.getElementById('departamentSelect');
-    const saveSRPBtn = document.getElementById('saveSRPBtn');
-
-    addUserBtn.addEventListener('click', ()=>{
-        newUserModalBS.show();
-        fetch('/api/get/public/allDepartaments.php')
-        .then((response) => {return response.json()})
-        .then((response) => {
-            departamentSelect.innerHTML = '<option value="">Select department...</option>';
-            response.forEach(department => {
-                departamentSelect.innerHTML += `<option value="${department.department_id}">${department.department_name}</option>`;
-            });
-        })
-    })
-    saveSRPBtn.addEventListener('click', (e)=>{
-        e.target.disabled = true;
-        e.target.innerHTML = `<div class="spinner-border text-light" role="status"></div>`;
-        let formData = new FormData();
-        formData.append('endTime', document.getElementById('end-time').value);
-        formData.append('startTime', document.getElementById('start-time').value);
-        fetch('/api/put/admin/registrationPeriod.php',{
-            method: 'POST',
-            body: formData
-        })
-        .then((response)=>{return response})
-        .then((response)=>{
-            alert('Done!');
-            SRPModalBS.hide();
-            saveSRPBtn.disabled = false;
-            saveSRPBtn.innerHTML = 'save'
-        })
-    })
-
-    const modalExceptionalCancellation = document.getElementById('modalExceptionalCancellation');
-    const modalCCE = new bootstrap.Modal(modalExceptionalCancellation)
-    const saveECCBtn = document.getElementById('saveECCBtn');
-    let starExceptional = document.getElementById('start-time-exceptional');
-    let endExceptional = document.getElementById('end-time-exceptional');
-
-
-    saveECCBtn.addEventListener('click', ()=>{
-   
-        saveECCBtn.innerHTML = `<div class="spinner-border text-light" role="status"></div>`;
-
-
-        if(starExceptional.value == "" || endExceptional.value == ""){
-            return
-        }else{
-
-            const formData = new FormData();
-            formData.append('start_time', starExceptional.value);
-            formData.append('end_time', endExceptional.value);
-
-
-            fetch('/api/put/admin/exceptionalCancellation.php',{
-            method: 'POST',
-            body: formData
-            })
-            .then((response)=>{return response})
-            .then((response)=>{
-                modalCCE.hide();
-                saveECCBtn.disabled = false;
-                saveECCBtn.innerHTML = 'save'
-            })
-        }
-
         
-    })
-
     </script>
 </body>
 </html>

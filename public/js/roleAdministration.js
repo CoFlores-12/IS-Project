@@ -67,3 +67,123 @@ document.getElementById('editRoleForm').addEventListener('submit', (e) => {
             }
         });
 });
+
+
+
+
+
+(function() {
+    'use strict';
+    window.addEventListener('load', function() {
+        var forms = document.getElementsByClassName('needs-validation');
+        var validation = Array.prototype.filter.call(forms, function(form) {
+        form.addEventListener('submit', function(event) {
+            if (form.checkValidity() === false) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            form.classList.add('was-validated');
+        }, false);
+        });
+    }, false);
+    })();
+    
+    const newUserModal = document.getElementById('newUserModal');
+    const newUserModalBS = new bootstrap.Modal(newUserModal)
+    const SRPModal = document.getElementById('SRP');
+    const SRPModalBS = new bootstrap.Modal(SRPModal)
+    const addUserBtn = document.getElementById('addUserBtn');
+    const departamentSelect = document.getElementById('departamentSelect');
+    const saveSRPBtn = document.getElementById('saveSRPBtn');
+
+    addUserBtn.addEventListener('click', ()=>{
+        newUserModalBS.show();
+        fetch('/api/get/public/allDepartaments.php')
+        .then((response) => {return response.json()})
+        .then((response) => {
+            departamentSelect.innerHTML = '<option value="">Select department...</option>';
+            response.forEach(department => {
+                departamentSelect.innerHTML += `<option value="${department.department_id}">${department.department_name}</option>`;
+            });
+        })
+    })
+    saveSRPBtn.addEventListener('click', (e)=>{
+        e.target.disabled = true;
+        e.target.innerHTML = `<div class="spinner-border text-light" role="status"></div>`;
+        let formData = new FormData();
+        formData.append('endTime', document.getElementById('end-time').value);
+        formData.append('startTime', document.getElementById('start-time').value);
+        fetch('/api/put/admin/registrationPeriod.php',{
+            method: 'POST',
+            body: formData
+        })
+        .then((response)=>{return response})
+        .then((response)=>{
+            alert('Done!');
+            SRPModalBS.hide();
+            saveSRPBtn.disabled = false;
+            saveSRPBtn.innerHTML = 'save'
+        })
+    })
+
+    const modalExceptionalCancellation = document.getElementById('modalExceptionalCancellation');
+    const modalCCE = new bootstrap.Modal(modalExceptionalCancellation)
+    const saveECCBtn = document.getElementById('saveECCBtn');
+    let starExceptional = document.getElementById('start-time-exceptional');
+    let endExceptional = document.getElementById('end-time-exceptional');
+
+
+    saveECCBtn.addEventListener('click', ()=>{
+   
+        saveECCBtn.innerHTML = `<div class="spinner-border text-light" role="status"></div>`;
+
+
+        if(starExceptional.value == "" || endExceptional.value == ""){
+            return
+        }else{
+
+            const formData = new FormData();
+            formData.append('start_time', starExceptional.value);
+            formData.append('end_time', endExceptional.value);
+
+
+            fetch('/api/put/admin/exceptionalCancellation.php',{
+            method: 'POST',
+            body: formData
+            })
+            .then((response)=>{return response})
+            .then((response)=>{
+                modalCCE.hide();
+                saveECCBtn.disabled = false;
+                saveECCBtn.innerHTML = 'save'
+            })
+        }
+
+        
+    })
+
+fetch('/api/get/admin/adminData.php')
+.then((res)=>{return res.json()})
+.then((res)=>{
+    console.log(res);
+    document.getElementById('RegionalCenter').innerHTML = `<strong>${res.Regional_center}</strong>`
+    document.getElementById('Teachers').innerHTML = `<strong>${res.Teachers}</strong>`
+    document.getElementById('Students').innerHTML = `<strong>${res.Students}</strong>`
+    document.getElementById('Careers').innerHTML = `<strong>${res.Careers}</strong>`
+    document.getElementById('inputStartR').innerHTML = `
+    <input
+        type="datetime-local"
+        id="start-time"
+        value="${res.registrationPeriod.startTime}"
+        class="form-control bg-aux"
+        name="start-time"
+    />`;
+    document.getElementById('inputEndR').innerHTML = `
+    <input
+        type="datetime-local"
+        id="end-time"
+        value="${res.registrationPeriod.endTime}"
+        class="form-control bg-aux"
+        name="start-time"
+    />`;
+})

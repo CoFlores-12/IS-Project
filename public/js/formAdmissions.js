@@ -4,20 +4,37 @@ let mainCareer = this.document.getElementById('mainCareer');
 let secondaryCareer = this.document.getElementById('secondaryCareer');
 let regional = document.getElementById('regionalCenter');
 
-window.addEventListener('load', function() {
-    var forms = document.getElementsByClassName('needs-validation');
-
-    var validation = Array.prototype.filter.call(forms, function(form) {
-    form.addEventListener('submit', function(event) {
-        if (form.checkValidity() === false) {
-            event.preventDefault();
-            event.stopPropagation();
-        }
-        form.classList.add('was-validated');
-    }, false);
-    });
+document.getElementById("admissionForm").addEventListener("submit", async function (event) {
+    event.preventDefault(); // Evita la recarga del formulario
     
-}, false);
+    const form = event.target;
+    if (!form.checkValidity()) {
+        form.classList.add("was-validated");
+        return; // Detener si el formulario no es válido
+    }
+
+    // Recopilar los datos del formulario
+    const formData = new FormData(form);
+
+    try {
+        const response = await fetch("/api/post/admissions/form.php", {
+            method: "POST",
+            body: formData
+        });
+
+        if (response.ok) {
+            alert("Formulario enviado exitosamente.");
+            form.reset();
+            form.classList.remove("was-validated");
+        } else {
+            alert("Hubo un problema al enviar el formulario. Intente nuevamente.");
+        }
+    } catch (error) {
+        console.error("Error:", error);
+        alert("Error de conexión. Por favor intente más tarde.");
+    }
+});
+
 document.getElementById('phone').addEventListener('input', function (e) {
     let input = e.target;
     let value = input.value.replace(/\D/g, '');
@@ -68,8 +85,8 @@ document.getElementById('email').addEventListener('input', function (e) {
 
 regional.addEventListener('change',async function (e) {
     mainCareer.disabled = true;
-    mainCareer.innerHTML = `<option value="">Select main career</option>`
-    secondaryCareer.innerHTML = `<option value="">Select secondary career</option>`
+    mainCareer.innerHTML = `<option value="">Seleccione una carrera principal</option>`
+    secondaryCareer.innerHTML = `<option value="">Seleccione una carrera secundaria</option>`
     secondaryCareer.disabled = true;
     
     if (e.target.value != '') {
