@@ -1,5 +1,6 @@
 <?php
-$idTest = 20201001034;
+session_start();
+$idTest = $_SESSION['user']['student_id'];
 $account_number = $_GET['account_number'];
 require_once '../../../src/modules/Auth.php';
 

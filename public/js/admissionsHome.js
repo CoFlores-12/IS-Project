@@ -138,11 +138,6 @@ function filterByCareer() {
 }
 
 
-
-        document.querySelector('#cardAdmitted').addEventListener('click', function () {
-            var modal = new bootstrap.Modal(document.getElementById('admittedModal'));
-            modal.show();
-        });
         document.querySelector('#addExamnBtn').addEventListener('click', function () {
             var modalAddExam = new bootstrap.Modal(document.getElementById('addExamModal'));
             modalAddExam.show();

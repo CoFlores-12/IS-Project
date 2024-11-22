@@ -121,25 +121,39 @@ const departments = {
 function validateHondurasID(id) {
     // Eliminar guiones y caracteres no numéricos
     const cleanedId = id.replace(/-/g, "").trim();
-
-    // Validar longitud
-    if (cleanedId.length !== 13) return false;
+    
+    
 
     // Separar las secciones
     const departmentCode = cleanedId.substring(0, 2);
     const municipalityCode = cleanedId.substring(0, 4);
     const year = cleanedId.substring(4, 8);
     const correlativo = cleanedId.substring(8, 13);
-
+    const feedback = document.getElementById('identityFeedback');
     // Validar que el departamento exista
-    if (!departments[departmentCode]) return false;
+    if (!departments[departmentCode]){ 
+        feedback.textContent = 'El código de departamento es incorrecto';
+        return false}else{
+            feedback.textContent = '';
 
-    // Validar que el municipio exista
-    if (!departments[departmentCode].includes(municipalityCode)) return false;
+        };
+        
+        // Validar que el municipio exista
+    if (!departments[departmentCode].includes(municipalityCode)) {
+        feedback.textContent = 'El código de municipio es incorrecto';
+        return false}else{
+            feedback.textContent = '';
 
-    // Validar año de inscripción (1900-2024)
-    const yearNumber = parseInt(year, 10);
-    if (yearNumber < 1900 || yearNumber > new Date().getFullYear()) return false;
+        };
+        
+        // Validar año de inscripción (1900-2014)
+        const yearNumber = parseInt(year, 10);
+        if (yearNumber < 1900 || yearNumber > new Date().getFullYear()-10){ 
+        feedback.textContent = 'El año de inscripción es incorrecto';
+        return false}else{
+            feedback.textContent = '';
+
+        };
 
     // Validar correlativo (debe ser numérico y no estar vacío)
     if (!/^\d{5}$/.test(correlativo)) return false;
@@ -150,7 +164,6 @@ function validateHondurasID(id) {
 const identityInput = document.getElementById('identity');
 
 
-// Event listener para el input
 document.getElementById('identity').addEventListener('input', function (e) {
     let input = e.target;
     let value = input.value.replace(/\D/g, ''); // Solo números
@@ -163,14 +176,12 @@ document.getElementById('identity').addEventListener('input', function (e) {
 
     input.value = formattedValue;
     
-    const feedback = document.getElementById('identityFeedback');
     const isValid = validateHondurasID(formattedValue);
     if (isValid) {
         feedback.textContent = '';
         identityInput.classList.remove('is-invalid');
         identityInput.classList.add('is-valid');
     } else {
-        feedback.textContent = 'El formato es incorrecto';
         identityInput.classList.add('is-invalid');
         identityInput.classList.remove('is-valid');
     }

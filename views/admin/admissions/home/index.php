@@ -41,26 +41,8 @@ $admitted = $result->fetch_assoc()['count'];
 </head>
 <body>
 
-<!-- Modal Admitted -->
-<div class="modal fade" id="admittedModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content bg">
-      <div class="modal-header bg">
-        <h5 class="modal-title text" id="staticBackdropLabel">Admitteds</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-      <a class="btn text-success btn-outline-success" href="/api/get/admin/admittedStudents.php">
-        Export Admitteds <i class="bi bi-arrow-bar-up"></i>
-    </a>
-    </div>
-    </div>
-  </div>
-</div>
-<!-- Modal Admitted -->
-
 <!-- Modal Applicant -->
-<div class="modal fade" id="applicantModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade" id="applicantModal"  tabindex="-1">
   <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
     <div class="modal-content bg">
       <div class="modal-header bg">
@@ -121,7 +103,7 @@ $admitted = $result->fetch_assoc()['count'];
 <!-- Modal Applicant -->
 
 <!-- Modal Add Exam -->
-<div class="modal fade" id="addExamModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade" id="addExamModal"  tabindex="-1">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content bg">
       <div class="modal-header bg">
@@ -139,65 +121,65 @@ $admitted = $result->fetch_assoc()['count'];
 </div>
 <!-- Modal Add Exam -->
 
-    <!-- Modal CSV Upload -->
-    <div class="modal fade" id="csvUploadModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content bg">
-                <div class="modal-header bg">
-                    <h5 class="modal-title text" id="staticBackdropLabel">Upload a CSV with the admissions results</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="csvUploadForm" method="post" enctype="multipart/form-data">
-                        <label for="file">Select a CSV file:</label>
-                        <input type="file" name="file" id="file" accept=".csv" required>
-                        <button type="submit" name="submit" class="btn btn-primary mt-2">Upload and Import</button>
-                    </form>
-                </div>
+<!-- Modal CSV Upload -->
+<div class="modal fade" id="csvUploadModal"  tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg">
+            <div class="modal-header bg">
+                <h5 class="modal-title text" id="staticBackdropLabel">Upload a CSV with the admissions results</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="csvUploadForm" method="post" enctype="multipart/form-data">
+                    <label for="file">Select a CSV file:</label>
+                    <input type="file" name="file" id="file" accept=".csv" required>
+                    <button type="submit" name="submit" class="btn btn-primary mt-2">Upload and Import</button>
+                </form>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- Modal Upload Result Message -->
-    <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content bg">
-                <div class="modal-header bg">
-                    <h5 class="modal-title text" id="successModalLabel">Upload Status</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p id="successMessage"></p>
-                    <button id="nextActionBtn" class="btn btn-primary">Validate Applicant Results</button>
-                </div>
+<!-- Modal Upload Result Message -->
+<div class="modal fade" id="successModal" tabindex="-1" >
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg">
+            <div class="modal-header bg">
+                <h5 class="modal-title text" id="successModalLabel">Upload Status</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p id="successMessage"></p>
+                <button id="nextActionBtn" class="btn btn-primary">Validate Applicant Results</button>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- Modal para éxito de validación -->
-    <div class="modal fade" id="finalSuccessModal" tabindex="-1" aria-labelledby="finalSuccessModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content bg">
-                <div class="modal-header bg">
-                    <h5 class="modal-title text" id="finalSuccessModalLabel">Task Completed</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p>The validation of admission results has been successful.</p>
-                    <button id="goToNextTask" class="btn btn-success">E-mail Results</button>
-                </div>
+<!-- Modal para éxito de validación -->
+<div class="modal fade" id="finalSuccessModal" tabindex="-1" >
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg">
+            <div class="modal-header bg">
+                <h5 class="modal-title text" id="finalSuccessModalLabel">Task Completed</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>The validation of admission results has been successful.</p>
+                <button id="goToNextTask" class="btn btn-success">E-mail Results</button>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- Loading Modal -->
-    <div class="modal fade" id="loadingModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="spinner-border" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
+<!-- Loading Modal -->
+<div class="modal fade" id="loadingModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
         </div>
     </div>
+</div>
 
 <div class="main">
         <div class="offcanvas offcanvas-start bg" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
@@ -226,8 +208,6 @@ $admitted = $result->fetch_assoc()['count'];
                     </button>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="#">My profile</a></li>
-                        <li><a class="dropdown-item" href="#">Messages</a></li>
-                        <li><a class="dropdown-item" href="#">requests</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="/api/get/logout.php">Logout <i class="bi bi-box-arrow-right"></i></a></li>
                     </ul>
@@ -242,20 +222,31 @@ $admitted = $result->fetch_assoc()['count'];
             <div class="row p-4">
                 <div class="col">
                     <div id="cardApplicant" class="card bg-aux shadow rounded m-2  p-2" data-bs-toggle="modal" data-bs-target="#applicantModal">
-                        <span>Applicants</span>
+                        <div class="card-body">
+                        <span>Applicants</span><br>
                         <strong><?php echo $applicant; ?></strong>
+                        </div>
                     </div>
                 </div>
                 <div class="col">
                     <div class="card shadow rounded m-2 bg-aux p-2">
-                        <span>Students</span>
+                        <div class="card-body">
+                        <span>Students</span><br>
                         <strong><?php echo $students; ?></strong>
+                        </div>
                     </div>
                 </div>
                 <div class="col">
                     <div id="cardAdmitted" class="card shadow rounded m-2 bg-aux p-2" data-bs-toggle="modal" data-bs-target="#admittedModal">
-                        <span>Admitted</span>
+                        <div class="card-body">
+                        <div class="row justify-between items-center">
+                            <span class="w-content">Admitted</span>
+                            <a class="btn w-content box-sizing-border text-success btn-outline-success" href="/api/get/admin/admittedStudents.php">
+                                Export <i class="bi bi-arrow-bar-up"></i>
+                            </a>
+                        </div>
                         <strong><?php echo $admitted; ?></strong>
+                        </div>
                     </div>
                 </div>
                 

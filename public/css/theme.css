@@ -228,7 +228,7 @@ html, body {
 .bg-gray-900 { background-color: #111827; }
 .bg{background-color: var(--bg) !important;}
 .bg-custom-primary {background-color: var(--primary-color) !important;}
-.box-sizing-border {box-sizing: border-box;}
+.box-sizing-border {box-sizing: border-box !important;}
 /* Etiquetas */
 a{
     text-decoration: none;
