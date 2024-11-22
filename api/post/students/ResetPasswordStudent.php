@@ -66,9 +66,7 @@ $message = sprintf('
  </table>', $resetUrl);
     
 
- $message1 = htmlspecialchars($message, ENT_QUOTES, 'UTF-8');
- 
-$resultado = $mail->sendEmail(getenv('emailUser'), $email, $affair, $message1);
+$resultado = $mail->sendEmail(getenv('emailUser'), $email, $affair, $message);
 
 
 if ($stmt->affected_rows > 0) {

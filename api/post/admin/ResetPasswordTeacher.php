@@ -71,7 +71,7 @@ $message = sprintf('
      </tr>
  </table>', $resetUrl);
     
-$resultado = $mail->sendEmail(getenv('emailUser'), $email, $affair, $message1);
+$resultado = $mail->sendEmail(getenv('emailUser'), $email, $affair, $message);
 
 
 if ($stmt->affected_rows > 0) {
