@@ -39,7 +39,7 @@ $response = [];
 
 
 $resetUrl = 'https://is-project-fixes.up.railway.app/views/admin/teacher/home/reset.php?token='.urlencode($newToken);
-$resetUrl1 = 'localhost/views/students/login/reset.php?token='.urlencode($newToken);
+$resetUrl1 = 'https://is-project-fixes.up.railway.app/views/students/login/reset.php?token='.urlencode($newToken);
 
 $affair = "Cambiar contraseña";
 $message = `<table align="center" border="0" cellpadding="0" cellspacing="0" width="600" style="border-collapse: collapse; background-color: #ffffff; border: 1px solid #dddddd;">
@@ -62,7 +62,7 @@ $message = `<table align="center" border="0" cellpadding="0" cellspacing="0" wid
         <tr>
             <td style="padding: 20px; background-color: #f4f4f4; color: #555555; font-size: 14px; text-align: center;">
                 <p>Si tiene alguna pregunta, comuníquese con nuestro equipo de soporte en <a href="mailto:support@unah.com" style="color: #007bff;">support@yourwebsite.com</a>.</p>
-                <p>&copy; 2024 uNAH. All rights reserved.</p>
+                <p>&copy; 2024 UNAH. All rights reserved.</p>
             </td>
         </tr>
     </table>`;
