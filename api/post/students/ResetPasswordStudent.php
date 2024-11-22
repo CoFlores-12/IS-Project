@@ -40,32 +40,35 @@ $resetUrl = 'https://is-project-fixes.up.railway.app/views/students/login/reset.
 
 $affair = "Cambiar contraseña";
 $message = sprintf('
-<table align="center" border="0" cellpadding="0" cellspacing="0" width="600" style="border-collapse: collapse; background-color: #ffffff; border: 1px solid #dddddd;">
-        <tr>
-            <td align="center" style="padding: 20px; background-color: #007bff; color: #ffffff; font-size: 24px; font-weight: bold;">
-                Notoficacion de cambio de contraseña
-            </td>
-        </tr>
-        <tr>
-            <td style="padding: 20px; color: #333333; font-size: 16px; line-height: 1.6;">
-                <p>Estimado Estudiante,</p>
-                <p>El presente es repondiendo a su peticion de cambio de contraseña. Por favor dirigase al siguiente enlace:</p>
-                <p style="text-align: center; margin: 20px 0;">
-                    <a href="{$resetUr1}" style="background-color: #007bff; color: #ffffff; text-decoration: none; padding: 10px 20px; font-size: 16px; border-radius: 5px; display: inline-block;">Cambiar contraseña</a>
-                </p>
-                <p>Si no solicitó esto, ignore este correo electrónico o comuníquese con el soporte si tiene inquietudes.</p>
-                <p>Nota: Este enlace caducará en 25 minutos.</p>
-            </td>
-        </tr>
-        <tr>
-            <td style="padding: 20px; background-color: #f4f4f4; color: #555555; font-size: 14px; text-align: center;">
-                <p>Si tiene alguna pregunta, comuníquese con nuestro equipo de soporte en <a href="mailto:support@unah.com" style="color: #007bff;">support@yourwebsite.com</a>.</p>
-                <p>&copy; 2024 UNAH. All rights reserved.</p>
-            </td>
-        </tr>
-    </table>', $resetUrl);
+ <table align="center" border="0" cellpadding="0" cellspacing="0" width="600" style="border-collapse: collapse; background-color: #ffffff; border: 1px solid #dddddd;">
+     <tr>
+         <td align="center" style="padding: 20px; background-color: #007bff; color: #ffffff; font-size: 24px; font-weight: bold;">
+             Notificacion de cambio de clave
+         </td>
+     </tr>
+     <tr>
+         <td style="padding: 20px; color: #333333; font-size: 16px; line-height: 1.6;">
+             <p>Estimado Estudiante,</p>
+             <p>El presente es respondiendo a su peticion de cambio de contrasenia. Por favor, dirijase al siguiente enlace:</p>
+             <p style="text-align: center; margin: 20px 0;">
+                 <a href="%s" style="background-color: #007bff; color: #ffffff; text-decoration: none; padding: 10px 20px; font-size: 16px; border-radius: 5px; display: inline-block;">Cambiar clave</a>
+             </p>
+             <p>Si no solicito esto, ignore este correo o comuniquese con el soporte si tiene inquietudes.</p>
+             <p>Nota: Este enlace caducara en 25 minutos.</p>
+         </td>
+     </tr>
+     <tr>
+         <td style="padding: 20px; background-color: #f4f4f4; color: #555555; font-size: 14px; text-align: center;">
+             <p>Si tiene alguna pregunta, comuníquese con nuestro equipo de soporte en <a href="mailto:support@unah.com" style="color: #007bff;">support@yourwebsite.com</a>.</p>
+             <p>&copy; 2024 UNAH. Todos los derechos reservados.</p>
+         </td>
+     </tr>
+ </table>', $resetUrl);
     
-$resultado = $mail->sendEmail(getenv('emailUser'), $email, $affair, $message);
+
+ $message1 = htmlspecialchars($message, ENT_QUOTES, 'UTF-8');
+ 
+$resultado = $mail->sendEmail(getenv('emailUser'), $email, $affair, $message1);
 
 
 if ($stmt->affected_rows > 0) {

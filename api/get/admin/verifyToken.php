@@ -8,7 +8,7 @@ include '../../../src/modules/database.php';
 $conn = (new Database())->getConnection();
 
 $query = "
-    SELECT identifier, expires_at, is_used
+    SELECT expires_at, is_used
     FROM PasswordResetTokens
     WHERE token = ?
 ";
