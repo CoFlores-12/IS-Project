@@ -9,7 +9,7 @@ include '../../../src/modules/database.php';
 $conn = (new Database())->getConnection();
 
 $query = "
-    SELECT employee_id, expires_at 
+    SELECT identifier, expires_at 
     FROM PasswordResetTokens
     WHERE token = ?
 ";
@@ -40,7 +40,7 @@ if ($result->num_rows > 0) {
 
         $update_query = "UPDATE Employees SET password =  AES_ENCRYPT(?, ?) WHERE employee_number = ?";
         $stmt_update = $conn->prepare($update_query);
-        $stmt_update->bind_param('ssi', $passphrase, $new_password , $row['employee_id']);
+        $stmt_update->bind_param('ssi', $passphrase, $new_password , $row['identifier']);
         
         if ($stmt_update->execute()) {
             $response["status"] = 0;

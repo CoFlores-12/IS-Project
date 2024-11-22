@@ -16,7 +16,6 @@ const token = urlParams.get('token');
 fetch(`/api/get/admin/verifyToken.php?token=${token}`)
 .then(response => response.json())
 .then(data => {
-    console.log(data)
     if (data.status === 0) {
          formInput.style.display = "block"
          

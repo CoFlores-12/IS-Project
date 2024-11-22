@@ -6,15 +6,9 @@ if (file_exists(__DIR__ . '../../../../.env')) {
     Dotenv\Dotenv::createUnsafeImmutable(__DIR__ . '../../../../')->load();
  }
 
-require_once '../../../src/modules/Auth.php';
-
-$requiredRole = 'Department Head';
-
-AuthMiddleware::checkAccess($requiredRole);
-
 $data = json_decode(file_get_contents('php://input'), true);
 
-$employeeId = $data['teacher_identifier'];
+$studentId = $data['student_identifier'];
 $email = $data['personal_email'];
 
 include '../../../src/modules/mails.php';
@@ -32,17 +26,20 @@ function generatePasswordResetToken() {
 
 $newToken = generatePasswordResetToken();
 $create = date("Y-m-d H:i:s");
-$expiry = date("Y-m-d H:i:s", strtotime("+2 minutes"));
+$expiry = date("Y-m-d H:i:s", strtotime("+25 minutes"));
 
 
 $sql = "INSERT INTO PasswordResetTokens (identifier, token, created_at, expires_at) VALUES (?, ?, ?, ?)";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param('ssss', $employeeId, $newToken,$create ,$expiry);
+$stmt->bind_param('ssss', $studentId, $newToken,$create ,$expiry);
 $stmt->execute();
 
 $response = [];
 
+
+
 $resetUrl = 'https://is-project-fixes.up.railway.app/views/admin/teacher/home/reset.php?token='.urlencode($newToken);
+$resetUrl1 = 'localhost/views/students/login/reset.php?token='.urlencode($newToken);
 
 $affair = "Cambiar contraseña";
 $message = `<table align="center" border="0" cellpadding="0" cellspacing="0" width="600" style="border-collapse: collapse; background-color: #ffffff; border: 1px solid #dddddd;">
@@ -53,13 +50,13 @@ $message = `<table align="center" border="0" cellpadding="0" cellspacing="0" wid
         </tr>
         <tr>
             <td style="padding: 20px; color: #333333; font-size: 16px; line-height: 1.6;">
-                <p>Estimado condente,</p>
+                <p>Estimado Estudiante,</p>
                 <p>El presente es repondiendo a su peticion de cambio de contraseña. Por favor dirigase al siguiente enlace:</p>
                 <p style="text-align: center; margin: 20px 0;">
                     <a href="{$resetUrl}" style="background-color: #007bff; color: #ffffff; text-decoration: none; padding: 10px 20px; font-size: 16px; border-radius: 5px; display: inline-block;">Cambiar contraseña</a>
                 </p>
                 <p>Si no solicitó esto, ignore este correo electrónico o comuníquese con el soporte si tiene inquietudes.</p>
-                <p>Nota: Este enlace caducará en 2 minutos.</p>
+                <p>Nota: Este enlace caducará en 25 minutos.</p>
             </td>
         </tr>
         <tr>
