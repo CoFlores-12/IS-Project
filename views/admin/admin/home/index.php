@@ -35,56 +35,67 @@ AuthMiddleware::checkAccess($requiredRole);
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content bg">
       <div class="modal-header bg">
-        <h5 class="modal-title text" id="staticBackdropLabel">New Teacher</h5>
+        <h5 class="modal-title text" id="staticBackdropLabel">Nuevo usuario</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-      <form class="needs-validation bg rounded p-4" novalidate method="POST" action="/api/post/admin/addUser.php"  enctype="multipart/form-data">
-            <input type="text" name="role" hidden readonly value="Teacher">
-            <div class="form-row flex gap-4">
+      <form class="needs-validation bg rounded p-4" id="newUSerForm" novalidate>
+            <div class="form-row d-flex gap-4">
                 <div class="col mb-3">
-                    <input name="name" type="text" class="form-control" id="validationCustom01" placeholder="Names"  required>
-                    <div class="valid-feedback">
-                        Looks good!
-                    </div>
+                    <label for="name">Nombres</label>
+                    <input name="name" type="text" class="form-control" id="name" placeholder="Ejemplo: Juan" required 
+                        pattern="[a-zA-Z\s]{4,}"
+                    aria-label="Campo para ingresar su nombre completo" aria-required="true" 
+                        aria-describedby="nameFeedback">
+                    <div id="nameFeedback" class="invalid-feedback">Por favor ingrese su nombre.</div>
                 </div>
                 <div class="col mb-3">
-                    <input name="lastName" type="text" class="form-control" id="validationCustom02" placeholder="Surnames" required>
-                    <div class="valid-feedback">
-                        Looks good!
-                    </div>
+                    <label for="lastName">Apellidos</label>
+                    <input name="lastName" type="text" class="form-control" id="lastName" placeholder="Ejemplo: Pérez" required 
+                        aria-label="Campo para ingresar sus apellidos" aria-required="true" 
+                        pattern="[a-zA-Z\s]{4,}"
+                        aria-describedby="lastNameFeedback">
+                    <div id="lastNameFeedback" class="invalid-feedback">Por favor ingrese sus apellidos.</div>
                 </div>
             </div>
             <div class="row mb-4">
                 <div class="form-group">
-                    <input name="identity" type="text" class="form-control" id="identity" placeholder="identity" maxlength="15" required>
+                    <label for="identity">Número de identidad</label>
+                    <input name="identity" pattern="\d{4}-\d{4}-\d{5}" id="identity" type="text" class="form-control" placeholder="0801-2000-00000" maxlength="15" required 
+                        aria-label="Campo para ingresar su número de identidad" aria-required="true" 
+                        aria-describedby="identityFeedback">
+                    <div id="identityFeedback" class="invalid-feedback">Por favor ingrese su número de identidad.</div>
                 </div>
             </div>
-            <div class="form-row flex gap-4">
-                <div class="col mb-3">
-                    <input name="phone" type="text" class="form-control" id="phone" placeholder="Phone Number" maxlength="9" required>
-                    <div class="valid-feedback">
-                        Looks good!
-                    </div>
+            <div class="form-row d-flex gap-4">
+                <div class="col-4 mb-3">
+                    <label for="phone">Número de teléfono</label>
+                    <input name="phone" id="phone" type="text" class="form-control" placeholder="99999999" maxlength="8" required 
+                        pattern="[389]\d{3}\d{4}" 
+                            aria-label="Campo para ingresar su número de teléfono" aria-required="true" 
+                        aria-describedby="phoneFeedback">
+                    <div id="phoneFeedback" class="invalid-feedback">Por favor ingrese un número de teléfono válido.</div>
                 </div>
                 <div class="col mb-3">
-                    <input name="email" type="email" class="form-control" id="email" placeholder="Email" required>
-                    <div class="valid-feedback">
-                        Looks good!
-                    </div>
+                    <label for="email">Correo electrónico</label>
+                    <input name="email" id="email" type="email" class="form-control" placeholder="correo@ejemplo.com" required 
+                        aria-label="Campo para ingresar su correo electrónico" aria-required="true" 
+                        aria-describedby="emailFeedback">
+                    <div id="emailFeedback" class="invalid-feedback">Por favor ingrese un correo electrónico válido.</div>
                 </div>
             </div>
             <div class="row mb-4">
                 <div class="form-group">
-                    <select class="for-control bg-aux w-full p-2" name="departament" id="departamentSelect">
-                    <option value="">Select department...</option>
+                    <select class="form-control bg-aux w-full p-2" required  name="departament" id="departamentSelect">
+                        <option value="">Seleccione un departamento...</option>
                     </select>
+                    <div id="mainCareerFeedback" class="invalid-feedback">Por favor seleccione un departamento.</div>
                 </div>
             </div>
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="submit" class="btn bg-custom-primary text-white">Save</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            <button type="submit" id="createUserBtn" class="btn bg-custom-primary text-white">Crear usuario</button>
         </div>
     </form>
     </div>
@@ -188,6 +199,18 @@ AuthMiddleware::checkAccess($requiredRole);
 </div>
 
 <div class="main">
+<div class="toast-container top-50 start-50 translate-middle mt-3">
+    <div class="toast border-0" id="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header bg border border-0">
+            <img src="/public/images/logo.png" width="24px" class="rounded me-2" alt="...">
+            <strong class="me-auto text" id="toastTitle"></strong>
+            <small class="text">Just now</small>
+            <button type="button" class="btn-close text" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body bg-aux border border-0" id="toastBody">
+        </div>
+    </div>
+</div>
         <div class="offcanvas offcanvas-start bg" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
             <div class="offcanvas-header justify-between">
                 <h5 class="offcanvas-title text" id="offcanvasExampleLabel">Menu</h5>

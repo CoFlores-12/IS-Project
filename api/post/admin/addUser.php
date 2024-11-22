@@ -5,15 +5,23 @@ if ($_SERVER['REQUEST_METHOD'] != 'POST') {
    
 } 
 
-include '../../../src/modules/database.php';
-$conn = (new Database())->getConnection();
-
 $name = $_POST['name'];
 $lastName = $_POST['lastName'];
 $identity = str_replace("-", "", $_POST['identity']);
 $phone = str_replace("-", "", $_POST['identity']);
 $email = $_POST['email'];
+$departament = $_POST['departament'];
 $role = 5;
+
+echo json_encode([
+    "status"=> true,
+    "message"=> "Credenciales enviadas al correo"
+]);
+//TODO: validate info
+return;
+
+include '../../../src/modules/database.php';
+$conn = (new Database())->getConnection();
 
 $sql = "INSERT INTO `Persons`(person_id,first_name,last_name,phone,personal_email ) VALUES (?,?,?,?,?);";
 $conn->execute_query($sql, [$identity,$name,$lastName,$phone,$email]);
@@ -72,5 +80,8 @@ $mail = new Mails(getenv('emailUser'), getenv('emailPassword'));
 $resultado = $mail->sendEmail(getenv('emailUser'), $email, $affair, $message);
 
 $conn->close();
-echo 'User Created! <a href="#" onclick="history.back(); return false;">Go Back</a>'
+echo json_encode([
+    "status"=> true,
+    "message"=> "Credenciales enviadas al correo"
+])
 ?>
