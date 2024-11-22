@@ -3,6 +3,11 @@ let MyModalLoading = new bootstrap.Modal(loadingModal);
 let mainCareer = this.document.getElementById('mainCareer');
 let secondaryCareer = this.document.getElementById('secondaryCareer');
 let regional = document.getElementById('regionalCenter');
+let toast = document.getElementById('toast');
+let toastBody = document.getElementById('toastBody');
+let toastTitle = document.getElementById('toastTitle');
+let sendBtn = document.getElementById('sendBtn');
+let toastBS = new bootstrap.Toast(toast);
 
 document.getElementById("admissionForm").addEventListener("submit", async function (event) {
     event.preventDefault(); // Evita la recarga del formulario
@@ -15,23 +20,38 @@ document.getElementById("admissionForm").addEventListener("submit", async functi
 
     // Recopilar los datos del formulario
     const formData = new FormData(form);
-
+    sendBtn.disabled = true;
     try {
-        const response = await fetch("/api/post/admissions/form.php", {
+        fetch("/api/post/admissions/form.php", {
             method: "POST",
             body: formData
-        });
+        })
+        .then((res)=>{return res.json()})
+        .then((res)=>{
+            if (res.status) {
+                sendBtn.disabled = false;
+                toastTitle.innerHTML ='Proceso de Admisión'
+                toastBody.innerHTML = `<div class="alert alert-success mb-0" role="alert">
+                ${res.message}
+                </div>`
+                toastBS.show();
+                getClassesView();
+                tableSections.innerHTML = '';
+                form.reset();
+                form.classList.remove("was-validated");
+            }else {
+                sendBtn.disabled = false;
+                toastTitle.innerHTML ='Proceso de Admisión'
+                toastBody.innerHTML = `<div class="alert alert-danger mb-0" role="alert">
+                    ${res.message}
+                </div>`
+                toastBS.show();
+                
+            }
+        })
 
-        if (response.ok) {
-            alert("Formulario enviado exitosamente.");
-            form.reset();
-            form.classList.remove("was-validated");
-        } else {
-            alert("Hubo un problema al enviar el formulario. Intente nuevamente.");
-        }
     } catch (error) {
         console.error("Error:", error);
-        alert("Error de conexión. Por favor intente más tarde.");
     }
 });
 

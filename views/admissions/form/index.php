@@ -28,6 +28,7 @@ $currentTime = new DateTime();
     <link rel="icon" type="image/png" href="/public/images/logo.png" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
     <link rel="stylesheet" href="/public/bootstrap-5.3.3-dist/css/bootstrap.min.css">
+    <script src="/public/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
     <?php include './../../../src/components/navbar.php'; 
@@ -40,7 +41,18 @@ $currentTime = new DateTime();
     }
     
     ?>
-
+    <div class="toast-container top-50 start-50 translate-middle mt-3">
+        <div class="toast border-0" id="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header bg border border-0">
+                <img src="/public/images/logo.png" width="24px" class="rounded me-2" alt="...">
+                <strong class="me-auto text" id="toastTitle"></strong>
+                <small class="text">Just now</small>
+                <button type="button" class="btn-close text" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body bg-aux border border-0" id="toastBody">
+            </div>
+        </div>
+    </div>
     <!-- Loading Modal -->
     <div class="modal fade" id="loadingModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -58,7 +70,8 @@ $currentTime = new DateTime();
         <div class="col mb-3">
             <label for="name">Nombres</label>
             <input name="name" type="text" class="form-control" id="name" placeholder="Ejemplo: Juan" required 
-                   aria-label="Campo para ingresar su nombre completo" aria-required="true" 
+                pattern="[a-zA-Z\s]{4,}"
+            aria-label="Campo para ingresar su nombre completo" aria-required="true" 
                    aria-describedby="nameFeedback">
             <div id="nameFeedback" class="invalid-feedback">Por favor ingrese su nombre.</div>
         </div>
@@ -66,6 +79,7 @@ $currentTime = new DateTime();
             <label for="lastName">Apellidos</label>
             <input name="lastName" type="text" class="form-control" id="lastName" placeholder="Ejemplo: Pérez" required 
                    aria-label="Campo para ingresar sus apellidos" aria-required="true" 
+                   pattern="[a-zA-Z\s]{4,}"
                    aria-describedby="lastNameFeedback">
             <div id="lastNameFeedback" class="invalid-feedback">Por favor ingrese sus apellidos.</div>
         </div>
@@ -74,7 +88,7 @@ $currentTime = new DateTime();
     <div class="row mb-4">
         <div class="form-group">
             <label for="identity">Número de identidad</label>
-            <input name="identity" id="identity" type="text" class="form-control" placeholder="123456789" maxlength="15" required 
+            <input name="identity" pattern="\d{4}-\d{4}-\d{5}" id="identity" type="text" class="form-control" placeholder="0801-2000-00000" maxlength="15" required 
                    aria-label="Campo para ingresar su número de identidad" aria-required="true" 
                    aria-describedby="identityFeedback">
             <div id="identityFeedback" class="invalid-feedback">Por favor ingrese su número de identidad.</div>
@@ -84,8 +98,9 @@ $currentTime = new DateTime();
     <div class="form-row d-flex gap-4">
         <div class="col-3 mb-3">
             <label for="phone">Número de teléfono</label>
-            <input name="phone" id="phone" type="text" class="form-control" placeholder="987654321" maxlength="9" required 
-                   aria-label="Campo para ingresar su número de teléfono" aria-required="true" 
+            <input name="phone" id="phone" type="text" class="form-control" placeholder="9999-9999" maxlength="9" required 
+                pattern="[389]\d{3}-\d{4}" 
+                    aria-label="Campo para ingresar su número de teléfono" aria-required="true" 
                    aria-describedby="phoneFeedback">
             <div id="phoneFeedback" class="invalid-feedback">Por favor ingrese un número de teléfono válido.</div>
         </div>
@@ -138,7 +153,7 @@ $currentTime = new DateTime();
         <div class="form-group row mt-2">
             <label for="certify" class="col-3">Certificado de estudios:</label>
             <div class="col">
-                <input name="certify" accept="image/*" type="file" class="form-control-file" id="certify" required 
+                <input name="certify" accept="image/*, .pdf" type="file" class="form-control-file" id="certify" required 
                        aria-label="Subir su certificado de estudios" aria-required="true" 
                        aria-describedby="certifyFeedback">
                 <div id="certifyFeedback" class="invalid-feedback">Por favor cargue su certificado de estudios.</div>
@@ -146,13 +161,13 @@ $currentTime = new DateTime();
         </div>
     </div>
 
-    <button class="btn bg-custom-primary form-control text-white" type="submit">Aplicar</button>
+    <button id="sendBtn" class="btn bg-custom-primary form-control text-white" type="submit">Aplicar</button>
 </form>
 
 
     </div>
 
-    <script src="/public/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
+    
     <script src="/public/js/formAdmissions.js"></script>
 </body>
 </html>

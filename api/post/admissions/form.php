@@ -1,57 +1,78 @@
 <?php
+$status = true;
+$message = 'Error in server';
+
 
 if ($_SERVER['REQUEST_METHOD'] != 'POST') {
-    echo "Please submit the form to view data";
-    return;
+    $status = false;
+    $message = "Error de petición";
 }
 
 if (!isset($_FILES['certify']) || $_FILES['certify']['error'] !== UPLOAD_ERR_OK) {
-    echo "No file was uploaded or there was an error uploading the file.";
+    $status = false;
+    $message =  "Archivo de certificado no enviado";
+}
+
+$maxFileSize = 4 * 1024 * 1024; // 2 MB
+if ($_FILES['certify']['size'] > $maxFileSize) {
+    $status = false;
+    $message =  "El archivo es demasiado grande. el tamaño máximo es 4 MB.";
+}
+
+if (!$status) {
+    echo json_encode([
+        'status'=>$status,
+        'message'=> $message
+    ]);
     return;
 }
 
 require '../../../src/models/AsppirantModel.php';
 include '../../../src/modules/database.php';
+include '../../../src/modules/mails.php';
 
+
+// Archivo a enviar
 $fileTmpPath = $_FILES['certify']['tmp_name'];
-$fileData = file_get_contents($fileTmpPath);
-$encodedFile = base64_encode($fileData);
+$fileContent = file_get_contents($fileTmpPath);
 
-// Enviar a imgbb usando cURL
-$ch = curl_init();
-curl_setopt($ch, CURLOPT_URL, "https://api.imgbb.com/1/upload?key=cee84319e470684665a483c6b90b9ce8");
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-curl_setopt($ch, CURLOPT_POST, 1);
-curl_setopt($ch, CURLOPT_POSTFIELDS, [
-    'image' => $encodedFile,
-]);
+$fileExtension = strtolower(pathinfo($_FILES['certify']['name'], PATHINFO_EXTENSION));
 
-$response = curl_exec($ch);
-curl_close($ch);
-
-$responseData = json_decode($response, true);
-
-if (isset($responseData['success']) && $responseData['success']) {
-    $imageUrl = $responseData['data']['url']; // URL de la imagen subida
-
-    $aspirant = new Aspirant($_POST, $imageUrl);
-    $conn = (new Database())->getConnection();
-
-    if ($aspirant->save($conn)) {
-        echo "Data entered successfully. <a href=\"/\">Go Back</a>";
-    } else {
-        // Muestra los errores de validación, si existen
-        $errors = $aspirant->getErrors();
-        echo "<h3>Validation Errors:</h3>";
-        echo "<ul>";
-        foreach ($errors as $field => $error) {
-            echo "<li><strong>$field</strong>: $error</li>";
-        }
-        echo "</ul>";
-        echo '<a href="/">Go Back</a>';
-    }
-} else {
-    echo "There was an error uploading the file to imgbb.";
-    echo '<a href="/">Go Back</a>';
+if (file_exists(__DIR__ . '../../../../.env')) {
+    require __DIR__ . '../../../../vendor/autoload.php';
+    Dotenv\Dotenv::createUnsafeImmutable(__DIR__ . '../../../../')->load();
 }
+
+$aspirant = new Aspirant($_POST, $fileContent, $fileExtension);
+$conn = (new Database())->getConnection();
+if ($aspirant->save($conn)) {
+    $status = true;
+    $message =  "Datos guardados correctamente. Por favor! revise su correo electrónico";
+    $aspirantData = $aspirant->toArray(); 
+    $emailBody = "<h3>Detalles de tu registro:</h3><ul>";
+    foreach ($aspirantData as $key => $value) {
+        $emailBody .= "<li><strong>$key:</strong> $value</li>";
+    }
+    $emailBody .= "</ul>";
+
+    $mailer = new Mails(getenv('emailUser'), getenv('emailPassword'));
+    $emailResult = $mailer->sendEmail(
+        getenv('emailUser'),  
+        $aspirant->email,      
+        'Confirmación de Registro',
+        $emailBody            
+    );
+} else {
+    $errors = $aspirant->getErrors();
+    $status = false;
+    $message = "<h3>Errores en datos:</h3><ul>";
+    foreach ($errors as $field => $error) {
+        $message .= "<li><strong>$field</strong>: $error</li>"; 
+    }
+    $message .= "</ul>";
+}
+echo json_encode([
+    'status'=>$status,
+    'message'=> $message
+]);
 ?>
