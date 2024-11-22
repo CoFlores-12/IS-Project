@@ -1,62 +1,98 @@
 const filterCareer = document.getElementById('filterCareer');
-        const filterExam = document.getElementById('filterExam');
-        const aspTableBody = document.getElementById('aspTableBody');
-        const Careers = [];
-        const Exams = [];
-        document.querySelector('#cardApplicant').addEventListener('click', function () {
-            var modal = new bootstrap.Modal(document.getElementById('applicantModal'));
-            modal.show();
-            aspTableBody.innerHTML = `<center><div class="spinner-border text-secondary" role="status">
-  <span class="visually-hidden">Loading...</span>
-</div></center>`
-            fetch('/api/get/admin/applicants.php')
-            .then((response)=>{return response.json()})
-            .then((response)=>{
-                console.log(response);
-                
-                aspTableBody.innerHTML = ``
-                response.Asp.reverse().forEach(element => {
-                    const examsForApplicant = response.Exams.filter(exam =>
-                        exam.career_id === element.preferend_career_id ||
-                        exam.career_id === element.secondary_career_id
-                    );
+const filterExam = document.getElementById('filterExam');
+const aspTableBody = document.getElementById('aspTableBody');
+const Careers = [];
+const Exams = [];
 
-                    const examCodes = examsForApplicant.map(exam => {
-                        if (!Exams.includes(exam.exam_code)) {
-                            Exams.push(exam.exam_code);
-                        }
-                        
-                        return exam.exam_code
-                    }).join(',');
+document.querySelector('#cardApplicant').addEventListener('click', function () {
+    var modal = new bootstrap.Modal(document.getElementById('applicantModal'));
+    modal.show();
+    aspTableBody.innerHTML = `<center><div class="spinner-border text-secondary" role="status">
+<span class="visually-hidden">Loading...</span>
+</div></center>`;
 
-                    if (!Careers.includes(element.preferend_career_name)) {
-                        Careers.push(element.preferend_career_name)
-                    }
-                    if (!Careers.includes(element.secondary_career_name)) {
-                        Careers.push(element.secondary_career_name)
-                    }
-                    aspTableBody.innerHTML += `<tr>
-                                <td>${element.identity}</td>
-                                <td>${element.full_name}</td>
-                                <td>${element.preferend_career_name}</td>
-                                <td>${element.secondary_career_name}</td>
-                                <td>${examCodes}</td>
-                            </tr>`
-                });
-                filterCareer.innerHTML = '<option>Career</option>'
-                Careers.forEach(element => {
-                    filterCareer.innerHTML += `<option>${element}</option>`
-                });
-                filterExam.innerHTML = '<option>Exams</option>'
-                Exams.forEach(element => {
-                    filterExam.innerHTML += `<option>${element}</option>`
-                });
-                
-            })
+    fetch('/api/get/admin/applicants.php')
+    .then((response) => response.json())
+    .then((response) => {
+        // Preparar datos
+        const applicants = response.Asp.reverse();
+        const examsForApplicants = response.Exams;
+        let currentPage = 1;
+        let rowsPerPage = parseInt(document.getElementById('rowsPerPageSelect').value);
 
+
+        // Función para generar las filas
+        function generateRows(page) {
+            const startIndex = (page - 1) * rowsPerPage;
+            const endIndex = startIndex + rowsPerPage;
+            const currentApplicants = applicants.slice(startIndex, endIndex);
+
+            aspTableBody.innerHTML = ""; // Limpiar tabla
+
+            currentApplicants.forEach(element => {
+                const examsForApplicant = examsForApplicants.filter(exam =>
+                    exam.career_id === element.preferend_career_id ||
+                    exam.career_id === element.secondary_career_id
+                );
+
+                const examCodes = examsForApplicant.map(exam => exam.exam_code).join(',');
+
+                aspTableBody.innerHTML += `
+                    <tr>
+                        <td>${element.identity}</td>
+                        <td>${element.full_name}</td>
+                        <td>${element.preferend_career_name}</td>
+                        <td>${element.secondary_career_name}</td>
+                        <td>${examCodes}</td>
+                    </tr>
+                `;
+            });
+        }
+
+        // Función para generar la paginación
+        function generatePagination() {
+            const totalPages = Math.ceil(applicants.length / rowsPerPage);
+            const paginationElement = document.getElementById('pagination');
+            paginationElement.innerHTML = ""; // Limpiar paginación
+
+            // Crear botones de paginación
+            for (let i = 1; i <= totalPages; i++) {
+                const pageItem = document.createElement('li');
+                pageItem.classList.add('page-item');
+                pageItem.innerHTML = `<a class="page-link" href="#">${i}</a>`;
+
+                pageItem.addEventListener('click', function () {
+                    currentPage = i;
+                    generateRows(currentPage); // Regenerar filas de acuerdo a la página
+                    highlightPage(i); // Resaltar la página activa
+                });
+
+                paginationElement.appendChild(pageItem);
+            }
+        }
+
+        // Resaltar la página activa
+        function highlightPage(page) {
+            const pageItems = document.querySelectorAll('.pagination .page-item');
+            pageItems.forEach(item => item.classList.remove('active'));
+            pageItems[page - 1].classList.add('active');
+        }
+
+        document.getElementById('rowsPerPageSelect').addEventListener('change', function () {
+            rowsPerPage = parseInt(this.value); // Actualizar rowsPerPage
+            currentPage = 1; // Reiniciar a la primera página
+            generatePagination(); // Regenerar paginación
+            generateRows(currentPage); // Regenerar filas
         });
 
-        document.getElementById('filterExam').addEventListener('change', filterByExam);
+        // Inicializar paginación y cargar las primeras filas
+        generatePagination();
+        generateRows(currentPage);
+    });
+});
+
+
+document.getElementById('filterExam').addEventListener('change', filterByExam);
 document.getElementById('filterCareer').addEventListener('change', filterByCareer);
 
 function filterByExam() {

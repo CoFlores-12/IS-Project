@@ -98,6 +98,22 @@ $admitted = $result->fetch_assoc()['count'];
             
         </table>
     </div>
+    <div class="modal-footer justify-between w-full items-center">
+        <div class="rpp row item-center">
+        <select id="rowsPerPageSelect" class="form-select w-auto">
+            <option value="2">2</option>
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="20">20</option>
+        </select>
+        <label for="rowsPerPageSelect" class=" text-xs w-content"><small>Resultados por pagina</small></label>
+        </div>
+        <nav aria-label="Page navigation">
+            <ul class="pagination mb-0" id="pagination">
+                <!-- Las páginas se insertarán aquí -->
+            </ul>
+        </nav>
+    </div>
     
     </div>
   </div>

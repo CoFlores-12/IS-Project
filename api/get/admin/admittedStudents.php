@@ -19,6 +19,10 @@ fputcsv($output, ['person_id','first_name','last_name','personal_email','prefere
 foreach ($students as $student) {
     fputcsv($output, $student);
 }
+$dataString = json_encode($students);
+$hash = hash('sha256', $dataString); 
+
+fputcsv($output, ['#hash', $hash]);
 fclose($output);
 
 $conn->close();

@@ -13,10 +13,10 @@ if (!isset($_FILES['certify']) || $_FILES['certify']['error'] !== UPLOAD_ERR_OK)
     $message =  "Archivo de certificado no enviado";
 }
 
-$maxFileSize = 4 * 1024 * 1024; // 2 MB
+$maxFileSize = 2 * 1024 * 1024; // 2 MB
 if ($_FILES['certify']['size'] > $maxFileSize) {
     $status = false;
-    $message =  "El archivo es demasiado grande. el tamaño máximo es 4 MB.";
+    $message =  "El archivo es demasiado grande. el tamaño máximo es 2 MB.";
 }
 
 if (!$status) {
