@@ -68,10 +68,6 @@ document.getElementById('editRoleForm').addEventListener('submit', (e) => {
         });
 });
 
-
-
-
-
 (function() {
     'use strict';
     window.addEventListener('load', function() {
@@ -95,6 +91,8 @@ document.getElementById('editRoleForm').addEventListener('submit', (e) => {
     const addUserBtn = document.getElementById('addUserBtn');
     const departamentSelect = document.getElementById('departamentSelect');
     const saveSRPBtn = document.getElementById('saveSRPBtn');
+    const saveECBtn = document.getElementById('saveECBtn');
+    
 
     addUserBtn.addEventListener('click', ()=>{
         newUserModalBS.show();
@@ -126,21 +124,17 @@ document.getElementById('editRoleForm').addEventListener('submit', (e) => {
         })
     })
 
-    const modalExceptionalCancellation = document.getElementById('modalExceptionalCancellation');
-    const modalCCE = new bootstrap.Modal(modalExceptionalCancellation)
-    const saveECCBtn = document.getElementById('saveECCBtn');
-    let starExceptional = document.getElementById('start-time-exceptional');
-    let endExceptional = document.getElementById('end-time-exceptional');
+    let alertUpdateCanceled = document.getElementById('alerCanceled');
+        
+    alertUpdateCanceled.style.display = 'none';
 
+    
 
-    saveECCBtn.addEventListener('click', ()=>{
-   
-        saveECCBtn.innerHTML = `<div class="spinner-border text-light" role="status"></div>`;
+    saveECBtn.addEventListener("click", ()=>{
+        saveECBtn.innerHTML = `<div class="spinner-border text-light" role="status"></div>`;
 
-
-        if(starExceptional.value == "" || endExceptional.value == ""){
-            return
-        }else{
+        let starExceptional = document.getElementById('start-time-exceptional');
+        let endExceptional = document.getElementById('end-time-exceptional');
 
             const formData = new FormData();
             formData.append('start_time', starExceptional.value);
@@ -153,14 +147,17 @@ document.getElementById('editRoleForm').addEventListener('submit', (e) => {
             })
             .then((response)=>{return response})
             .then((response)=>{
-                modalCCE.hide();
-                saveECCBtn.disabled = false;
-                saveECCBtn.innerHTML = 'save'
-            })
-        }
+                alertUpdateCanceled.style.display = "block";
+                setTimeout(function() {
+                    alertUpdateCanceled.style.display = 'none';
+                  }, 3000)
 
+                saveECBtn.disabled = false;
+                saveECBtn.innerHTML = 'save'
+            })
         
     })
+
 
 fetch('/api/get/admin/adminData.php')
 .then((res)=>{return res.json()})
@@ -186,4 +183,22 @@ fetch('/api/get/admin/adminData.php')
         class="form-control bg-aux"
         name="start-time"
     />`;
+    document.getElementById('start-time-cancaled').innerHTML = `
+    <input
+        type="datetime-local"
+        id="start-time-exceptional"
+        value="${res.cancellationExceptional.startTime}"
+        class="form-control bg-aux"
+        name="start-time"
+    />`;
+    document.getElementById('end-time-cancaled').innerHTML = `
+    <input
+        type="datetime-local"
+        id="end-time-exceptional"
+        value="${res.cancellationExceptional.endTime}"
+        class="form-control bg-aux"
+        name="start-time"
+    />`;
+
+
 })

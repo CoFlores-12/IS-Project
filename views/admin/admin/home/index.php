@@ -29,6 +29,7 @@ AuthMiddleware::checkAccess($requiredRole);
     </style>
 </head>
 <body>
+    
 
 <!-- Modal New User -->
 <div class="modal fade" id="newUserModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -147,54 +148,20 @@ AuthMiddleware::checkAccess($requiredRole);
         </div>
     </div>
 </div>
-
-<div class="modal fade" id="modalExceptionalCancellation" tabindex="-1" role="dialog" aria-labelledby="SRP" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content bg">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalCenterTitle">Exceptional class cancellation period</h5>
-      </div>
-      <div class="modal-body">
-        <div class="row">
-            <div class="col-6">
-                <center>
-                    <label for="start-time">Start time</label><br>
-                    <input
-                        type="datetime-local"
-                        id="start-time-exceptional"
-                        name="start-time"/>
-                </center>
-            </div>
-            <div class="col-6">
-                <center>
-                    <label for="end-time">End time</label><br>
-                    <input
-                        type="datetime-local"
-                        id="end-time-exceptional"
-                        name="end-time"/>
-                </center>
-
-            </div>
-        </div>
-        <div class="row">
-            <center>
-                <button id="saveECCBtn" type="button" class="btn bg-custom-primary m-4 text-white">Save</button>
-            </center>
-        </div>
-      </div>
-      
-    </div>
-  </div>
+<div class="alert alert-success" id="alerCanceled" role="alert">
+  Perido de cancelaciones actualizado correctamente!!!
 </div>
-
 <div class="main">
+
         <div class="offcanvas offcanvas-start bg" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
             <div class="offcanvas-header justify-between">
                 <h5 class="offcanvas-title text" id="offcanvasExampleLabel">Menu</h5>
                 <button type="button" class="btn bg text" data-bs-dismiss="offcanvas" aria-label="Close">
                     <i class="bi bi-x"></i>
                 </button>
+                
             </div>
+            
             <div class="offcanvas-body">
                 <div class="list-group">
                   <a class="text bg aux text-decoration-none" data-bs-toggle=""  role="button" aria-expanded="false" aria-controls="collapseStudents">
@@ -205,9 +172,6 @@ AuthMiddleware::checkAccess($requiredRole);
                           <div class="" id="collapseStudents">
                             <button type="button" class="text list-group-item list-group-item-action bg list-group-item-indent" data-bs-toggle="modal" data-bs-target="#historyStudent">
                                 enrollment
-                            </button>
-                            <button id="btnExceptionalCancellation" type="button" class="text list-group-item list-group-item-action bg list-group-item-indent" data-bs-toggle="modal" data-bs-target="#modalExceptionalCancellation">
-                                exceptional cancellation
                             </button>
                             <button id="roleAdministrationBtn" type="button" class="text list-group-item list-group-item-action bg list-group-item-indent" data-bs-toggle="modal" data-bs-target="#roleAdminModal">
                                 role administration
@@ -304,33 +268,29 @@ AuthMiddleware::checkAccess($requiredRole);
                 <div class="col-12 col-md-4 my-2">
                     <div class="card bg-aux">
                         <div class="card-body">
-                            <h5 class="modal-title" id="exampleModalCenterTitle">Exceptional cancellation period</h5>
+                            <h5 class="modal-title" id="exampleModalCenterTitle">Periodo de cancelacion de clases excepcional</h5>
                             <div class="row my-3">
                                 <div class="col-12 col-md-6">
                                     <center>
-                                        <label for="start-time">Start time</label><br>
-                                        <input
-                                            type="datetime-local"
-                                            id="start-time"
-                                            class="form-control"
-                                            name="start-time"/>
+                                        <label for="start-time-cancaled">Start time</label><br>
+                                        <div id="start-time-cancaled">
+                                            <p class="card-text placeholder-glow"><span class="placeholder col-12"></span></p>
+                                        </div>
                                     </center>
                                 </div>
                                 <div class="col-12 col-md-6">
                                     <center>
-                                        <label for="end-time">End time</label><br>
-                                        <input
-                                            type="datetime-local"
-                                            id="end-time"
-                                            class="form-control"
-                                            name="end-time"/>
+                                    <label for="start-time">End time</label><br>
+                                        <div id="end-time-cancaled">
+                                        <p class="card-text placeholder-glow"><span class="placeholder col-12"></span></p>
+                                        </div>
                                     </center>
 
                                 </div>
                             </div>
                             <div class="row">
                                 <center>
-                                    <button id="saveSRPBtn" type="button" class="btn bg-custom-primary mt-2 text-white">Save</button>
+                                    <button id="saveECBtn" type="button" class="btn bg-custom-primary mt-2 text-white">Save</button>
                                 </center>
                             </div>
                         </div>

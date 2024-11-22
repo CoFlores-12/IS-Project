@@ -27,4 +27,12 @@ $result = $db->execute_query("SELECT JSON_UNQUOTE(JSON_EXTRACT(data, '$.registra
         WHERE config_id = 1;");
 $response['registrationPeriod'] = json_decode($result->fetch_assoc()['registrationPeriod']);
 
+
+$result = $db->execute_query("SELECT JSON_UNQUOTE(JSON_EXTRACT(data, '$.cancellationExceptional')) AS cancellationExceptional 
+          FROM Config 
+          WHERE config_id = 1;");
+$response['cancellationExceptional'] = json_decode($result->fetch_assoc()['cancellationExceptional']);
+
+
+
 echo json_encode($response);
