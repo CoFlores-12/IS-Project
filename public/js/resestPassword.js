@@ -29,8 +29,6 @@ fetch(`/api/get/admin/verifyToken.php?token=${token}`)
  });
 
 
-
-
 submitButton.addEventListener('click', () => {
 const newPassword = inputPassword.value;
 

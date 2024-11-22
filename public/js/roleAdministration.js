@@ -86,6 +86,32 @@ form.addEventListener('submit', function(event) {
         return;
     }
 
+    (function() {
+        'use strict';
+        window.addEventListener('load', function() {
+            var forms = document.getElementsByClassName('needs-validation');
+            var validation = Array.prototype.filter.call(forms, function(form) {
+            form.addEventListener('submit', function(event) {
+                if (form.checkValidity() === false) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+            });
+        }, false);
+        })();
+        
+        const newUserModal = document.getElementById('newUserModal');
+        const newUserModalBS = new bootstrap.Modal(newUserModal)
+        const SRPModal = document.getElementById('SRP');
+        const SRPModalBS = new bootstrap.Modal(SRPModal)
+        const addUserBtn = document.getElementById('addUserBtn');
+        const departamentSelect = document.getElementById('departamentSelect');
+        const saveSRPBtn = document.getElementById('saveSRPBtn');
+        const saveECBtn = document.getElementById('saveECBtn');
+
+
     if (!form.checkValidity() || !isIdentityValid) {
         form.classList.add("was-validated");
         return; // Detener si el formulario no es válido
@@ -309,8 +335,45 @@ saveECCBtn.addEventListener('click', ()=>{
         })
     }
 
+<<<<<<< HEAD
     
 })
+=======
+    let alertUpdateCanceled = document.getElementById('alerCanceled');
+        
+    alertUpdateCanceled.style.display = 'none';
+
+    
+
+    saveECBtn.addEventListener("click", ()=>{
+        saveECBtn.innerHTML = `<div class="spinner-border text-light" role="status"></div>`;
+
+        let starExceptional = document.getElementById('start-time-exceptional');
+        let endExceptional = document.getElementById('end-time-exceptional');
+
+            const formData = new FormData();
+            formData.append('start_time', starExceptional.value);
+            formData.append('end_time', endExceptional.value);
+
+
+            fetch('/api/put/admin/exceptionalCancellation.php',{
+            method: 'POST',
+            body: formData
+            })
+            .then((response)=>{return response})
+            .then((response)=>{
+                alertUpdateCanceled.style.display = "block";
+                setTimeout(function() {
+                    alertUpdateCanceled.style.display = 'none';
+                  }, 3000)
+
+                saveECBtn.disabled = false;
+                saveECBtn.innerHTML = 'save'
+            })
+        
+    })
+>>>>>>> rediseño-DA
+
 
 fetch('/api/get/admin/adminData.php')
 .then((res)=>{return res.json()})
@@ -336,4 +399,22 @@ fetch('/api/get/admin/adminData.php')
         class="form-control bg-aux"
         name="start-time"
     />`;
+    document.getElementById('start-time-cancaled').innerHTML = `
+    <input
+        type="datetime-local"
+        id="start-time-exceptional"
+        value="${res.cancellationExceptional.startTime}"
+        class="form-control bg-aux"
+        name="start-time"
+    />`;
+    document.getElementById('end-time-cancaled').innerHTML = `
+    <input
+        type="datetime-local"
+        id="end-time-exceptional"
+        value="${res.cancellationExceptional.endTime}"
+        class="form-control bg-aux"
+        name="start-time"
+    />`;
+
+
 })
