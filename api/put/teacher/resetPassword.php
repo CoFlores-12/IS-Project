@@ -44,6 +44,11 @@ if ($result->num_rows > 0) {
         
         if ($stmt_update->execute()) {
             $response["status"] = 0;
+            $invalidate_query = "UPDATE PasswordResetTokens SET is_used = 1 WHERE token = ?";
+            $stmt_invalidate = $conn->prepare($invalidate_query);
+            $stmt_invalidate->bind_param('s', $token);
+            $stmt_invalidate->execute();
+
         } else {
             $response["status"] = 1;
         }

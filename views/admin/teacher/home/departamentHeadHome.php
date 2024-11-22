@@ -77,6 +77,10 @@ AuthMiddleware::checkAccess($requiredRole);
   </div>
 </div>
 
+<div class="alert alert-success successAlert" id="alertSuccessEmail"  role="alert">
+  Correo enviado Correctamente.
+</div>
+
 <div class="modal fade" id="changePassword" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog bg modal-lg">
     <div class="modal-content bg">
@@ -94,7 +98,7 @@ AuthMiddleware::checkAccess($requiredRole);
             </div>
         </div>
         <div id="resetBody" class="pt-3">
-
+          
         </div>
       </div>
     </div>
@@ -363,7 +367,7 @@ AuthMiddleware::checkAccess($requiredRole);
                       </div>
                     </a>
                           <div class="collapse" id="collapseTeachers">
-                            <button type="button" class="text list-group-item list-group-item-action bg list-group-item-indent" data-bs-toggle="modal" data-bs-target="#changePassword">
+                            <button type="button" id="changePassword" class="text list-group-item list-group-item-action bg list-group-item-indent" data-bs-toggle="modal" data-bs-target="#changePassword">
                                Reset Password
                             </button>
                           </div>

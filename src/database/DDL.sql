@@ -266,6 +266,7 @@
     token VARCHAR(255) NOT NULL UNIQUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
     expires_at DATETIME NOT NULL,
+    is_used BIT(1) DEFAULT 0,
     FOREIGN KEY (employee_id) REFERENCES Employees(employee_number)
 );
 
@@ -452,3 +453,4 @@ WHERE (Employees.employee_number = ?
        OR Persons.person_id = ? 
        OR Employees.institute_email = ?)
   AND Employees.employee_number = ?; -- Filtro para asegurar que solo se traigan empleados del docente autenticado
+
