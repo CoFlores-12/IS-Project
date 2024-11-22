@@ -36,13 +36,11 @@ $stmt->execute();
 
 $response = [];
 
-
-
-$resetUrl = 'https://is-project-fixes.up.railway.app/views/admin/teacher/home/reset.php?token='.urlencode($newToken);
-$resetUrl1 = 'https://is-project-fixes.up.railway.app/views/students/login/reset.php?token='.urlencode($newToken);
+$resetUrl = 'https://is-project-fixes.up.railway.app/views/students/login/reset.php?token='.urlencode($newToken);
 
 $affair = "Cambiar contraseña";
-$message = `<table align="center" border="0" cellpadding="0" cellspacing="0" width="600" style="border-collapse: collapse; background-color: #ffffff; border: 1px solid #dddddd;">
+$message = sprintf('
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="600" style="border-collapse: collapse; background-color: #ffffff; border: 1px solid #dddddd;">
         <tr>
             <td align="center" style="padding: 20px; background-color: #007bff; color: #ffffff; font-size: 24px; font-weight: bold;">
                 Notoficacion de cambio de contraseña
@@ -53,7 +51,7 @@ $message = `<table align="center" border="0" cellpadding="0" cellspacing="0" wid
                 <p>Estimado Estudiante,</p>
                 <p>El presente es repondiendo a su peticion de cambio de contraseña. Por favor dirigase al siguiente enlace:</p>
                 <p style="text-align: center; margin: 20px 0;">
-                    <a href="{$resetUrl}" style="background-color: #007bff; color: #ffffff; text-decoration: none; padding: 10px 20px; font-size: 16px; border-radius: 5px; display: inline-block;">Cambiar contraseña</a>
+                    <a href="{$resetUr1}" style="background-color: #007bff; color: #ffffff; text-decoration: none; padding: 10px 20px; font-size: 16px; border-radius: 5px; display: inline-block;">Cambiar contraseña</a>
                 </p>
                 <p>Si no solicitó esto, ignore este correo electrónico o comuníquese con el soporte si tiene inquietudes.</p>
                 <p>Nota: Este enlace caducará en 25 minutos.</p>
@@ -65,7 +63,7 @@ $message = `<table align="center" border="0" cellpadding="0" cellspacing="0" wid
                 <p>&copy; 2024 UNAH. All rights reserved.</p>
             </td>
         </tr>
-    </table>`;
+    </table>', $resetUrl);
     
 $resultado = $mail->sendEmail(getenv('emailUser'), $email, $affair, $message);
 
