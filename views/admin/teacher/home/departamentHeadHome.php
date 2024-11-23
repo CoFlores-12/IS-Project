@@ -239,16 +239,16 @@ AuthMiddleware::checkAccess($requiredRole);
             </div>
         </div>
         <div id="sectionBody" class="pt-3">
-        <table class="table w-100 table-dark table-striped" id="tableDeleteSection">
+        <table class="table w-100 bg-aux mt-2" id="tableDeleteSection" border="1" style="width: 50%; border-collapse: collapse;">
         <thead>
                 <tr>
-                  <th scope="col">Section ID</th>
-                  <th scope="col">Start time</th>
-                  <th scope="col">End time</th>
-                  <th scope="col">Days</th>
-                  <th scope="col">Classroom</th>
-                  <th scope="col">Quotas</th>
-                  <th scope="col">Action</th>
+                  <th style="text-align: center;" scope="col" class="bg-aux text">Seccion ID</th>
+                  <th style="text-align: center;" scope="col" class="bg-aux text">Hora inicio</th>
+                  <th style="text-align: center;" scope="col" class="bg-aux text">Hora fin</th>
+                  <th style="text-align: center;" scope="col" class="bg-aux text">Dias</th>
+                  <th style="text-align: center;" scope="col" class="bg-aux text">Aula</th>
+                  <th style="text-align: center;" scope="col" class="bg-aux text">Matriculados</th>
+                  <th style="text-align: center;" scope="col" class="bg-aux text">Accion</th>
                 </tr>
               </thead>
               
@@ -277,8 +277,8 @@ AuthMiddleware::checkAccess($requiredRole);
       </div>
       <div class="modal-body">
       
-      <div class="container table-no-border mt-2">
-        <table class="table table-bordered" id="tableSecction"> 
+      <div class="container  mt-2">
+        <table class="table w-100 bg-aux mt-2" id="tableSecction"> 
             <tbody>
                 
                
@@ -292,11 +292,18 @@ AuthMiddleware::checkAccess($requiredRole);
         <div class="alert alert-danger mt-2"  id="alertJustication" role="alert">
           Necessary Justification
         </div>
+        <div class="alert alert-success  mt-2" id="validedQuotas" role="alert">
+          Cupos Actualizados correctamente
+        </div>
+        <div class="alert alert-danger  mt-2" id="invalidQuotas" role="alert">
+          Error, cupos no validos
+        </div>
       </div>
       </div>
       <div>
-        <button type="button" class="btn btn-secondary pr-2" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-danger" id="saveDeleteSection">Save changes</button>
+        <button type="button" class="btn btn-secondary pr-2" data-bs-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-success" id="updateQuotas">Actualizar cupos</button>
+        <button type="button" class="btn btn-danger" id="saveDeleteSection"><i class="bi bi-trash"></i></button>
       </div>
 
       </div>
@@ -378,7 +385,7 @@ AuthMiddleware::checkAccess($requiredRole);
                     </a>
                           <div class="collapse" id="collapseClasses">
                             <button type="button" class="text list-group-item list-group-item-action bg list-group-item-indent"  id="newSectionClass">
-                                   Add new section
+                              Crear sección
                              </button>
                             <button type="button" class="text list-group-item list-group-item-action bg list-group-item-indent" data-bs-toggle="modal" data-bs-target="#waitlistModal">
                                 View wait lists
@@ -386,7 +393,7 @@ AuthMiddleware::checkAccess($requiredRole);
                           </div>
                           <div class="collapse" id="collapseClasses">
                             <button type="button" class="text list-group-item list-group-item-action bg list-group-item-indent"  id="deleteSection" data-bs-toggle="modal" data-bs-target="#deleteSectionModal">
-                                    Delete section
+                                Actualizar Sección
                              </button>
                           </div>
                 </div>

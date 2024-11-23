@@ -23,6 +23,7 @@ $sql ='
             s.period_id,
             s.classroom_id,
             cr.classroom_name,
+            cr.capacity,
             s.quotas,
             sd.Monday,
             sd.Tuesday,

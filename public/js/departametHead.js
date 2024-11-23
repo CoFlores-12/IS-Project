@@ -304,8 +304,6 @@ let historyBody = document.getElementById('historyBody');
             if (hourStart.value === '') { return; }
             if (hourEnd.value === '') { return; }
             if (selectedValues === '') { return; }
-    
-            console.log(classes.value, "  - ", teachers.value, "  - ",classrooms.value, " - ",available_spaces.value, " - ", hourStart.value, " - ",hourEnd.value, " - ",selectedValues);
 
             btnNewSection.disabled = true;
             btnNewSection.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Loading...`;
@@ -546,6 +544,12 @@ let deleteSection = document.getElementById('deleteSection');
 let alertIdsection = document.getElementById('alertIdsection');
 alertIdsection.style.display = 'none';
 
+let validedQuotas = document.getElementById('validedQuotas');
+validedQuotas.style.display = 'none';
+
+let invalidQuotas = document.getElementById('invalidQuotas');
+invalidQuotas.style.display = 'none';
+
 var tableDeleteSection = document.getElementById('tableDeleteSection');
 const tableSection = tableDeleteSection.querySelector("tbody");
         
@@ -562,10 +566,10 @@ function showSection(){
     
                 newRow = `
                 <tr>
-                    <th>${item.section_id}</th>
-                    <th>${item.hour_start}</th>
-                    <th>${item.hour_end}</th>
-                    <th> ${[
+                    <th style="text-align: center;" class="bg-aux text">${item.section_id}</th>
+                    <th style="text-align: center;" class="bg-aux text">${item.hour_start}</th>
+                    <th style="text-align: center;" class="bg-aux text">${item.hour_end}</th>
+                    <th style="text-align: center;" class="bg-aux text"> ${[
                     item.Monday && "Monday",
                     item.Tuesday && "Tuesday",
                     item.Wednesday && "Wednesday",
@@ -575,9 +579,9 @@ function showSection(){
                 ]
                     .filter(Boolean)
                     .join(", ")}</th>
-                    <th>${item.classroom_name}</th>
-                    <th>${item.enrolled_students}</th>
-                    <th><button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalDelete" id="delete" onclick="modalVerifyDelete(${item.section_id})">Danger</button></th>
+                    <th style="text-align: center;" class="bg-aux text">${item.classroom_name}</th>
+                    <th style="text-align: center;" class="bg-aux text">${item.enrolled_students}</th>
+                    <th class="bg-aux text"><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalDelete" id="delete" onclick="modalVerifyDelete(${item.section_id})"><i class="bi bi-pencil-square"></i></button></th>
                 </tr>
                 `;
     
@@ -588,9 +592,15 @@ function showSection(){
         });
 }
 
+
+
+
 let alertDelete = document.getElementById('alertDelete');
 var tableSecction = document.getElementById('tableSecction');
 const tableSectiondelete = tableSecction.querySelector("tbody");
+
+let updateQuotas = document.getElementById('updateQuotas');
+
 
 let justificationInput = document.getElementById('justificationInput');
 
@@ -609,25 +619,70 @@ function modalVerifyDelete(id){
     idSectionDelete = id;
     tableSectiondelete.innerHTML = "";
 
-    for (const [key, value] of Object.entries(foundItem)) {
-        if (
-          key !== "Monday" &&
-          key !== "Tuesday" &&
-          key !== "Wednesday" &&
-          key !== "Thursday" &&
-          key !== "Friday" &&
-          key !== "Saturday"
-        ) {
-          const row = `
+    console.log(foundItem)
+
+      const row1 = `
             <tr>
-              <td>${key}</td>
-              <td>${value}</td>
+                <td class="bg-aux text">Seccion ID</td>
+                <td class="bg-aux text">${foundItem.section_id}</td>
             </tr>
-          `;
-          tableSectiondelete.innerHTML += row;
-        }
-      }
-  
+            `;
+            const row2 = `
+            <tr>
+                <td class="bg-aux text">Clase</td>
+                <td class="bg-aux text">${foundItem.class_name}</td>
+            </tr>
+            `;
+            const row3 = `
+            <tr>
+                <td class="bg-aux text">Edificio</td>
+                <td class="bg-aux text">${foundItem.building_name}</td>
+            </tr>
+            `;
+            const row4 = `
+            <tr>
+                <td class="bg-aux text">Hora inicio</td>
+                <td class="bg-aux text">${foundItem.hour_start}</td>
+            </tr>
+            `;
+            const row5 = `
+            <tr>
+                <td class="bg-aux text">Hora fin</td>
+                <td class="bg-aux text">${foundItem.hour_end}</td>
+            </tr>
+            `;
+            const row6 = `
+            <tr>
+                <td class="bg-aux text">Periodo</td>
+                <td class="bg-aux text">${foundItem.period_id}</td>
+            </tr>
+            `;
+            const row7 = `
+            <tr>
+                <td class="bg-aux text">Aula ID</td>
+                <td class="bg-aux text">${foundItem.classroom_id}</td>
+            </tr>
+            `;
+
+            const row8 = `
+            <tr>
+                <td class="bg-aux text">Aula Nombre</td>
+                <td class="bg-aux text">${foundItem.classroom_name}</td>
+            </tr>
+            `;
+
+            const row9 = `
+            <tr>
+                <td class="bg-aux text">Cupos</td>
+                <td class="bg-aux text"><input type="number" id="newQuotas" style="width: 100%; border: 2px solid red; border-radius: 4px; padding: 2px; box-sizing: border-box; background-color: #fff;" value="${foundItem.quotas}"></td>
+            </tr>
+            `;
+            const row10 = `
+            <tr>
+                <td class="bg-aux text">Matriculados</td>
+                <td class="bg-aux text">${foundItem.enrolled_students}</td>
+            </tr>
+            `;
       const days = [
         foundItem.Monday ? "Monday" : "",
         foundItem.Tuesday ? "Tuesday" : "",
@@ -638,15 +693,60 @@ function modalVerifyDelete(id){
       ]
         .filter(Boolean)
         .join(", ");
+
+        tableSectiondelete.innerHTML = row1 + row2 + row3 + row4 + row5 + row6 + row7 + row8 + row9 + row10;
   
         tableSectiondelete.innerHTML += `
                                     <tr>
-                                        <td>Days</td>
-                                        <td>${days}</td>
-                                    </tr>
-                                `
-            
+                                        <td  class="bg-aux text">Dias</td>
+                                        <td  class="bg-aux text">${days}</td>
+                                    </tr> `  
+    updateQuotas.addEventListener("click", ()=>{
+        invalidQuotas.style.display = 'none';
+        validedQuotas.style.display = 'none';
+        let newQuotas = document.getElementById('newQuotas');
+ 
+        if(newQuotas.value == ""){
+            invalidQuotas.style.display = 'block';
+        }else{
+            updateQuotas.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Cargando...`;
+            updateQuotas.disabled = true;
+            fetch('/api/put/admin/updateSectionQuotas.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    section_id: foundItem.section_id, 
+                    new_quotas: newQuotas.value    
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 200) {
+                        validedQuotas.style.display = 'block';
+                        setTimeout(function() {
+                            validedQuotas.style.display = 'none';;
+                          }, 3000); 
+                        
+                    } else {
+                        invalidQuotas.style.display = 'block';
+                        setTimeout(function() {
+                            invalidQuotas.style.display = 'none';;
+                          }, 3000); 
+                    }
+                    updateQuotas.innerHTML = `Actualizar Cupos`;
+                    updateQuotas.disabled = false;
+                })
+                .catch(error => console.error('Error:', error));            
+        }
+
+
+    }) 
 }
+
+
+
 
 function modalDeleteSection(item){
     fetch('/api/delete/admin/deleteSection.php', {
