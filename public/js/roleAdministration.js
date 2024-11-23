@@ -72,9 +72,8 @@ document.getElementById('editRoleForm').addEventListener('submit', (e) => {
         });
 });
 
-var forms = document.getElementsByClassName('needs-validation');
-var validation = Array.prototype.filter.call(forms, function(form) {
-form.addEventListener('submit', function(event) {
+var form = document.getElementById('newUSerForm');
+form.addEventListener('submit',async function(event) {
     event.preventDefault();
     const identityInput = document.getElementById('identity');
     const createUserBtn = document.getElementById('createUserBtn');
@@ -93,19 +92,20 @@ form.addEventListener('submit', function(event) {
     createUserBtn.disabled = true;
     createUserBtn.innerHTML = '<div class="spinner-border text-secondary" role="status"></div>'
 
-    // Recopilar los datos del formulario
     const formData = new FormData(form);
     try {
         fetch("/api/post/admin/addUser.php", {
             method: "POST",
             body: formData
         })
-        .then((res)=>{return res.json()})
         .then((res)=>{
+            return res.json()})
+            .then((res)=>{
             createUserBtn.disabled = false;
-            createUserBtn.innerHTML = 'Crear usuario'
+            createUserBtn.innerHTML = 'Crear Usuario'
             if (res.status) {
                 
+
                 toastTitle.innerHTML ='Usuario creado exitoso'
                 toastBody.innerHTML = `<div class="alert alert-success mb-0" role="alert">
                 ${res.message}
@@ -116,7 +116,6 @@ form.addEventListener('submit', function(event) {
                 form.classList.remove("was-validated");
                 newUserModalBS.hide();
             }else {
-                console.log("error");
                 
                 toastTitle.innerHTML ='error al crear usuario'
                 toastBody.innerHTML = `<div class="alert alert-danger mb-0" role="alert">
@@ -127,9 +126,11 @@ form.addEventListener('submit', function(event) {
         })
 
     } catch (error) {
+        
+        createUserBtn.disabled = false;
+        createUserBtn.innerHTML = 'Crear Usuario'
         console.error("Error:", error);
     }
-}, false);
 });
 
 // Datos de departamentos y municipios

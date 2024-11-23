@@ -4,7 +4,8 @@ $current_page = $_SERVER['REQUEST_URI'];
 <style>
     .nav-link.active {
     font-weight: bold;
-    color: #000; /* Puedes personalizar el color */
+    color: #176b87 !important;
+    border-bottom: 1px solid #176b87;
 }
 
 </style>

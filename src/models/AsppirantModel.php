@@ -1,8 +1,8 @@
 <?php
 class Aspirant {
     private $identity;
-    private $firstName;
-    private $lastName;
+    public $firstName;
+    public $lastName;
     private $phone;
     public $email;
     private $mainCareer;
