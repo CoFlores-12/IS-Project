@@ -17,8 +17,6 @@ echo json_encode([
     "status"=> true,
     "message"=> "Credenciales enviadas al correo"
 ]);
-//TODO: validate info
-return;
 
 include '../../../src/modules/database.php';
 $conn = (new Database())->getConnection();
@@ -64,8 +62,8 @@ function generateEmail($firstName, $lastName) {
 $password = generatePassword();
 $instituteEmail = generateEmail($name, $lastName);
 
-$sql = "CALL `CreateAdministrator`(?, 5, ?, ?);";
-$conn->execute_query($sql, [$identity, $password, $instituteEmail]);
+$sql = "CALL `CreateAdministrator`(?, 5, ?, ?, ?);";
+$conn->execute_query($sql, [$identity, $password, $instituteEmail, $departament]);
 
 include '../../../src/modules/mails.php';
 $affair = "User Created";

@@ -283,3 +283,6 @@ On A.person_id = `P`.person_id
 WHERE status_id = 0 AND validated IS NULL;
 
 UPDATE `Applicant` SET validated = NULL;
+
+
+SELECT role_id FROM `LogAuth` GROUP BY role_id;

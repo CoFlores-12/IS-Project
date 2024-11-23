@@ -11,25 +11,79 @@ AuthMiddleware::checkAccess($requiredRole);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin | Home</title>
+    <title>Admin | Inicio</title>
     <link rel="stylesheet" href="/public/css/theme.css">
     <link rel="icon" type="image/png" href="/public/images/logo.png" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
     <link rel="stylesheet" href="/public/bootstrap-5.3.3-dist/css/bootstrap.min.css">
-    <style>
-        .list-group-title {
-            border: none !important;
-            font-weight: bold;
-            outline: none;
-        }
-        .list-group-item-indent {
-            padding-left: 2rem; 
-            border: none; 
-        }
-    </style>
+    <link rel="stylesheet" href="/public/css/homeAdmin.css">
 </head>
 <body>
     
+
+<div class="modal fade" id="logModal" tabindex="-1" aria-labelledby="logModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="logModalLabel">Registros de Acceso</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row mb-3">
+          <div class="col-6">
+            <label for="authStatusFilter" class="form-label">Filtrar por estado de autenticación</label>
+            <select id="authStatusFilter" class="form-select">
+              <option value="">Todos</option>
+              <option value="1">Éxito</option>
+              <option value="0">Fallo</option>
+            </select>
+          </div>
+          <div class="col-6">
+            <label for="roleFilter" class="form-label">Filtrar por Rol</label>
+            <select id="roleFilter" class="form-select">
+              <option value="">Todos</option>
+              <option value="0">Administrador</option>
+              <option value="1">Admisiones</option>
+              <option value="2">Registro</option>
+              <option value="3">Docentes</option>
+              <option value="4">Coordinador</option>
+              <option value="7">Estudiantes</option>
+            </select>
+          </div>
+        </div>
+
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>IP Address</th>
+              <th>Estado de Autenticación</th>
+              <th>Identificador</th>
+              <th>Role</th>
+            </tr>
+          </thead>
+          <tbody id="logTableBody">
+          </tbody>
+        </table>
+
+        
+      </div>
+      <div class="modal-footer row justify-between items-center">
+        <div class="d-flex justify-content-between align-items-center">
+          <select id="rowsPerPage" class="form-select w-auto">
+            <option value="5">5 filas</option>
+            <option value="10">10 filas</option>
+            <option value="20">20 filas</option>
+          </select>
+          <nav>
+            <ul class="pagination m-0" id="pagination">
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- Modal New User -->
 <div class="modal fade" id="newUserModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -168,7 +222,7 @@ AuthMiddleware::checkAccess($requiredRole);
         <div class="toast-header bg border border-0">
             <img src="/public/images/logo.png" width="24px" class="rounded me-2" alt="...">
             <strong class="me-auto text" id="toastTitle"></strong>
-            <small class="text">Just now</small>
+            <small class="text">Justo ahora</small>
             <button type="button" class="btn-close text" data-bs-dismiss="toast" aria-label="Close"></button>
         </div>
         <div class="toast-body bg-aux border border-0" id="toastBody">
@@ -217,40 +271,40 @@ AuthMiddleware::checkAccess($requiredRole);
                         
                     </button>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">My profile</a></li>
+                        <li><a class="dropdown-item" href="#">Mi perfil</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="/api/get/logout.php">Logout <i class="bi bi-box-arrow-right"></i></a></li>
+                        <li><a class="dropdown-item" href="/api/get/logout.php">Cerrar sesión <i class="bi bi-box-arrow-right"></i></a></li>
                     </ul>
                  </div>
             </div>
         </div>
         <div class="container-fluid">
             <div class=" flex px-4">
-                <h4 class="text">Dashboard</h4>
+                <h4 class="text">Administrador</h4>
                 
             </div>
             <div class="row p-2">
                 <div class="col">
                     <div class="card bg-aux shadow rounded m-2  p-2">
-                        <span>Teachers</span>
+                        <span>Docentes</span>
                         <div id="Teachers"><p class="card-text placeholder-glow"><span class="placeholder col-6"></span></p></div>
                     </div>
                 </div>
                 <div class="col">
                     <div class="card shadow rounded m-2 bg-aux p-2">
-                        <span>Students</span>
+                        <span>Estudiantes</span>
                         <div id="Students"><p class="card-text placeholder-glow"><span class="placeholder col-6"></span></p></div>
                     </div>
                 </div>
                 <div class="col">
                     <div class="card shadow rounded m-2 bg-aux p-2">
-                        <span>Careers</span>
+                        <span>Carreras</span>
                         <div id="Careers"><p class="card-text placeholder-glow"><span class="placeholder col-6"></span></p></div>
                     </div>
                 </div>
                 <div class="col">
                     <div class="card shadow rounded m-2 bg-aux p-2">
-                        <span>Regional Center</span>
+                        <span>Centros regionales</span>
                         <div id="RegionalCenter"><p class="card-text placeholder-glow"><span class="placeholder col-6"></span></p></div>
                     </div>
                 </div>
@@ -260,11 +314,11 @@ AuthMiddleware::checkAccess($requiredRole);
                 <div class="col-12 col-md-4 my-2">
                     <div class="card bg-aux">
                         <div class="card-body">
-                            <h5 class="modal-title" id="exampleModalCenterTitle">Admissions period</h5>
+                            <h5 class="modal-title" id="exampleModalCenterTitle">Periodo de admisiones</h5>
                             <div class="row my-3">
                                 <div class="col-12 col-md-6">
                                     <center>
-                                        <label for="start-time">Start time</label><br>
+                                        <label for="start-time">Inicia</label><br>
                                         <div id="inputStartR">
                                         <p class="card-text placeholder-glow"><span class="placeholder col-12"></span></p>
                                         </div>
@@ -272,7 +326,7 @@ AuthMiddleware::checkAccess($requiredRole);
                                 </div>
                                 <div class="col-12 col-md-6">
                                     <center>
-                                        <label for="end-time">End time</label><br>
+                                        <label for="end-time">Finaliza</label><br>
                                         <div id="inputEndR">
                                         <p class="card-text placeholder-glow"><span class="placeholder col-12"></span></p>
                                         </div>
@@ -282,7 +336,7 @@ AuthMiddleware::checkAccess($requiredRole);
                             </div>
                             <div class="row">
                                 <center>
-                                    <button id="saveSRPBtn" type="button" class="btn bg-custom-primary mt-2 text-white">Save</button>
+                                    <button id="saveSRPBtn" type="button" class="btn bg-custom-primary mt-2 text-white">Guardar</button>
                                 </center>
                             </div>
                         </div>
@@ -313,7 +367,9 @@ AuthMiddleware::checkAccess($requiredRole);
                             </div>
                             <div class="row">
                                 <center>
-                                    <button id="saveECBtn" type="button" class="btn bg-custom-primary mt-2 text-white">Save</button>
+
+                                    <button id="saveECBtn" type="button" class="btn bg-custom-primary mt-2 text-white">Guardar</button>
+
                                 </center>
                             </div>
                         </div>
@@ -348,7 +404,7 @@ AuthMiddleware::checkAccess($requiredRole);
                             </div>
                             <div class="row">
                                 <center>
-                                    <button id="saveSRPBtn" type="button" class="btn bg-custom-primary mt-2 text-white">Save</button>
+                                    <button id="saveSRPBtn" type="button" class="btn bg-custom-primary mt-2 text-white">Guardar</button>
                                 </center>
                             </div>
                         </div>
@@ -363,9 +419,24 @@ AuthMiddleware::checkAccess($requiredRole);
 
                         <div class="card-body">
                             <div class="flex flex-row justify-between items-center">
-                                <h5 class="text">Users</h5>
-                                <button id="addUserBtn" class="btn bg-custom-primary text-white"  data-bs-toggle="modal" data-bs-target="#newUserModal">Add User</button>
+                                <h5 class="text">Usuarios</h5>
+                                <button id="addUserBtn" class="btn bg-custom-primary text-white"  data-bs-toggle="modal" data-bs-target="#newUserModal">Crear usuario</button>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row p-2">
+                <div class=" col-12">
+                    <div class="card bg-aux">
+
+                        <div class="card-body pb-8">
+                            <div class="flex flex-row justify-between items-center">
+                                <h5 class="text">Inicios de sesión</h5>
+                                
+                                <button id="addUserBtn" class="btn bg-custom-primary text-white"  data-bs-toggle="modal" data-bs-target="#logModal">Mas detalles</button>
+                            </div>
+                            <div id="chart" class="chart"></div>
                         </div>
                     </div>
                 </div>
@@ -374,10 +445,9 @@ AuthMiddleware::checkAccess($requiredRole);
             
         </div>
     </div>
+
     <script src="/public/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
     <script src="/public/js/roleAdministration.js"></script>
-    <script>
-        
-    </script>
+    
 </body>
 </html>

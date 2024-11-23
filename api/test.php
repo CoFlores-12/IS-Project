@@ -1,18 +1,19 @@
 <?php
-date_default_timezone_set('America/Tegucigalpa');
-$currentDate = new DateTime();
 
-print_r($currentDate);
+include '../src/modules/database.php';
 
-$host = '185.27.134.98'; // Usa la IP si DNS falla
-$username = 'if0_37535915';
-$password = 'Qwerty2024FTP';
-$database = 'if0_37535915_isproject';
+$db = (new Database())->getConnection();
+$response = [];
 
-$conn = new mysqli($host, $username, $password, $database);
+$result = $db->execute_query("SELECT * FROM LogAuth L left join Roles R on L.role_id = R.role_id");
 
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+$resultArray = [];
+if ($result) {
+    while ($row = $result->fetch_assoc()) {
+        $resultArray[] = $row;
+    }
 }
-echo "Connected successfully!";
+
+header('Content-Type: application/json');
+echo json_encode($resultArray);
 ?>
