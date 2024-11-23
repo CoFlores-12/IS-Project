@@ -41,7 +41,7 @@ class Mails {
             $this->mail->isHTML(true);
             $this->mail->Subject = $affair;
             $this->mail->Body = $message;
-            $this->mail->AltBody = strip_tags($message); 
+            $this->mail->AltBody = strip_tags($message ?? ''); 
 
            
             $this->mail->send();

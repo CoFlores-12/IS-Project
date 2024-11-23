@@ -78,6 +78,6 @@
     </div>
 
     <script src="/public/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
-    <script src="/public/js/resestPasswordT.js"></script>
+    <script src="/public/js/resestPasswordS.js"></script>
 </body>
 </html>

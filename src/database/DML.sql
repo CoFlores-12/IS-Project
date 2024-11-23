@@ -36,6 +36,7 @@ CALL `CreateAdministrator`('0801202400002', 3, 'jefe', 'jefe@unah.hn');
 CALL `CreateAdministrator`('0801202400004', 4, 'coordinador', 'coordinador@unah.hn');
 INSERT INTO `Persons`(person_id, first_name, last_name) VALUES ('0801202400005', 'estudiante', "1");
 INSERT INTO `Students` (account_number, person_id, institute_email, password) VALUES ('20201000005', '0801202400005', 'estudainte@unah.hn', AES_ENCRYPT('estudiante', 'ISPROJECT'));
+INSERT INTO `Students` (account_number, person_id, institute_email, password) VALUES ('20201000004', '0801202400004', 'prueba@unah.hn', AES_ENCRYPT('prueba', 'ISPROJECT'));
 
 INSERT INTO `Classroom`(`classroom_id`,`classroom_name`,`building_id`,`capacity`) VALUES (1, 'FI-403', 1, 15);
 

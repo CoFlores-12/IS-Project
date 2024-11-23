@@ -276,21 +276,19 @@ saveSRPBtn.addEventListener('click', (e)=>{
     })
 })
 
-const modalExceptionalCancellation = document.getElementById('modalExceptionalCancellation');
-const modalCCE = new bootstrap.Modal(modalExceptionalCancellation)
-const saveECCBtn = document.getElementById('saveECCBtn');
-let starExceptional = document.getElementById('start-time-exceptional');
-let endExceptional = document.getElementById('end-time-exceptional');
 
 
-saveECCBtn.addEventListener('click', ()=>{
+let alertUpdateCanceled = document.getElementById('alerCanceled');
+        
+alertUpdateCanceled.style.display = 'none';
 
-    saveECCBtn.innerHTML = `<div class="spinner-border text-light" role="status"></div>`;
 
 
-    if(starExceptional.value == "" || endExceptional.value == ""){
-        return
-    }else{
+saveECBtn.addEventListener("click", ()=>{
+    saveECBtn.innerHTML = `<div class="spinner-border text-light" role="status"></div>`;
+
+    let starExceptional = document.getElementById('start-time-exceptional');
+    let endExceptional = document.getElementById('end-time-exceptional');
 
         const formData = new FormData();
         formData.append('start_time', starExceptional.value);
@@ -303,12 +301,14 @@ saveECCBtn.addEventListener('click', ()=>{
         })
         .then((response)=>{return response})
         .then((response)=>{
-            modalCCE.hide();
-            saveECCBtn.disabled = false;
-            saveECCBtn.innerHTML = 'save'
-        })
-    }
+            alertUpdateCanceled.style.display = "block";
+            setTimeout(function() {
+                alertUpdateCanceled.style.display = 'none';
+              }, 3000)
 
+            saveECBtn.disabled = false;
+            saveECBtn.innerHTML = 'save'
+        })
     
 })
 
@@ -345,6 +345,22 @@ fetch('/api/get/admin/adminData.php')
         type="datetime-local"
         id="end-time"
         value="${res.registrationPeriod.endTime}"
+        class="form-control bg-aux"
+        name="start-time"
+    />`;
+    document.getElementById('start-time-cancaled').innerHTML = `
+    <input
+        type="datetime-local"
+        id="start-time-exceptional"
+        value="${res.cancellationExceptional.startTime}"
+        class="form-control bg-aux"
+        name="start-time"
+    />`;
+    document.getElementById('end-time-cancaled').innerHTML = `
+    <input
+        type="datetime-local"
+        id="end-time-exceptional"
+        value="${res.cancellationExceptional.endTime}"
         class="form-control bg-aux"
         name="start-time"
     />`;
@@ -488,3 +504,4 @@ document.getElementById('rowsPerPage').addEventListener('change', (e) => {
 rowsPerPage = parseInt(e.target.value);
 renderTable();
 });
+

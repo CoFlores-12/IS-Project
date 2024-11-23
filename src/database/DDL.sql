@@ -277,13 +277,13 @@
 
     CREATE TABLE PasswordResetTokens (
     id_passwordResetTokens INT AUTO_INCREMENT PRIMARY KEY,
-    employee_id INT NOT NULL,
+    identifier VARCHAR(255) NOT NULL,
     token VARCHAR(255) NOT NULL UNIQUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
     expires_at DATETIME NOT NULL,
-    is_used BIT(1) DEFAULT 0,
-    FOREIGN KEY (employee_id) REFERENCES Employees(employee_number)
-);
+    is_used BIT(1) DEFAULT 0
+    );
+
 
 DELIMITER //
 
