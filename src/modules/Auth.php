@@ -15,6 +15,8 @@ class AuthMiddleware {
         $user = [];
         $user['ip'] = $_SERVER['REMOTE_ADDR'];
         $conn = (new Database())->getConnection();
+        $query_insert = "insert into  `LogAuth` (ip_address, auth_status, role_id, identifier)values(?, ?, ?, ?)";
+        $roleAuth = NULL;
 
         if ($entity === 0) {
             $result = $conn->execute_query("CALL LoginStudent(?, ?, @is_authenticated, @out_id)", [$identifier, $password]);
@@ -26,22 +28,49 @@ class AuthMiddleware {
             $user['role'] = 'Student';
             $user['route'] = 'student';
             $user['mainPage'] = '/views/students/home/index.php';
+            $roleAuth = 7;
         }else{
             $result = $conn->execute_query("CALL LoginAdministrator(?, ?, @is_authenticated, @out_role, @out_route, @out_employee_number);", [$identifier, $password]);
-
             $result = $conn->query("SELECT @is_authenticated AS is_authenticated, @out_role AS role, @out_route as route, @out_employee_number as employeenumber");
-
-
+            
             $row = $result->fetch_assoc();
             $user['is_authenticated'] = $row['is_authenticated'];
             $user['role'] = $row['role'];
             $user['route'] = $row['route'];
-
             $user['employeenumber'] = $row['employeenumber'];
-
             $user['mainPage'] = "/views/admin/". $user['route'] ."/home/index.php";
+            
+            switch ($user['role']) {
+                case 'Administrator':
+                    $roleAuth = 0;
+                    break;
+                case 'Admissions':
+                    $roleAuth = 1;
+                    break;
+                case 'Register Agent':
+                    $roleAuth = 2;
+                    break;
+                case 'Department Head':
+                    $roleAuth = 3;
+                    break;
+                case 'Coordinator':
+                    $roleAuth = 4;
+                    break;
+                case 'Teacher':
+                    $roleAuth = 5;
+                    break;
+                case 'Validator':
+                    $roleAuth = 6;
+                    break;
+                default:
+                    $roleAuth = NULL;
+                    break;
+            }
         }
-
+        
+        $stmt_insert = $conn->prepare($query_insert);
+        $stmt_insert->bind_param("siis", $user['ip'], $user['is_authenticated'], $roleAuth, $identifier);
+        $stmt_insert->execute();
         if ($user['is_authenticated']) {
             session_start();
             $_SESSION['user'] = $user;

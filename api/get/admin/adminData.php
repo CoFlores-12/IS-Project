@@ -27,4 +27,21 @@ $result = $db->execute_query("SELECT JSON_UNQUOTE(JSON_EXTRACT(data, '$.registra
         WHERE config_id = 1;");
 $response['registrationPeriod'] = json_decode($result->fetch_assoc()['registrationPeriod']);
 
+$result = $db->execute_query("SELECT log_id, 
+       CONVERT_TZ(DATE, '+00:00', '-06:00') AS local_time, 
+       ip_address, 
+       auth_status, 
+       R.role_id, 
+       identifier,
+       R.type
+FROM LogAuth L left join Roles R on L.role_id = R.role_id");
+
+$resultArray = [];
+if ($result) {
+    while ($row = $result->fetch_assoc()) {
+        $resultArray[] = $row;
+    }
+}
+$response['logs'] = $resultArray;
+
 echo json_encode($response);

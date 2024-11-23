@@ -130,6 +130,7 @@ html, body {
 .pl-4 { padding-right: 1rem; }
 .px-4 { padding-left: 1rem; padding-right: 1rem; }
 .py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+.pb-8 { padding-bottom: 70px !important; }
 
 /* text color */
 .text-white { color: #ffffff; }

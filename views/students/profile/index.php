@@ -83,6 +83,12 @@ $isMyUser = $idTest == $account_number;
 <!-- Modal upload photo -->
 
     <div class="container pt-3">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/views//students/home/index.php">Mi campus</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Perfil</li>
+          </ol>
+        </nav>
         <div class="main-body">
               <div class="row gutters-sm">
                 <div class="col-md-4 mb-3">

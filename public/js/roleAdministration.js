@@ -312,10 +312,22 @@ saveECCBtn.addEventListener('click', ()=>{
     
 })
 
+let logs = [];
+  const roles = {
+    0: "Administrador",
+    1: "Admisiones",
+    2: "Registro",
+    3: "Docentes",
+    4: "Coordinador",
+    7: "Estudiantes"
+  };
+
+  let filteredLogs = [...logs];
+  let currentPage = 1;
+  let rowsPerPage = 5;
 fetch('/api/get/admin/adminData.php')
 .then((res)=>{return res.json()})
 .then((res)=>{
-    console.log(res);
     document.getElementById('RegionalCenter').innerHTML = `<strong>${res.Regional_center}</strong>`
     document.getElementById('Teachers').innerHTML = `<strong>${res.Teachers}</strong>`
     document.getElementById('Students').innerHTML = `<strong>${res.Students}</strong>`
@@ -336,4 +348,143 @@ fetch('/api/get/admin/adminData.php')
         class="form-control bg-aux"
         name="start-time"
     />`;
+    initGraph(res.logs);
+    
+    logs = res.logs.reverse();
+    filteredLogs = [...logs]; 
+    renderTable();
 })
+
+function initGraph(logs) {
+    
+    const roles = {
+        0: "Administrador",
+        1: "Admisiones",
+        2: "Registro",
+        3: "Docentes",
+        4: "Docentes",
+        5: "Docentes",
+        7: "Estudiantes"
+    };
+
+    // Contadores de éxito y fallo por rol
+    const stats = {
+        'Administrador': { success: 0, failure: 0 },
+        'Registro': { success: 0, failure: 0 },
+        'Docentes': { success: 0, failure: 0 },
+        'Admisiones': { success: 0, failure: 0 },
+        'Estudiantes': { success: 0, failure: 0 }
+    };
+
+    // Procesar los logs
+    logs.forEach(log => {
+        const roleName = roles[log.role_id];
+        if (roleName) {
+            if (log.auth_status === 1) {
+                stats[roleName].success++;
+            } else {
+                stats[roleName].failure++;
+            }
+        }
+    });
+
+
+    // Crear el gráfico
+    const chart = document.getElementById('chart');
+
+    // Generar las barras para cada rol
+    for (const role in stats) {
+        const roleStats = stats[role];
+        const barContainer = document.createElement('div');
+        barContainer.className = 'bar-container';
+
+        // Barra de éxito (en porcentaje)
+        const barSuccess = document.createElement('div');
+        barSuccess.className = 'bar bar-success';
+        const successHeight = (roleStats.success ) * 100;
+        barSuccess.style.height = `${successHeight}%`;
+        barSuccess.textContent = `${roleStats.success}`;
+
+        // Barra de fallo (en porcentaje)
+        const barFailure = document.createElement('div');
+        barFailure.className = 'bar bar-failure';
+        const failureHeight = (roleStats.failure ) * 100;
+        barFailure.style.height = `${failureHeight}%`;
+        barFailure.textContent = `${roleStats.failure}`;
+
+        const label = document.createElement('div');
+        label.className = 'label';
+        label.textContent = role;
+
+        barContainer.appendChild(barSuccess);
+        barContainer.appendChild(barFailure);
+        barContainer.appendChild(label);
+
+        chart.appendChild(barContainer);
+    }
+}
+
+function renderTable() {
+    const tbody = document.getElementById('logTableBody');
+    tbody.innerHTML = '';
+
+    filteredLogs.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage).forEach(log => {
+      const row = document.createElement('tr');
+      if (log.auth_status === 1) {
+        row.classList.add('table-success');
+      } else {
+        row.classList.add('table-danger'); 
+      }
+      row.innerHTML = `
+        <td>${log.local_time}</td>
+        <td>${log.ip_address}</td>
+        <td>${log.auth_status === 1 ? 'Éxito' : 'Fallo'}</td>
+        <td>${log.identifier}</td>
+        <td>${log.type}</td>
+      `;
+      tbody.appendChild(row);
+    });
+
+    renderPagination();
+  }
+
+  function renderPagination() {
+    const pagination = document.getElementById('pagination');
+    const totalPages = Math.ceil(filteredLogs.length / rowsPerPage);
+    pagination.innerHTML = '';
+
+    for (let i = 1; i <= totalPages; i++) {
+      const li = document.createElement('li');
+      li.classList.add('page-item');
+      const a = document.createElement('a');
+      a.classList.add('page-link');
+      a.href = '#';
+      a.textContent = i;
+      a.addEventListener('click', () => {
+        currentPage = i;
+        renderTable();
+      });
+      li.appendChild(a);
+      pagination.appendChild(li);
+    }
+  }
+
+function filterLogs() {
+    const authStatusFilter = document.getElementById('authStatusFilter').value;
+    const roleFilter = document.getElementById('roleFilter').value;
+
+    filteredLogs = logs.filter(log => {
+        return (authStatusFilter === '' || log.auth_status == authStatusFilter) &&
+                (roleFilter === '' || log.role_id == roleFilter);
+    });
+
+    currentPage = 1;
+    renderTable();
+}
+
+document.getElementById('authStatusFilter').addEventListener('change', filterLogs);
+document.getElementById('roleFilter').addEventListener('change', filterLogs);
+document.getElementById('rowsPerPage').addEventListener('change', (e) => {
+rowsPerPage = parseInt(e.target.value);
+renderTable();
+});

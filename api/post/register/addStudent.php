@@ -29,14 +29,14 @@ function generateEmail($firstName, $lastName) {
     $firstInitial = strtolower(substr($firstName, 0, 1));
     $lastNameLower = strtolower($lastName);
 
-    $baseEmail = $firstInitial . $lastNameLower . '@unah.edu';
+    $baseEmail = $firstInitial . $lastNameLower . '@unah.hn';
     $email = $baseEmail;
 
     $conn = (new Database())->getConnection();
 
     if (emailExists($conn, $email)) {
         $firstInitials = strtolower(substr($firstName, 0, 2));
-        $email = $firstInitials . $lastNameLower . '@unah.edu';
+        $email = $firstInitials . $lastNameLower . '@unah.hn';
         return $email;
     }
 
