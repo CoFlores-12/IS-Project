@@ -12,9 +12,26 @@ let cancelBtn = document.getElementById('cancelBtn');
 let toast = document.getElementById('toast');
 let toastBody = document.getElementById('toastBody');
 let toastTitle = document.getElementById('toastTitle');
+let refreshChats = document.getElementById('refreshChats');
+let frameChats = document.getElementById('frameChats');
 let toastBS = new bootstrap.Toast(toast)
 let modalRequestsBS = new bootstrap.Modal(modalRequests);
 let modalEnrollmentBS = new bootstrap.Modal(modalEnrollment);
+const refreshIcon = document.getElementById('refreshIcon');
+
+// Evento de clic en el botón de refrescar
+refreshChats.addEventListener('click', () => {
+    // Agregar la clase para la animación de rotación
+    refreshChats.classList.add('rotate');
+
+    // Recargar el iframe
+    frameChats.contentWindow.location.reload();
+
+    // Eliminar la clase de animación después de que termine (1s)
+    setTimeout(() => {
+        refreshChats.classList.remove('rotate');
+    }, 1000); // Tiempo en milisegundos (1 segundo)
+});
 
 let optionsBody = async (value) => {
     let body = `<textarea name="comments" placeholder="Justify" id="comments" class="form-control bg-aux my-4 text"></textarea>`;
@@ -426,3 +443,27 @@ function getClassesView() {
     })
 }
 getClassesView();
+
+
+const toggleAside = document.getElementById('toggleAside');
+const desktopAside = document.getElementById('desktopAside');
+
+function toggleSidebar() {
+    if (desktopAside.classList.contains('d-md-block')) {
+        desktopAside.classList.remove('d-md-block');
+        desktopAside.classList.add('d-md-none');
+    } else {
+        desktopAside.classList.remove('d-md-none');
+        desktopAside.classList.add('d-md-block');
+    }
+    if (desktopAside.classList.contains('d-none')) {
+        desktopAside.classList.remove('d-none');
+        desktopAside.classList.add('d-block');
+    } else {
+        desktopAside.classList.remove('d-block');
+        desktopAside.classList.add('d-none');
+    }
+    
+}
+
+toggleAside.addEventListener('click', toggleSidebar);

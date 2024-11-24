@@ -18,6 +18,12 @@
 
 <section class=" mt-4 flex justify-center items-center">
   <div class="container-fluid">
+  <div class="row flex justify-center">
+      <div class="col-12 col-md-4">
+          <center><div class="alert alert-warning d-none" role="alert" id="alertLogin">
+    </div></center>
+      </div>
+    </div>
     <div class="row flex justify-center items-center h-full">
       <div class="col-md-9 col-lg-6 col-xl-5 flex justify-center items-center mb-4">
         <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
@@ -30,13 +36,13 @@
           <!-- Email input -->
           <div data-mdb-input-init class="form-outline mb-4">
             <input type="email" id="email" class="form-control form-control-lg"
-              placeholder="Enter a email address" />
+              placeholder="Identificador" />
           </div>
 
           <!-- Password input -->
           <div data-mdb-input-init class="form-outline mb-3">
             <input type="password" id="password" class="form-control form-control-lg"
-              placeholder="Enter password" />
+              placeholder="Contraseña" />
           </div>
 
           <div class="flex justify-between items-center">
@@ -44,8 +50,8 @@
           </div>
 
           <div class="text-center text-lg-start mt-4 pt-2">
-              <button id="loginButton" type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-lg"
-              style="padding-left: 2.5rem; padding-right: 2.5rem;">Login</button>
+              <button id="loginButton" type="button" data-mdb-button-init data-mdb-ripple-init class="btn text-white bg-custom-primary btn-lg"
+              style="padding-left: 2.5rem; padding-right: 2.5rem;">iniciar sesión</button>
           </div>
 
         </form>
@@ -55,6 +61,22 @@
 </section>
 <script src="/public/bootstrap-5.3.3-dist/js/bootstrap.min.js"></script>
 <script>
+  const urlParams = new URLSearchParams(window.location.search);
+  const errorCode = urlParams.get('error');
+
+  const errorMessages = {
+      '403': 'No tienes permisos para acceder a esta ruta.',
+      '401': 'Debes iniciar sesión para acceder a esta página.',
+      'invalid': 'Credenciales incorrectas. Intenta nuevamente.',
+      'default': 'Ha ocurrido un error. Por favor, intenta de nuevo.'
+  };
+
+  if (errorCode) {
+      const alertDiv = document.getElementById('alertLogin');
+      const message = errorMessages[errorCode] || errorMessages['default'];
+      alertDiv.textContent = message;
+      alertDiv.classList.remove('d-none');
+  }
   const loginButton = document.getElementById('loginButton');
   loginButton.addEventListener('click', function(){
     loginButton.disabled = true;
@@ -66,12 +88,7 @@
             password: document.getElementById('password').value
         })
     })
-    .then(async response => {
-        if (!response.ok) {
-            let text = await response.text();
-            
-            throw new Error('Error in request: ' + text);
-        }
+    .then(response => {
         return response.json();
     })
     .then(data => {
@@ -79,8 +96,11 @@
     })
     .catch(error => {
         loginButton.disabled = false;
-        loginButton.innerHTML = 'Login';
-        alert('error: ' + error.message);
+        loginButton.innerHTML = 'Iniciar sesión';
+        const alertDiv = document.getElementById('alertLogin');
+        const message = errorMessages['invalid'];
+        alertDiv.textContent = message;
+        alertDiv.classList.remove('d-none');
     });
     
   })

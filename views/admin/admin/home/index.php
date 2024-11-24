@@ -4,86 +4,154 @@ require_once '../../../../src/modules/Auth.php';
 $requiredRole = 'Administrator';
 
 AuthMiddleware::checkAccess($requiredRole);
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin | Home</title>
+    <title>Admin | Inicio</title>
     <link rel="stylesheet" href="/public/css/theme.css">
     <link rel="icon" type="image/png" href="/public/images/logo.png" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
     <link rel="stylesheet" href="/public/bootstrap-5.3.3-dist/css/bootstrap.min.css">
-    <style>
-        .list-group-title {
-            border: none !important;
-            font-weight: bold;
-            outline: none;
-        }
-        .list-group-item-indent {
-            padding-left: 2rem; 
-            border: none; 
-        }
-    </style>
+    <link rel="stylesheet" href="/public/css/homeAdmin.css">
 </head>
 <body>
+    
+
+<div class="modal fade" id="logModal" tabindex="-1" aria-labelledby="logModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="logModalLabel">Registros de Acceso</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row mb-3">
+          <div class="col-6">
+            <label for="authStatusFilter" class="form-label">Filtrar por estado de autenticación</label>
+            <select id="authStatusFilter" class="form-select">
+              <option value="">Todos</option>
+              <option value="1">Éxito</option>
+              <option value="0">Fallo</option>
+            </select>
+          </div>
+          <div class="col-6">
+            <label for="roleFilter" class="form-label">Filtrar por Rol</label>
+            <select id="roleFilter" class="form-select">
+              <option value="">Todos</option>
+              <option value="0">Administrador</option>
+              <option value="1">Admisiones</option>
+              <option value="2">Registro</option>
+              <option value="3">Docentes</option>
+              <option value="4">Coordinador</option>
+              <option value="7">Estudiantes</option>
+            </select>
+          </div>
+        </div>
+
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>IP Address</th>
+              <th>Estado de Autenticación</th>
+              <th>Identificador</th>
+              <th>Role</th>
+            </tr>
+          </thead>
+          <tbody id="logTableBody">
+          </tbody>
+        </table>
+
+        
+      </div>
+      <div class="modal-footer row justify-between items-center">
+        <div class="d-flex justify-content-between align-items-center">
+          <select id="rowsPerPage" class="form-select w-auto">
+            <option value="10">10 filas</option>
+            <option value="20">20 filas</option>
+            <option value="50">50 filas</option>
+            <option value="100">100 filas</option>
+          </select>
+          <nav>
+            <ul class="pagination m-0" id="pagination">
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- Modal New User -->
 <div class="modal fade" id="newUserModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content bg">
       <div class="modal-header bg">
-        <h5 class="modal-title text" id="staticBackdropLabel">New Teacher</h5>
+        <h5 class="modal-title text" id="staticBackdropLabel">Nuevo usuario</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-      <form class="needs-validation bg rounded p-4" novalidate method="POST" action="/api/post/admin/addUser.php"  enctype="multipart/form-data">
-            <input type="text" name="role" hidden readonly value="Teacher">
-            <div class="form-row flex gap-4">
+      <form class="needs-validation bg rounded p-4" id="newUSerForm" novalidate>
+            <div class="form-row d-flex gap-4">
                 <div class="col mb-3">
-                    <input name="name" type="text" class="form-control" id="validationCustom01" placeholder="Names"  required>
-                    <div class="valid-feedback">
-                        Looks good!
-                    </div>
+                    <label for="name">Nombres</label>
+                    <input name="name" type="text" class="form-control" id="name" placeholder="Ejemplo: Juan" required 
+                        pattern="[a-zA-Z\s]{4,}"
+                    aria-label="Campo para ingresar su nombre completo" aria-required="true" 
+                        aria-describedby="nameFeedback">
+                    <div id="nameFeedback" class="invalid-feedback">Por favor ingrese su nombre.</div>
                 </div>
                 <div class="col mb-3">
-                    <input name="lastName" type="text" class="form-control" id="validationCustom02" placeholder="Surnames" required>
-                    <div class="valid-feedback">
-                        Looks good!
-                    </div>
+                    <label for="lastName">Apellidos</label>
+                    <input name="lastName" type="text" class="form-control" id="lastName" placeholder="Ejemplo: Pérez" required 
+                        aria-label="Campo para ingresar sus apellidos" aria-required="true" 
+                        pattern="[a-zA-Z\s]{4,}"
+                        aria-describedby="lastNameFeedback">
+                    <div id="lastNameFeedback" class="invalid-feedback">Por favor ingrese sus apellidos.</div>
                 </div>
             </div>
             <div class="row mb-4">
                 <div class="form-group">
-                    <input name="identity" type="text" class="form-control" id="identity" placeholder="identity" maxlength="15" required>
+                    <label for="identity">Número de identidad</label>
+                    <input name="identity" pattern="\d{4}-\d{4}-\d{5}" id="identity" type="text" class="form-control" placeholder="0801-2000-00000" maxlength="15" required 
+                        aria-label="Campo para ingresar su número de identidad" aria-required="true" 
+                        aria-describedby="identityFeedback">
+                    <div id="identityFeedback" class="invalid-feedback">Por favor ingrese su número de identidad.</div>
                 </div>
             </div>
-            <div class="form-row flex gap-4">
-                <div class="col mb-3">
-                    <input name="phone" type="text" class="form-control" id="phone" placeholder="Phone Number" maxlength="9" required>
-                    <div class="valid-feedback">
-                        Looks good!
-                    </div>
+            <div class="form-row d-flex gap-4">
+                <div class="col-4 mb-3">
+                    <label for="phone">Número de teléfono</label>
+                    <input name="phone" id="phone" type="text" class="form-control" placeholder="99999999" maxlength="8" required 
+                        pattern="[389]\d{3}\d{4}" 
+                            aria-label="Campo para ingresar su número de teléfono" aria-required="true" 
+                        aria-describedby="phoneFeedback">
+                    <div id="phoneFeedback" class="invalid-feedback">Por favor ingrese un número de teléfono válido.</div>
                 </div>
                 <div class="col mb-3">
-                    <input name="email" type="email" class="form-control" id="email" placeholder="Email" required>
-                    <div class="valid-feedback">
-                        Looks good!
-                    </div>
+                    <label for="email">Correo electrónico</label>
+                    <input name="email" id="email" type="email" class="form-control" placeholder="correo@ejemplo.com" required 
+                        aria-label="Campo para ingresar su correo electrónico" aria-required="true" 
+                        aria-describedby="emailFeedback">
+                    <div id="emailFeedback" class="invalid-feedback">Por favor ingrese un correo electrónico válido.</div>
                 </div>
             </div>
             <div class="row mb-4">
                 <div class="form-group">
-                    <select class="for-control bg-aux w-full p-2" name="departament" id="departamentSelect">
-                    <option value="">Select department...</option>
+                    <select class="form-control bg-aux w-full p-2" required  name="departament" id="departamentSelect">
+                        <option value="">Seleccione un departamento...</option>
                     </select>
+                    <div id="mainCareerFeedback" class="invalid-feedback">Por favor seleccione un departamento.</div>
                 </div>
             </div>
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="submit" class="btn bg-custom-primary text-white">Save</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            <button type="submit" id="createUserBtn" class="btn bg-custom-primary text-white">Crear usuario</button>
         </div>
     </form>
     </div>
@@ -94,43 +162,75 @@ AuthMiddleware::checkAccess($requiredRole);
 <!-- Modal SRP -->
 <div class="modal fade" id="SRP" tabindex="-1" role="dialog" aria-labelledby="SRP" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content bg">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalCenterTitle">Registration period</h5>
-      </div>
-      <div class="modal-body">
-        <div class="row">
-            <div class="col-6">
-                <center>
-                    <label for="start-time">Start time</label><br>
-                    <input
-                        type="datetime-local"
-                        id="start-time"
-                        name="start-time"/>
-                </center>
-            </div>
-            <div class="col-6">
-                <center>
-                    <label for="end-time">End time</label><br>
-                    <input
-                        type="datetime-local"
-                        id="end-time"
-                        name="end-time"/>
-                </center>
-
-            </div>
-        </div>
-        <div class="row">
-            <center>
-                <button id="saveSRPBtn" type="button" class="btn bg-custom-primary m-4 text-white">Save</button>
-            </center>
-        </div>
-      </div>
-      
-    </div>
+    
   </div>
 </div>
 <!-- Modal SRP -->
+
+<!-- Modal Matricula -->
+<div class="modal fade" id="enrollPeriod" tabindex="-1" role="dialog" aria-labelledby="SRP" aria-hidden="true">
+    <div class="modal-dialog  modal-dialog-scrollable modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-center bg-aux">
+                <h5>Configurar Período de Matrícula</h5>
+            </div>
+            <div class="modal-body">
+                <!-- Periodo 1 -->
+                <div class="mb-4">
+                    <h6 class="card-title">Matrícula de Excelencia Académica</h6>
+                    <p class="text-muted mb-3">Índice global de 80% a 100%</p>
+                    <div class="row g-3">
+                    <div class="col-md-6">
+                        <label for="periodo1Inicio" class="form-label">Inicio</label>
+                        <input type="datetime-local" class="form-control" id="periodo1Inicio">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="periodo1Fin" class="form-label">Fin</label>
+                        <input type="datetime-local" class="form-control" id="periodo1Fin">
+                    </div>
+                    </div>
+                </div>
+                <hr>
+                <!-- Periodo 2 -->
+                <div class="mb-4">
+                    <h6 class="card-title">Matrícula Regular</h6>
+                    <p class="text-muted mb-3">Índice global de 71% a 100% del último período</p>
+                    <div class="row g-3">
+                    <div class="col-md-6">
+                        <label for="periodo2Inicio" class="form-label">Inicio</label>
+                        <input type="datetime-local" class="form-control" id="periodo2Inicio">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="periodo2Fin" class="form-label">Fin</label>
+                        <input type="datetime-local" class="form-control" id="periodo2Fin">
+                    </div>
+                    </div>
+                </div>
+                <hr>
+                <!-- Periodo 3 -->
+                <div class="mb-4">
+                    <h6 class="card-title">Matrícula Rezagados</h6>
+                    <p class="text-muted mb-3">Índice global de 0% a 70% del último período</p>
+                    <div class="row g-3">
+                    <div class="col-md-6">
+                        <label for="periodo3Inicio" class="form-label">Inicio</label>
+                        <input type="datetime-local" class="form-control" id="periodo3Inicio">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="periodo3Fin" class="form-label">Fin</label>
+                        <input type="datetime-local" class="form-control" id="periodo3Fin">
+                    </div>
+                    </div>
+            </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary"  data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
+                <button class="btn bg-custom-primary text-white">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal Matricula -->
 
 <!-- Modal for Role Administration -->
 <div class="modal fade" id="roleAdminModal" tabindex="-1" aria-labelledby="roleAdminModalLabel" aria-hidden="true">
@@ -179,70 +279,42 @@ AuthMiddleware::checkAccess($requiredRole);
         </div>
     </div>
 </div>
-
-<div class="modal fade" id="modalExceptionalCancellation" tabindex="-1" role="dialog" aria-labelledby="SRP" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content bg">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalCenterTitle">Exceptional class cancellation period</h5>
-      </div>
-      <div class="modal-body">
-        <div class="row">
-            <div class="col-6">
-                <center>
-                    <label for="start-time">Start time</label><br>
-                    <input
-                        type="datetime-local"
-                        id="start-time-exceptional"
-                        name="start-time"/>
-                </center>
-            </div>
-            <div class="col-6">
-                <center>
-                    <label for="end-time">End time</label><br>
-                    <input
-                        type="datetime-local"
-                        id="end-time-exceptional"
-                        name="end-time"/>
-                </center>
-
-            </div>
+<div class="alert alert-success" id="alerCanceled" role="alert">
+  Perido de cancelaciones actualizado correctamente!!!
+</div>
+<div class="main">
+<div class="toast-container top-50 start-50 translate-middle mt-3">
+    <div class="toast border-0" id="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header bg border border-0">
+            <img src="/public/images/logo.png" width="24px" class="rounded me-2" alt="...">
+            <strong class="me-auto text" id="toastTitle"></strong>
+            <small class="text">Justo ahora</small>
+            <button type="button" class="btn-close text" data-bs-dismiss="toast" aria-label="Close"></button>
         </div>
-        <div class="row">
-            <center>
-                <button id="saveECCBtn" type="button" class="btn bg-custom-primary m-4 text-white">Save</button>
-            </center>
+        <div class="toast-body bg-aux border border-0" id="toastBody">
         </div>
-      </div>
-      
     </div>
-  </div>
 </div>
 
-<div class="main">
         <div class="offcanvas offcanvas-start bg" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
             <div class="offcanvas-header justify-between">
                 <h5 class="offcanvas-title text" id="offcanvasExampleLabel">Menu</h5>
                 <button type="button" class="btn bg text" data-bs-dismiss="offcanvas" aria-label="Close">
                     <i class="bi bi-x"></i>
                 </button>
+                
             </div>
+            
             <div class="offcanvas-body">
                 <div class="list-group">
-                  <a class="text bg aux text-decoration-none" data-bs-toggle="collapse" href="#collapseStudents" role="button" aria-expanded="false" aria-controls="collapseStudents">
+                  <a class="text bg aux text-decoration-none" data-bs-toggle=""  role="button" aria-expanded="false" aria-controls="collapseStudents">
                     <div class="list-group-item list-group-title list-group-item- bg-aux text fw-bold">
                         Settings
                       </div>
                     </a>
-                          <div class="collapse" id="collapseStudents">
-                            <button type="button" class="text list-group-item list-group-item-action bg list-group-item-indent" data-bs-toggle="modal" data-bs-target="#SRP">
-                                registration
-                            </button>
+                          <div class="" id="collapseStudents">
                             <button type="button" class="text list-group-item list-group-item-action bg list-group-item-indent" data-bs-toggle="modal" data-bs-target="#historyStudent">
                                 enrollment
-                            </button>
-                            <button id="btnExceptionalCancellation" type="button" class="text list-group-item list-group-item-action bg list-group-item-indent" data-bs-toggle="modal" data-bs-target="#modalExceptionalCancellation">
-                                exceptional cancellation
                             </button>
                             <button id="roleAdministrationBtn" type="button" class="text list-group-item list-group-item-action bg list-group-item-indent" data-bs-toggle="modal" data-bs-target="#roleAdminModal">
                                 role administration
@@ -265,44 +337,152 @@ AuthMiddleware::checkAccess($requiredRole);
                         
                     </button>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">My profile</a></li>
+                        <li><a class="dropdown-item" href="#">Mi perfil</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="/api/get/logout.php">Logout <i class="bi bi-box-arrow-right"></i></a></li>
+                        <li><a class="dropdown-item" href="/api/get/logout.php">Cerrar sesión <i class="bi bi-box-arrow-right"></i></a></li>
                     </ul>
                  </div>
             </div>
         </div>
         <div class="container-fluid">
-            <div class=" flex p-2 justify-between items-center">
-                <h4 class="text">Dashboard</h4>
-                <div class="buttons">
-
-                    <button id="addUserBtn" class="btn bg-custom-primary text-white"  data-bs-toggle="modal" data-bs-target="#newUserModal">Add User</button>
-                </div>
+            <div class=" flex px-4">
+                <h4 class="text">Administrador</h4>
+                
             </div>
-            <div class="row p-4">
+            <div class="row p-2">
                 <div class="col">
                     <div class="card bg-aux shadow rounded m-2  p-2">
-                        <span>Teachers</span>
-                        <strong>67</strong>
+                        <span>Docentes</span>
+                        <div id="Teachers"><p class="card-text placeholder-glow"><span class="placeholder col-6"></span></p></div>
                     </div>
                 </div>
                 <div class="col">
                     <div class="card shadow rounded m-2 bg-aux p-2">
-                        <span>Students</span>
-                        <strong>1830</strong>
+                        <span>Estudiantes</span>
+                        <div id="Students"><p class="card-text placeholder-glow"><span class="placeholder col-6"></span></p></div>
                     </div>
                 </div>
                 <div class="col">
                     <div class="card shadow rounded m-2 bg-aux p-2">
-                        <span>Careers</span>
-                        <strong>12</strong>
+                        <span>Carreras</span>
+                        <div id="Careers"><p class="card-text placeholder-glow"><span class="placeholder col-6"></span></p></div>
                     </div>
                 </div>
                 <div class="col">
                     <div class="card shadow rounded m-2 bg-aux p-2">
-                        <span>Regional Center</span>
-                        <strong>2</strong>
+                        <span>Centros regionales</span>
+                        <div id="RegionalCenter"><p class="card-text placeholder-glow"><span class="placeholder col-6"></span></p></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row p-2">
+                <div class="col-12 col-md-4 my-2">
+                    <div class="card bg-aux">
+                        <div class="card-body">
+                            <h5 class="modal-title" id="exampleModalCenterTitle">Periodo de admisiones</h5>
+                            <div class="row my-3">
+                                <div class="col-12 col-md-6">
+                                    <center>
+                                        <label for="start-time">Inicio</label><br>
+                                        <div id="inputStartR">
+                                        <p class="card-text placeholder-glow"><span class="placeholder col-12"></span></p>
+                                        </div>
+                                    </center>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <center>
+                                        <label for="end-time">Fin</label><br>
+                                        <div id="inputEndR">
+                                        <p class="card-text placeholder-glow"><span class="placeholder col-12"></span></p>
+                                        </div>
+                                    </center>
+
+                                </div>
+                            </div>
+                            <div class="row">
+                                <center>
+                                    <button id="saveSRPBtn" type="button" class="btn bg-custom-primary mt-2 text-white">Guardar</button>
+                                </center>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4 my-2">
+                    <div class="card bg-aux">
+                        <div class="card-body">
+                            <h5 class="modal-title" id="exampleModalCenterTitle">Periodo de cancelacion de clases excepcional</h5>
+                            <div class="row my-3">
+                                <div class="col-12 col-md-6">
+                                    <center>
+                                        <label for="start-time-cancaled">Start time</label><br>
+                                        <div id="start-time-cancaled">
+                                            <p class="card-text placeholder-glow"><span class="placeholder col-12"></span></p>
+                                        </div>
+                                    </center>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <center>
+                                    <label for="start-time">End time</label><br>
+                                        <div id="end-time-cancaled">
+                                        <p class="card-text placeholder-glow"><span class="placeholder col-12"></span></p>
+                                        </div>
+                                    </center>
+
+                                </div>
+                            </div>
+                            <div class="row">
+                                <center>
+
+                                    <button id="saveECBtn" type="button" class="btn bg-custom-primary mt-2 text-white">Guardar</button>
+
+                                </center>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4 my-2">
+                    <div class="card bg-aux">
+                        <div class="card-body">
+                            <h5 class="modal-title" id="exampleModalCenterTitle">Periodo de matricula</h5>
+                            
+                            <div class="row">
+                                <center>
+                                    <button id="" type="button" class="btn bg-custom-primary mt-2 text-white"  data-bs-toggle="modal" data-bs-target="#enrollPeriod">Configurar</button>
+                                </center>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="row p-2">
+                <div class=" col-12">
+                    <div class="card bg-aux">
+
+                        <div class="card-body">
+                            <div class="flex flex-row justify-between items-center">
+                                <h5 class="text">Usuarios</h5>
+                                <button id="addUserBtn" class="btn bg-custom-primary text-white"  data-bs-toggle="modal" data-bs-target="#newUserModal">Crear usuario</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row p-2">
+                <div class=" col-12">
+                    <div class="card bg-aux">
+
+                        <div class="card-body pb-8">
+                            <div class="flex flex-row justify-between items-center">
+                                <h5 class="text">Inicios de sesión</h5>
+                                
+                                <button id="addUserBtn" class="btn bg-custom-primary text-white"  data-bs-toggle="modal" data-bs-target="#logModal">Mas detalles</button>
+                            </div>
+                            <div id="chart" class="chart"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -310,99 +490,9 @@ AuthMiddleware::checkAccess($requiredRole);
             
         </div>
     </div>
+
     <script src="/public/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
     <script src="/public/js/roleAdministration.js"></script>
-    <script>
-        (function() {
-    'use strict';
-    window.addEventListener('load', function() {
-        var forms = document.getElementsByClassName('needs-validation');
-        var validation = Array.prototype.filter.call(forms, function(form) {
-        form.addEventListener('submit', function(event) {
-            if (form.checkValidity() === false) {
-                event.preventDefault();
-                event.stopPropagation();
-            }
-            form.classList.add('was-validated');
-        }, false);
-        });
-    }, false);
-    })();
     
-    const newUserModal = document.getElementById('newUserModal');
-    const newUserModalBS = new bootstrap.Modal(newUserModal)
-    const SRPModal = document.getElementById('SRP');
-    const SRPModalBS = new bootstrap.Modal(SRPModal)
-    const addUserBtn = document.getElementById('addUserBtn');
-    const departamentSelect = document.getElementById('departamentSelect');
-    const saveSRPBtn = document.getElementById('saveSRPBtn');
-
-    addUserBtn.addEventListener('click', ()=>{
-        newUserModalBS.show();
-        fetch('/api/get/public/allDepartaments.php')
-        .then((response) => {return response.json()})
-        .then((response) => {
-            departamentSelect.innerHTML = '<option value="">Select department...</option>';
-            response.forEach(department => {
-                departamentSelect.innerHTML += `<option value="${department.department_id}">${department.department_name}</option>`;
-            });
-        })
-    })
-    saveSRPBtn.addEventListener('click', (e)=>{
-        e.target.disabled = true;
-        e.target.innerHTML = `<div class="spinner-border text-light" role="status"></div>`;
-        let formData = new FormData();
-        formData.append('endTime', document.getElementById('end-time').value);
-        formData.append('startTime', document.getElementById('start-time').value);
-        fetch('/api/put/admin/registrationPeriod.php',{
-            method: 'POST',
-            body: formData
-        })
-        .then((response)=>{return response})
-        .then((response)=>{
-            alert('Done!');
-            SRPModalBS.hide();
-            saveSRPBtn.disabled = false;
-            saveSRPBtn.innerHTML = 'save'
-        })
-    })
-
-    const modalExceptionalCancellation = document.getElementById('modalExceptionalCancellation');
-    const modalCCE = new bootstrap.Modal(modalExceptionalCancellation)
-    const saveECCBtn = document.getElementById('saveECCBtn');
-    let starExceptional = document.getElementById('start-time-exceptional');
-    let endExceptional = document.getElementById('end-time-exceptional');
-
-
-    saveECCBtn.addEventListener('click', ()=>{
-   
-        saveECCBtn.innerHTML = `<div class="spinner-border text-light" role="status"></div>`;
-
-
-        if(starExceptional.value == "" || endExceptional.value == ""){
-            return
-        }else{
-
-            const formData = new FormData();
-            formData.append('start_time', starExceptional.value);
-            formData.append('end_time', endExceptional.value);
-
-
-            fetch('/api/put/admin/exceptionalCancellation.php',{
-            method: 'POST',
-            body: formData
-            })
-            .then((response)=>{return response})
-            .then((response)=>{
-                modalCCE.hide();
-                saveECCBtn.disabled = false;
-                saveECCBtn.innerHTML = 'save'
-            })
-        }
-
-        
-    })
-
-    </script>
 </body>
 </html>

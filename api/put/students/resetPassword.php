@@ -38,9 +38,9 @@ if ($result->num_rows > 0) {
 
     if ($current_time < $expiration_time) {
 
-        $update_query = "UPDATE Employees SET password =  AES_ENCRYPT(?, ?) WHERE employee_number = ?";
+        $update_query = "UPDATE Students SET password =  AES_ENCRYPT(?, ?) WHERE account_number = ?";
         $stmt_update = $conn->prepare($update_query);
-        $stmt_update->bind_param('ssi', $new_password, $passphrase , $row['identifier']);
+        $stmt_update->bind_param('ssi', $new_password, $passphrase, $row['identifier']);
         
         if ($stmt_update->execute()) {
             $response["status"] = 0;

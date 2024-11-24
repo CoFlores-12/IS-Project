@@ -14,5 +14,8 @@ if ($role === 'Department Head') {
 if ($role === 'Teacher') {
     include 'TeacherHome.php';
 }
+if ($role === 'Coordinator') {
+    include 'coordinatorHome.php';
+}
 
 ?>

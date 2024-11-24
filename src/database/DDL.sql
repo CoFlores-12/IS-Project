@@ -1,5 +1,5 @@
     SET FOREIGN_KEY_CHECKS = 0;
-    DROP TABLE StatusApplicant;
+    DROP TABLE LogAuth;
     DROP TABLE `Applicant`;
     DROP TABLE Roles;
     DROP TABLE `Applicant_result`;
@@ -41,11 +41,30 @@
         Foreign Key (career_id) REFERENCES Careers(career_id),
         Foreign Key (center_id) REFERENCES Regional_center(center_id)
     );
+
+    CREATE TABLE Roles (
+        role_id TINYINT PRIMARY KEY,
+        type VARCHAR(20) --(jefe, coordinador, docente, etc)
+        route VARCHAR(20) --(admin, teacher, etc)
+    );
+
+    CREATE TABLE Employees (
+        employee_number INT PRIMARY KEY AUTO_INCREMENT,
+        person_id VARCHAR(20),
+        role_id TINYINT,
+        password VARBINARY(255) NOT NULL, 
+        institute_email VARCHAR(100) UNIQUE,
+        FOREIGN KEY (person_id) REFERENCES Persons(person_id),
+        Foreign Key (role_id) REFERENCES Roles(role_id)
+    );
+
     CREATE TABLE Careers (
         career_id INT PRIMARY KEY AUTO_INCREMENT,
         career_name VARCHAR(100) NOT NULL,
         time_stm TINYINT,
         faculty_id INT,
+        coordinator_id INT,
+        Foreign Key (employee_number) REFERENCES Employees(employee_number),
         FOREIGN KEY (faculty_id) REFERENCES Faculty(faculty_id)
     );
 
@@ -89,13 +108,14 @@
         person_id VARCHAR(20), -- (identity_number)
         preferend_career_id INT,
         secondary_career_id INT,
-        certify VARCHAR(255),
         inscription_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         status_id TINYINT,
         counter TINYINT DEFAULT 1,
         approved_pref BIT DEFAULT 0,
         approved_sec BIT DEFAULT 0,
         validated BIT,
+        certify MEDIUMBLOB,
+        certify_ext VARCHAR(6),
         FOREIGN KEY (person_id) REFERENCES Persons(person_id),
         FOREIGN KEY (preferend_career_id) REFERENCES Careers(career_id),
         FOREIGN KEY (secondary_career_id) REFERENCES Careers(career_id),
@@ -123,21 +143,6 @@
         FOREIGN KEY (person_id) REFERENCES Persons(person_id),
         FOREIGN KEY (career_id) REFERENCES Careers(career_id)
     );
-
-    CREATE TABLE Roles (
-        role_id TINYINT PRIMARY KEY,
-        type VARCHAR(20) --(jefe, coordinador, docente, etc)
-        route VARCHAR(20) --(admin, teacher, etc)
-    );
-    CREATE TABLE Employees (
-        employee_number INT PRIMARY KEY AUTO_INCREMENT,
-        person_id VARCHAR(20),
-        role_id TINYINT,
-        password VARBINARY(255) NOT NULL, 
-        institute_email VARCHAR(100) UNIQUE,
-        FOREIGN KEY (person_id) REFERENCES Persons(person_id),
-        Foreign Key (role_id) REFERENCES Roles(role_id)
-    )
 
     CREATE TABLE Config (
         config_id BINARY PRIMARY KEY AUTO_INCREMENT,
@@ -178,7 +183,8 @@
     Foreign Key (class_id)  REFERENCES Classes(class_id),
     Foreign Key (period_id) REFERENCES Periods(period_id),
     Foreign Key (classroom_id) REFERENCES Classroom(classroom_id),  
-    Foreign Key (employee_number) REFERENCES Employees(employee_number));
+    Foreign Key (employee_number) REFERENCES Employees(employee_number)
+    );
 
     CREATE TABLE `Obs` (
         obs_id TINYINT PRIMARY KEY,
@@ -249,10 +255,20 @@
     );
 
     CREATE TABLE StudentsxWaitlist (
-    student_id VARCHAR(11),
-    waitlist_id INT,
-    FOREIGN KEY (student_id) REFERENCES Students(account_number),
-    FOREIGN KEY (waitlist_id) REFERENCES Waitlist(waitlist_id)
+        student_id VARCHAR(11),
+        waitlist_id INT,
+        FOREIGN KEY (student_id) REFERENCES Students(account_number),
+        FOREIGN KEY (waitlist_id) REFERENCES Waitlist(waitlist_id)
+    );
+
+    CREATE TABLE LogAuth (
+        log_id INT PRIMARY KEY AUTO_INCREMENT,
+        DATE TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        ip_address VARCHAR(15),
+        auth_status BIT,
+        role_id TINYINT,
+        identifier VARCHAR(50),
+        Foreign Key (role_id) REFERENCES Roles(role_id)
     );
     
     ALTER TABLE Employees
@@ -261,12 +277,13 @@
 
     CREATE TABLE PasswordResetTokens (
     id_passwordResetTokens INT AUTO_INCREMENT PRIMARY KEY,
-    employee_id INT NOT NULL,
+    identifier VARCHAR(255) NOT NULL,
     token VARCHAR(255) NOT NULL UNIQUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
     expires_at DATETIME NOT NULL,
-    FOREIGN KEY (employee_id) REFERENCES Employees(employee_number)
-);
+    is_used BIT(1) DEFAULT 0
+    );
+
 
 DELIMITER //
 
@@ -274,7 +291,8 @@ DELIMITER //
         IN in_person_id VARCHAR(20),
         IN in_role VARCHAR(25),
         IN in_password VARCHAR(255),
-        IN in_institute_email VARCHAR(100)
+        IN in_institute_email VARCHAR(100),
+        IN in_departament_id int
     )
     BEGIN
         DECLARE secret_key VARCHAR(255); 
@@ -286,12 +304,13 @@ DELIMITER //
 
         START TRANSACTION;
 
-        INSERT INTO `Employees` (person_id, role_id, password, institute_email)
+        INSERT INTO `Employees` (person_id, role_id, password, institute_email, department_id)
         VALUES (
             in_person_id,
             in_role,
             AES_ENCRYPT(in_password, secret_key),
-            in_institute_email
+            in_institute_email,
+            in_departament_id
         );
 
         COMMIT;
@@ -332,7 +351,7 @@ DELIMITER //
 
 CREATE PROCEDURE LoginAdministrator (
         IN in_identifier VARCHAR(100),      
-        IN in_password VARCHAR(255),       
+        IN in_password VARCHAR(255),
         OUT is_authenticated BOOLEAN,       
         OUT out_role VARCHAR(25),
         OUT out_route VARCHAR(25),
@@ -343,8 +362,8 @@ CREATE PROCEDURE LoginAdministrator (
         DECLARE db_password VARBINARY(255);
 
         SET is_authenticated = FALSE;
-        SET out_role = '0';
-        SET out_route = '';
+        SET out_role = NULL;
+        SET out_route = NULL;
         SET out_employee_number = NULL;
 
         SELECT JSON_UNQUOTE(JSON_EXTRACT(data, '$.phraseEncrypt'))
@@ -361,7 +380,7 @@ CREATE PROCEDURE LoginAdministrator (
         IF db_password IS NOT NULL AND AES_DECRYPT(db_password, secret_key) = in_password THEN
             SET is_authenticated = TRUE;
         ELSE
-            SET out_role = '0'; 
+            SET out_role = NULL; 
         END IF;
     END //
 
@@ -451,3 +470,4 @@ WHERE (Employees.employee_number = ?
        OR Persons.person_id = ? 
        OR Employees.institute_email = ?)
   AND Employees.employee_number = ?; -- Filtro para asegurar que solo se traigan empleados del docente autenticado
+

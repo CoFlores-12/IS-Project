@@ -16,19 +16,18 @@ const token = urlParams.get('token');
 fetch(`/api/get/admin/verifyToken.php?token=${token}`)
 .then(response => response.json())
 .then(data => {
+
     console.log(data)
+
     if (data.status === 0) {
-         formInput.style.display = "block"
-         
+        formInput.style.display = "block"
     } else {
-         alertExpired.style.display = "block"
+        alertExpired.style.display = "block"
     }
    })
  .catch(error => {
     console.error('Error:', error);
  });
-
-
 
 
 submitButton.addEventListener('click', () => {
@@ -38,14 +37,14 @@ if(newPassword == ""){
     return;
 }
     
-    fetch('/api/put/teacher/resetPassword.php', {
+    fetch('/api/put/students/resetPassword.php', {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            token: token, 
-            new_password: newPassword
+            token:token, 
+            new_password:newPassword
         })
     })
     .then(response => response.json())

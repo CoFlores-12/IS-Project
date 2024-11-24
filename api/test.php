@@ -1,8 +1,19 @@
 <?php
-require_once '../src/modules/Auth.php';
 
-$requiredRole = 'Administrator';
+include '../src/modules/database.php';
 
-AuthMiddleware::checkAccess($requiredRole);
+$db = (new Database())->getConnection();
+$response = [];
 
-echo "Bienvenido a la página protegida!";
+$result = $db->execute_query("SELECT * FROM LogAuth L left join Roles R on L.role_id = R.role_id");
+
+$resultArray = [];
+if ($result) {
+    while ($row = $result->fetch_assoc()) {
+        $resultArray[] = $row;
+    }
+}
+
+header('Content-Type: application/json');
+echo json_encode($resultArray);
+?>
