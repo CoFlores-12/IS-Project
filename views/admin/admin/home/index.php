@@ -71,9 +71,10 @@ AuthMiddleware::checkAccess($requiredRole);
       <div class="modal-footer row justify-between items-center">
         <div class="d-flex justify-content-between align-items-center">
           <select id="rowsPerPage" class="form-select w-auto">
-            <option value="5">5 filas</option>
             <option value="10">10 filas</option>
             <option value="20">20 filas</option>
+            <option value="50">50 filas</option>
+            <option value="100">100 filas</option>
           </select>
           <nav>
             <ul class="pagination m-0" id="pagination">

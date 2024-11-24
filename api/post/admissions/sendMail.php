@@ -17,7 +17,7 @@
                 p.personal_email, 
                 sa.description AS status,  
                 e.exam_name,
-                MAX(ar.result_exam) AS result_exam  -- O usar cualquier tipo de agregación si es necesario
+                MAX(ar.result_exam) AS result_exam 
             FROM 
                 Applicant a
             JOIN 
@@ -46,6 +46,11 @@
         $resultado = $mail->sendEmail(getenv('emailUser'), $mailAspirant, $affair, $message);
         echo $resultado . "<br>"; 
     }
+
+    $sql = "UPDATE Config
+        SET data = JSON_SET(data, '$.AdmissionsStatus', 0)
+        WHERE config_id = 1;";
+    $conn->execute_query($sql);
 
 ?>
 

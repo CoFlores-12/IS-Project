@@ -174,7 +174,7 @@ class Aspirant {
      * @return mixed
      */
     public static function getAdmitted($conn){
-        return $conn->execute_query("SELECT 
+        $exported =  $conn->execute_query("SELECT 
                                         P.person_id,
                                         P.first_name,
                                         P.last_name,
@@ -189,6 +189,8 @@ class Aspirant {
                                         Persons P ON A.person_id = P.person_id
                                     WHERE 
                                         A.status_id = 1;");
+        $conn->execute_query('UPDATE `Applicant` SET status_id = 4 WHERE  A.status_id = 1;');
+        return $exported;
     }
 
     public function toArray() {
