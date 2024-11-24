@@ -1,42 +1,43 @@
-document.getElementById('goToNextTask').addEventListener('click', function () {
-    // Obtiene todas las modales abiertas actualmente
-    var modals = document.querySelectorAll('.modal.show');
 
-    fetch('https://tuservidor.com/api/ejecutar_funcion.php', {
-        method: 'POS', 
-        headers: {
-            'Content-Type': 'application/json'  
-        }
+const sendMails = document.getElementById('sendMails');
+const alertSuccesMails = document.getElementById('alertSuccesMails');
+const alertFalitedMails = document.getElementById('alertFalitedMails');
+
+alertSuccesMails.style.display = "none"
+
+alertFalitedMails.style.display = "none"
+
+function sentMails (){
+    fetch('/api/post/admissions/sendMail.php', {
+        method: 'GET',
     })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`Error  : ${response.statusText}`);
-        }
-        return response.text(); 
-    })
-    .then(data => {
-        console.log('The emails were sent successfully:', data); 
-    })
-    .catch(error => {
-        console.error('mistake:', error);
-    });
+        .then(response => response.json())
+        .then(data => {
+            alertSuccesMails.style.display = "block"
+            setTimeout(function() {
+                alertSuccesMails.style.display = 'none';
+              }, 3000); 
+              sendMails.innerHTML = `Empezar`
+            sendMails.disabled = false;
+        })
+        .catch(error => {
+            alertFalitedMails.style.display = "block"
+            setTimeout(function() {
+                alertFalitedMails.style.display = 'none';
+              }, 3000); 
+        });
 
-    // Cierra cada modal
-    modals.forEach(modal => {
-        var modalInstance = bootstrap.Modal.getInstance(modal);
-        if (modalInstance) {
-            modalInstance.hide();
-        }
-    });
 
-    // Lógica para la preparación de la siguiente tarea
-    prepareNextTask();
-});
-
-// Función para preparar la siguiente tarea
-function prepareNextTask() {
-    // Aquí puedes agregar cualquier lógica necesaria para configurar la siguiente tarea
-    // Ejemplo: actualizar la interfaz, cargar datos nuevos, etc.
-    console.log("Ready for next task.");
-    // ... cualquier otra lógica necesaria
 }
+
+sendMails.addEventListener("click", ()=>{
+    sendMails.innerHTML = `<center><div class="spinner-grow text-secondary" role="status">
+        <span class="visually-hidden">Cargando...</span>
+    </div>`
+    sendMails.disabled = true;
+
+
+    sentMails();
+})
+
+
