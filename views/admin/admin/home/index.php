@@ -166,6 +166,71 @@ AuthMiddleware::checkAccess($requiredRole);
 </div>
 <!-- Modal SRP -->
 
+<!-- Modal Matricula -->
+<div class="modal fade" id="enrollPeriod" tabindex="-1" role="dialog" aria-labelledby="SRP" aria-hidden="true">
+    <div class="modal-dialog  modal-dialog-scrollable modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-center bg-aux">
+                <h5>Configurar Período de Matrícula</h5>
+            </div>
+            <div class="modal-body">
+                <!-- Periodo 1 -->
+                <div class="mb-4">
+                    <h6 class="card-title">Matrícula de Excelencia Académica</h6>
+                    <p class="text-muted mb-3">Índice global de 80% a 100%</p>
+                    <div class="row g-3">
+                    <div class="col-md-6">
+                        <label for="periodo1Inicio" class="form-label">Inicio</label>
+                        <input type="datetime-local" class="form-control" id="periodo1Inicio">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="periodo1Fin" class="form-label">Fin</label>
+                        <input type="datetime-local" class="form-control" id="periodo1Fin">
+                    </div>
+                    </div>
+                </div>
+                <hr>
+                <!-- Periodo 2 -->
+                <div class="mb-4">
+                    <h6 class="card-title">Matrícula Regular</h6>
+                    <p class="text-muted mb-3">Índice global de 71% a 100% del último período</p>
+                    <div class="row g-3">
+                    <div class="col-md-6">
+                        <label for="periodo2Inicio" class="form-label">Inicio</label>
+                        <input type="datetime-local" class="form-control" id="periodo2Inicio">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="periodo2Fin" class="form-label">Fin</label>
+                        <input type="datetime-local" class="form-control" id="periodo2Fin">
+                    </div>
+                    </div>
+                </div>
+                <hr>
+                <!-- Periodo 3 -->
+                <div class="mb-4">
+                    <h6 class="card-title">Matrícula Rezagados</h6>
+                    <p class="text-muted mb-3">Índice global de 0% a 70% del último período</p>
+                    <div class="row g-3">
+                    <div class="col-md-6">
+                        <label for="periodo3Inicio" class="form-label">Inicio</label>
+                        <input type="datetime-local" class="form-control" id="periodo3Inicio">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="periodo3Fin" class="form-label">Fin</label>
+                        <input type="datetime-local" class="form-control" id="periodo3Fin">
+                    </div>
+                    </div>
+            </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary"  data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
+                <button class="btn bg-custom-primary text-white">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal Matricula -->
+
 <!-- Modal for Role Administration -->
 <div class="modal fade" id="roleAdminModal" tabindex="-1" aria-labelledby="roleAdminModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -318,7 +383,7 @@ AuthMiddleware::checkAccess($requiredRole);
                             <div class="row my-3">
                                 <div class="col-12 col-md-6">
                                     <center>
-                                        <label for="start-time">Inicia</label><br>
+                                        <label for="start-time">Inicio</label><br>
                                         <div id="inputStartR">
                                         <p class="card-text placeholder-glow"><span class="placeholder col-12"></span></p>
                                         </div>
@@ -326,7 +391,7 @@ AuthMiddleware::checkAccess($requiredRole);
                                 </div>
                                 <div class="col-12 col-md-6">
                                     <center>
-                                        <label for="end-time">Finaliza</label><br>
+                                        <label for="end-time">Fin</label><br>
                                         <div id="inputEndR">
                                         <p class="card-text placeholder-glow"><span class="placeholder col-12"></span></p>
                                         </div>
@@ -378,39 +443,18 @@ AuthMiddleware::checkAccess($requiredRole);
                 <div class="col-12 col-md-4 my-2">
                     <div class="card bg-aux">
                         <div class="card-body">
-                            <h5 class="modal-title" id="exampleModalCenterTitle">period</h5>
-                            <div class="row my-3">
-                                <div class="col-12 col-md-6">
-                                    <center>
-                                        <label for="start-time">Start time</label><br>
-                                        <input
-                                            type="datetime-local"
-                                            id="start-time"
-                                            class="form-control"
-                                            name="start-time"/>
-                                    </center>
-                                </div>
-                                <div class="col-12 col-md-6">
-                                    <center>
-                                        <label for="end-time">End time</label><br>
-                                        <input
-                                            type="datetime-local"
-                                            id="end-time"
-                                            class="form-control"
-                                            name="end-time"/>
-                                    </center>
-
-                                </div>
-                            </div>
+                            <h5 class="modal-title" id="exampleModalCenterTitle">Periodo de matricula</h5>
+                            
                             <div class="row">
                                 <center>
-                                    <button id="saveSRPBtn" type="button" class="btn bg-custom-primary mt-2 text-white">Guardar</button>
+                                    <button id="" type="button" class="btn bg-custom-primary mt-2 text-white"  data-bs-toggle="modal" data-bs-target="#enrollPeriod">Configurar</button>
                                 </center>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
 
 
             <div class="row p-2">

@@ -99,27 +99,28 @@ class AuthMiddleware {
         }
 
         if (!isset($_SESSION['user'])) {
-            http_response_code(403);
-            echo "Not logged";
+            $entity  = ($requiredRole === "Student") ? "students" : "admin";
+
+            echo "<script>window.location.href = '/views/".$entity."/login/index.php?error=401';</script>";
             exit;
         }
 
         // Verifica la dirección IP de la sesión
-        $sessionIp = $_SESSION['user']['ip'];
-        $currentIp = $_SERVER['REMOTE_ADDR'];
-        if ($currentIp !== $sessionIp) {
-            http_response_code(403);
-            echo "Acceso denegado: IP no coincide con la de la sesión.";
-            exit;
+        if ($requiredRole !== 'Student') {
+            $sessionIp = $_SESSION['user']['ip'];
+            $currentIp = $_SERVER['REMOTE_ADDR'];
+            if ($currentIp !== $sessionIp) {
+                echo "<script>window.location.href = '/views/admin/login/index.php?error=403';</script>";
+                exit;
+            }
         }
 
         // Verifica el rol del usuario
         $userRole = $_SESSION['user']['role'];
         if ($userRole !== $requiredRole) {
-            http_response_code(403);
-            echo "Acceso denegado: Rol no autorizado.".$_SESSION['user']['role'];
+            $entity  = ($requiredRole === "Student") ? "students" : "admin";
+            echo "<script>window.location.href = '/views/".$entity."/login/index.php?error=403';</script>";
             exit;
         }
-
     }
 }

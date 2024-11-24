@@ -5,7 +5,7 @@ $current_page = $_SERVER['REQUEST_URI'];
     .nav-link.active {
     font-weight: bold;
     color: #176b87 !important;
-    border-bottom: 1px solid #176b87;
+    border-bottom: 3px solid #176b87;
 }
 
 </style>
@@ -18,7 +18,7 @@ $current_page = $_SERVER['REQUEST_URI'];
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link <?php echo $current_page == '/' ? 'active' : ''; ?>" href="/">Inicio</a>
+                    <a class="nav-link <?php echo $current_page == '/' ||  $current_page == '/index.php' ? 'active' : ''; ?>" href="/">Inicio</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link <?php echo strpos($current_page, '/views/admissions/form/index.php') !== false ? 'active' : ''; ?>" href="/views/admissions/form/index.php">Admisiones</a>

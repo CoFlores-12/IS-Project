@@ -50,7 +50,7 @@
           </div>
 
           <div class="text-center text-lg-start mt-4 pt-2">
-              <button id="loginButton" type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-lg"
+              <button id="loginButton" type="button" data-mdb-button-init data-mdb-ripple-init class="btn text-white bg-custom-primary btn-lg"
               style="padding-left: 2.5rem; padding-right: 2.5rem;">iniciar sesión</button>
           </div>
 
