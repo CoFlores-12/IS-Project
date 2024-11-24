@@ -16,6 +16,13 @@ $students = $result->fetch_assoc()['count'];
 
 $result = $db->execute_query("SELECT COUNT(*) AS count FROM Applicant WHERE status_id = 1");
 $admitted = $result->fetch_assoc()['count'];
+
+
+$result = $db->execute_query("SELECT JSON_UNQUOTE(JSON_EXTRACT(data, '$.AdmissionsStatus')) as AdmissionsStatus
+        FROM Config
+        WHERE config_id = 1;");
+$AdmissionsStatus= json_decode($result->fetch_assoc()['AdmissionsStatus']);
+
 ?>
 
 <!DOCTYPE html>
@@ -191,8 +198,7 @@ $admitted = $result->fetch_assoc()['count'];
             </div>
             <div class="offcanvas-body">
                 
-                <button id="addExamnBtn" class="w-full bg-aux text btn rounded">Add Exam</button>
-                <button id="csvUploadBtn" class="w-full bg-aux text btn rounded mt-3" data-bs-toggle="modal" data-bs-target="#csvUploadModal">Upload Exam Results</button>
+                <button id="addExamnBtn" class="w-full bg-aux text btn rounded">Agregar Examen</button>
             </div>
         </div>
         <div class="header p-2 text-inverter bg">
@@ -207,23 +213,23 @@ $admitted = $result->fetch_assoc()['count'];
                         
                     </button>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">My profile</a></li>
+                        <li><a class="dropdown-item" href="#">Mi perfil</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="/api/get/logout.php">Logout <i class="bi bi-box-arrow-right"></i></a></li>
+                        <li><a class="dropdown-item" href="/api/get/logout.php">Salir <i class="bi bi-box-arrow-right"></i></a></li>
                     </ul>
                  </div>
             </div>
         </div>
         <div class="container-fluid">
             <div class=" flex p-2 justify-between items-center">
-                <h4 class="text">Dashboard</h4>
+                <h4 class="text">Admisiones</h4>
                
             </div>
             <div class="row p-4">
                 <div class="col">
                     <div id="cardApplicant" class="card bg-aux shadow rounded m-2  p-2" data-bs-toggle="modal" data-bs-target="#applicantModal">
                         <div class="card-body">
-                        <span>Applicants</span><br>
+                        <span>Aspirantes</span><br>
                         <strong><?php echo $applicant; ?></strong>
                         </div>
                     </div>
@@ -231,7 +237,7 @@ $admitted = $result->fetch_assoc()['count'];
                 <div class="col">
                     <div class="card shadow rounded m-2 bg-aux p-2">
                         <div class="card-body">
-                        <span>Students</span><br>
+                        <span>Estudiantes</span><br>
                         <strong><?php echo $students; ?></strong>
                         </div>
                     </div>
@@ -240,9 +246,9 @@ $admitted = $result->fetch_assoc()['count'];
                     <div id="cardAdmitted" class="card shadow rounded m-2 bg-aux p-2" data-bs-toggle="modal" data-bs-target="#admittedModal">
                         <div class="card-body">
                         <div class="row justify-between items-center">
-                            <span class="w-content">Admitted</span>
+                            <span class="w-content">Admitidos</span>
                             <a class="btn w-content box-sizing-border text-success btn-outline-success" href="/api/get/admin/admittedStudents.php">
-                                Export <i class="bi bi-arrow-bar-up"></i>
+                                Exportar <i class="bi bi-arrow-bar-up"></i>
                             </a>
                         </div>
                         <strong><?php echo $admitted; ?></strong>
@@ -257,18 +263,19 @@ $admitted = $result->fetch_assoc()['count'];
                     <div class="card bg-aux shadow rounded m-2  p-2" >
                         <span>Subir CSV</span>
                         <small class="my-2">Click aqui para descargar la plantilla</small>
-                        <button type="button" class="btn btn-primary">Subir</button>
+                        <button type="button" class="btn btn-primary"  data-bs-toggle="modal" data-bs-target="#csvUploadModal" <?php echo $AdmissionsStatus == 0 ? "" : "disabled" ?> >Subir</button>
                     </div>
                 </div>
                 <div class="col">
                     <div class="card shadow rounded m-2 bg-aux p-2">
                         <span>Validar resultados</span>
-                        <button type="button" class="btn btn-primary" disabled>Empezar</button>
+                        <button type="button" class="btn btn-primary"  data-bs-toggle="modal" data-bs-target="#successModal" <?php echo $AdmissionsStatus == 1 ? "" : "disabled" ?> >Empezar</button>
                     </div>
                 </div>
                 <div class="col">
                     <div  class="card shadow rounded m-2 bg-aux p-2" >
                         <span>Enviar Correos</span>
+
                         <div class="alert alert-success" id="alertSuccesMails" role="alert">
                             Correos enviados correctamente
                         </div>
@@ -276,6 +283,7 @@ $admitted = $result->fetch_assoc()['count'];
                             Algo salio Mal
                         </div>
                         <button type="button" id="sendMails" class="btn btn-primary" >Empezar</button>
+
                     </div>
                 </div>
                 

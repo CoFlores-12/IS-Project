@@ -325,7 +325,7 @@ let logs = [];
 
   let filteredLogs = [...logs];
   let currentPage = 1;
-  let rowsPerPage = 5;
+  let rowsPerPage = 10;
 fetch('/api/get/admin/adminData.php')
 .then((res)=>{return res.json()})
 .then((res)=>{

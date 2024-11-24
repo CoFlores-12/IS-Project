@@ -126,7 +126,7 @@ foreach ($result as $applicant) {
                                 <td>$resultScore</td>
                             </tr>";
     }
-    
+
     $message .= "
                         </tbody>
                     </table>
@@ -146,4 +146,6 @@ foreach ($result as $applicant) {
 }
 
 echo json_encode($result);
+
+
 ?>

@@ -90,13 +90,8 @@
             password: document.getElementById('password').value
         })
     })
-    .then(async response => {
-        if (!response.ok) {
-            let text = await response.text();
-            
-            throw new Error('Error in request: ' + text);
-        }
-        return response.json();
+    .then(response => {
+       response.json();
     })
     .then(data => {
       loginButton.disabled = false;

@@ -62,6 +62,11 @@ try {
             fclose($handle);
             $response['success'] = true;
             $response['message'] = 'Data Succesfully Imported.';
+            
+            //TODO ejecutar esta sentencia 
+            $sql = "UPDATE Config
+                SET data = JSON_SET(data, '$.AdmissionsStatus', 1)
+                WHERE config_id = 1;";
         } else {
             $response['success'] = false;
             $response['error'] = 'Error opening the file.';
