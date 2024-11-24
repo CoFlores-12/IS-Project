@@ -163,6 +163,27 @@ $AdmissionsStatus= json_decode($result->fetch_assoc()['AdmissionsStatus']);
     </div>
 </div>
 
+<!-- Modal Upload Result Message -->
+<div class="modal fade" id="successEmails" tabindex="-1" >
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg">
+            <div class="modal-header bg">
+                <h5 class="modal-title text" id="successModalLabel">Enviar Correos de resultados</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+            <div class="alert alert-success" id="alertSuccesMails" role="alert">
+                Correos enviados correctamente
+            </div>
+            <div class="alert alert-danger"  id="alertFalitedMails" role="alert">
+                Algo salio Mal
+            </div>
+                    <button id="sendMails" class="btn btn-success">Mandar correos</button>
+                </div>
+        </div>
+    </div>
+</div>
+
 <!-- Modal para éxito de validación -->
 <div class="modal fade" id="finalSuccessModal" tabindex="-1" >
     <div class="modal-dialog modal-dialog-centered">
@@ -274,16 +295,9 @@ $AdmissionsStatus= json_decode($result->fetch_assoc()['AdmissionsStatus']);
                 </div>
                 <div class="col">
                     <div  class="card shadow rounded m-2 bg-aux p-2" >
-                        <span>Enviar Correos</span>
-
-                        <div class="alert alert-success" id="alertSuccesMails" role="alert">
-                            Correos enviados correctamente
-                        </div>
-                        <div class="alert alert-danger"  id="alertFalitedMails" role="alert">
-                            Algo salio Mal
-                        </div>
-                        <button type="button" id="sendMails" class="btn btn-primary" >Empezar</button>
-
+                        
+                    <span>Mandar correos</span>
+                        <button type="button" class="btn btn-primary my-2"  data-bs-toggle="modal" data-bs-target="#successEmails" <?php echo $AdmissionsStatus == 2 ? "" : "disabled" ?> >Empezar</button>
                     </div>
                 </div>
                 

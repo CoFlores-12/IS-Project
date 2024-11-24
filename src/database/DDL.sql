@@ -116,6 +116,7 @@
         validated BIT,
         certify MEDIUMBLOB,
         certify_ext VARCHAR(6),
+        email_sent BIT DEFAULT 0,
         FOREIGN KEY (person_id) REFERENCES Persons(person_id),
         FOREIGN KEY (preferend_career_id) REFERENCES Careers(career_id),
         FOREIGN KEY (secondary_career_id) REFERENCES Careers(career_id),
@@ -470,4 +471,5 @@ WHERE (Employees.employee_number = ?
        OR Persons.person_id = ? 
        OR Employees.institute_email = ?)
   AND Employees.employee_number = ?; -- Filtro para asegurar que solo se traigan empleados del docente autenticado
+
 

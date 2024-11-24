@@ -17,7 +17,7 @@ function sentMails (){
             setTimeout(function() {
                 alertSuccesMails.style.display = 'none';
               }, 3000); 
-              sendMails.innerHTML = `Empezar`
+              sendMails.innerHTML = `Mandar correos`
             sendMails.disabled = false;
         })
         .catch(error => {
@@ -31,9 +31,9 @@ function sentMails (){
 }
 
 sendMails.addEventListener("click", ()=>{
-    sendMails.innerHTML = `<center><div class="spinner-grow text-secondary" role="status">
-        <span class="visually-hidden">Cargando...</span>
-    </div>`
+    sendMails.innerHTML = `<div class="spinner-border" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                            </div>`
     sendMails.disabled = true;
 
 

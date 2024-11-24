@@ -14,22 +14,33 @@ $conn = (new Database())->getConnection();
 $query = "SELECT 
             p.first_name, 
             p.last_name, 
-            p.personal_email,  
-            sa.description AS status,
-            GROUP_CONCAT(e.exam_name SEPARATOR ', ') AS exam_names,
-            GROUP_CONCAT(ar.result_exam SEPARATOR ', ') AS exam_results
+            p.personal_email,
+            GROUP_CONCAT(DISTINCT e.exam_code ORDER BY e.exam_code ASC SEPARATOR ', ') AS exam_codes, 
+            GROUP_CONCAT(DISTINCT ar.result_exam ORDER BY e.exam_code ASC SEPARATOR ', ') AS exam_results,  
+            CASE 
+                WHEN a.approved_pref = 1 AND a.approved_sec = 1 THEN CONCAT(c1.career_name, ', ', c2.career_name)
+                WHEN a.approved_pref = 1 THEN c1.career_name  
+                WHEN a.approved_sec = 1 THEN c2.career_name  
+                ELSE NULL
+            END AS approved_career,  
+            a.email_sent AS email_status,
+            a.applicant_id
         FROM 
             Applicant a
         JOIN 
             Persons p ON a.person_id = p.person_id
         LEFT JOIN 
-            Applicant_result ar ON a.person_id = ar.identity_number
+            Applicant_result ar ON a.person_id = ar.identity_number  
         LEFT JOIN 
-            Exams e ON ar.exam_code = e.exam_code
+            Exams e ON ar.exam_code = e.exam_code  
         LEFT JOIN 
-            StatusApplicant sa ON a.status_id = sa.status_id
+            Careers c1 ON a.preferend_career_id = c1.career_id  
+        LEFT JOIN 
+            Careers c2 ON a.secondary_career_id = c2.career_id  
+        WHERE 
+            a.email_sent = 0  
         GROUP BY 
-            p.person_id, p.first_name, p.last_name, p.personal_email, sa.description;";
+            a.applicant_id, p.first_name, p.last_name, p.personal_email, a.email_sent;";
 
 $result = $conn->execute_query($query);
 
@@ -37,8 +48,9 @@ foreach ($result as $applicant) {
     $firstName = $applicant['first_name'];
     $lastName = $applicant['last_name'];
     $email = $applicant['personal_email'];
-    $examNames = $applicant['exam_names'];
+    $examCodes = $applicant['exam_codes'];
     $examResults = $applicant['exam_results'];
+    $approvedCareer = $applicant['approved_career'];
 
     $affair = "Resultados de Examen de Admisión";
     $message = "
@@ -96,6 +108,29 @@ foreach ($result as $applicant) {
                     background-color: #176b87;
                     color: white;
                 }
+                ul {
+                    list-style-type: none;
+                    padding: 0;
+                }
+                li {
+                    margin: 10px 0;
+                    display: flex;
+                    align-items: center;
+                }
+                .checkmark {
+                    width: 16px;
+                    height: 16px;
+                    background-color: #28a745;
+                    border-radius: 50%;
+                    margin-right: 10px;
+                }
+                .crossmark {
+                    width: 16px;
+                    height: 16px;
+                    background-color: #dc3545;
+                    border-radius: 50%;
+                    margin-right: 10px;
+                }
             </style>
         </head>
         <body>
@@ -109,27 +144,40 @@ foreach ($result as $applicant) {
                     <table>
                         <thead>
                             <tr>
-                                <th>Nombre del Examen</th>
+                                <th>Código del Examen</th>
                                 <th>Resultado</th>
                             </tr>
                         </thead>
                         <tbody>";
     
-    // Separar los datos de exámenes
-    $examNamesArray = explode(', ', $examNames);
+    $examCodesArray = explode(', ', $examCodes);
     $examResultsArray = explode(', ', $examResults);
-    foreach ($examNamesArray as $index => $examName) {
+    foreach ($examCodesArray as $index => $examCode) {
         $resultScore = $examResultsArray[$index] ?? 'N/A';
         $message .= "
                             <tr>
-                                <td>$examName</td>
+                                <td>$examCode</td>
                                 <td>$resultScore</td>
                             </tr>";
     }
 
     $message .= "
                         </tbody>
-                    </table>
+                    </table>";
+
+    if ($approvedCareer) {
+        $careersArray = explode(', ', $approvedCareer);  
+        $message .= "<p>Has sido aprobado para las siguientes carreras:</p><ul>";
+        
+        foreach ($careersArray as $career) {
+            $message .= "<li><span class='checkmark'></span><strong>$career</strong></li>";
+        }
+        $message .= "</ul>";
+    } else {
+        $message .= "<p>Lo sentimos, no has sido aprobado para ninguna carrera.</p>";
+    }
+
+    $message .= "
                     <p>Si tienes alguna pregunta o necesitas más información, no dudes en contactarnos.</p>
                     <p>Atentamente,</p>
                     <p><strong>Equipo de Admisiones</strong></p>
@@ -143,9 +191,14 @@ foreach ($result as $applicant) {
     ";
 
     $resultado = $mail->sendEmail(getenv('emailUser'), $email, $affair, $message);
+
+    if ($resultado === 'Mail sent successfully.') {
+        $updateQuery = "UPDATE Applicant SET email_sent = 1 WHERE applicant_id = ?";
+        $stmt = $conn->prepare($updateQuery);
+        $stmt->bind_param("i", $applicant['applicant_id']);
+        $stmt->execute();
+    }
 }
 
 echo json_encode($result);
-
-
 ?>
