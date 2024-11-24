@@ -262,7 +262,7 @@ $AdmissionsStatus= json_decode($result->fetch_assoc()['AdmissionsStatus']);
                 <div class="col">
                     <div class="card bg-aux shadow rounded m-2  p-2" >
                         <span>Subir CSV</span>
-                        <small class="my-2">Click aqui para descargar la plantilla</small>
+                        <small class="my-2">Click <a href="/api/get/public/csvScoresTemplate.php">aqui</a> para descargar la plantilla</small>
                         <button type="button" class="btn btn-primary"  data-bs-toggle="modal" data-bs-target="#csvUploadModal" <?php echo $AdmissionsStatus == 0 ? "" : "disabled" ?> >Subir</button>
                     </div>
                 </div>
