@@ -275,7 +275,15 @@ $AdmissionsStatus= json_decode($result->fetch_assoc()['AdmissionsStatus']);
                 <div class="col">
                     <div  class="card shadow rounded m-2 bg-aux p-2" >
                         <span>Enviar Correos</span>
-                        <button type="button" class="btn btn-primary"  data-bs-toggle="modal" data-bs-target="#finalSuccessModal" <?php echo $AdmissionsStatus == 2 ? "" : "disabled" ?> >Empezar</button>
+
+                        <div class="alert alert-success" id="alertSuccesMails" role="alert">
+                            Correos enviados correctamente
+                        </div>
+                        <div class="alert alert-danger"  id="alertFalitedMails" role="alert">
+                            Algo salio Mal
+                        </div>
+                        <button type="button" id="sendMails" class="btn btn-primary" >Empezar</button>
+
                     </div>
                 </div>
                 
