@@ -16,6 +16,8 @@ $students = $result->fetch_assoc()['count'];
 
 $result = $db->execute_query("SELECT COUNT(*) AS count FROM Applicant WHERE status_id = 1");
 $admitted = $result->fetch_assoc()['count'];
+$result = $db->execute_query("SELECT COUNT(*) AS count FROM Employees WHERE role_id = 6");
+$validators = $result->fetch_assoc()['count'];
 
 
 $result = $db->execute_query("SELECT JSON_UNQUOTE(JSON_EXTRACT(data, '$.AdmissionsStatus')) as AdmissionsStatus
@@ -47,6 +49,8 @@ $AdmissionsStatus= json_decode($result->fetch_assoc()['AdmissionsStatus']);
     </style>
 </head>
 <body>
+
+
 
 <!-- Modal Applicant -->
 <div class="modal fade" id="applicantModal"  tabindex="-1">
@@ -140,7 +144,7 @@ $AdmissionsStatus= json_decode($result->fetch_assoc()['AdmissionsStatus']);
                 <form id="csvUploadForm" method="post" enctype="multipart/form-data">
                     <label for="file">Select a CSV file:</label>
                     <input type="file" name="file" id="file" accept=".csv" required>
-                    <button type="submit" name="submit" class="btn btn-primary mt-2">Upload and Import</button>
+                    <button type="submit" name="submit" class="btn bg-custom-primary text-white mt-2">Upload and Import</button>
                 </form>
             </div>
         </div>
@@ -157,7 +161,7 @@ $AdmissionsStatus= json_decode($result->fetch_assoc()['AdmissionsStatus']);
             </div>
             <div class="modal-body">
                 <p id="successMessage"></p>
-                <button id="nextActionBtn" class="btn btn-primary">Validate Applicant Results</button>
+                <button id="nextActionBtn" class="btn bg-custom-primary text-white">Validate Applicant Results</button>
             </div>
         </div>
     </div>
@@ -209,23 +213,89 @@ $AdmissionsStatus= json_decode($result->fetch_assoc()['AdmissionsStatus']);
     </div>
 </div>
 
-<div class="main">
-        <div class="offcanvas offcanvas-start bg" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
-            <div class="offcanvas-header justify-between">
-                <h5 class="offcanvas-title text" id="offcanvasExampleLabel">Menu</h5>
-                <button type="button" class="btn bg text" data-bs-dismiss="offcanvas" aria-label="Close">
-                    <i class="bi bi-x"></i>
-                </button>
+<!-- Modal New User -->
+<div class="modal fade" id="newUserModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content bg">
+      <div class="modal-header bg">
+        <h5 class="modal-title text" id="staticBackdropLabel">Nuevo Validador</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+      <form class="needs-validation bg rounded p-4" id="newUSerForm" novalidate>
+            <div class="form-row d-flex gap-4">
+                <div class="col mb-3">
+                    <label for="name">Nombres</label>
+                    <input name="name" type="text" class="form-control" id="name" placeholder="Ejemplo: Juan" required 
+                        pattern="[a-zA-Z\s]{4,}"
+                    aria-label="Campo para ingresar su nombre completo" aria-required="true" 
+                        aria-describedby="nameFeedback">
+                    <div id="nameFeedback" class="invalid-feedback">Por favor ingrese su nombre.</div>
+                </div>
+                <div class="col mb-3">
+                    <label for="lastName">Apellidos</label>
+                    <input name="lastName" type="text" class="form-control" id="lastName" placeholder="Ejemplo: Pérez" required 
+                        aria-label="Campo para ingresar sus apellidos" aria-required="true" 
+                        pattern="[a-zA-Z\s]{4,}"
+                        aria-describedby="lastNameFeedback">
+                    <div id="lastNameFeedback" class="invalid-feedback">Por favor ingrese sus apellidos.</div>
+                </div>
             </div>
-            <div class="offcanvas-body">
-                
-                <button id="addExamnBtn" class="w-full bg-aux text btn rounded">Agregar Examen</button>
+            <div class="row mb-4">
+                <div class="form-group">
+                    <label for="identity">Número de identidad</label>
+                    <input name="identity" pattern="\d{4}-\d{4}-\d{5}" id="identity" type="text" class="form-control" placeholder="0801-2000-00000" maxlength="15" required 
+                        aria-label="Campo para ingresar su número de identidad" aria-required="true" 
+                        aria-describedby="identityFeedback">
+                    <div id="identityFeedback" class="invalid-feedback">Por favor ingrese su número de identidad.</div>
+                </div>
             </div>
+            <div class="form-row d-flex gap-4">
+                <div class="col-4 mb-3">
+                    <label for="phone">Número de teléfono</label>
+                    <input name="phone" id="phone" type="text" class="form-control" placeholder="99999999" maxlength="8" required 
+                        pattern="[389]\d{3}\d{4}" 
+                            aria-label="Campo para ingresar su número de teléfono" aria-required="true" 
+                        aria-describedby="phoneFeedback">
+                    <div id="phoneFeedback" class="invalid-feedback">Por favor ingrese un número de teléfono válido.</div>
+                </div>
+                <div class="col mb-3">
+                    <label for="email">Correo electrónico</label>
+                    <input name="email" id="email" type="email" class="form-control" placeholder="correo@ejemplo.com" required 
+                        aria-label="Campo para ingresar su correo electrónico" aria-required="true" 
+                        aria-describedby="emailFeedback">
+                    <div id="emailFeedback" class="invalid-feedback">Por favor ingrese un correo electrónico válido.</div>
+                </div>
+            </div>
+           
         </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            <button type="submit" id="createUserBtn" class="btn bg-custom-primary text-white">Crear usuario</button>
+        </div>
+    </form>
+    </div>
+  </div>
+</div>
+<!-- Modal New User -->
+
+<div class="main">
+<div class="toast-container top-50 start-50 translate-middle mt-3">
+    <div class="toast border-0" id="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header bg border border-0">
+            <img src="/public/images/logo.png" width="24px" class="rounded me-2" alt="...">
+            <strong class="me-auto text" id="toastTitle"></strong>
+            <small class="text">Justo ahora</small>
+            <button type="button" class="btn-close text" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body bg-aux border border-0" id="toastBody">
+        </div>
+    </div>
+</div>
         <div class="header p-2 text-inverter bg">
             <div class="flex justify-between">
                 <button class="btn bg text" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
-                    <i class="bi bi-list"></i>
+                    
                 </button>
                 
                 <div class="btn-group">
@@ -279,28 +349,53 @@ $AdmissionsStatus= json_decode($result->fetch_assoc()['AdmissionsStatus']);
                 
             </div>
             <div class="row p-4">
+                <div class="flex flex-row justify-between items-center">
+                    <h4 class="text">Validadores</h4>
+                    <button id="addUserBtn" class="btn bg-custom-primary text-white"  data-bs-toggle="modal" data-bs-target="#newUserModal">Agregar validador</button>
+                </div>
+                <div class="col">
+                    <div class="card bg-aux shadow rounded m-2 p-2">
+                        <div class="card-body">
+                            <p>Validadores: <span id="totalValidators"><?php echo $validators ?></span></p>
+                            <center><button
+                                type="button"
+                                id="applicantsxValidatorBtn"
+                                class="btn bg-custom-primary text-white m-2"
+                            >
+                                Asignar aspirantes a validadores
+                            </button>
+                            </center>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row p-4">
                 <h4 class="text">Proceso de admisión</h4>
                 <div class="col">
                     <div class="card bg-aux shadow rounded m-2  p-2" >
                         <span>Subir CSV</span>
                         <small class="my-2">Click <a href="/api/get/public/csvScoresTemplate.php">aqui</a> para descargar la plantilla</small>
-                        <button type="button" class="btn btn-primary"  data-bs-toggle="modal" data-bs-target="#csvUploadModal" <?php echo $AdmissionsStatus == 0 ? "" : "disabled" ?> >Subir</button>
+                        <button type="button" class="btn bg-custom-primary text-white"  data-bs-toggle="modal" data-bs-target="#csvUploadModal" <?php echo $AdmissionsStatus == 0 ? "" : "disabled" ?> >Subir</button>
                     </div>
                 </div>
                 <div class="col">
                     <div class="card shadow rounded m-2 bg-aux p-2">
                         <span>Validar resultados</span>
-                        <button type="button" class="btn btn-primary"  data-bs-toggle="modal" data-bs-target="#successModal" <?php echo $AdmissionsStatus == 1 ? "" : "disabled" ?> >Empezar</button>
+                        <button type="button" class="btn bg-custom-primary text-white"  data-bs-toggle="modal" data-bs-target="#successModal" <?php echo $AdmissionsStatus == 1 ? "" : "disabled" ?> >Empezar</button>
                     </div>
                 </div>
                 <div class="col">
                     <div  class="card shadow rounded m-2 bg-aux p-2" >
                         
                     <span>Mandar correos</span>
-                        <button type="button" class="btn btn-primary my-2"  data-bs-toggle="modal" data-bs-target="#successEmails" <?php echo $AdmissionsStatus == 2 ? "" : "disabled" ?> >Empezar</button>
+                        <button type="button" class="btn bg-custom-primary text-white my-2"  data-bs-toggle="modal" data-bs-target="#successEmails" <?php echo $AdmissionsStatus == 2 ? "" : "disabled" ?> >Empezar</button>
                     </div>
                 </div>
                 
+            </div>
+
+            <div class="row p-4">
+                <button id="addExamnBtn" class="w-full bg-aux text btn rounded">Agregar Examen</button>
             </div>
             
         </div>

@@ -4,6 +4,15 @@ require_once '../../../../src/modules/Auth.php';
 $requiredRole = 'Validator';
 
 AuthMiddleware::checkAccess($requiredRole);
+
+include './../../../../src/modules/database.php';
+
+$conn = (new Database())->getConnection();
+
+
+$query = "SELECT obsReview_id, comment FROM obsReviews";
+$resultR = $conn->query($query);
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -32,8 +41,36 @@ AuthMiddleware::checkAccess($requiredRole);
     </div>
   </div>
 </div>
-<!-- Modal New User -->
-
+<!-- Modal -->
+<div class="modal fade" id="obsReviewsModal" tabindex="-1" aria-labelledby="obsReviewsModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content bg">
+            <div class="modal-header">
+                <h5 class="modal-title" id="obsReviewsModalLabel">Seleccionar una observación</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body bg">
+                <form id="obsReviewForm">
+                    <div class="mb-3">
+                        <label for="obsReviewSelect" class="form-label">Razón de invalidez</label>
+                        <select id="obsReviewSelect" class="form-select" required>
+                            <option value="">Seleccione una opción</option>
+                            <?php
+                                while ($row = $resultR->fetch_assoc()) {
+                                    echo '<option value="' . $row['obsReview_id'] . '">' . htmlspecialchars($row['comment']) . '</option>';
+                                }
+                            ?>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer bg">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="submit" form="obsReviewForm" class="btn btn-danger"  id="invalidBtn">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="main h-full flex flex-column">
         
@@ -62,7 +99,7 @@ AuthMiddleware::checkAccess($requiredRole);
                         
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-danger m-2" id="invalidBtn" disabled>Invalid</button>
+                        <button type="button" class="btn btn-danger m-2" id="targetInvalid" disabled>Invalid</button>
                         <button type="submit" class="btn btn-success m-2" id="validBtn" disabled>Valid</button>
                     </div>
                 </div>
@@ -76,6 +113,10 @@ AuthMiddleware::checkAccess($requiredRole);
        const applicant_id = document.getElementById('applicant_id');
        const validBtn = document.getElementById('validBtn');
        const invalidBtn = document.getElementById('invalidBtn');
+       const targetInvalid = document.getElementById('targetInvalid');
+       const obsReviewsModal = document.getElementById('obsReviewsModal');
+       const obsReviewSelect = document.getElementById('obsReviewSelect');
+       const obsReviewsModalBS = new bootstrap.Modal(obsReviewsModal);
 
        const person_id = document.getElementById('person_id');
        const full_name = document.getElementById('full_name');
@@ -128,12 +169,14 @@ AuthMiddleware::checkAccess($requiredRole);
                     }
                     validBtn.disabled = false;
                     invalidBtn.disabled = false;
+                    targetInvalid.disabled = false;
                 } catch (error) {
                     dataMdalValidate.innerHTML = `<div class="alert alert-warning" role="alert">
                     no applicants
                     </div>`
                     validBtn.disabled = true;
                     invalidBtn.disabled = true;
+                    targetInvalid.disabled = true;
                     validBtn.classList.add('d-none')
                     invalidBtn.classList.add('d-none')
                 }
@@ -152,6 +195,9 @@ AuthMiddleware::checkAccess($requiredRole);
                 getAsppirant();
            })
         })
+       targetInvalid.addEventListener('click', (e)=>{
+        obsReviewsModalBS.show();
+        })
         invalidBtn.addEventListener('click', (e)=>{
            e.target.innerHTML = `<div class="spinner-border text-secondary" role="status"></div>`;
            e.target.disabled = true;
@@ -160,6 +206,7 @@ AuthMiddleware::checkAccess($requiredRole);
            .then((res)=>{
                e.target.innerHTML = `Invalid`;
                e.target.disabled = false;
+               obsReviewsModalBS.hide();
                getAsppirant();
            })
        })
@@ -168,6 +215,7 @@ AuthMiddleware::checkAccess($requiredRole);
            const formData = new FormData();
            formData.append("applicant_id", document.getElementById('applicant_id').value)
            formData.append("validate", validateBIT)
+           formData.append("razon", obsReviewSelect.value)
            const reques = await fetch('/api/put/admin/validateAspirant.php', {
                method: 'POST',
                body: formData

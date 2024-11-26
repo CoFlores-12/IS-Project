@@ -286,3 +286,18 @@ UPDATE `Applicant` SET validated = NULL;
 
 
 SELECT role_id FROM `LogAuth` GROUP BY role_id;
+
+INSERT INTO obsReviews (comment) VALUES ('Primer nombre incorrecto');
+INSERT INTO obsReviews (comment) VALUES ('Segundo nombre incorrecto');
+INSERT INTO obsReviews (comment) VALUES ('Primer Apellido incorrecto');
+INSERT INTO obsReviews (comment) VALUES ('Segundo Apellido incorrecto');
+INSERT INTO obsReviews (comment) VALUES ('Foto de certificado borrosa');
+INSERT INTO obsReviews (comment) VALUES ('Documento incompleto');
+INSERT INTO obsReviews (comment) VALUES ('Error en el número de identificación');
+INSERT INTO obsReviews (comment) VALUES ('Inconsistencia en la información proporcionada');
+INSERT INTO obsReviews (comment) VALUES ('Certificado con datos ilegibles');
+INSERT INTO obsReviews (comment) VALUES ('Faltan firmas o sellos en el documento');
+INSERT INTO obsReviews (comment) VALUES ('Datos falsificados detectados');
+
+
+SELECT p.first_name, p.personal_email FROM Applicant a INNER JOIN `Persons` p ON a.person_id = p.person_id

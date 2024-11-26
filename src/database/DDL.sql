@@ -113,7 +113,6 @@
         counter TINYINT DEFAULT 1,
         approved_pref BIT DEFAULT 0,
         approved_sec BIT DEFAULT 0,
-        validated BIT,
         certify MEDIUMBLOB,
         certify_ext VARCHAR(6),
         email_sent BIT DEFAULT 0,
@@ -122,6 +121,22 @@
         FOREIGN KEY (secondary_career_id) REFERENCES Careers(career_id),
         Foreign Key (status_id) REFERENCES StatusApplicant(Status_id)
     );
+
+    CREATE Table obsReviews (
+        obsReview_id INT PRIMARY KEY AUTO_INCREMENT,
+        comment TEXT
+    )
+
+    CREATE Table ValidatorxApplicant (
+        review_id int PRIMARY KEY AUTO_INCREMENT,
+        applicant_id INT NOT NULL,
+        validator_id INT NOT NULL,
+        is_valid BIT DEFAULT NULL,
+        obs_id INT,
+        Foreign Key (applicant_id) REFERENCES Applicant(applicant_id),
+        Foreign Key (validator_id) REFERENCES Employees(employee_number),
+        Foreign Key (obs_id) REFERENCES obsReviews(obsReview_id)
+    )
 
     CREATE TABLE Applicant_result (
         result_id INT PRIMARY KEY AUTO_INCREMENT,
