@@ -3,17 +3,29 @@
 include '../src/modules/database.php';
 
 $db = (new Database())->getConnection();
-$response = [];
+$response = [
+    "1"=> [
+        "start"=>"2024-12-03T10:59",
+        "end"=>"2024-12-03T10:59"
+    ],
+    "2"=> [
+        "start"=>"2024-12-03T10:59",
+        "end"=>"2024-12-03T10:59"
+    ],
+    "3"=> [
+        "start"=>"2024-12-03T10:59",
+        "end"=>"2024-12-03T10:59"
+    ]
+];
 
-$result = $db->execute_query("SELECT * FROM LogAuth L left join Roles R on L.role_id = R.role_id");
 
-$resultArray = [];
-if ($result) {
-    while ($row = $result->fetch_assoc()) {
-        $resultArray[] = $row;
-    }
-}
+$sql = "UPDATE Config
+        SET data = JSON_SET(data, '$.AdmissionsStatus', 0)
+        WHERE config_id = 1;";
+    $stmt = $db->prepare($sql);
+    $jsonResponse = json_encode($response);
+    $stmt->execute();
 
 header('Content-Type: application/json');
-echo json_encode($resultArray);
+echo json_encode($response);
 ?>

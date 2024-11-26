@@ -25,7 +25,7 @@ AuthMiddleware::checkAccess($requiredRole);
         <div class="toast-header bg border border-0">
             <img src="/public/images/logo.png" width="24px" class="rounded me-2" alt="...">
             <strong class="me-auto text" id="toastTitle"></strong>
-            <small class="text">Just now</small>
+            <small class="text">Justo ahora</small>
             <button type="button" class="btn-close text" data-bs-dismiss="toast" aria-label="Close"></button>
         </div>
         <div class="toast-body bg-aux border border-0" id="toastBody">

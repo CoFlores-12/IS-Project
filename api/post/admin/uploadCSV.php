@@ -8,7 +8,7 @@ error_reporting(E_ALL);
 $host = 'junction.proxy.rlwy.net';    
 $db = 'railway';
 $user = 'root';
-$pass = 'efcUQKAeIGMGtWQfRCLPMenByJTqkuhp';
+$pass = 'ISProjectMySQL';
 $port = '53379';
 
     // Conectar a la base de datos usando PDO
@@ -67,6 +67,8 @@ try {
             $sql = "UPDATE Config
                 SET data = JSON_SET(data, '$.AdmissionsStatus', 1)
                 WHERE config_id = 1;";
+            $check_exam_stmt = $pdo->prepare($sql);
+            $check_exam_stmt->execute();
         } else {
             $response['success'] = false;
             $response['error'] = 'Error opening the file.';

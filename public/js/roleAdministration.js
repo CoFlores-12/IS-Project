@@ -242,10 +242,14 @@ document.getElementById('identity').addEventListener('input', function (e) {
 const newUserModal = document.getElementById('newUserModal');
 const newUserModalBS = new bootstrap.Modal(newUserModal)
 const SRPModal = document.getElementById('SRP');
+const enrollPeriod = document.getElementById('enrollPeriod');
+const enrollPeriodBS = new bootstrap.Modal(enrollPeriod)
 const SRPModalBS = new bootstrap.Modal(SRPModal)
 const addUserBtn = document.getElementById('addUserBtn');
 const departamentSelect = document.getElementById('departamentSelect');
 const saveSRPBtn = document.getElementById('saveSRPBtn');
+const saveEnrollPeriodBtn = document.getElementById('saveEnrollPeriodBtn');
+
 
 addUserBtn.addEventListener('click', ()=>{
     newUserModalBS.show();
@@ -270,10 +274,46 @@ saveSRPBtn.addEventListener('click', (e)=>{
     })
     .then((response)=>{return response})
     .then((response)=>{
-        alert('Done!');
-        SRPModalBS.hide();
         saveSRPBtn.disabled = false;
-        saveSRPBtn.innerHTML = 'save'
+        saveSRPBtn.innerHTML = 'Guardar'
+    })
+})
+saveEnrollPeriodBtn.addEventListener('click', (e)=>{
+    e.target.disabled = true;
+    e.target.innerHTML = `<div class="spinner-border text-light" role="status"></div>`;
+    let formData = new FormData();
+    formData.append('EnrollIn1S', document.getElementById('periodo1Inicio').value);
+    formData.append('EnrollIn1F', document.getElementById('periodo1Fin').value);
+
+    formData.append('EnrollIn2S', document.getElementById('periodo2Inicio').value);
+    formData.append('EnrollIn2F', document.getElementById('periodo2Fin').value);
+
+    formData.append('EnrollIn3S', document.getElementById('periodo3Inicio').value);
+    formData.append('EnrollIn3F', document.getElementById('periodo3Fin').value);
+    fetch('/api/put/admin/enrollPeriod.php',{
+        method: 'POST',
+        body: formData
+    })
+    .then((response)=>{return response})
+    .then((response)=>{
+        e.target.disabled = false;
+        e.target.innerHTML = 'Guardar'
+        toastTitle.innerHTML =''
+        toastBody.innerHTML = `<div class="alert alert-success mb-0" role="alert">
+            Periodo de matricula actualizado exitosamente!
+        </div>`
+        toastBS.show();
+        enrollPeriodBS.hide();
+    })
+    .catch(error=>{
+        e.target.disabled = false;
+        e.target.innerHTML = 'Guardar';
+        toastTitle.innerHTML =''
+        toastBody.innerHTML = `<div class="alert alert-danger mb-0" role="alert">
+            Error en servidor
+        </div>`
+        toastBS.show();
+
     })
 })
 
@@ -308,7 +348,7 @@ saveECBtn.addEventListener("click", ()=>{
               }, 3000)
 
             saveECBtn.disabled = false;
-            saveECBtn.innerHTML = 'save'
+            saveECBtn.innerHTML = 'Guardar'
         })
     
 })
@@ -365,9 +405,57 @@ fetch('/api/get/admin/adminData.php')
         class="form-control bg-aux"
         name="start-time"
     />`;
-    initGraph(res.logs);
+    document.getElementById('EnrollIn1S').innerHTML = `
+    <input
+        type="datetime-local"
+        id="periodo1Inicio"
+        value="${res.EnrollPeriod[1].start}"
+        class="form-control bg-aux"
+        name="start-time"
+    />`;
+    document.getElementById('EnrollIn1F').innerHTML = `
+    <input
+        type="datetime-local"
+        id="periodo1Fin"
+        value="${res.EnrollPeriod[1].end}"
+        class="form-control bg-aux"
+        name="start-time"
+    />`;
+    document.getElementById('EnrollIn2S').innerHTML = `
+    <input
+        type="datetime-local"
+        id="periodo2Inicio"
+        value="${res.EnrollPeriod[2].start}"
+        class="form-control bg-aux"
+        name="start-time"
+    />`;
+    document.getElementById('EnrollIn2F').innerHTML = `
+    <input
+        type="datetime-local"
+        id="periodo2Fin"
+        value="${res.EnrollPeriod[2].end}"
+        class="form-control bg-aux"
+        name="start-time"
+    />`;
+    document.getElementById('EnrollIn3S').innerHTML = `
+    <input
+        type="datetime-local"
+        id="periodo3Inicio"
+        value="${res.EnrollPeriod[3].start}"
+        class="form-control bg-aux"
+        name="start-time"
+    />`;
+    document.getElementById('EnrollIn3F').innerHTML = `
+    <input
+        type="datetime-local"
+        id="periodo3Fin"
+        value="${res.EnrollPeriod[3].end}"
+        class="form-control bg-aux"
+        name="start-time"
+    />`;
     
     logs = res.logs.reverse();
+    initGraph(logs);
     filteredLogs = [...logs]; 
     renderTable();
 })
@@ -408,6 +496,7 @@ function initGraph(logs) {
 
     // Crear el gráfico
     const chart = document.getElementById('chart');
+    
 
     // Generar las barras para cada rol
     for (const role in stats) {
@@ -473,8 +562,10 @@ function renderTable() {
     for (let i = 1; i <= totalPages; i++) {
       const li = document.createElement('li');
       li.classList.add('page-item');
+      li.classList.add('bg');
       const a = document.createElement('a');
       a.classList.add('page-link');
+      a.classList.add('bg');
       a.href = '#';
       a.textContent = i;
       a.addEventListener('click', () => {
