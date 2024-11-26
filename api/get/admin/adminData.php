@@ -27,6 +27,11 @@ $result = $db->execute_query("SELECT JSON_UNQUOTE(JSON_EXTRACT(data, '$.registra
         WHERE config_id = 1;");
 $response['registrationPeriod'] = json_decode($result->fetch_assoc()['registrationPeriod']);
 
+$result = $db->execute_query("SELECT JSON_UNQUOTE(JSON_EXTRACT(data, '$.EnrollPeriod')) as EnrollPeriod
+        FROM Config
+        WHERE config_id = 1;");
+$response['EnrollPeriod'] = json_decode($result->fetch_assoc()['EnrollPeriod']);
+
 $result = $db->execute_query("SELECT log_id, 
        CONVERT_TZ(DATE, '+00:00', '-06:00') AS local_time, 
        ip_address, 
