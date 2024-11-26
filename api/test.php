@@ -20,11 +20,10 @@ $response = [
 
 
 $sql = "UPDATE Config
-        SET data = JSON_SET(data, '$.EnrollPeriod', ?)
+        SET data = JSON_SET(data, '$.AdmissionsStatus', 0)
         WHERE config_id = 1;";
     $stmt = $db->prepare($sql);
     $jsonResponse = json_encode($response);
-    $stmt->bind_param('s', $jsonResponse); // Vincula el parámetro como cadena
     $stmt->execute();
 
 header('Content-Type: application/json');

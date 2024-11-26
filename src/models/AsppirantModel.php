@@ -189,7 +189,7 @@ class Aspirant {
                                         Persons P ON A.person_id = P.person_id
                                     WHERE 
                                         A.status_id = 1;");
-        $conn->execute_query('UPDATE `Applicant` SET status_id = 4 WHERE  A.status_id = 1;');
+        $conn->execute_query('UPDATE `Applicant` SET status_id = 4 WHERE  status_id = 1;');
         return $exported;
     }
 

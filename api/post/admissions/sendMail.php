@@ -200,5 +200,10 @@ foreach ($result as $applicant) {
     }
 }
 
+$sql = "UPDATE Config
+        SET data = JSON_SET(data, '$.AdmissionsStatus', ?)
+        WHERE config_id = 1;";
+$conn->execute_query($sql, [0]);
+
 echo json_encode($result);
 ?>
