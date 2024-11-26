@@ -45,18 +45,16 @@ AuthMiddleware::checkAccess($requiredRole);
                
             </div>
             <div class="row m-4 ">
-            <div class="card col-12 col-md-6 shadow">
+            <div class="card col-12 col-md-6 shadow bg tex">
                 <div class="card-body">
                         <h4>Crear Estudiantes</h4>
                         <div class="row">
                             <div class="col-12">
                                 <div class="my-3">
-                                    <label for="formFile" class="form-label">Upload CSV file with applicant data</label>
+                                    <label for="formFile" class="form-label">Cargar el archivo CSV con los datos de los proximos estudiantes</label>
                                     <input class="form-control"  accept=".csv" type="file" id="csvFile">
                                 </div>
-
-
-                                    <button type="button" class="btn btn-success mt-4 btn-sm" id="sendCSV">Success</button>
+                                    <button type="button" class="btn btn-success mt-4 btn-sm" id="sendCSV">Enviar</button>
                             </div>
                             
                            
