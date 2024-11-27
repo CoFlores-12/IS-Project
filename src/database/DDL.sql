@@ -1,5 +1,5 @@
     SET FOREIGN_KEY_CHECKS = 0;
-    DROP TABLE LogAuth;
+    DROP TABLE `Messages`;
     DROP TABLE `Applicant`;
     DROP TABLE Roles;
     DROP TABLE `Applicant_result`;
@@ -300,6 +300,39 @@
     is_used BIT(1) DEFAULT 0
     );
 
+CREATE TABLE ChatsGroups (
+    group_id INT AUTO_INCREMENT PRIMARY KEY,
+    group_name VARCHAR(255) NOT NULL,
+    group_photo TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    created_by VARCHAR(20) NOT NULL,
+    FOREIGN KEY (created_by) REFERENCES Persons(person_id)
+);
+CREATE TABLE Chats (
+    chat_id INT AUTO_INCREMENT PRIMARY KEY,
+    is_group BOOLEAN NOT NULL,
+    group_id INT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    Foreign Key (group_id) REFERENCES ChatsGroups(group_id)
+);
+CREATE TABLE ChatParticipants (
+    participant_id INT AUTO_INCREMENT PRIMARY KEY,
+    chat_id INT NOT NULL, 
+    person_id VARCHAR(20) NOT NULL,
+    FOREIGN KEY (chat_id) REFERENCES Chats(chat_id) ON DELETE CASCADE,
+    FOREIGN KEY (person_id) REFERENCES Persons(person_id) ON DELETE CASCADE
+);
+
+CREATE TABLE Messages (
+    message_id INT AUTO_INCREMENT PRIMARY KEY, 
+    sender_id VARCHAR(20) NOT NULL,
+    chat_id INT, 
+    content TEXT NOT NULL,
+    sent_at DATETIME DEFAULT CURRENT_TIMESTAMP, 
+    status BIT DEFAULT 0,
+    FOREIGN KEY (sender_id) REFERENCES Persons(person_id),
+    FOREIGN KEY (chat_id) REFERENCES Chats(chat_id) ON DELETE CASCADE
+);
 
 DELIMITER //
 

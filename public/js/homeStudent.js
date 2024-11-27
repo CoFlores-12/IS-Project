@@ -19,18 +19,14 @@ let modalRequestsBS = new bootstrap.Modal(modalRequests);
 let modalEnrollmentBS = new bootstrap.Modal(modalEnrollment);
 const refreshIcon = document.getElementById('refreshIcon');
 
-// Evento de clic en el botón de refrescar
 refreshChats.addEventListener('click', () => {
-    // Agregar la clase para la animación de rotación
     refreshChats.classList.add('rotate');
 
-    // Recargar el iframe
     frameChats.contentWindow.location.reload();
 
-    // Eliminar la clase de animación después de que termine (1s)
     setTimeout(() => {
         refreshChats.classList.remove('rotate');
-    }, 1000); // Tiempo en milisegundos (1 segundo)
+    }, 1000); 
 });
 
 let optionsBody = async (value) => {

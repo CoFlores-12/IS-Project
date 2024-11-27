@@ -104,6 +104,17 @@ AuthMiddleware::checkAccess($requiredRole);
 </div>
 
 <div class="container-fluid row h-full"> 
+<div class="offcanvas offcanvas-end bg p-0" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+            <div class="offcanvas-header justify-between">
+                <h5 class="offcanvas-title" id="offcanvasExampleLabel">Chats <button class="btn mx-2" id="refreshChats"><i  id="refreshIcon" class="bi bi-arrow-clockwise text rotate"></i></button></h5>
+                <button type="button" class="btn bg text" data-bs-dismiss="offcanvas" aria-label="Close">
+                    <i class="bi bi-x"></i>
+                </button>
+            </div>
+            <div class="body h-full" id="bodyOffCanvas">
+                <iframe id="frameChats" src="/views/chats/index.php" class="w-full h-full" frameborder="0"></iframe>
+            </div>
+        </div>
       <div class="col-md-3 d-none d-md-block bg-aux" id="desktopAside">
               <div class="offcanvas-header py-3 justify-between">
                   <h5 class="offcanvas-title text" id="offcanvasExampleLabel">Menu</h5>
@@ -145,9 +156,10 @@ AuthMiddleware::checkAccess($requiredRole);
                           
                       </button>
                       <ul class="dropdown-menu">
-                          <li><a class="dropdown-item" href="#">My profile</a></li>
+                          <li><a class="dropdown-item" href="#">Mi perfil</a></li>
+                          <li><a class="dropdown-item" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">Chats</a></li>
                           <li><hr class="dropdown-divider"></li>
-                          <li><a class="dropdown-item" href="/api/get/logout.php">Logout <i class="bi bi-box-arrow-right"></i></a></li>
+                          <li><a class="dropdown-item" href="/api/get/logout.php">Salir <i class="bi bi-box-arrow-right"></i></a></li>
                       </ul>
                    </div>
               </div>
