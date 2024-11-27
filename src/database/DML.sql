@@ -346,3 +346,18 @@ WHERE
 OR
     cp.person_id = (SELECT person_id FROM `Employees` WHERE employee_number = 9)
 ORDER BY md.message_time DESC;
+
+
+SELECT person_id FROM `Persons` p
+WHERE p.person_id = (SELECT person_id FROM `Students` WHERE account_number = NULL)
+    OR 
+    p.person_id = (SELECT person_id FROM `Employees` WHERE employee_number = 9)
+;
+
+SELECT COUNT(*)
+        FROM Messages m
+        WHERE 
+            m.chat_id = 2 
+            AND (m.status = 0 OR m.status = 1) 
+            AND ( m.sender_id != (SELECT person_id FROM `Students` WHERE account_number = ?)
+                OR m.sender_id != (SELECT person_id FROM `Employees` WHERE employee_number = ?))

@@ -312,6 +312,7 @@ CREATE TABLE Chats (
     chat_id INT AUTO_INCREMENT PRIMARY KEY,
     is_group BOOLEAN NOT NULL,
     group_id INT,
+    secret TEXT NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     Foreign Key (group_id) REFERENCES ChatsGroups(group_id)
 );
@@ -329,7 +330,7 @@ CREATE TABLE Messages (
     chat_id INT, 
     content TEXT NOT NULL,
     sent_at DATETIME DEFAULT CURRENT_TIMESTAMP, 
-    status BIT DEFAULT 0,
+    status TINYINT(1) DEFAULT 0,
     FOREIGN KEY (sender_id) REFERENCES Persons(person_id),
     FOREIGN KEY (chat_id) REFERENCES Chats(chat_id) ON DELETE CASCADE
 );
