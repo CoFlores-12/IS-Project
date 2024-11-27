@@ -91,7 +91,7 @@
         })
     })
     .then(response => {
-       response.json();
+       return response.json();
     })
     .then(data => {
       loginButton.disabled = false;

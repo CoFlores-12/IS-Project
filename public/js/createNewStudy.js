@@ -5,9 +5,12 @@ sendButton.addEventListener("click", () => {
     const file = fileInput.files[0];
 
     if (!file) {
-        alert("Please select a file.");
+        alert("Por favor seleccione un archivo.");
         return;
     }
+
+    sendButton.disabled = true;
+    sendButton.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Cargando...`;
 
     const reader = new FileReader();
 
@@ -26,7 +29,8 @@ sendButton.addEventListener("click", () => {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                alert(data.message);
+                sendButton.disabled = false;
+                sendButton.innerHTML = `Enviar`;
             } else {
                 console.error(data.message);
             }
