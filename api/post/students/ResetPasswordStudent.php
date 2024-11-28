@@ -26,7 +26,7 @@ function generatePasswordResetToken() {
 
 $newToken = generatePasswordResetToken();
 $create = date("Y-m-d H:i:s");
-$expiry = date("Y-m-d H:i:s", strtotime("+25 minutes"));
+$expiry = date("Y-m-d H:i:s", strtotime("+10 minutes"));
 
 
 $sql = "INSERT INTO PasswordResetTokens (identifier, token, created_at, expires_at) VALUES (?, ?, ?, ?)";
@@ -54,12 +54,12 @@ $message = sprintf('
                  <a href="%s" style="background-color: #007bff; color: #ffffff; text-decoration: none; padding: 10px 20px; font-size: 16px; border-radius: 5px; display: inline-block;">Cambiar clave</a>
              </p>
              <p>Si no solicito esto, ignore este correo o comuniquese con el soporte si tiene inquietudes.</p>
-             <p>Nota: Este enlace caducara en 25 minutos.</p>
+             <p>Nota: Este enlace caducara en 10 minutos.</p>
          </td>
      </tr>
      <tr>
          <td style="padding: 20px; background-color: #f4f4f4; color: #555555; font-size: 14px; text-align: center;">
-             <p>Si tiene alguna pregunta, comuníquese con nuestro equipo de soporte en <a href="mailto:support@unah.com" style="color: #007bff;">support@yourwebsite.com</a>.</p>
+             <p>Si tiene alguna pregunta, comuniquese con nuestro equipo de soporte en <a href="mailto:support@unah.com" style="color: #007bff;">soporte@Unah.com</a>.</p>
              <p>&copy; 2024 UNAH. Todos los derechos reservados.</p>
          </td>
      </tr>

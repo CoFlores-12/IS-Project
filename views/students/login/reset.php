@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contraseña - Docente</title>
+    <title>Contraseña - Estudiante</title>
     <link rel="stylesheet" href="/public/css/theme.css">
     <link rel="icon" type="image/png" href="/public/images/logo.png" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
@@ -61,20 +61,19 @@
 </head>
 <body>
 
-    <div  class="center-box bg text" id="formInput">
-        <h1>Change password</h1>
+    <div  class="center-box bg-aux text" hidden id="formInput">
         <div>
-            <input type="text" placeholder="Enter the new password" id="inputPassword" required>
-            <button id="submit-button" type="submit">Submit</button>
+            <input type="text" placeholder="Ingrese la nueva Contreseña" id="inputPassword" required>
+            <button id="submit-button" type="submit">Enviar</button>
         </div>
     </div>
 
-    <div  id="alertExpired" class="alert alert-danger" role="alert">
-        The token expired
+    <div  id="alertExpired" hidden  class="alert alert-danger" role="alert">
+        El token Expiro
     </div>
 
-    <div id="alertSuccess" class="alert alert-success" role="alert">
-        Password changed
+    <div id="alertSuccess" hidden class="alert alert-success" role="alert">
+        Contraseña Cambiada
     </div>
 
     <script src="/public/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>

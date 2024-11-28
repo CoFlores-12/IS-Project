@@ -64,27 +64,22 @@
 </head>
 <body>
 
-<div class="alert alert-danger" id="alertNoEmail" role="alert">
-  No existe usuario con este correo intitucional
+<div class="alert alert-danger" hidden id="alertNoEmail" role="alert">
+  No existe usuario con este correo personal
 </div>
 
-<div class="alert alert-success" id="sendEmail" role="alert">
+<div class="alert alert-success"  hidden id="sendEmail" role="alert">
   Revise su correo de recuperacion
 </div>
 
-<div class="spinner-border" role="status" id="loading">
+<div class="spinner-border" hidden role="status" id="loading">
   <span class="visually-hidden">Loading...</span>
 </div>
-
-
     <div  id="formInput" class="center-box bg text">
-        <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">Correo institucional</label>
-            <input type="email" class="form-control" id="institucinalInputEmail" aria-describedby="emailHelp">
-        </div>
+        <h1>Cambio de contraseña</h1>
         <div class="mb-3">
             <label for="exampleInputEmail1" class="form-label">Correo de recuperacion</label>
-            <input type="email" class="form-control" id="personalInputEmail" aria-describedby="emailHelp">
+            <input type="email" class="form-control" id="personalInputEmail" aria-describedby="emailHelp" placeholder="Correo de inscripcion">
     </div>
         <button type="submit" class="btn btn-primary" id="btnEnviar">Enviar</button>
     </div>

@@ -49,8 +49,8 @@ AuthMiddleware::checkAccess($requiredRole);
 </head>
 <body>
 
-<div class="alert alert-success successAlert" id="alertSuccess" role="alert">
-  Section created successfully.
+<div class="alert alert-success successAlert" hidden id="alertSuccess" role="alert">
+  Seccion creada corectamente.
 </div>
 
 <div class="modal fade" id="historyStudent" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -77,7 +77,7 @@ AuthMiddleware::checkAccess($requiredRole);
   </div>
 </div>
 
-<div class="alert alert-success successAlert" id="alertSuccessEmail"  role="alert">
+<div class="alert alert-success successAlert" hidden id="alertSuccessEmail"  role="alert">
   Correo enviado Correctamente.
 </div>
 
@@ -85,16 +85,16 @@ AuthMiddleware::checkAccess($requiredRole);
   <div class="modal-dialog bg modal-lg">
     <div class="modal-content bg">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Reset Password</h1>
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Cambio de Contraseña</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <div class="row p">
             <div class="col-9 flex justify-center items-center">
-                <input type="text" id="inputTeacher" class="w-full" placeholder="Enter the employee number, identification or institutional email of the teacher">
+                <input type="text" id="inputTeacher" class="w-full" placeholder="Ingrese el numero de emplado, identificaion o correo institucional del docente">
             </div>
             <div class="col-3">
-                <button id="btnSearcTeacher" class="btn bg-custom-primary text-white">Search</button>
+                <button id="btnSearcTeacher" class="btn bg-custom-primary text-white">Buscar</button>
             </div>
         </div>
         <div id="resetBody" class="pt-3">
@@ -110,12 +110,15 @@ AuthMiddleware::checkAccess($requiredRole);
   <div class="modal-dialog bg modal-lg">
     <div class="modal-content bg">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Add new section</h1>
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Agregar nueva sección</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <input type="file" name="" accept=".csv" id="csvFile">
-        <button type="button" class="btn bg-custom-primary mt-4 form-control text" id="uploadFile">Upload file</button>
+        <div class="alert alert-warning mt-3" hidden id="alertUploadFile" role="alert" >
+          Cargar archivo
+        </div>
+        <button type="button" class="btn bg-custom-primary mt-4 form-control text" id="uploadFile">Cargar Archivo</button>
         <hr class="my-2">
         <div class="table-responsive">
           <table class="table w-100 table-dark table-striped" id="table">
@@ -128,9 +131,6 @@ AuthMiddleware::checkAccess($requiredRole);
             </thead>
             <tbody>
 
-              
-              
-              
             </tbody>
           </table>
       </div>
@@ -144,72 +144,72 @@ AuthMiddleware::checkAccess($requiredRole);
   <div class="modal-dialog bg modal-lg">
     <div class="modal-content bg">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Add new section</h1>
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Agregar nueva seccion</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <div class="row p">
       
-        <label class="mb-1" require>Classes:</label>
+        <label class="mb-1" require>Clases:</label>
         <select class="form-select mb-3" id="classes" required>
-            <option value="" selected >Select...</option>
+            <option value="" selected >Seleccione...</option>
         </select>
 
-        <label class="mb-1">Teachers:</label>
+        <label class="mb-1">Docente:</label>
         <select class="form-select mb-3" id="teachers">
-            <option value="" selected>Select...</option>
+            <option value="" selected>Seleccione...</option>
         </select>
-        <div class="alert alert-danger" role="alert" id="alertTeacher">
-          Teacher busy at this time, choose another time or day.
+        <div class="alert alert-danger" hidden role="alert" id="alertTeacher">
+          El deocete esta ocupado a esta hora, elija otro.
         </div>
-        <label class="mb-1">Classrooms:</label>
+        <label class="mb-1">Aulas:</label>
         <select class="form-select mb-3" id="classrooms">
-            <option value="" selected>Select...</option>
+            <option value="" selected>Seleccione...</option>
         </select>
-        <div class="alert alert-danger" role="alert" id="alertClassroom">
-          Classroom busy at this time, choose another time or day.
+        <div class="alert alert-danger" hidden role="alert" id="alertClassroom">
+          El aula esta ocupada a esta hora, elija otra.
         </div>        
-        <label class="mb-1">Mark the days:</label>
+        <label class="mb-1">Marque los dias:</label>
         <div class="days">
         <div class="form-check form-check-inline">
             <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="Mon">
-            <label class="form-check-label" for="inlineCheckbox1">Mon</label>
+            <label class="form-check-label" for="inlineCheckbox1">Lun</label>
           </div>
           <div class="form-check form-check-inline">
             <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="Tue">
-            <label class="form-check-label" for="inlineCheckbox2">Tue</label>
+            <label class="form-check-label" for="inlineCheckbox2">Mar</label>
           </div>          
           <div class="form-check form-check-inline">
             <input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="Wed">
-            <label class="form-check-label" for="inlineCheckbox2">Wed</label>
+            <label class="form-check-label" for="inlineCheckbox2">Mie</label>
           </div>          
           <div class="form-check form-check-inline">
             <input class="form-check-input" type="checkbox" id="inlineCheckbox4" value="Thu">
-            <label class="form-check-label" for="inlineCheckbox2">Thur</label>
+            <label class="form-check-label" for="inlineCheckbox2">Jue</label>
           </div>          
           <div class="form-check form-check-inline">
             <input class="form-check-input" type="checkbox" id="inlineCheckbox5" value="Fri">
-            <label class="form-check-label" for="inlineCheckbox2">Fri</label>
+            <label class="form-check-label" for="inlineCheckbox2">Vie</label>
           </div>          
           <div class="form-check form-check-inline">
             <input class="form-check-input" type="checkbox" id="inlineCheckbox6" value="Sat">
-            <label class="form-check-label" for="inlineCheckbox2">Sat</label>
+            <label class="form-check-label" for="inlineCheckbox2">Sab</label>
           </div>          
       </div>
 
-        <label class="mb-1">Schedule:</label>
+        <label class="mb-1">Horarios:</label>
         <div class="row">
           <div class="col-6"><input class="form-control" type="number" name="" min="700" max="1900" id="hourStart"></div>
           <div class="col-6"><input class="form-control" type="number" name="" min="" max="2000" id="hourEnd"></div>
         </div>
         
 
-        <label class="mb-1">Available Spaces (maximum student capacity):</label>
+        <label class="mb-1">Cupos disponibles(aqui la capacidad maxima):</label>
             <input type="number" id="available_spaces" name="cupo"  placeholder="Select..." value="" min="5" max="100" step="1">
-        <div class="alert alert-danger" role="alert" id="alertCapacity">
-          Incorrect student capacity.
+        <div class="alert alert-danger" hidden role="alert" id="alertCapacity">
+          Capacidad incorrecta.
         </div>   
-        <button type="button" class="btn btn-success mt-4 btn-sm" id="btnNewSection">Success</button>
+        <button type="button" class="btn btn-success mt-4 btn-sm" id="btnNewSection">Enviar</button>
         </div>
 
       
@@ -218,24 +218,24 @@ AuthMiddleware::checkAccess($requiredRole);
   </div>
 </div>
 
-<div class="alert alert-success successAlert" id="alertDelete" role="alert">
-    Deleted successfully
+<div class="alert alert-success successAlert" hidden id="alertDelete" role="alert">
+    Sección eliminada.
 </div>
 
 <div class="modal fade" id="deleteSectionModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog bg modal-lg">
     <div class="modal-content bg">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Delete section</h1>
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Actualizar seccion</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
       <div class="row p">
             <div class="col-9 flex justify-center items-center">
-                <input type="text" id="inputSection" class="w-full" placeholder="Enter the section ID">
+                <input type="text" id="inputSection" class="w-full" placeholder="Ingrese el ID de la seccion">
             </div>
             <div class="col-3">
-                <button id="btnSearcSection" class="btn bg-custom-primary text-white">Search</button>
+                <button id="btnSearcSection" class="btn bg-custom-primary text-white">Buscar</button>
             </div>
         </div>
         <div id="sectionBody" class="pt-3">
@@ -257,8 +257,8 @@ AuthMiddleware::checkAccess($requiredRole);
                 
               </tbody>
             </table>
-            <div class="alert alert-danger" role="alert"  id="alertIdsection">
-              There is no section with that ID
+            <div class="alert alert-danger" hidden role="alert"  id="alertIdsection">
+              No existe un Aula con este ID
             </div>
         </div>
      
@@ -272,7 +272,7 @@ AuthMiddleware::checkAccess($requiredRole);
   <div class="modal-dialog bg modal-lg">
     <div class="modal-content bg">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Delete section</h1>
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Eliminar Seccion</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -284,18 +284,16 @@ AuthMiddleware::checkAccess($requiredRole);
                
             </tbody>
         </table>
-
-
         <div class="mb-3">
         <label for="exampleFormControlTextarea1" class="form-label">Justification</label>
         <textarea class="form-control" id="justificationInput" rows="3"></textarea>
-        <div class="alert alert-danger mt-2"  id="alertJustication" role="alert">
+        <div class="alert alert-danger mt-2" hidden  id="alertJustication" role="alert">
           Necessary Justification
         </div>
-        <div class="alert alert-success  mt-2" id="validedQuotas" role="alert">
+        <div class="alert alert-success  mt-2" hidden id="validedQuotas" role="alert">
           Cupos Actualizados correctamente
         </div>
-        <div class="alert alert-danger  mt-2" id="invalidQuotas" role="alert">
+        <div class="alert alert-danger  mt-2" hidden id="invalidQuotas" role="alert">
           Error, cupos no validos
         </div>
       </div>
@@ -370,17 +368,17 @@ AuthMiddleware::checkAccess($requiredRole);
                           </div>
                     <a class="text bg aux text-decoration-none my-2" data-bs-toggle="collapse" href="#collapseTeachers" role="button" aria-expanded="false" aria-controls="collapseTeachers">
                       <div class="list-group-item list-group-title list-group-item- bg-aux text fw-bold">
-                        Teachers
+                        Docentes
                       </div>
                     </a>
                           <div class="collapse" id="collapseTeachers">
                             <button type="button" id="changePassword" class="text list-group-item list-group-item-action bg list-group-item-indent" data-bs-toggle="modal" data-bs-target="#changePassword">
-                               Reset Password
+                               Cambiar Contraseña
                             </button>
                           </div>
                     <a class="text bg aux text-decoration-none" data-bs-toggle="collapse" href="#collapseClasses" role="button" aria-expanded="false" aria-controls="collapseClasses">
                       <div class="list-group-item list-group-title list-group-item- bg-aux text fw-bold">
-                        Classes
+                        Secciones
                       </div>
                     </a>
                           <div class="collapse" id="collapseClasses">

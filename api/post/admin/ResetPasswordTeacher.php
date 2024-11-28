@@ -54,7 +54,7 @@ $message = sprintf('
      </tr>
      <tr>
          <td style="padding: 20px; color: #333333; font-size: 16px; line-height: 1.6;">
-             <p>Estimado condente,</p>
+             <p>Estimado(a) Doncente,</p>
              <p>El presente es respondiendo a su peticion de cambio de contrasenia. Por favor, dirijase al siguiente enlace:</p>
              <p style="text-align: center; margin: 20px 0;">
                  <a href="%s" style="background-color: #007bff; color: #ffffff; text-decoration: none; padding: 10px 20px; font-size: 16px; border-radius: 5px; display: inline-block;">Cambiar clave</a>
@@ -65,7 +65,7 @@ $message = sprintf('
      </tr>
      <tr>
          <td style="padding: 20px; background-color: #f4f4f4; color: #555555; font-size: 14px; text-align: center;">
-             <p>Si tiene alguna pregunta, comuníquese con nuestro equipo de soporte en <a href="mailto:support@unah.com" style="color: #007bff;">support@yourwebsite.com</a>.</p>
+             <p>Si tiene alguna pregunta, comuníquese con nuestro equipo de soporte en <a href="mailto:support@unah.com" style="color: #007bff;">soporte@unah.com</a>.</p>
              <p>&copy; 2024 UNAH. Todos los derechos reservados.</p>
          </td>
      </tr>
