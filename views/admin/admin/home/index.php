@@ -426,7 +426,7 @@ AuthMiddleware::checkAccess($requiredRole);
                             <div class="row my-3">
                                 <div class="col-12 col-md-6">
                                     <center>
-                                        <label for="start-time-cancaled">Start time</label><br>
+                                        <label for="start-time-cancaled">Inicio</label><br>
                                         <div id="start-time-cancaled">
                                             <p class="card-text placeholder-glow"><span class="placeholder col-12"></span></p>
                                         </div>
@@ -434,7 +434,7 @@ AuthMiddleware::checkAccess($requiredRole);
                                 </div>
                                 <div class="col-12 col-md-6">
                                     <center>
-                                    <label for="start-time">End time</label><br>
+                                    <label for="start-time">Fin</label><br>
                                         <div id="end-time-cancaled">
                                         <p class="card-text placeholder-glow"><span class="placeholder col-12"></span></p>
                                         </div>
