@@ -91,8 +91,8 @@ if ($result) {
     while ($row = $result->fetch_assoc()) {
         if (!empty($row['last_message']) && !empty($row['secret'])) {
             $row['last_message'] = decryptMessage($row['last_message'], $row['secret']);
-            $row['secret'] = '';
         }
+        $row['secret'] = '';
         $resultArray[] = $row;
     }
 }

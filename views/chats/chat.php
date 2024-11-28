@@ -38,6 +38,7 @@ margin-top: -.75rem;
     display: block;
   flex-grow: 1;
   flex-shrink: 2;
+  height: 100vh;
 }
 .bar, .header-chat {
     display: block;
@@ -105,7 +106,7 @@ a {
 </head>
 <body>
 
-    <div class="container-fluid">
+    <div class="container-fluid" id="container">
   
       <div class="row h-full">
         <div class="col-md-12 h-full">
@@ -354,10 +355,14 @@ a {
                         </svg>
                         <img src="https://via.placeholder.com/40" alt="Usuario 1" class="me-3">
                     </a>
-                    <div class="d-flex align-items-center">
-                        <div>
-                            <div><strong>Usuario 1</strong></div>
-                            <small class="text-muted text-sm">Última vez activo: 2 horas</small>
+                    <div class="d-flex align-items-center" style="width: calc(100% - 120px);">
+                        <div class="w-full">
+                            <div class="w-full"><strong class="w-full" id="chatName"><p class=" w-full placeholder-glow">
+                          <span class="placeholder col-12  bg-dark"></span>
+                      </p></strong></div>
+                            <small id="lastCon" class="text-muted text-sm"><p class=" w-full placeholder-glow">
+                          <span class="placeholder col-6  bg-dark"></span>
+                      </p></small>
                         </div>
                     </div>
                 </div>
@@ -366,93 +371,29 @@ a {
                     style=" overflow-y:scroll" id="messagesContainer">
   
                     <div class="d-flex flex-row justify-content-start">
-                      <div class="msg">
-                        <p class="small p-2 ms-3 mb-1 rounded-3 bg-aux">Lorem ipsum
-                          dolor</p>
-                        <p class="small ms-3 mb-3 rounded-3 text-muted float-end">12:00 PM | Aug 13</p>
+                      <div class="msg w-full">
+                        <p class=" w-full placeholder-glow">
+                          <span class="placeholder col-12  bg-dark"></span>
+                      </p>
                       </div>
                     </div>
   
                     <div class="d-flex flex-row justify-content-end">
-                      <div class="msg">
-                        <p class="small p-2 me-3 mb-1 text-white rounded-3 user1">Ut enim ad minim veniam,
-                          quis
-                          nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-                        <p class="small me-3 mb-3 rounded-3 text-muted">12:00 PM | Aug 13</p>
+                    <div class="msg w-full">
+                        <p class=" w-full placeholder-glow">
+                          <span class="placeholder col-12  bg-dark"></span>
+                      </p>
                       </div>
                     </div>
-  
+                    
                     <div class="d-flex flex-row justify-content-start">
-                      <div class="msg">
-                        <p class="small p-2 ms-3 mb-1 rounded-3 bg-aux">Duis aute
-                          irure
-                          dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                        </p>
-                        <p class="small ms-3 mb-3 rounded-3 text-muted float-end">12:00 PM | Aug 13</p>
+                      <div class="msg w-full">
+                        <p class=" w-full placeholder-glow">
+                          <span class="placeholder col-12  bg-dark"></span>
+                      </p>
                       </div>
                     </div>
-  
-                    <div class="d-flex flex-row justify-content-end">
-                      <div class="msg">
-                        <p class="small p-2 me-3 mb-1 text-white rounded-3 user1">Excepteur sint occaecat
-                          cupidatat
-                          non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                        <p class="small me-3 mb-3 rounded-3 text-muted">12:00 PM | Aug 13</p>
-                      </div>
-                      
-                    </div>
-  
-                    <div class="d-flex flex-row justify-content-start">
-                      <div class="msg">
-                        <p class="small p-2 ms-3 mb-1 rounded-3 bg-aux">Sed ut
-                          perspiciatis
-                          unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam
-                          rem
-                          aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae
-                          dicta
-                          sunt explicabo.</p>
-                        <p class="small ms-3 mb-3 rounded-3 text-muted float-end">12:00 PM | Aug 13</p>
-                      </div>
-                    </div>
-  
-                    <div class="d-flex flex-row justify-content-end">
-                      <div class="msg">
-                        <p class="small p-2 me-3 mb-1 text-white rounded-3 user1">Nemo enim ipsam
-                          voluptatem quia
-                          voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos
-                          qui
-                          ratione voluptatem sequi nesciunt.</p>
-                        <p class="small me-3 mb-3 rounded-3 text-muted">12:00 PM | Aug 13</p>
-                      </div>
-                    </div>
-  
-                    <div class="d-flex flex-row justify-content-start">
-                      <div class="msg">
-                        <p class="small p-2 ms-3 mb-1 rounded-3 bg-aux">Neque porro
-                          quisquam
-                          est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non
-                          numquam
-                          eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.</p>
-                        <p class="small ms-3 mb-3 rounded-3 text-muted float-end">12:00 PM | Aug 13</p>
-                      </div>
-                    </div>
-  
-                    <div class="d-flex flex-row justify-content-end">
-                      <div class="msg">
-                        <p class="small p-2 me-3 mb-1 text-white rounded-3 user1">Ut enim ad minima veniam,
-                          quis
-                          nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea
-                          commodi
-                          consequatur?</p>
-                          <div class="flex  me-3 mb-3  justify-between items-center">
-                              <p class="small mb-0 rounded-3 text-muted">12:00 PM | Aug 13</p>
-                                <div class="icon mx-3">
-                                    <i class="bi bi-check2"></i>
-                                </div>
-                          </div>
-                      </div>
-                    </div>
-  
+
                   </div>
   
                   <div class="text-muted bar d-flex justify-content-start align-items-center">
@@ -483,12 +424,82 @@ a {
     <script src="/public/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
 <script>
     let params = new URLSearchParams(document.location.search);
+    const container = document.getElementById('container');
+    const chatName = document.getElementById('chatName');
+    const lastCon = document.getElementById('lastCon');
+    const messagesContainer = document.getElementById('messagesContainer');
     let id = params.get("id");
+    let icon = [`<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2 mx-1" viewBox="0 0 16 16">
+          <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0"/>
+        </svg>`, `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-all mx-1" viewBox="0 0 16 16">
+          <path d="M8.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L2.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093L8.95 4.992zm-.92 5.14.92.92a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 1 0-1.091-1.028L9.477 9.417l-.485-.486z"/>
+        </svg>`, `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#176b87" class="bi bi-check-all mx-1" viewBox="0 0 16 16">
+          <path d="M8.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L2.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093L8.95 4.992zm-.92 5.14.92.92a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 1 0-1.091-1.028L9.477 9.417l-.485-.486z"/>
+        </svg>`];
 
-    //TODO get messages
+    fetch('/api/get/chats/chat.php?id='+id)
+    .then((res)=>{return res.json()})
+    .then(res=>{
+      if (!res.status) throw new Error(res.message);
+      messagesContainer.innerHTML = '';
+      chatName.innerHTML = res.info.chat_name;
+      lastCon.innerHTML = res.info.last_connection == null ? '' : res.info.last_connection;
+      res.data.forEach(msg => {
+            
+            let iconToPrint = '';
+            if (msg.sender_type == "me" && msg.status != null) {
+                iconToPrint = icon[msg.status];
+            }
+            const sentAt = new Date(msg.sent_at_adjusted);
+            const formattedTime = sentAt.toLocaleString('en-US', {
+                hour: 'numeric',
+                minute: '2-digit',
+                hour12: false,
+            });
+            const formattedDate = sentAt.toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric',
+            });
+
+            const messageHTML = msg.sender_type == "me"
+            ? `
+            <div class="d-flex flex-row justify-content-end">
+                <div class="msg">
+                    <p class="small p-2 me-3 mb-1 text-white rounded-3 user1">${msg.content}</p>
+                    <div class="flex  me-3 mb-3  justify-between items-center">
+                      <p class="small mb-0 rounded-3 text-muted">${formattedTime} | ${formattedDate} </p>
+                        <div class="icon mx-1">
+          ${iconToPrint}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            `
+            : `
+            <div class="d-flex flex-row justify-content-start">
+                <div class="msg">
+                    <p class="small p-2 ms-3 mb-1 rounded-3 bg-aux">${msg.content}</p>
+                    <p class="small ms-3 mb-3 rounded-3 text-muted float-end">${formattedTime} | ${formattedDate}</p>
+                    
+                </div>
+            </div>
+            `;
+
+        messagesContainer.innerHTML += messageHTML;
+      });
+      messagesContainer.innerHTML += `<div id="lastMsg"></div>`;
+
+document.getElementById('lastMsg').scrollIntoView({ behavior: 'smooth', block: 'end' });
+    })
+    .catch(err=>{
+      console.log(err);
+      
+      container.innerHTML = `<div class="alert alert-danger mt-4" role="alert">
+    ${err}
+</div>`;
+    })
     
     const sendBtn = document.getElementById('sendBtn');
-    const messagesContainer = document.getElementById('messagesContainer');
     const exampleFormControlInput2 = document.getElementById('exampleFormControlInput2');
     const file = document.getElementById('file');
     let messageId = 0;
@@ -499,11 +510,21 @@ a {
             return;
         }
         const currentMessageId = ++messageId;
+        const sentAt = new Date();
+            const formattedTime = sentAt.toLocaleString('en-US', {
+                hour: 'numeric',
+                minute: '2-digit',
+                hour12: false,
+            });
+            const formattedDate = sentAt.toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric',
+            });
         messagesContainer.innerHTML += `<div class="d-flex flex-row justify-content-end " id="message-${currentMessageId}">
                         <div class="msg">
                             <p class="small p-2 me-3 mb-1 text-white rounded-3 user1">${messageText}</p>
                             <div class="flex  me-3 mb-3  justify-between items-center">
-                              <p class="small mb-0 rounded-3 text-muted">12:00 PM | Aug 13</p>
+                              <p class="small mb-0 rounded-3 text-muted">${formattedTime} | ${formattedDate}</p>
                                 <div class="icon mx-3">
                                     <i class="bi bi-clock"></i>
                                 </div>

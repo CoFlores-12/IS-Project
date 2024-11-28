@@ -360,4 +360,19 @@ SELECT COUNT(*)
             m.chat_id = 2 
             AND (m.status = 0 OR m.status = 1) 
             AND ( m.sender_id != (SELECT person_id FROM `Students` WHERE account_number = ?)
-                OR m.sender_id != (SELECT person_id FROM `Employees` WHERE employee_number = ?))
+                OR m.sender_id != (SELECT person_id FROM `Employees` WHERE employee_number = ?));
+
+
+SELECT 
+    c.chat_id,
+    c.is_group,
+    COALESCE(cg.group_name, CONCAT(p.first_name, ' ', p.last_name)) AS chat_name,
+    MAX(la.DATE) AS last_connection
+FROM Chats c
+LEFT JOIN ChatsGroups cg ON c.group_id = cg.group_id
+LEFT JOIN ChatParticipants cp ON c.chat_id = cp.chat_id
+LEFT JOIN Persons p ON cp.person_id = p.person_id
+LEFT JOIN LogAuth la ON p.person_id = la.identifier
+WHERE c.chat_id = 2
+  AND (c.is_group = 1 OR cp.person_id != 0801202400005)
+GROUP BY c.chat_id, c.is_group, chat_name;

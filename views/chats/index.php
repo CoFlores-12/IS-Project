@@ -221,9 +221,9 @@ width: 100%;
         </li>
     </ul>
 </div>
-    <div class="dropup position-fixed bottom-0 end-0 rounded-circle m-5">
-  <button type="button" class="btn bg-custom-primary flex justify-center items-center text-white btn-lg hide-toggle" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">
-  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+    <div class="dropup position-fixed bottom-0 end-0 m-4">
+  <button type="button" class="btn  flex justify-center items-center text-white btn-lg hide-toggle" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">
+  <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor" class="bi bi-plus bg-custom-primary rounded-circle" viewBox="0 0 16 16">
   <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
 </svg>
   </button>
@@ -268,6 +268,13 @@ function getTimeElapsed(messageTime) {
     }
 }
     const chatsContainer = document.getElementById('chatsContainer')
+    let icon = [`<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2 mx-1" viewBox="0 0 16 16">
+<path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0"/>
+</svg>`, `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-all mx-1" viewBox="0 0 16 16">
+<path d="M8.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L2.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093L8.95 4.992zm-.92 5.14.92.92a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 1 0-1.091-1.028L9.477 9.417l-.485-.486z"/>
+</svg>`, `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#176b87" class="bi bi-check-all mx-1" viewBox="0 0 16 16">
+<path d="M8.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L2.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093L8.95 4.992zm-.92 5.14.92.92a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 1 0-1.091-1.028L9.477 9.417l-.485-.486z"/>
+</svg>`];
     fetch('/api/get/chats/chats.php')
     .then((res)=>{return res.json()})
     .then((res)=>{
@@ -275,11 +282,6 @@ function getTimeElapsed(messageTime) {
             chatsContainer.innerHTML = '';
             res.data.forEach(chat => {
                 let name = chat.is_group == 1 ? chat.group_name : chat.direct_user_name
-                let icon = [`<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2 mx-1" viewBox="0 0 16 16">
-  <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0"/>
-</svg>`, `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#176b87" class="bi bi-check-all mx-1" viewBox="0 0 16 16">
-  <path d="M8.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L2.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093L8.95 4.992zm-.92 5.14.92.92a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 1 0-1.091-1.028L9.477 9.417l-.485-.486z"/>
-</svg>`];
                 let iconToPrint = '';
                 if (chat.unread_messages == 0 && chat.status != null) {
                     iconToPrint = icon[chat.status];
@@ -305,6 +307,7 @@ function getTimeElapsed(messageTime) {
     </li>`
             });
         }
+        
     })
     .catch(err =>{
         console.log(err);
