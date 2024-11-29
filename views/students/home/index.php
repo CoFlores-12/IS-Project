@@ -93,7 +93,7 @@ AuthMiddleware::checkAccess($requiredRole);
                 </button>
             </div>
             <div class="body h-full" id="bodyOffCanvas">
-                <iframe id="frameChats" src="/views/students/chats/index.php" class="w-full h-full" frameborder="0"></iframe>
+                <iframe id="frameChats" src="/views/chats/index.php" class="w-full h-full" frameborder="0"></iframe>
             </div>
         </div>
 
@@ -130,11 +130,11 @@ AuthMiddleware::checkAccess($requiredRole);
                             
                         </button>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="/views/students/profile/index.php?account_number=<?php echo $_SESSION['user']['student_id'] ?>">My profile</a></li>
-                            <li><a class="dropdown-item" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">Messages</a></li>
+                            <li><a class="dropdown-item" href="/views/students/profile/index.php?account_number=<?php echo $_SESSION['user']['student_id'] ?>">Mi perfil</a></li>
+                            <li><a class="dropdown-item" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">Chats</a></li>
                             
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="/api/get/logout.php">Logout <i class="bi bi-box-arrow-right"></i></a></li>
+                            <li><a class="dropdown-item" href="/api/get/logout.php">Salir <i class="bi bi-box-arrow-right"></i></a></li>
                         </ul>
                      </div>
                 </div>

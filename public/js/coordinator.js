@@ -61,3 +61,13 @@ function toggleSidebar() {
 }
 
 toggleAside.addEventListener('click', toggleSidebar);
+const refreshIcon = document.getElementById('refreshIcon');
+refreshChats.addEventListener('click', () => {
+    refreshChats.classList.add('rotate');
+
+    frameChats.contentWindow.location.reload();
+
+    setTimeout(() => {
+        refreshChats.classList.remove('rotate');
+    }, 1000); 
+});

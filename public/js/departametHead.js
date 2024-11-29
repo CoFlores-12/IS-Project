@@ -1,4 +1,16 @@
 let btnSearchHistory = document.getElementById('btnSearchHistory');
+
+const refreshIcon = document.getElementById('refreshIcon');
+refreshChats.addEventListener('click', () => {
+    refreshChats.classList.add('rotate');
+
+    frameChats.contentWindow.location.reload();
+
+    setTimeout(() => {
+        refreshChats.classList.remove('rotate');
+    }, 1000); 
+});
+
 let historyBody = document.getElementById('historyBody');
         let inputHistory = document.getElementById('inputHistory');
         btnSearchHistory.addEventListener('click', ()=>{
