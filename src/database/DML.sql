@@ -410,3 +410,8 @@ WHERE
     h.student_id = '20201000005' 
 GROUP BY 
     h.student_id;
+
+
+SELECT * FROM  `Requests` r
+INNER JOIN `Periods` p on r.period_id = p.period_id
+WHERE p.active = 1 AND  r.student_id = 20201000005

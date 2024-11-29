@@ -3,6 +3,7 @@ let btnModalEnrollment = document.getElementById('btnModalEnrollment');
 let cancelEnrollmentBtn = document.getElementById('cancelEnrollmentBtn');
 let addEnrollmentBtn = document.getElementById('addEnrollmentBtn');
 let modalRequests = document.getElementById('modalRequests');
+let MyRequestModal = document.getElementById('MyRequestModal');
 let modalEnrollment = document.getElementById('modalEnrolment');
 let requestType = document.getElementById('requestType');
 let dataForRequest = document.getElementById('dataForRequest');
@@ -16,8 +17,11 @@ let toastBS = new bootstrap.Toast(toast);
 let refreshChats = document.getElementById('refreshChats');
 let frameChats = document.getElementById('frameChats');
 let modalRequestsBS = new bootstrap.Modal(modalRequests);
+let MyRequestModalBS = new bootstrap.Modal(MyRequestModal);
 let modalEnrollmentBS = new bootstrap.Modal(modalEnrollment);
 const refreshIcon = document.getElementById('refreshIcon');
+const courseHistory = document.getElementById('courseHistory');
+const btnModalMyRequests = document.getElementById('btnModalMyRequests');
 
 refreshChats.addEventListener('click', () => {
     refreshChats.classList.add('rotate');
@@ -48,7 +52,7 @@ let optionsBody = async (value) => {
                     body += '<input type="file" name="evidemce"  accept="application/pdf" class="form-control my-4" id="evidence">';
                 } else {
                     body = `<div class="alert alert-danger mt-3" role="alert">
-                                Inactive period
+                                Periodo no activo
                             </div>`;
                     return body;
                 }
@@ -74,7 +78,7 @@ let optionsBody = async (value) => {
             break;
         case "4":
             let HTML2 = `<select name="careerChange" class="form-control my-4" id="campusChange">
-            <option value="">Select Campus</option>`
+            <option value="">Seleccionar centro regional</option>`
             const response2 = await fetch('/api/get/public/allCampus.php');
             const data2 = await response2.json();
 
@@ -96,6 +100,36 @@ let optionsBody = async (value) => {
 
 btnModalRequests.addEventListener('click', (e)=>{
     modalRequestsBS.show();
+})
+
+btnModalMyRequests.addEventListener('click', (e)=>{
+    MyRequestModalBS.show();
+    const tbody = document.getElementById('RequestTableBody');
+    tbody.innerHTML = '<center><div class="spinner-border text m-4" role="status"></div></center>';
+    
+    fetch('/api/get/students/myRequsts.php')
+    .then(res => {return res.json()})
+    .then(res=>{
+        tbody.innerHTML = '';
+        res.forEach(log => {
+          const row = document.createElement('tr');
+          if (log.status === 1) {
+            row.classList.add('table-success');
+          } else if (log.status === 0) {
+            row.classList.add('table-danger'); 
+        } else {
+              row.classList.add('bg-aux'); 
+
+          }
+          row.innerHTML = `
+            <td>${log.local_time}</td>
+            <td>${log.title}</td>
+            <td>${log.status === 1 ? 'Aprobada' : log.status === null ? 'Pendiente' : 'Rechazada'}</td>
+            <td>${log.response === null ? 'N/A' : log.response}</td>
+          `;
+          tbody.appendChild(row);
+        });
+    })
 })
 btnModalEnrollment.addEventListener('click', (e)=>{
     modalEnrollmentBS.show();
@@ -215,14 +249,16 @@ cancelEnrollmentBtn.addEventListener('click', (e)=>{
     fetch('/api/get/students/getClassesEnrolled.php')
     .then((res)=>{return res.json()})
     .then((res)=> {
+        if (!res.status) throw new Error(res.message);
+        
         var html = `<table id="table" class="my-2">
         <thead>
-            <tr><th colspan="2"><h5>Enrolled</h5></th></tr>
+            <tr><th colspan="2"><h5>Matriculadas</h5></th></tr>
         </thead>
         <tbody  id="tableEnrolled">
         </tbody>
         <thead>
-            <tr><th colspan="2"><h5>Wait list</h5></th></tr>
+            <tr><th colspan="2"><h5>Lista de espera</h5></th></tr>
         </thead>
         <tbody id="tableWaitList">
             
@@ -231,7 +267,7 @@ cancelEnrollmentBtn.addEventListener('click', (e)=>{
         formDataEnrollment.innerHTML= html;
         var tableEnrolled = document.getElementById('tableEnrolled');
         var tableWaitList = document.getElementById('tableWaitList');
-        res.forEach(element => {
+        res.data.forEach(element => {
             if (element.is_waitlist == 0) {
                 tableEnrolled.innerHTML += `<tr data-enrolled-id="${element.enroll_id}">
                 <td>${element.hour_start}</td>
@@ -247,6 +283,11 @@ cancelEnrollmentBtn.addEventListener('click', (e)=>{
         var table = document.getElementById('table');
         selectedCancel = table.getElementsByClassName('selected');
         table.onclick = highlightCancell;
+    })
+    .catch(err=>{
+        formDataEnrollment.innerHTML= `<div class="alert alert-danger mt-3" role="alert">
+  ${err}
+</div>`;
     })
 })
 addEnrollmentBtn.addEventListener('click', (e)=>{
@@ -346,7 +387,7 @@ enrollBtn.addEventListener('click', (e)=>{
         e.target.innerHTML = `Enroll`; 
         e.target.disabled = true; 
         if (res.status) {
-            toastTitle.innerHTML ='Enroll succes'
+            toastTitle.innerHTML ='Clase matriculada exitosamente'
             toastBody.innerHTML = `<div class="alert alert-success mb-0" role="alert">
                 ${res.message}
             </div>`
@@ -354,7 +395,7 @@ enrollBtn.addEventListener('click', (e)=>{
             getClassesView();
             tableSections.innerHTML = '';
         }else {
-            toastTitle.innerHTML ='Enroll error'
+            toastTitle.innerHTML ='Error en matricula'
             toastBody.innerHTML = `<div class="alert alert-danger mb-0" role="alert">
                 ${res.message}
             </div>`
@@ -395,7 +436,35 @@ cancelBtn.addEventListener('click', (e)=>{
         }
         cancelEnrollmentBtn.click();
     })
+
+    
 })
+
+const bgLightClasses = [
+    "bg-red-50", "bg-red-100", "bg-orange-50", "bg-orange-100",
+    "bg-yellow-50", "bg-yellow-100", "bg-green-50", "bg-green-100",
+    "bg-blue-50", "bg-blue-100", "bg-gray-50", "bg-gray-100", "bg-gray-200"
+];
+
+const bgClasses = [
+    "bg-blue", "bg-red", "bg-green", "bg-gray", "bg-orange-500",
+    "bg-red-50", "bg-red-100", "bg-red-200", "bg-red-300", "bg-red-400",
+    "bg-red-500", "bg-red-600", "bg-red-700", "bg-red-800", "bg-red-900",
+    "bg-orange-50", "bg-orange-100", "bg-orange-200", "bg-orange-300", "bg-orange-400",
+    "bg-orange-600", "bg-orange-700", "bg-orange-800", "bg-orange-900",
+    "bg-yellow-50", "bg-yellow-100", "bg-yellow-200", "bg-yellow-300", "bg-yellow-400",
+    "bg-yellow-500", "bg-yellow-600", "bg-yellow-700", "bg-yellow-800", "bg-yellow-900",
+    "bg-green-50", "bg-green-100", "bg-green-200", "bg-green-300", "bg-green-400",
+    "bg-green-500", "bg-green-600", "bg-green-700", "bg-green-800", "bg-green-900",
+    "bg-blue-50", "bg-blue-100", "bg-blue-200", "bg-blue-300", "bg-blue-400",
+    "bg-blue-500", "bg-blue-600", "bg-blue-700", "bg-blue-800", "bg-blue-900",
+    "bg-gray-50", "bg-gray-100", "bg-gray-200", "bg-gray-300", "bg-gray-400",
+    "bg-gray-500", "bg-gray-600", "bg-gray-700", "bg-gray-800", "bg-gray-900"
+];
+
+function getRandomBgClass() {
+    return bgClasses[Math.floor(Math.random() * bgClasses.length)];
+}
 
 function getClassesView() {
     const courseRunning = document.getElementById('courseRunning');
@@ -417,20 +486,40 @@ function getClassesView() {
                     </div>
                 </div>
             </div>`;
-    fetch('/api/get/students/getClassesEnrolled.php')
+    courseHistory.innerHTML = `<div class="card card-course shadow">
+                <div class="p-0 card-bd flex flex-column">
+                    <div class="name w-full p-2 bg-secondary text-white mb-1">
+                        <p class="card-text placeholder-glow">
+                            <span class="placeholder col-4"></span>
+                        </p>
+                    </div>
+                    <div class="infoClass p-3">
+                        <p class="card-text placeholder-glow">
+                            <span class="placeholder bg-secondary col-12"></span>
+                            <span class="placeholder bg-secondary col-4"></span>
+                            <span class="placeholder bg-secondary col-6"></span>
+                            <span class="placeholder bg-secondary col-8"></span>
+                        </p>
+                        
+                    </div>
+                </div>
+            </div>`;
+    fetch('/api/get/students/getClassesRunning.php')
     .then((res)=>{return res.json()})
     .then((res)=> {
         courseRunning.innerHTML = '';
         res.forEach(element => {
             if (element.is_waitlist == 0) {
+                const bgClass = getRandomBgClass();
+                const textClass = bgLightClasses.includes(bgClass) ? "text-dark" : "text-white";
                 courseRunning.innerHTML += `<a class="text-decoration-none" href="/views/class/index.php?section_id=${element.section_id}">
                 <div class="card card-course shadow">
                     <div class="p-0 card-bd flex flex-column">
-                        <div class="name w-full p-2 bg-primary text-white mb-1">
+                        <div class="name w-full p-2 ${bgClass}  ${textClass} mb-1">
                             ${element.class_code}
                         </div>
                         <div class="infoClass p-2">
-                            <span class=" font-bold text-md mb-2">${element.class_name}</span>
+                            <span class=" font-bold text-md mb-2">${element.hour_start} ${element.class_name}</span>
                             <div class="pr mt-3">
                                 <div class="progress mt-2">
                                     <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
@@ -443,9 +532,39 @@ function getClassesView() {
             }
         });
     })
+    
+}
+
+function getClassesHistory() {
+    fetch('/api/get/students/classesHistory.php')
+    .then((res)=>{return res.json()})
+    .then((res)=> {
+        courseHistory.innerHTML = '';
+        res.forEach(element => {
+            const bgClass = getRandomBgClass();
+                const textClass = bgLightClasses.includes(bgClass) ? "text-dark" : "text-white";
+                courseHistory.innerHTML += `<a class="text-decoration-none" href="/views/class/index.php?section_id=${element.section_id}">
+                <div class="card card-course shadow">
+                    <div class="p-0 card-bd flex flex-column">
+                        <div class="name w-full font-bold p-2 ${bgClass}  ${textClass} mb-1">
+                            ${element.class_code}
+                        </div>
+                        <div class="infoClass p-2">
+                            <span class=" mb-2"><span class="text-md">${element.hour_start}</span> ${element.class_name}</span>
+                            <div class="pr mt-3">
+                                <div class="progress mt-2">
+                                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
+                                    </div>
+                                <div class="text-end"><small class="font-light text-xs">Progress (0%)</small></div>
+                            </div>
+                        </div>
+                    </div>
+                </div></a>`;
+        });
+    })
 }
 getClassesView();
-
+getClassesHistory();
 
 const toggleAside = document.getElementById('toggleAside');
 const desktopAside = document.getElementById('desktopAside');
