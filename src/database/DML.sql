@@ -300,4 +300,113 @@ INSERT INTO obsReviews (comment) VALUES ('Faltan firmas o sellos en el documento
 INSERT INTO obsReviews (comment) VALUES ('Datos falsificados detectados');
 
 
-SELECT p.first_name, p.personal_email FROM Applicant a INNER JOIN `Persons` p ON a.person_id = p.person_id
+SELECT p.first_name, p.personal_email FROM Applicant a INNER JOIN `Persons` p ON a.person_id = p.person_id;
+
+WITH LastMessage AS (
+    SELECT
+        chat_id,
+        MAX(sent_at) AS last_message_time
+    FROM Messages
+    GROUP BY chat_id
+),
+MessageDetails AS (
+    SELECT
+        m.chat_id,
+        m.content AS last_message,
+        m.sent_at AS message_time
+    FROM Messages m
+    INNER JOIN LastMessage lm ON m.chat_id = lm.chat_id AND m.sent_at = lm.last_message_time
+)
+SELECT
+    c.chat_id,
+    c.is_group,
+    -- Datos para grupos
+    g.group_name AS group_name,
+    g.group_photo AS group_photo,
+    -- Datos para chats directos
+    p.first_name AS direct_user_name,
+    -- Último mensaje
+    md.last_message,
+    md.message_time
+FROM Chats c
+LEFT JOIN ChatsGroups g ON c.group_id = g.group_id
+LEFT JOIN ChatParticipants cp ON c.chat_id = cp.chat_id
+LEFT JOIN Persons p ON p.person_id = (
+    SELECT person_id
+    FROM ChatParticipants
+    WHERE 
+        (chat_id = c.chat_id AND person_id != (SELECT person_id FROM `Students` WHERE account_number = 20201000005))
+    OR 
+        (chat_id = c.chat_id AND person_id != (SELECT person_id FROM `Employees` WHERE employee_number = 9))
+    LIMIT 1
+)
+LEFT JOIN MessageDetails md ON c.chat_id = md.chat_id
+WHERE 
+    cp.person_id = (SELECT person_id FROM `Students` WHERE account_number = 20201000005)
+OR
+    cp.person_id = (SELECT person_id FROM `Employees` WHERE employee_number = 9)
+ORDER BY md.message_time DESC;
+
+
+SELECT person_id FROM `Persons` p
+WHERE p.person_id = (SELECT person_id FROM `Students` WHERE account_number = NULL)
+    OR 
+    p.person_id = (SELECT person_id FROM `Employees` WHERE employee_number = 9)
+;
+
+SELECT COUNT(*)
+        FROM Messages m
+        WHERE 
+            m.chat_id = 2 
+            AND (m.status = 0 OR m.status = 1) 
+            AND ( m.sender_id != (SELECT person_id FROM `Students` WHERE account_number = ?)
+                OR m.sender_id != (SELECT person_id FROM `Employees` WHERE employee_number = ?));
+
+
+SELECT 
+    c.chat_id,
+    c.is_group,
+    COALESCE(cg.group_name, CONCAT(p.first_name, ' ', p.last_name)) AS chat_name,
+    MAX(la.DATE) AS last_connection
+FROM Chats c
+LEFT JOIN ChatsGroups cg ON c.group_id = cg.group_id
+LEFT JOIN ChatParticipants cp ON c.chat_id = cp.chat_id
+LEFT JOIN Persons p ON cp.person_id = p.person_id
+LEFT JOIN LogAuth la ON p.person_id = la.identifier
+WHERE c.chat_id = 2
+  AND (c.is_group = 1 OR cp.person_id != 0801202400005)
+GROUP BY c.chat_id, c.is_group, chat_name;
+
+
+SELECT 
+    h.student_id,
+    SUM(h.score * c.uv) / SUM(c.uv) AS indice_global,
+    (SELECT 
+        SUM(h1.score * c1.uv) / SUM(c1.uv)  
+     FROM 
+        History h1
+     JOIN 
+        `Section` s1 ON h1.section_id = s1.section_id
+     JOIN 
+        `Classes` c1 ON s1.class_id = c1.class_id
+     JOIN 
+        `Periods` p1 ON s1.period_id = p1.period_id
+     WHERE 
+        h1.student_id = h.student_id
+        AND p1.active = 0 
+        AND s1.period_id = (
+            SELECT MAX(period_id)  
+            FROM `Periods`
+            WHERE active = 0
+        )
+    ) AS indice_ultimo_periodo
+FROM 
+    History h
+JOIN 
+    `Section` s ON h.section_id = s.section_id
+JOIN 
+    `Classes` c ON s.class_id = c.class_id
+WHERE 
+    h.student_id = '20201000005' 
+GROUP BY 
+    h.student_id;
