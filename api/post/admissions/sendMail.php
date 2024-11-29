@@ -140,57 +140,53 @@ foreach ($result as $applicant) {
         </head>
         <body>
             <div class=\"email-container\">
-                <div class=\"header\">
-                    <h1>Resultados de tu Examen de Admisión</h1>
-                </div>
-                <div class=\"content\">
-                    <p>Estimado(a) $firstName $lastName,</p>
-                    <p>Nos complace informarle los resultados de los exámenes que realizó:</p>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Código del Examen</th>
-                                <th>Resultado</th>
-                            </tr>
-                        </thead>
-                        <tbody>";
-    
-    $examCodesArray = explode(', ', $examCodes);
-    $examResultsArray = explode(', ', $examResults);
-    foreach ($examCodesArray as $index => $examCode) {
-        $resultScore = $examResultsArray[$index] ?? 'N/A';
-        $message .= "
-                            <tr>
-                                <td>$examCode</td>
-                                <td>$resultScore</td>
-                            </tr>";
-    }
-
-    $message .= "
-                        </tbody>
-                    </table>";
-
-    if ($approvedCareer) {
-        $careersArray = explode(', ', $approvedCareer);  
-        $message .= "<p>Has sido aprobado para las siguientes carreras:</p><ul>";
-        
-        foreach ($careersArray as $career) {
-            $message .= "<li><span class='checkmark'></span><strong>$career</strong></li>";
-        }
-        $message .= "</ul>";
-    } else {
-        $message .= "<p>Lo sentimos, no has sido aprobado para ninguna carrera.</p>";
-    }
-
-    $message .= "
-                    <p>Si tienes alguna pregunta o necesitas más información, no dudes en contactarnos.</p>
-                    <p>Atentamente,</p>
-                    <p><strong>Equipo de Admisiones</strong></p>
-                </div>
-                <div class=\"footer\">
-                    <p>Este correo es generado automáticamente. Por favor, no responda a este mensaje.</p>
-                </div>
+            <div class=\"header\">
+                <h1>Resultados de tu Examen de Admision</h1>
             </div>
+            <div class=\"content\">
+                <p>Estimado(a) $firstName $lastName,</p>
+                <p>Nos complace informarle los resultados de los examenes que realizo:</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Codigo del Examen</th>
+                            <th>Resultado</th>
+                        </tr>
+                    </thead>
+                    <tbody>";
+                    
+        foreach (explode(', ', $examCodes) as $index => $examCode) {
+            $resultScore = explode(', ', $examResults)[$index] ?? 'N/A';
+            $message .= "
+                        <tr>
+                            <td>$examCode</td>
+                            <td>$resultScore</td>
+                        </tr>";
+        }
+
+        $message .= "
+                    </tbody>
+                </table>";
+
+        if (!empty($approvedCareer)) {
+            $message .= "<p>¡Felicitaciones! Has sido aprobado(a) para las siguientes carreras:</p><ul>";
+            foreach (explode(', ', $approvedCareer) as $career) {
+                $message .= "<li><strong>$career</strong></li>";
+            }
+            $message .= "</ul>";
+        } else {
+            $message .= "<p>Lo sentimos, no has sido aprobado(a) para ninguna carrera en esta ocasión.</p>";
+        }
+
+        $message .= "
+                <p>Si tienes alguna pregunta o necesitas mas información, no dudes en contactarnos.</p>
+                <p>Atentamente,</p>
+                <p><strong>Equipo de Admisiones</strong></p>
+            </div>
+            <div class=\"footer\">
+                <p>Este correo es generado automaticamente. Por favor, no responda a este mensaje.</p>
+            </div>
+        </div>
         </body>
         </html>
     ";
