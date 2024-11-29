@@ -376,3 +376,37 @@ LEFT JOIN LogAuth la ON p.person_id = la.identifier
 WHERE c.chat_id = 2
   AND (c.is_group = 1 OR cp.person_id != 0801202400005)
 GROUP BY c.chat_id, c.is_group, chat_name;
+
+
+SELECT 
+    h.student_id,
+    SUM(h.score * c.uv) / SUM(c.uv) AS indice_global,
+    (SELECT 
+        SUM(h1.score * c1.uv) / SUM(c1.uv)  
+     FROM 
+        History h1
+     JOIN 
+        `Section` s1 ON h1.section_id = s1.section_id
+     JOIN 
+        `Classes` c1 ON s1.class_id = c1.class_id
+     JOIN 
+        `Periods` p1 ON s1.period_id = p1.period_id
+     WHERE 
+        h1.student_id = h.student_id
+        AND p1.active = 0 
+        AND s1.period_id = (
+            SELECT MAX(period_id)  
+            FROM `Periods`
+            WHERE active = 0
+        )
+    ) AS indice_ultimo_periodo
+FROM 
+    History h
+JOIN 
+    `Section` s ON h.section_id = s.section_id
+JOIN 
+    `Classes` c ON s.class_id = c.class_id
+WHERE 
+    h.student_id = '20201000005' 
+GROUP BY 
+    h.student_id;

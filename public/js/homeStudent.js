@@ -180,8 +180,9 @@ function getClasses() {
     fetch('/api/get/students/getClasses.php')
     .then((res) => {return res.json()})
     .then((res) =>{
+        if (!res.status) throw new Error(res.message);
         var html = `<table id="table" class="mt-4">`;
-        res.forEach(element => {
+        res.data.forEach(element => {
             html += `<tr data-class-id="${element.class_id}">
                     <td>${element.class_code}</td>
                     <td>${element.class_name}</td>
@@ -193,6 +194,11 @@ function getClasses() {
         var table = document.getElementById('table');
         selected = table.getElementsByClassName('selected');
         table.onclick = highlight;
+    })
+    .catch(err=>{
+        formDataEnrollment.innerHTML= `<div class="alert alert-danger mt-3" role="alert">
+  ${err}
+</div>`;
     })
 }
 
