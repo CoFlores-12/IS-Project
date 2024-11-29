@@ -56,9 +56,13 @@ $sql ='
 try {
     $result = $conn->execute_query($sql, [$employeetid]);
     $data = $result->fetch_all(MYSQLI_ASSOC); 
-    
+
+    $response = [];
+
+    $response["dataSection"] = $data;
+
     if ($data) {
-        echo json_encode($data); 
+        echo json_encode($response); 
     } else {
         http_response_code(404); 
         echo json_encode(['Message' => 'No sections found for the specified employee.']);

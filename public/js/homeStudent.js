@@ -34,7 +34,7 @@ refreshChats.addEventListener('click', () => {
 });
 
 let optionsBody = async (value) => {
-    let body = `<textarea name="comments" placeholder="Justify" id="comments" class="form-control bg-aux my-4 text"></textarea>`;
+    let body = `<textarea name="comments" placeholder="Justicación" id="comments" class="form-control bg-aux my-4 text"></textarea>`;
     switch (value) {
         case "2": 
                 
@@ -92,7 +92,7 @@ let optionsBody = async (value) => {
             break;
 
     }
-    body += `<button id="sendRequestBtn" class="btn bg-custom-primary text mt-2 form-control">Send</button>`;
+    body += `<button id="sendRequestBtn" class="btn bg-custom-primary text mt-2 form-control">Enviar</button>`;
     
     return body
     

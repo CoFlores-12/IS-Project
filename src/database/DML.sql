@@ -415,3 +415,38 @@ GROUP BY
 SELECT * FROM  `Requests` r
 INNER JOIN `Periods` p on r.period_id = p.period_id
 WHERE p.active = 1 AND  r.student_id = 20201000005
+
+
+
+
+SELECT 
+    e.student_id,
+    COUNT(h.history_id) AS approved_classes
+FROM Enroll e
+JOIN Students st ON e.student_id = st.account_number
+LEFT JOIN History h ON e.student_id = h.student_id AND h.obs_id = 1
+WHERE e.section_id = 159
+GROUP BY e.student_id;
+
+SELECT 
+    e.student_id,
+    COUNT(h.history_id) AS approved_classes,
+    total_classes.total_classes - COUNT(h.history_id) AS pending_classes,
+    CASE 
+        WHEN total_classes.total_classes - COUNT(h.history_id) < 5 THEN TRUE
+        ELSE FALSE
+    END AS has_less_than_5_remaining
+FROM Enroll e
+JOIN Students st ON e.student_id = st.account_number
+LEFT JOIN History h ON e.student_id = h.student_id AND h.obs_id = 1
+JOIN (
+    SELECT 
+        cxc.career_id,
+        COUNT(cxc.class_id) AS total_classes
+    FROM ClassesXCareer cxc
+    GROUP BY cxc.career_id
+) AS total_classes ON st.career_id = total_classes.career_id
+WHERE e.section_id = 159
+GROUP BY e.student_id, total_classes.total_classes;
+
+
