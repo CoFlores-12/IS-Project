@@ -11,6 +11,11 @@ $mail = new Mails(getenv('emailUser'), getenv('emailPassword'));
 
 $conn = (new Database())->getConnection();
 
+$logFile = __DIR__ . '/email_log.txt';
+
+file_put_contents($logFile, "Inicio del envío de correos: " . date('Y-m-d H:i:s') . "\n", FILE_APPEND);
+
+
 $query = "SELECT 
             p.first_name, 
             p.last_name, 
@@ -197,8 +202,16 @@ foreach ($result as $applicant) {
         $stmt = $conn->prepare($updateQuery);
         $stmt->bind_param("i", $applicant['applicant_id']);
         $stmt->execute();
+
+        $logMessage = "Correo enviado a {$lastName} {$lastName} ({$email}) - Éxito.";
+
+    }else{
+        $logMessage = "Correo enviado a {$lastName} {$lastName} ({$email}) - Fallo.";
     }
+    file_put_contents($logFile, $logMessage . "\n", FILE_APPEND);
 }
+
+file_put_contents($logFile, "Fin del envío de correos: " . date('Y-m-d H:i:s') . "\n", FILE_APPEND);
 
 $sql = "UPDATE Config
         SET data = JSON_SET(data, '$.AdmissionsStatus', ?)
