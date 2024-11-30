@@ -559,8 +559,6 @@ let historyBody = document.getElementById('historyBody');
     });
 
 
-
-  
 let btnSearcSection = document.getElementById('btnSearcSection');
 let deleteSection = document.getElementById('deleteSection');
 
@@ -584,8 +582,9 @@ function showSection(){
         .then((res) =>{
             let newRow ="";   
             tableSection.innerHTML = "";
-            sections = res;
-            res.forEach((item) => {
+            sections = res.dataSection;
+        
+            res.dataSection.forEach((item) => {
     
                 newRow = `
                 <tr>
@@ -593,12 +592,12 @@ function showSection(){
                     <th style="text-align: center;" class="bg-aux text">${item.hour_start}</th>
                     <th style="text-align: center;" class="bg-aux text">${item.hour_end}</th>
                     <th style="text-align: center;" class="bg-aux text"> ${[
-                    item.Monday && "Monday",
-                    item.Tuesday && "Tuesday",
-                    item.Wednesday && "Wednesday",
-                    item.Thursday && "Thursday",
-                    item.Friday && "Friday",
-                    item.Saturday && "Saturday",
+                    item.Monday && "Lunes",
+                    item.Tuesday && "Martes",
+                    item.Wednesday && "Miercoles",
+                    item.Thursday && "Jueves",
+                    item.Friday && "Viernes",
+                    item.Saturday && "Sabado",
                 ]
                     .filter(Boolean)
                     .join(", ")}</th>
@@ -609,7 +608,8 @@ function showSection(){
                 `;
     
                 tableSection.innerHTML += newRow
-            });
+            })
+    
             
                     
         });
@@ -641,8 +641,6 @@ function modalVerifyDelete(id){
     const foundItem = sections.find(item => item.section_id === id);
     idSectionDelete = id;
     tableSectiondelete.innerHTML = "";
-
-    console.log(foundItem)
 
       const row1 = `
             <tr>
@@ -707,12 +705,12 @@ function modalVerifyDelete(id){
             </tr>
             `;
       const days = [
-        foundItem.Monday ? "Monday" : "",
-        foundItem.Tuesday ? "Tuesday" : "",
-        foundItem.Wednesday ? "Wednesday" : "",
-        foundItem.Thursday ? "Thursday" : "",
-        foundItem.Friday ? "Friday" : "",
-        foundItem.Saturday ? "Saturday" : ""
+        foundItem.Monday ? "Lunes" : "",
+        foundItem.Tuesday ? "Martes" : "",
+        foundItem.Wednesday ? "Miercoles" : "",
+        foundItem.Thursday ? "Jueves" : "",
+        foundItem.Friday ? "Viernes" : "",
+        foundItem.Saturday ? "Sabado" : ""
       ]
         .filter(Boolean)
         .join(", ");
@@ -724,6 +722,9 @@ function modalVerifyDelete(id){
                                         <td  class="bg-aux text">Dias</td>
                                         <td  class="bg-aux text">${days}</td>
                                     </tr> `  
+
+    tableSecctionStudentFuntion(foundItem.section_id);
+
     updateQuotas.addEventListener("click", ()=>{
         invalidQuotas.style.display = 'none';
         validedQuotas.style.display = 'none';
@@ -771,7 +772,56 @@ function modalVerifyDelete(id){
     }) 
 }
 
+let tableSecctionStudent = document.getElementById("tableSecctionStudent");
+let tableSectiondeleteStudent = tableSecctionStudent.querySelector("tbody");
 
+function tableSecctionStudentFuntion(idSection){
+    fetch('/api/get/admin/countClassesStudent.php?section_identifier='+idSection)
+    .then((res) => {return res.json()})
+    .then((res) =>{
+    
+
+        tableSectiondeleteStudent.innerHTML = `
+                <thead>
+                    <tr>
+                    <th style="text-align: center;" scope="col" class="bg-aux text">Id del estudiante</th>
+                    <th style="text-align: center;" scope="col" class="bg-aux text">Clases restantes</th>
+                    <th style="text-align: center;" scope="col" class="bg-aux text">Clases aprobadas</th>
+                    <th style="text-align: center;" scope="col" class="bg-aux text">Menos de 5 clases?</th>
+                    </tr>
+                </thead>
+        `;
+
+        console.log(res.rows)
+    
+        if(res.status == 0){
+            res.rows.forEach((item) => {
+                if(item.has_less_than_5_remaining == 1){
+                    clase = "SI"
+                }else{
+                     clase = "NO"
+                }
+    
+                newRow = `
+                <tr>
+                    <th style="text-align: center;" class="bg-aux text">${item.student_id}</th>
+                    <th style="text-align: center;" class="bg-aux text">${item.pending_classes}</th>
+                    <th style="text-align: center;" class="bg-aux text">${item.approved_classes}</th>
+                    <th style="text-align: center;" class="bg-aux text">${clase}</th>
+                   </tr>
+                `;
+
+                if (item.has_less_than_5_remaining === 1) {
+                    saveDeleteSection.disabled = true;
+                }
+
+                tableSectiondeleteStudent.innerHTML += newRow;
+            })
+        }
+        
+
+    })
+}
 
 
 function modalDeleteSection(item){

@@ -27,6 +27,24 @@ AuthMiddleware::checkAccess($requiredRole);
             padding-left: 2rem; 
             border: none; 
         }
+        .list-group-parent {
+            padding-left: 2rem; 
+            border: none; 
+        }
+        table {
+          width: 100%;
+        }
+        td {
+          background-color: var(--bg-aux) !important;
+          color: var(--text) !important;
+        }
+        thead td {
+          border: 1px solid grey;
+        }
+        tr {
+          margin: 1.15rem !important;
+          cursor: pointer;
+        }
         .successAlert {
             position: fixed;
             top: 20px;
@@ -115,7 +133,7 @@ AuthMiddleware::checkAccess($requiredRole);
       </div>
       <div class="modal-body">
         <input type="file" name="" accept=".csv" id="csvFile">
-        <div class="alert alert-warning mt-3" hidden id="alertUploadFile" role="alert" >
+        <div class="alert alert-warning mt-3" id="alertUploadFile" role="alert" >
           Cargar archivo
         </div>
         <button type="button" class="btn bg-custom-primary mt-4 form-control text" id="uploadFile">Cargar Archivo</button>
@@ -159,14 +177,14 @@ AuthMiddleware::checkAccess($requiredRole);
         <select class="form-select mb-3" id="teachers">
             <option value="" selected>Seleccione...</option>
         </select>
-        <div class="alert alert-danger" hidden role="alert" id="alertTeacher">
-          El deocete esta ocupado a esta hora, elija otro.
+        <div class="alert alert-danger" role="alert" id="alertTeacher">
+          El docente esta ocupado a esta hora, elija otro.
         </div>
         <label class="mb-1">Aulas:</label>
         <select class="form-select mb-3" id="classrooms">
             <option value="" selected>Seleccione...</option>
         </select>
-        <div class="alert alert-danger" hidden role="alert" id="alertClassroom">
+        <div class="alert alert-danger" role="alert" id="alertClassroom">
           El aula esta ocupada a esta hora, elija otra.
         </div>        
         <label class="mb-1">Marque los dias:</label>
@@ -206,7 +224,7 @@ AuthMiddleware::checkAccess($requiredRole);
 
         <label class="mb-1">Cupos disponibles(aqui la capacidad maxima):</label>
             <input type="number" id="available_spaces" name="cupo"  placeholder="Select..." value="" min="5" max="100" step="1">
-        <div class="alert alert-danger" hidden role="alert" id="alertCapacity">
+        <div class="alert alert-danger" role="alert" id="alertCapacity">
           Capacidad incorrecta.
         </div>   
         <button type="button" class="btn btn-success mt-4 btn-sm" id="btnNewSection">Enviar</button>
@@ -287,13 +305,19 @@ AuthMiddleware::checkAccess($requiredRole);
         <div class="mb-3">
         <label for="exampleFormControlTextarea1" class="form-label">Justification</label>
         <textarea class="form-control" id="justificationInput" rows="3"></textarea>
-        <div class="alert alert-danger mt-2" hidden  id="alertJustication" role="alert">
-          Necessary Justification
+        <table class="table w-100 bg-aux mt-2" id="tableSecctionStudent"> 
+            <tbody>
+                
+               
+            </tbody>
+        </table>
+        <div class="alert alert-danger mt-2"  id="alertJustication" role="alert">
+          Se necesita una justificacion
         </div>
-        <div class="alert alert-success  mt-2" hidden id="validedQuotas" role="alert">
+        <div class="alert alert-success  mt-2"  id="validedQuotas" role="alert">
           Cupos Actualizados correctamente
         </div>
-        <div class="alert alert-danger  mt-2" hidden id="invalidQuotas" role="alert">
+        <div class="alert alert-danger  mt-2"  id="invalidQuotas" role="alert">
           Error, cupos no validos
         </div>
       </div>
@@ -345,8 +369,8 @@ AuthMiddleware::checkAccess($requiredRole);
 </div>
 
 
-<div class="main">
-        <div class="offcanvas offcanvas-end bg p-0" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+    <div class="container-fluid row h-full"> 
+<div class="offcanvas offcanvas-end bg p-0" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
             <div class="offcanvas-header justify-between">
                 <h5 class="offcanvas-title" id="offcanvasExampleLabel">Chats <button class="btn mx-2" id="refreshChats"><i  id="refreshIcon" class="bi bi-arrow-clockwise text rotate"></i></button></h5>
                 <button type="button" class="btn bg text" data-bs-dismiss="offcanvas" aria-label="Close">
@@ -357,23 +381,29 @@ AuthMiddleware::checkAccess($requiredRole);
                 <iframe id="frameChats" src="/views/chats/index.php" class="w-full h-full" frameborder="0"></iframe>
             </div>
         </div>
-        <div class="offcanvas offcanvas-start bg dark" tabindex="-1" id="eliminar" aria-labelledby="offcanvasExampleLabel">
-            <div class="offcanvas-header justify-between">
-                <h5 class="offcanvas-title text" id="offcanvasExampleLabel">Menu</h5>
-                <button type="button" class="btn bg text" data-bs-dismiss="offcanvas" aria-label="Close">
-                    <i class="bi bi-x"></i>
-                </button>
-            </div>
-            <div class="offcanvas-body">
-                <div class="list-group">
+      <div class="col-md-3 d-none d-md-block bg-aux" id="desktopAside">
+              <div class="offcanvas-header py-3 justify-between">
+                  <h5 class="offcanvas-title text" id="offcanvasExampleLabel">Menu</h5>
+                  <button type="button" class="btn d-md-none" aria-label="Close" onclick="toggleSidebar()">
+                    <i class="bi bi-x-lg"></i>
+                  </button>
+              </div>
+              <div class="list-group">
                   <a class="text bg aux text-decoration-none" data-bs-toggle="collapse" href="#collapseStudents" role="button" aria-expanded="false" aria-controls="collapseStudents">
                     <div class="list-group-item list-group-title list-group-item- bg-aux text fw-bold">
-                        Students
+                        Opciones
+                    </div>
+                  </a>
+                          <div class="list-group-parent">
+                          <div class="list-group">
+                  <a class="text bg aux text-decoration-none" data-bs-toggle="collapse" href="#collapseStudents" role="button" aria-expanded="false" aria-controls="collapseStudents">
+                    <div class="list-group-item list-group-title list-group-item- bg-aux text fw-bold">
+                       Estudiantes
                       </div>
                     </a>
                           <div class="collapse" id="collapseStudents">
                             <button type="button" class="text list-group-item list-group-item-action bg list-group-item-indent" data-bs-toggle="modal" data-bs-target="#historyStudent">
-                                View History
+                               Ver hitorial
                             </button>
                             <a href="#" class="list-group-item list-group-item-action bg list-group-item-indent">View Requests</a>
                           </div>
@@ -397,7 +427,7 @@ AuthMiddleware::checkAccess($requiredRole);
                               Crear sección
                              </button>
                             <button type="button" class="text list-group-item list-group-item-action bg list-group-item-indent" data-bs-toggle="modal" data-bs-target="#waitlistModal">
-                                View wait lists
+                               Lista de espera
                             </button>
                           </div>
                           <div class="collapse" id="collapseClasses">
@@ -406,35 +436,41 @@ AuthMiddleware::checkAccess($requiredRole);
                              </button>
                           </div>
                 </div>
-            </div>
+                            
+                          </div>
+                    
+                </div>
         </div>
-        <div class="header p-2 text-inverter bg">
-            <div class="flex justify-between">
-                <button class="btn bg text" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
-                    <i class="bi bi-list"></i>
-                </button>
-                
-                <div class="btn-group">
-                    <button type="button" class="btn bg dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img height="40px" width="40px" src='https://avataaars.io/?avatarStyle=Circle&topType=LongHairStraight&accessoriesType=Blank&hairColor=BrownDark&facialHairType=Blank&clotheType=BlazerShirt&eyeType=Default&eyebrowType=Default&mouthType=Default&skinColor=Light'/>
-                        
-                    </button>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Mi perfil</a></li>
-                        <li><a class="dropdown-item" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">Chats</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="/api/get/logout.php">Salir <i class="bi bi-box-arrow-right"></i></a></li>
-                    </ul>
-                 </div>
-            </div>
-        </div>
-        <div class="container-fluid">
-          <div class=" flex p-2 justify-between items-center">
-              <h4 class="text"><?php echo $role; ?></h4>
+        <div class="col">
+          <div class="header p-2 text-inverter bg">
+              <div class="flex justify-between">
+                  <button class="btn bg text" type="button" id="toggleAside">
+                      <i class="bi bi-list"></i>
+                  </button>
+                  
+                  <div class="btn-group">
+                      <button type="button" class="btn bg dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                          <img height="40px" width="40px" src='https://avataaars.io/?avatarStyle=Circle&topType=LongHairStraight&accessoriesType=Blank&hairColor=BrownDark&facialHairType=Blank&clotheType=BlazerShirt&eyeType=Default&eyebrowType=Default&mouthType=Default&skinColor=Light'/>
+                          
+                      </button>
+                      <ul class="dropdown-menu">
+                          <li><a class="dropdown-item" href="#">Mi perfil</a></li>
+                          <li><a class="dropdown-item" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">Chats</a></li>
+                          <li><hr class="dropdown-divider"></li>
+                          <li><a class="dropdown-item" href="/api/get/logout.php">Salir <i class="bi bi-box-arrow-right"></i></a></li>
+                      </ul>
+                   </div>
+              </div>
           </div>
-          <?php include '../../../../src/components/teacherClasses.php'; ?>
+  
+            <div class=" flex p-2 justify-between items-center">
+                <h4 class="text"><?php echo $role; ?></h4>
+               
+            </div>
+            <?php include '../../../../src/components/teacherClasses.php'; ?>
+            
         </div>
-    </div>
+
     <script src="/public/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
     <script src="/public/js/departametHead.js"></script>
 </body>
