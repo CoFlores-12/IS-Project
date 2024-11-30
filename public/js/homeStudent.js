@@ -37,30 +37,54 @@ let optionsBody = async (value) => {
     let body = `<textarea name="comments" placeholder="Justicación" id="comments" class="form-control bg-aux my-4 text"></textarea>`;
     switch (value) {
         case "2": 
-                
-            try {
-                const response = await fetch('/api/get/students/exceptionalCancellation.php', {
-                    method: 'GET', 
-                    headers: {
-                        'Content-Type': 'application/json', 
-                    }
-                });
-
-                const data = await response.json();
-                
-                if (data.status === true) {
-                    body += '<input type="file" name="evidemce"  accept="application/pdf" class="form-control my-4" id="evidence">';
-                } else {
-                    body = `<div class="alert alert-danger mt-3" role="alert">
-                                Periodo no activo
-                            </div>`;
-                    return body;
+        try {
+            const response = await fetch('/api/get/students/exceptionalCancellation.php', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
                 }
+            });
+            const data = await response.json();
+        
+            if (data.status === true) {
+                const response1 = await fetch(`/api/get/students/enrollClass.php`);
+                const data1 = await response1.json();
+
+                body += `
+                    <input type="file" name="evidemce" accept="application/pdf" class="form-control my-4" id="evidence">
+                `;
+
+                body += `<h5 class="modal-title text pb-2" >Seleccione las clases a cancelar</h5>`;
+        
+                body += "<div id='checkboxGroup'>";
+
+                data1.forEach((clase) => {
+                    body += `
+                        <label>
+                            <input type="checkbox" name="class_id[]" value="${clase.nombre_clase}">
+                            ${clase.nombre_clase}
+                        </label><br>
+                    `;
+                });
+        
+                body += "</div>";  
+                
+                
+        
+            } else {
+                body = `
+                    <div class="alert alert-danger mt-3" role="alert">
+                        Periodo no activo
+                    </div>
+                `;
+                return body;
+            }
+        
                 
             } catch (error) {
                 console.error('Error:', error);
                 body = `<div class="alert alert-danger mt-3" role="alert">
-                            Error while fetching data
+                            Error, algo salio mal, vuelva a intentarlo
                         </div>`;
             }
             break
