@@ -11,13 +11,21 @@ function modalDataShow() {
 }
 function careerChangeClick(e) {
     modalDataShow();
+    
     modalDataBody.innerHTML = `<p class="card-text placeholder-glow">
-                <span class="placeholder col-7"></span>
-                <span class="placeholder col-4"></span>
-                <span class="placeholder col-4"></span>
-                <span class="placeholder col-6"></span>
-                <span class="placeholder col-8"></span>
-              </p>`
+            <span class="placeholder col-7"></span>
+            <span class="placeholder col-4"></span>
+            <span class="placeholder col-4"></span>
+            <span class="placeholder col-6"></span>
+            <span class="placeholder col-8"></span>
+          </p>`
+
+    fetch('/api/get/admin/getRequest.php?id='+e)
+    .then(res => {return res.text()})
+    .then((res)=>{
+        modalDataBody.innerHTML = res
+    }).catch((err)=>{
+    })
 }
 careerChangeBtn.addEventListener('click', (e)=>{
     careerChangeBS.show();

@@ -50,7 +50,7 @@ AuthMiddleware::checkAccess($requiredRole);
 <body>
 
 <div class="modal fade" id="careerChange" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog bg modal-xl modal-dialog-scrollable">
+  <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
     <div class="modal-content bg">
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="exampleModalLabel">Solicitudes</h1>
@@ -82,26 +82,33 @@ AuthMiddleware::checkAccess($requiredRole);
     </div>
   </div>
 </div>
+
 <div class="modal fade" id="modalData" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog bg modal-lg modal-dialog-scrollable">
-    <div class="modal-content bg">
+  <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content bg  ">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="careerChangeDataHeader"></h1>
+        <h1 class="modal-title fs-5" id="careerChangeDataHeader">solicitud</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body" id="modalDataBody">
-              <p class="card-text placeholder-glow">
-                <span class="placeholder col-7"></span>
-                <span class="placeholder col-4"></span>
-                <span class="placeholder col-4"></span>
-                <span class="placeholder col-6"></span>
-                <span class="placeholder col-8"></span>
-              </p>
-       
       </div>
     </div>
   </div>
 </div>
+<div class="modal fade" id="modalAcademic" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content bg  ">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="careerChangeDataHeader">Carga académica</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="modalDataBody">
+
+      </div>
+    </div>
+  </div>
+</div>
+
 
 <div class="container-fluid row h-full"> 
 <div class="offcanvas offcanvas-end bg p-0" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
@@ -126,6 +133,9 @@ AuthMiddleware::checkAccess($requiredRole);
                   
                 <button id="careerChangeBtn" type="button" class="text list-group-item list-group-item-action bg list-group-item-indent">
                     Ver solicitudes
+                </button>
+                <button id="academicBtn" type="button" class="text my-2 list-group-item list-group-item-action bg list-group-item-indent">
+                    Ver carga académica
                 </button>
                           
                     
@@ -154,7 +164,7 @@ AuthMiddleware::checkAccess($requiredRole);
           </div>
   
             <div class=" flex p-2 justify-between items-center">
-                <h4 class="text"><?php echo $role; ?></h4>
+                <h4 class="text">Coordinador</h4>
                
             </div>
             <?php include '../../../../src/components/teacherClasses.php'; ?>
