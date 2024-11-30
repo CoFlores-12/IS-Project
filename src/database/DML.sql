@@ -414,4 +414,15 @@ GROUP BY
 
 SELECT * FROM  `Requests` r
 INNER JOIN `Periods` p on r.period_id = p.period_id
-WHERE p.active = 1 AND  r.student_id = 20201000005
+WHERE p.active = 1 AND  r.student_id = 20201000005;
+
+SELECT 
+    r.request_id,
+    r.student_id,
+    CONVERT_TZ(r.date, '+00:00', '-06:00') AS local_time, 
+    rt.title,
+    CONCAT(p.indicator, ' ', p.year)
+FROM  `Requests` r
+INNER JOIN RequestTypes rt ON r.request_type_id = rt.request_type_id
+INNER JOIN `Periods` p on r.period_id = p.period_id
+where r.status IS NULL

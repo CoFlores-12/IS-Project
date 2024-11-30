@@ -173,48 +173,46 @@ AuthMiddleware::checkAccess($requiredRole);
             <div class="courses-container">
                 <h5 class="text-md font-bold pt-4 pl-4">Clases matriculadas</h5>
                 <div class="courses pl-4 pr-4 pb-4" id="courseRunning">
-                <div class="card card-course shadow">
-                <div class="p-0 card-bd flex flex-column">
-                    <div class="name w-full p-2 bg-secondary text-white mb-1">
-                        <p class="card-text placeholder-glow">
-                            <span class="placeholder col-4"></span>
-                        </p>
+                    <div class="card card-course shadow">
+                        <div class="p-0 card-bd flex flex-column">
+                            <div class="name w-full p-2 bg-secondary text-white mb-1">
+                                <p class="card-text placeholder-glow">
+                                    <span class="placeholder col-4"></span>
+                                </p>
+                            </div>
+                            <div class="infoClass p-3">
+                                <p class="card-text placeholder-glow">
+                                    <span class="placeholder bg-secondary col-12"></span>
+                                    <span class="placeholder bg-secondary col-4"></span>
+                                    <span class="placeholder bg-secondary col-6"></span>
+                                    <span class="placeholder bg-secondary col-8"></span>
+                                </p>
+                                
+                            </div>
+                        </div>
                     </div>
-                    <div class="infoClass p-3">
-                        <p class="card-text placeholder-glow">
-                            <span class="placeholder bg-secondary col-12"></span>
-                            <span class="placeholder bg-secondary col-4"></span>
-                            <span class="placeholder bg-secondary col-6"></span>
-                            <span class="placeholder bg-secondary col-8"></span>
-                        </p>
-                        
-                    </div>
-                </div>
-            </div>
-                    
                 </div>
 
                 <h5 class="text-md font-bold pt-4 pl-4">Historial de clases</h5>
                 <div class="courses pl-4 pr-4 pb-4" id="courseHistory">
-                <div class="card card-course shadow">
-                <div class="p-0 card-bd flex flex-column">
-                    <div class="name w-full p-2 bg-secondary text-white mb-1">
-                        <p class="card-text placeholder-glow">
-                            <span class="placeholder col-4"></span>
-                        </p>
+                    <div class="card card-course shadow">
+                        <div class="p-0 card-bd flex flex-column">
+                            <div class="name w-full p-2 bg-secondary text-white mb-1">
+                                <p class="card-text placeholder-glow">
+                                    <span class="placeholder col-4"></span>
+                                </p>
+                            </div>
+                            <div class="infoClass p-3">
+                                <p class="card-text placeholder-glow">
+                                    <span class="placeholder bg-secondary col-12"></span>
+                                    <span class="placeholder bg-secondary col-4"></span>
+                                    <span class="placeholder bg-secondary col-6"></span>
+                                    <span class="placeholder bg-secondary col-8"></span>
+                                </p>
+                                
+                            </div>
+                        </div>
                     </div>
-                    <div class="infoClass p-3">
-                        <p class="card-text placeholder-glow">
-                            <span class="placeholder bg-secondary col-12"></span>
-                            <span class="placeholder bg-secondary col-4"></span>
-                            <span class="placeholder bg-secondary col-6"></span>
-                            <span class="placeholder bg-secondary col-8"></span>
-                        </p>
-                        
-                    </div>
-                </div>
-            </div>
-                    
                 </div>
             </div>
         </div>

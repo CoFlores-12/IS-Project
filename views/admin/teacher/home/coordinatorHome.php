@@ -50,33 +50,33 @@ AuthMiddleware::checkAccess($requiredRole);
 <body>
 
 <div class="modal fade" id="careerChange" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog bg modal-lg modal-dialog-scrollable">
+  <div class="modal-dialog bg modal-xl modal-dialog-scrollable">
     <div class="modal-content bg">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Career Change</h1>
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Solicitudes</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
-        <div class="row p">
-            <div class="col-9 flex justify-center items-center">
-                <input type="text" id="inputHistory" class="w-full" placeholder="Enter Account Number, identity or email of Student">
-            </div>
-            <div class="col-3">
-                <button id="btnSearchHistory" class="btn bg-custom-primary text-white">Search</button>
-            </div>
+      <div class="container modal-body">
+        <div class="row mb-2 flex items-center">
+                <label for="filter-select" class="form-label m-0 w-content">Filtrar por tipo de solicitud:</label>
+                <select id="filter-select" class="form-select w-content" onchange="filterRequests()">
+                    <option value="">Todos los tipos</option>
+                </select>
         </div>
-        <div id="careerChangeBody">
-          <table class="my-2 table">
-            <tbody >
-              <p class="card-text placeholder-glow">
-                <span class="placeholder col-7"></span>
-                <span class="placeholder col-4"></span>
-                <span class="placeholder col-4"></span>
-                <span class="placeholder col-6"></span>
-                <span class="placeholder col-8"></span>
-              </p>
-            </tbody>
-          </table>
+
+        <div class="table-responsive">
+            <table id="requests-table" class="table bg table-bordered table-striped">
+                <thead class="bg-aux">
+                    <tr>
+                      <th>Fecha</th>
+                      <th>Estudiante ID</th>
+                      <th>Tipo</th>
+                      <th>Período</th>
+                    </tr>
+                </thead>
+                <tbody id="tableRequest">
+                </tbody>
+            </table>
         </div>
       </div>
     </div>
@@ -123,23 +123,11 @@ AuthMiddleware::checkAccess($requiredRole);
                   </button>
               </div>
               <div class="list-group">
-                  <a class="text bg aux text-decoration-none" data-bs-toggle="collapse" href="#collapseStudents" role="button" aria-expanded="false" aria-controls="collapseStudents">
-                    <div class="list-group-item list-group-title list-group-item- bg-aux text fw-bold">
-                        Solicitudes
-                    </div>
-                  </a>
-                          <div class="list-group-parent">
-                            <button id="careerChangeBtn" type="button" class="text list-group-item list-group-item-action bg list-group-item-indent">
-                                Cambio de carrera
-                            </button>
-                            <button id="cancelBtn" type="button" class="text my-2 list-group-item list-group-item-action bg list-group-item-indent">
-                                Cancelación excepcional
-                            </button>
-                            <button id="cBtn" type="button" class="text my-2 list-group-item list-group-item-action bg list-group-item-indent">
-                                Cambio de centro
-                            </button>
-                            
-                          </div>
+                  
+                <button id="careerChangeBtn" type="button" class="text list-group-item list-group-item-action bg list-group-item-indent">
+                    Ver solicitudes
+                </button>
+                          
                     
                 </div>
         </div>

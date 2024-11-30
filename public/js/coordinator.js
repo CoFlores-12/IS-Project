@@ -2,7 +2,7 @@ const careerChangeBtn = document.getElementById('careerChangeBtn');
 const careerChange = document.getElementById('careerChange');
 const modalData = document.getElementById('modalData');
 const modalDataBody = document.getElementById('modalDataBody');
-const careerChangeBody = document.getElementById('careerChangeBody');
+const tableRequest = document.getElementById('tableRequest');
 const careerChangeBS = new bootstrap.Modal(careerChange);
 const modalDataBS = new bootstrap.Modal(modalData);
 let dataCareerChange = [];
@@ -21,27 +21,21 @@ function careerChangeClick(e) {
 }
 careerChangeBtn.addEventListener('click', (e)=>{
     careerChangeBS.show();
-    fetch('/api/get/admin/careerChangeRequest.php')
+    fetch('/api/get/admin/MyRequest.php')
     .then((res)=>{return res.json()})
     .then((res)=>{
         dataCareerChange = res;
-        let html = `<table class="my-2 table">
-            <thead>
-              <tr>
-                <td>Account number</td>
-                <td>Student name</td>
-                <td>Date</td>
-              </tr>
-            </thead><tbody>`;
-        res.forEach((data, index) => {
-            html += `<tr onclick="careerChangeClick(${index})" class="careerChangeClickeable">
+        let html = ``;
+        res.forEach(data => {
+            html += `<tr onclick="careerChangeClick(${data.request_id})" class="careerChangeClickeable">
+            <td>${data.local_time}</td>
             <td>${data.student_id}</td>
-            <td>${data.student_name}</td>
-            <td>${data.date}</td>
+            <td>${data.title}</td>
+            <td>${data.period}</td>
             <td><i class="bi bi-chevron-right"></i></td>
             </tr>`;
         });
-        careerChangeBody.innerHTML = html + '</tbody></table>';
+        tableRequest.innerHTML = html;
     })
 })
 
