@@ -177,7 +177,7 @@ AuthMiddleware::checkAccess($requiredRole);
                 </button>
 
                 <button type="button" class="text list-group-item list-group-item-action bg list-group-item-indent" data-bs-toggle="modal" data-bs-target="#historyStudent">
-                    Ver hitorial
+                    Ver historial
                 </button>
                           
                     
