@@ -8,8 +8,49 @@
     <link rel="icon" type="image/png" href="/public/images/logo.png" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
     <link rel="stylesheet" href="/public/bootstrap-5.3.3-dist/css/bootstrap.min.css">
+    <style>
+        #boton {
+            z-index: 10;
+            position: relative;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
+
+<div class="modal fade" id="modalVideo" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog bg modal-lg">
+    <div class="modal-content bg">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Agregar video introductorio de la clase</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+      
+      <div class="container  mt-2">
+        <div class="mb-3">
+            <label for="exampleFormControlTextarea1" class="form-label">Ingrese la URL de su video</label>
+            <input type="url" id="videoUrl" class="form-control mb-2" placeholder="Ingrese el enlace del video" required>
+            <div class="alert alert-danger mt-2"  id="alertErrorVideo" role="alert">
+                Error, algo salio mal. Vuelva a intentarlo
+            </div>
+            <div class="alert alert-success  mt-2"  id="validedVideo" role="alert">
+                Video agregado Correctamente
+            </div>
+        </div>
+        </div>
+        <div>
+            <button type="button" class="btn btn-secondary pr-2" data-bs-dismiss="modal">Cerrar</button>
+            <button type="button" class="btn btn-success" id="saveVideo">Guardar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
     <div class="container-fluid row h-full">
         <!-- Offcanvas -->
         <div class="offcanvas offcanvas-end bg p-0" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
@@ -128,12 +169,15 @@
                             <div class="card shadow-sm border-0 bg">
                                 <div class="card-body">
                                     <h5 class="card-title text">Material de Apoyo</h5>
-                                    <div class="ratio ratio-16x9">
-                                        <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="YouTube video" allowfullscreen></iframe>
+                                    <div id="butonVideo" class="m-2">
+                                    </div>
+                                    <div id="video-container" class="ratio ratio-16x9">
+                                        <img id="placeholder" src="/uploads/genericVideo.webp" alt="Video Introductorio" style="width: 100%; height: 100%; object-fit: cover;">
                                     </div>
                                 </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>
