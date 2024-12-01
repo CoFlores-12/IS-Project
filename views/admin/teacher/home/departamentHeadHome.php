@@ -75,16 +75,16 @@ AuthMiddleware::checkAccess($requiredRole);
   <div class="modal-dialog bg  modal-dialog-scrollable">
     <div class="modal-content bg">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">View History</h1>
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Ver historial</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <div class="row p">
             <div class="col-9 flex justify-center items-center">
-                <input type="text" id="inputHistory" class="w-full" placeholder="Enter Account Number, identity or email of Student">
+                <input type="text" id="inputHistory" class="w-full" placeholder="Ingrese el numero de cuenta, identidad o correo del estudiante">
             </div>
             <div class="col-3">
-                <button id="btnSearchHistory" class="btn bg-custom-primary text-white">Search</button>
+                <button id="btnSearchHistory" class="btn bg-custom-primary text-white">Buscar</button>
             </div>
         </div>
         <div id="historyBody">
@@ -401,7 +401,7 @@ AuthMiddleware::checkAccess($requiredRole);
                        Estudiantes
                       </div>
                     </a>
-                          <div class="collapse" id="collapseStudents">
+                          <div class="" id="collapseStudents">
                             <button type="button" class="text list-group-item list-group-item-action bg list-group-item-indent" data-bs-toggle="modal" data-bs-target="#historyStudent">
                                Ver hitorial
                             </button>
@@ -412,7 +412,7 @@ AuthMiddleware::checkAccess($requiredRole);
                         Docentes
                       </div>
                     </a>
-                          <div class="collapse" id="collapseTeachers">
+                          <div class="" id="collapseTeachers">
                             <button type="button" id="changePassword" class="text list-group-item list-group-item-action bg list-group-item-indent" data-bs-toggle="modal" data-bs-target="#changePassword">
                                Cambiar Contraseña
                             </button>
@@ -422,7 +422,7 @@ AuthMiddleware::checkAccess($requiredRole);
                         Secciones
                       </div>
                     </a>
-                          <div class="collapse" id="collapseClasses">
+                          <div class="" id="collapseClasses">
                             <button type="button" class="text list-group-item list-group-item-action bg list-group-item-indent"  id="newSectionClass">
                               Crear sección
                              </button>
