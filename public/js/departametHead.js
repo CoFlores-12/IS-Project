@@ -12,7 +12,7 @@ refreshChats.addEventListener('click', () => {
 });
 
 let historyBody = document.getElementById('historyBody');
-        let inputHistory = document.getElementById('inputHistory');
+let inputHistory = document.getElementById('inputHistory');
         btnSearchHistory.addEventListener('click', ()=>{
             if (inputHistory.value === '') {return; }
             historyBody.innerHTML = `<center><div class="spinner-grow text-secondary" role="status">
@@ -83,15 +83,15 @@ let historyBody = document.getElementById('historyBody');
                     <table class="w-full mx-4" border="0">
                     <tbody>
                     <tr>
-                        <th>Indentity</th>
+                        <th>Nombre</th>
                         <th>${response.row.first_name}  ${response.row.last_name}</th>
                     </tr>
                     <tr>
-                        <td>Phone</td>
+                        <td>Telefono</td>
                         <td>${response.row.phone}</td>
                       </tr>
                      <tr>
-                        <td>Personal email</td>
+                        <td>Correo personal(de recuperacion)</td>
                         <td><input type="text" id="newEmail" placeholder="Email" value="${response.row.personal_email}"></td>
                     </tr>
                     </tbody>
@@ -103,7 +103,7 @@ let historyBody = document.getElementById('historyBody');
                     btnChange = document.getElementById("btnChange");
 
                     btnChange.addEventListener("click", ()=>{
-                        btnChange.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Loading...`;
+                        btnChange.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Enviando...`;
                         btnChange.disabled = true;
                     }) 
 
@@ -111,7 +111,7 @@ let historyBody = document.getElementById('historyBody');
                 if (response.status !== 0) {
                     teacher = ` 
                     <div class="alert alert-danger" role="alert">
-                        Incorrect parameters
+                        Parametros Incorrectos
                     </div>`;
                         resetBody.innerHTML = teacher
                 }
@@ -138,6 +138,7 @@ let historyBody = document.getElementById('historyBody');
                 .then(response => {
                     changePasswordModal.hide();
                     alertSuccessEmail.style.display = "block";
+                    alertSuccessEmail.removeAttribute('hidden');
                     setTimeout(function() {
                         alertSuccessEmail.style.display = 'none';
                         resetBody.innerHTML = "";
@@ -182,6 +183,9 @@ let historyBody = document.getElementById('historyBody');
         let inlineCheckbox5 = document.getElementById('inlineCheckbox5');
         let inlineCheckbox6 = document.getElementById('inlineCheckbox6');
 
+        let alertUploadFile = document.getElementById('alertUploadFile');
+        alertUploadFile.style.display = 'none';
+        
         newSectionClass.addEventListener('click', ()=>{
             modalNewSection.show();
         });
@@ -318,7 +322,7 @@ let historyBody = document.getElementById('historyBody');
             if (selectedValues === '') { return; }
 
             btnNewSection.disabled = true;
-            btnNewSection.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Loading...`;
+            btnNewSection.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Cargando...`;
             
             fetch('/api/post/admin/addSection.php', {
                 method: 'POST',
@@ -341,16 +345,21 @@ let historyBody = document.getElementById('historyBody');
                 if (data.status == 0) {
                     alertClassroom.style.display = 'block';
                     alertTeacher.style.display = 'block';
+                    alertTeacher.removeAttribute('hidden');
+                    alertClassroom.removeAttribute('hidden');
                     console.log(data.message);
                 } else if (data.status == 1) {
                     alertClassroom.style.display = 'block';
+                    alertClassroom.removeAttribute('hidden');
                     console.log(data.message);
                 }else if (data.status == 2) {
                     alertTeacher.style.display = 'block';
+                    alertTeacher.removeAttribute('hidden');
                     console.log(data.message);
                 } 
                 else if (data.status == 3) {
                     alertCapacity.style.display = 'block';
+                    alertCapacity.removeAttribute('hidden');
                     console.log(data.message);
                 }else  {
                     modalNewSection.hide();
@@ -367,6 +376,7 @@ let historyBody = document.getElementById('historyBody');
                     hourEnd.value = ""; 
 
                     alertSuccess.style.display = 'block';
+                    alertSuccess.removeAttribute('hidden');
                     setTimeout(function() {
                         alertSuccess.style.display = 'none';
                       }, 3000); 
@@ -459,16 +469,17 @@ let historyBody = document.getElementById('historyBody');
 
     uploadFile.addEventListener("click", () => {
         const file = csvFile.files[0];
-
+        alertUploadFile.style.display = 'none';
         if (!file) {
-            alert("Please select a file.");
+            alertUploadFile.style.display = 'block';
+            alertUploadFile.removeAttribute('hidden');
             return;
         }
 
         table.innerHTML = "";
 
         uploadFile.disabled = true;
-        uploadFile.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Loading...`;
+        uploadFile.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Cargando...`;
 
         const reader = new FileReader();
 
@@ -497,27 +508,27 @@ let historyBody = document.getElementById('historyBody');
 
                         switch(item.status.status) {
                             case 0:
-                                message = `Both the teacher and the classroom are available at this time.`;
+                                message = `Docente y aula ocupado a esta hora.`;
                                 className = "alert table-danger";
                                 break;
                             case 1:
-                                message = `The classroom is occupied at this time.`;
+                                message = `El aula esta ocupada a esta hora.`;
                                 className = "alert alert-danger";
                                 break;
                             case 2:
-                                message = `The teacher is occupied at this time.`;
+                                message = `El docente esta ocupado a esta hora`;
                                 className = "alert alert-danger"; 
                                 break;
                             case 3:
-                                message = `Incorrect student capacity.`;
+                                message = `Incorrecta la capacidad de estudiantes`;
                                 className = "alert alert-danger"; 
                                 break;
                             case "success":
-                                message = `Saved correctly.`;
+                                message = `Seccion guardada`;
                                 className = "table-success"; 
                                 break;
                             default:
-                                message = `Data is missing.`;
+                                message = `Datos incorrectos.`;
                                 className = "alert alert-danger"; 
                                 break;
                         }
@@ -538,7 +549,7 @@ let historyBody = document.getElementById('historyBody');
 
             
                 uploadFile.disabled = false;
-                uploadFile.innerHTML = `Upload file`;
+                uploadFile.innerHTML = `Cargar Archivo`;
                 
             })
             .catch(error => console.error('Error:', error));
@@ -548,8 +559,6 @@ let historyBody = document.getElementById('historyBody');
     });
 
 
-
-  
 let btnSearcSection = document.getElementById('btnSearcSection');
 let deleteSection = document.getElementById('deleteSection');
 
@@ -573,8 +582,9 @@ function showSection(){
         .then((res) =>{
             let newRow ="";   
             tableSection.innerHTML = "";
-            sections = res;
-            res.forEach((item) => {
+            sections = res.dataSection;
+        
+            res.dataSection.forEach((item) => {
     
                 newRow = `
                 <tr>
@@ -582,12 +592,12 @@ function showSection(){
                     <th style="text-align: center;" class="bg-aux text">${item.hour_start}</th>
                     <th style="text-align: center;" class="bg-aux text">${item.hour_end}</th>
                     <th style="text-align: center;" class="bg-aux text"> ${[
-                    item.Monday && "Monday",
-                    item.Tuesday && "Tuesday",
-                    item.Wednesday && "Wednesday",
-                    item.Thursday && "Thursday",
-                    item.Friday && "Friday",
-                    item.Saturday && "Saturday",
+                    item.Monday && "Lunes",
+                    item.Tuesday && "Martes",
+                    item.Wednesday && "Miercoles",
+                    item.Thursday && "Jueves",
+                    item.Friday && "Viernes",
+                    item.Saturday && "Sabado",
                 ]
                     .filter(Boolean)
                     .join(", ")}</th>
@@ -598,7 +608,8 @@ function showSection(){
                 `;
     
                 tableSection.innerHTML += newRow
-            });
+            })
+    
             
                     
         });
@@ -630,8 +641,6 @@ function modalVerifyDelete(id){
     const foundItem = sections.find(item => item.section_id === id);
     idSectionDelete = id;
     tableSectiondelete.innerHTML = "";
-
-    console.log(foundItem)
 
       const row1 = `
             <tr>
@@ -696,12 +705,12 @@ function modalVerifyDelete(id){
             </tr>
             `;
       const days = [
-        foundItem.Monday ? "Monday" : "",
-        foundItem.Tuesday ? "Tuesday" : "",
-        foundItem.Wednesday ? "Wednesday" : "",
-        foundItem.Thursday ? "Thursday" : "",
-        foundItem.Friday ? "Friday" : "",
-        foundItem.Saturday ? "Saturday" : ""
+        foundItem.Monday ? "Lunes" : "",
+        foundItem.Tuesday ? "Martes" : "",
+        foundItem.Wednesday ? "Miercoles" : "",
+        foundItem.Thursday ? "Jueves" : "",
+        foundItem.Friday ? "Viernes" : "",
+        foundItem.Saturday ? "Sabado" : ""
       ]
         .filter(Boolean)
         .join(", ");
@@ -713,6 +722,9 @@ function modalVerifyDelete(id){
                                         <td  class="bg-aux text">Dias</td>
                                         <td  class="bg-aux text">${days}</td>
                                     </tr> `  
+
+    tableSecctionStudentFuntion(foundItem.section_id);
+
     updateQuotas.addEventListener("click", ()=>{
         invalidQuotas.style.display = 'none';
         validedQuotas.style.display = 'none';
@@ -720,6 +732,7 @@ function modalVerifyDelete(id){
  
         if(newQuotas.value == ""){
             invalidQuotas.style.display = 'block';
+            invalidQuotas.removeAttribute('hidden');
         }else{
             updateQuotas.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Cargando...`;
             updateQuotas.disabled = true;
@@ -737,12 +750,14 @@ function modalVerifyDelete(id){
                 .then(data => {
                     if (data.status === 200) {
                         validedQuotas.style.display = 'block';
+                        validedQuotas.removeAttribute('hidden');
                         setTimeout(function() {
                             validedQuotas.style.display = 'none';;
                           }, 3000); 
                         
                     } else {
                         invalidQuotas.style.display = 'block';
+                        invalidQuotas.removeAttribute('hidden');
                         setTimeout(function() {
                             invalidQuotas.style.display = 'none';;
                           }, 3000); 
@@ -757,7 +772,56 @@ function modalVerifyDelete(id){
     }) 
 }
 
+let tableSecctionStudent = document.getElementById("tableSecctionStudent");
+let tableSectiondeleteStudent = tableSecctionStudent.querySelector("tbody");
 
+function tableSecctionStudentFuntion(idSection){
+    fetch('/api/get/admin/countClassesStudent.php?section_identifier='+idSection)
+    .then((res) => {return res.json()})
+    .then((res) =>{
+    
+
+        tableSectiondeleteStudent.innerHTML = `
+                <thead>
+                    <tr>
+                    <th style="text-align: center;" scope="col" class="bg-aux text">Id del estudiante</th>
+                    <th style="text-align: center;" scope="col" class="bg-aux text">Clases restantes</th>
+                    <th style="text-align: center;" scope="col" class="bg-aux text">Clases aprobadas</th>
+                    <th style="text-align: center;" scope="col" class="bg-aux text">Menos de 5 clases?</th>
+                    </tr>
+                </thead>
+        `;
+
+        console.log(res.rows)
+    
+        if(res.status == 0){
+            res.rows.forEach((item) => {
+                if(item.has_less_than_5_remaining == 1){
+                    clase = "SI"
+                }else{
+                     clase = "NO"
+                }
+    
+                newRow = `
+                <tr>
+                    <th style="text-align: center;" class="bg-aux text">${item.student_id}</th>
+                    <th style="text-align: center;" class="bg-aux text">${item.pending_classes}</th>
+                    <th style="text-align: center;" class="bg-aux text">${item.approved_classes}</th>
+                    <th style="text-align: center;" class="bg-aux text">${clase}</th>
+                   </tr>
+                `;
+
+                if (item.has_less_than_5_remaining === 1) {
+                    saveDeleteSection.disabled = true;
+                }
+
+                tableSectiondeleteStudent.innerHTML += newRow;
+            })
+        }
+        
+
+    })
+}
 
 
 function modalDeleteSection(item){

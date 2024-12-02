@@ -20,8 +20,10 @@ fetch(`/api/get/admin/verifyToken.php?token=${token}`)
     console.log(data)
 
     if (data.status === 0) {
+        formInput.removeAttribute('hidden');
         formInput.style.display = "block"
     } else {
+        alertExpired.removeAttribute('hidden');
         alertExpired.style.display = "block"
     }
    })
@@ -36,6 +38,9 @@ const newPassword = inputPassword.value;
 if(newPassword == ""){
     return;
 }
+
+submitButton.disabled = true;
+submitButton.innerHTML = '<div class="spinner-border text-secondary" role="status"></div>'
     
     fetch('/api/put/students/resetPassword.php', {
         method: 'PUT',
@@ -52,11 +57,11 @@ if(newPassword == ""){
         if(data.status === 0){
             alertSuccess.style.display = "block"
             formInput.style.display = "none"
+            alertSuccess.removeAttribute('hidden');
         }
     })
     .catch(error => {
         console.error('Error:', error);
-        alert('Error updating password.');
     });
 
 

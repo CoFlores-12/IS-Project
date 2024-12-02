@@ -12,7 +12,7 @@
     DROP TABLE `Persons`;
     DROP TABLE `Regional_center`;
     DROP TABLE `Students`;
-    DROP TABLE `Employees`;
+    DROP TABLE `Requests`;
     SET FOREIGN_KEY_CHECKS = 1;
 
     CREATE TABLE Regional_center (
@@ -335,6 +335,40 @@ CREATE TABLE Messages (
     FOREIGN KEY (chat_id) REFERENCES Chats(chat_id) ON DELETE CASCADE
 );
 
+CREATE TABLE RequestTypes (
+  request_type_id TINYINT PRIMARY key AUTO_INCREMENT,
+  title VARCHAR(50)
+);
+
+CREATE TABLE `Requests` (
+  `request_id` int PRIMARY KEY AUTO_INCREMENT,
+  `student_id` VARCHAR(11) not NULL,
+  `request_type_id` TINYINT,
+  `date` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  `period_id` int,
+  `status` BIT,
+  `comments` TEXT,
+  `response` TEXT,
+  `evidence` mediumblob,
+  `evidence_ext` VARCHAR(5),
+  `career_change_id` int,
+  `campus_change_id` int,
+  classes_cancel JSON,
+  Foreign Key (request_type_id) REFERENCES RequestTypes(request_type_id),
+  Foreign Key (student_id) REFERENCES Students(account_number),
+  Foreign Key (career_change_id) REFERENCES Careers(career_id),
+  Foreign Key (campus_change_id) REFERENCES Regional_center(center_id),
+  Foreign Key (period_id) REFERENCES Periods(period_id)
+);
+
+CREATE TABLE class_resources (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    section_id INT NOT NULL,           
+    video_url VARCHAR(255) NOT NULL,   
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
 DELIMITER //
 
     CREATE PROCEDURE CreateAdministrator (
@@ -520,5 +554,3 @@ WHERE (Employees.employee_number = ?
        OR Persons.person_id = ? 
        OR Employees.institute_email = ?)
   AND Employees.employee_number = ?; -- Filtro para asegurar que solo se traigan empleados del docente autenticado
-
-

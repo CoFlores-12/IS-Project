@@ -17,9 +17,11 @@ fetch(`/api/get/admin/verifyToken.php?token=${token}`)
 .then(response => response.json())
 .then(data => {
     if (data.status === 0) {
-         formInput.style.display = "block" 
+        formInput.style.display = "block" 
+        formInput.removeAttribute('hidden');
     } else {
         alertExpired.style.display = "block"
+        alertExpired.removeAttribute('hidden');
     }
    })
  .catch(error => {
@@ -33,7 +35,10 @@ const newPassword = inputPassword.value;
 if(newPassword == ""){
     return;
 }
-    
+
+submitButton.disabled = true;
+submitButton.innerHTML = '<div class="spinner-border text-secondary" role="status"></div>'
+
     fetch('/api/put/teacher/resetPassword.php', {
         method: 'PUT',
         headers: {
@@ -48,6 +53,7 @@ if(newPassword == ""){
     .then(data => {
         if(data.status === 0){
             alertSuccess.style.display = "block"
+            alertSuccess.removeAttribute('hidden');
             formInput.style.display = "none"
         }
     })

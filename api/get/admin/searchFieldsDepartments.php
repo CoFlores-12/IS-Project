@@ -90,7 +90,7 @@ $sql = '
     JOIN 
         Departments D ON E.department_id = D.department_id 
     WHERE 
-        R.type = "Teacher" AND E.department_id = ?;    
+        (R.type = "Teacher" OR R.type = "Department Head" OR R.type = "Coordinator") AND E.department_id = ?;    
     ';
 
 $result = $conn->execute_query($sql, [$departamentid]);

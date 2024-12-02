@@ -32,21 +32,49 @@ AuthMiddleware::checkAccess($requiredRole);
         </div>
     </div>
 </div>
+<div class="modal fade" id="MyRequestModal" tabindex="-1" aria-labelledby="MyRequestLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header bg">
+        <h5 class="modal-title" id="logModalLabel">Mis solicitudes</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body bg">
+
+        <table class="table table-striped bg">
+          <thead>
+            <tr>
+              <th class="bg text">Fecha</th>
+              <th class="bg text">Tipo</th>
+              <th class="bg text">Estado</th>
+              <th class="bg text">Comentarios</th>
+            </tr>
+          </thead>
+          <tbody id="RequestTableBody">
+          </tbody>
+        </table>
+
+        
+      </div>
+      
+    </div>
+  </div>
+</div>
 <!-- Modal Requests -->
 <div class="modal fade" id="modalRequests" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content bg">
       <div class="modal-header bg">
-        <h5 class="modal-title text" id="staticBackdropLabel">Create Request</h5>
+        <h5 class="modal-title text" id="staticBackdropLabel">Crear solicitud</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <select name="requestType" class="form-control mb-2" id="requestType">
-            <option value="">Select request type</option>
-            <option value="1">Remedial Exam Fee</option>
-            <option value="2">Class Cancellation</option>
-            <option value="3">Career Change</option>
-            <option value="4">Campus Change</option>
+            <option value="">Seleccionar tipo de solicitud</option>
+            <option value="1">Reposición</option>
+            <option value="2">Cancelación excepcional</option>
+            <option value="3">Cambio de carrera</option>
+            <option value="4">Cambio de centro regional</option>
         </select>
         <div id="dataForRequest">
             
@@ -64,10 +92,10 @@ AuthMiddleware::checkAccess($requiredRole);
             <div class="row relative">
                 <ul class="nav nav-tabs w-full">
                     <li class="nav-item">
-                        <button id="addEnrollmentBtn" class="nav-link  bg-aux active  text " aria-current="page">Add class</button>
+                        <button id="addEnrollmentBtn" class="nav-link  bg-aux active  text " aria-current="page">Matricular clase</button>
                     </li>
                     <li class="nav-item">
-                        <button id="cancelEnrollmentBtn" class="nav-link text">Cancel class</button>
+                        <button id="cancelEnrollmentBtn" class="nav-link text">Cancelar Clase</button>
                     </li>
                 </ul>
                 <button type="button" class="btn-close absolute right-0 m-2" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -78,8 +106,8 @@ AuthMiddleware::checkAccess($requiredRole);
         </div>
     </div>
     <div class="modal-footer">
-        <button class="btn bg-custom-primary text-white" disabled id="enrollBtn">Enroll</button>
-        <button class="btn bg-custom-primary text-white d-none" disabled id="cancelBtn">Cancel Class</button>
+        <button class="btn bg-custom-primary text-white" disabled id="enrollBtn">Matricular</button>
+        <button class="btn bg-custom-primary text-white d-none" disabled id="cancelBtn">Cancelar Clase</button>
     </div>
     </div>
   </div>
@@ -108,6 +136,9 @@ AuthMiddleware::checkAccess($requiredRole);
                   
                             <button id="btnModalRequests" type="button" class="text bg btn mb-1">
                                 Crear Solicitud
+                            </button>
+                            <button id="btnModalMyRequests" type="button" class="text bg btn mb-1">
+                                Ver mis Solicitudes
                             </button>
                             <button id="btnModalEnrollment" type="button" class="text bg btn my-1">
                                 Matricula
@@ -140,10 +171,48 @@ AuthMiddleware::checkAccess($requiredRole);
                 </div>
             </div>
             <div class="courses-container">
-                <h5 class="text-md font-bold pt-4 pl-4">Running Course</h5>
+                <h5 class="text-md font-bold pt-4 pl-4">Clases matriculadas</h5>
                 <div class="courses pl-4 pr-4 pb-4" id="courseRunning">
-                    
-                    
+                    <div class="card card-course shadow">
+                        <div class="p-0 card-bd flex flex-column">
+                            <div class="name w-full p-2 bg-secondary text-white mb-1">
+                                <p class="card-text placeholder-glow">
+                                    <span class="placeholder col-4"></span>
+                                </p>
+                            </div>
+                            <div class="infoClass p-3">
+                                <p class="card-text placeholder-glow">
+                                    <span class="placeholder bg-secondary col-12"></span>
+                                    <span class="placeholder bg-secondary col-4"></span>
+                                    <span class="placeholder bg-secondary col-6"></span>
+                                    <span class="placeholder bg-secondary col-8"></span>
+                                </p>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h5 class="text-md font-bold pt-4 pl-4">Historial de clases</h5>
+                <div class="courses pl-4 pr-4 pb-4" id="courseHistory">
+                    <div class="card card-course shadow">
+                        <div class="p-0 card-bd flex flex-column">
+                            <div class="name w-full p-2 bg-secondary text-white mb-1">
+                                <p class="card-text placeholder-glow">
+                                    <span class="placeholder col-4"></span>
+                                </p>
+                            </div>
+                            <div class="infoClass p-3">
+                                <p class="card-text placeholder-glow">
+                                    <span class="placeholder bg-secondary col-12"></span>
+                                    <span class="placeholder bg-secondary col-4"></span>
+                                    <span class="placeholder bg-secondary col-6"></span>
+                                    <span class="placeholder bg-secondary col-8"></span>
+                                </p>
+                                
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

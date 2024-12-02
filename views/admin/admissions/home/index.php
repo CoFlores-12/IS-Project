@@ -177,7 +177,7 @@ $AdmissionsStatus= json_decode($result->fetch_assoc()['AdmissionsStatus']);
             </div>
             <div class="modal-body">
             <div class="alert alert-success" id="alertSuccesMails" role="alert">
-                Correos enviados correctamente
+                Proceso activado correctamente
             </div>
             <div class="alert alert-danger"  id="alertFalitedMails" role="alert">
                 Algo salio Mal

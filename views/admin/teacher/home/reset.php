@@ -61,20 +61,20 @@
 </head>
 <body>
 
-    <div  class="center-box bg text" id="formInput">
-        <h1>Change password</h1>
+    <div class="center-box bg text" hidden id="formInput">
+        <h1>Cambio de Contraseña</h1>
         <div>
-            <input type="text" placeholder="Enter the new password" id="inputPassword" required>
-            <button id="submit-button" type="submit">Submit</button>
+            <input type="text" placeholder="Ingrese nueva contraseña" id="inputPassword" required>
+            <button id="submit-button" type="submit">Enviar</button>
         </div>
     </div>
 
-    <div  id="alertExpired" class="alert alert-danger" role="alert">
-        The token expired
+    <div  id="alertExpired" hidden class="alert alert-danger" role="alert">
+        El token Expiro
     </div>
 
-    <div id="alertSuccess" class="alert alert-success" role="alert">
-        Password changed
+    <div id="alertSuccess" hidden class="alert alert-success" role="alert">
+        Contraseña Cambiada
     </div>
 
     <script src="/public/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
