@@ -48,12 +48,61 @@ AuthMiddleware::checkAccess($requiredRole);
         </style>
 </head>
 <body>
-
-<div class="modal fade" id="careerChange" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog bg modal-lg modal-dialog-scrollable">
+<div class="modal fade" id="academicModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-scrollable modal-xl modal-dialog-centered" role="document">
     <div class="modal-content bg">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Career Change</h1>
+        <h5 class="modal-title">Carga académica</h5>
+      </div>
+      <div class="modal-body" id="academicBody">
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success" onclick="downloadExcel()">Descargar en hoja de calculo</button>
+        <button type="button" class="btn btn-danger" onclick="downloadPDF()">Descargar en PDF</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="careerChange" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+    <div class="modal-content bg">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Solicitudes</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="container modal-body">
+        <div class="row mb-2 flex items-center">
+                <label for="filter-select" class="form-label m-0 w-content">Filtrar por tipo de solicitud:</label>
+                <select id="filter-select" class="form-select w-content" onchange="filterRequests()">
+                    <option value="">Todos los tipos</option>
+                </select>
+        </div>
+
+        <div class="table-responsive">
+            <table id="requests-table" class="table bg table-bordered table-striped">
+                <thead class="bg-aux">
+                    <tr>
+                      <th>Fecha</th>
+                      <th>Estudiante ID</th>
+                      <th>Tipo</th>
+                      <th>Período</th>
+                    </tr>
+                </thead>
+                <tbody id="tableRequest">
+                </tbody>
+            </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="historyStudent" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog bg  modal-dialog-scrollable">
+    <div class="modal-content bg">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">View History</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -65,44 +114,51 @@ AuthMiddleware::checkAccess($requiredRole);
                 <button id="btnSearchHistory" class="btn bg-custom-primary text-white">Search</button>
             </div>
         </div>
-        <div id="careerChangeBody">
-          <table class="my-2 table">
-            <tbody >
-              <p class="card-text placeholder-glow">
-                <span class="placeholder col-7"></span>
-                <span class="placeholder col-4"></span>
-                <span class="placeholder col-4"></span>
-                <span class="placeholder col-6"></span>
-                <span class="placeholder col-8"></span>
-              </p>
-            </tbody>
-          </table>
+        <div id="historyBody">
+
         </div>
       </div>
     </div>
   </div>
 </div>
 <div class="modal fade" id="modalData" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog bg modal-lg modal-dialog-scrollable">
-    <div class="modal-content bg">
+  <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content bg  ">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="careerChangeDataHeader"></h1>
+        <h1 class="modal-title fs-5" id="careerChangeDataHeader">solicitud</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body" id="modalDataBody">
-              <p class="card-text placeholder-glow">
-                <span class="placeholder col-7"></span>
-                <span class="placeholder col-4"></span>
-                <span class="placeholder col-4"></span>
-                <span class="placeholder col-6"></span>
-                <span class="placeholder col-8"></span>
-              </p>
-       
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="modalAcademic" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content bg  ">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="careerChangeDataHeader">Carga académica</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="modalDataBody">
+
       </div>
     </div>
   </div>
 </div>
 
+<div class="toast-container top-0 start-50 translate-middle-x mt-3">
+    <div class="toast border-0" id="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header bg border border-0">
+            <img src="/public/images/logo.png" width="24px" class="rounded me-2" alt="...">
+            <strong class="me-auto text" id="toastTitle"></strong>
+            <small class="text">Justo ahora</small>
+            <button type="button" class="btn-close text" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body bg-aux border border-0" id="toastBody">
+        </div>
+    </div>
+</div>
 <div class="container-fluid row h-full"> 
 <div class="offcanvas offcanvas-end bg p-0" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
             <div class="offcanvas-header justify-between">
@@ -123,23 +179,18 @@ AuthMiddleware::checkAccess($requiredRole);
                   </button>
               </div>
               <div class="list-group">
-                  <a class="text bg aux text-decoration-none" data-bs-toggle="collapse" href="#collapseStudents" role="button" aria-expanded="false" aria-controls="collapseStudents">
-                    <div class="list-group-item list-group-title list-group-item- bg-aux text fw-bold">
-                        Solicitudes
-                    </div>
-                  </a>
-                          <div class="list-group-parent">
-                            <button id="careerChangeBtn" type="button" class="text list-group-item list-group-item-action bg list-group-item-indent">
-                                Cambio de carrera
-                            </button>
-                            <button id="cancelBtn" type="button" class="text my-2 list-group-item list-group-item-action bg list-group-item-indent">
-                                Cancelación excepcional
-                            </button>
-                            <button id="cBtn" type="button" class="text my-2 list-group-item list-group-item-action bg list-group-item-indent">
-                                Cambio de centro
-                            </button>
-                            
-                          </div>
+                  
+                <button id="careerChangeBtn" type="button" class="text list-group-item list-group-item-action bg list-group-item-indent">
+                    Ver solicitudes
+                </button>
+                <button id="academicBtn" type="button" class="text my-2 list-group-item list-group-item-action bg list-group-item-indent">
+                    Ver carga académica
+                </button>
+
+                <button type="button" class="text list-group-item list-group-item-action bg list-group-item-indent" data-bs-toggle="modal" data-bs-target="#historyStudent">
+                    Ver historial
+                </button>
+                          
                     
                 </div>
         </div>
@@ -166,7 +217,7 @@ AuthMiddleware::checkAccess($requiredRole);
           </div>
   
             <div class=" flex p-2 justify-between items-center">
-                <h4 class="text"><?php echo $role; ?></h4>
+                <h4 class="text">Coordinador</h4>
                
             </div>
             <?php include '../../../../src/components/teacherClasses.php'; ?>
