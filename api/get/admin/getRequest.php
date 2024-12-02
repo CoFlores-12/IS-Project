@@ -22,6 +22,7 @@ where r.request_id = ?", [$_GET['id']]);
 
 $row = $Carrers->fetch_assoc();
 if ($row['request_type_id']===2) {
+    $request_id =$row['request_id'];
     $pdfContent = $row['evidence'];
     $base64Pdf = base64_encode($pdfContent);
     $date = $row['local_time'];
@@ -125,13 +126,14 @@ if ($row['request_type_id']===2) {
                         <div class="col">
                             <label for="retroRequest">Ingrese un comentario de retroalimentación</label>  
                             <textarea name="" class="form-control bg-aux" id="retroRequest"></textarea>
+                            <small class="text-danger d-none" id="retroInvalid">Debe ingresar una justificación</small>
                         </div>
                     </div>
                     <div class="row d-flex justify-between">
-                        <button type="button" class="btn col-5 mr-2 btn-danger">
+                        <button type="button" id="btnValidateReq" class="btn col-5 mr-2 btn-danger" onclick="validateRequest(0,$request_id)">
                         Rechazar
                         </button>
-                        <button type="button" class="btn col-5 ml-2 btn-success">
+                        <button type="button" id="btnValidateReq1" class="btn col-5 ml-2 btn-success" onclick="validateRequest(1,$request_id)">
                         Aprobar
                         </button>
                     

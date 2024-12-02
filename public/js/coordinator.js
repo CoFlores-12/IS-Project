@@ -10,7 +10,57 @@ const academicModalBS = new bootstrap.Modal(academicModal);
 const modalDataBS = new bootstrap.Modal(modalData);
 const academicBody = document.getElementById("academicBody");
 let dataCareerChange = [];
+let toast = document.getElementById('toast');
+let toastBody = document.getElementById('toastBody');
+let toastTitle = document.getElementById('toastTitle');
+let toastBS = new bootstrap.Toast(toast);
 
+function validateRequest(value,request_id, e) {
+  const retroRequest = document.getElementById('retroRequest');
+  const btnValidateReq = document.getElementById('btnValidateReq');
+  const btnValidateReq1 = document.getElementById('btnValidateReq1');
+  btnValidateReq.disabled = true;
+  btnValidateReq1.disabled = true;
+  const retroInvalid = document.getElementById('retroInvalid');
+  if (retroRequest.value == "" && value == 0) {
+    retroRequest.classList.add('border-danger');
+    retroInvalid.classList.remove('d-none');
+  }
+
+  const formData = new FormData();
+  formData.append('value', value);
+  formData.append('request_id',request_id)
+  formData.append('response', retroRequest.value)
+
+  fetch('/api/put/admin/validateRequest.php',{
+    method: "POST",
+    body: formData
+  })
+  .then(res=>{return res.json()})
+  .then(res=>{
+    if (!res.status) {
+      throw new Error(res.message);
+      
+    }
+    toastTitle.innerHTML ='Enroll Error'
+    toastBody.innerHTML = `<div class="alert alert-success mb-0" role="alert">
+        ${res.message}
+    </div>`
+    toastBS.show();
+    modalDataBS.hide();
+    GetMyRequests();
+  })
+  .catch(err=>{
+    toastTitle.innerHTML ='Enroll Error'
+    toastBody.innerHTML = `<div class="alert alert-danger mb-0" role="alert">
+        ${err}
+    </div>`
+    toastBS.show();
+    btnValidateReq.disabled = false;
+    btnValidateReq1.disabled = false;
+  })
+
+}
 
 function modalDataShow() {
     modalDataBS.show();
@@ -188,7 +238,11 @@ function careerChangeClick(e) {
 }
 careerChangeBtn.addEventListener('click', (e)=>{
     careerChangeBS.show();
-    fetch('/api/get/admin/MyRequest.php')
+  GetMyRequests();
+})
+
+function GetMyRequests() {
+  fetch('/api/get/admin/MyRequest.php')
     .then((res)=>{return res.json()})
     .then((res)=>{
         dataCareerChange = res;
@@ -204,7 +258,7 @@ careerChangeBtn.addEventListener('click', (e)=>{
         });
         tableRequest.innerHTML = html;
     })
-})
+}
 
 const toggleAside = document.getElementById('toggleAside');
 const desktopAside = document.getElementById('desktopAside');

@@ -147,7 +147,18 @@ AuthMiddleware::checkAccess($requiredRole);
   </div>
 </div>
 
-
+<div class="toast-container top-0 start-50 translate-middle-x mt-3">
+    <div class="toast border-0" id="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header bg border border-0">
+            <img src="/public/images/logo.png" width="24px" class="rounded me-2" alt="...">
+            <strong class="me-auto text" id="toastTitle"></strong>
+            <small class="text">Justo ahora</small>
+            <button type="button" class="btn-close text" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body bg-aux border border-0" id="toastBody">
+        </div>
+    </div>
+</div>
 <div class="container-fluid row h-full"> 
 <div class="offcanvas offcanvas-end bg p-0" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
             <div class="offcanvas-header justify-between">

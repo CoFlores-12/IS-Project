@@ -482,4 +482,12 @@ INNER JOIN `Careers` ca
 ON cxc.career_id = ca.career_id
 WHERE pe.active = 1 AND ca.department_id = (
     SELECT department_id FROM `Employees` WHERE employee_number = 9
-)
+);
+
+
+SELECT p.first_name, p.personal_email, rt.title
+    FROM Requests r 
+    INNER JOIN `RequestTypes` rt ON r.request_type_id = rt.request_type_id
+    INNER JOIN `Students` s ON r.student_id = s.account_number 
+    INNER JOIN `Persons` p ON s.person_id = p.person_id
+    WHERE r.request_id = 1

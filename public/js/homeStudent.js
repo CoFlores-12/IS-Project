@@ -120,7 +120,7 @@ let optionsBody = async (value) => {
             break;
 
     }
-    body += `<button id="sendRequestBtn" class="btn bg-custom-primary text mt-2 form-control">Enviar</button>`;
+    body += `<button id="sendRequestBtn" class="btn bg-custom-primary text-white mt-2 form-control">Enviar</button>`;
     
     return body
     
