@@ -1,4 +1,3 @@
-const institucinalInputEmail = document.getElementById('institucinalInputEmail');
 const personalInputEmail = document.getElementById('personalInputEmail');
 const btnEnviar = document.getElementById('btnEnviar');
 
@@ -12,8 +11,8 @@ alertNoEmail.style.display = "none";
 const sendEmail = document.getElementById('sendEmail');
 sendEmail.style.display = "none"
 
-const checkInstitutionalEmail = (email) => {
-    fetch(`/api/get/students/verifyMail.php?institute_email=${encodeURIComponent(email)}`, {
+const checkPersonallEmail = (email) => {
+    fetch(`/api/get/students/verifyMail.php?personal_email=${encodeURIComponent(email)}`, {
         method: 'GET',
     })
         .then((response) => response.json())
@@ -22,6 +21,7 @@ const checkInstitutionalEmail = (email) => {
                 newToken(data.student_id)
             } else {
                 alertNoEmail.style.display = "block"
+                alertNoEmail.removeAttribute('hidden');
                 loading.style.display = "none";
             }
         })
@@ -41,6 +41,7 @@ const newToken = (ID) => {
     .then(response => response.json())
     .then(data => {   
         sendEmail.style.display = "block"
+        sendEmail.removeAttribute('hidden');
         loading.style.display = "none";
         console.log(data.status)
     })
@@ -52,10 +53,9 @@ const newToken = (ID) => {
 
 
 btnEnviar.addEventListener("click", ()=>{
-    if(institucinalInputEmail.value == ""){ return};
     if(personalInputEmail.value == ""){ return};
     loading.style.display = "block";
-    checkInstitutionalEmail(institucinalInputEmail.value)
+    loading.removeAttribute('hidden');
+    checkPersonallEmail(personalInputEmail.value)
     formInput.style.display = "none";
-
 })

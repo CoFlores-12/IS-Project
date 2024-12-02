@@ -3,16 +3,16 @@ header('Content-Type: application/json');
 include '../../../src/modules/database.php';
 
 $data = json_decode(file_get_contents('php://input'), true);
-$institute_email = isset($_GET['institute_email']) ? $_GET['institute_email'] : '';
+$personal_email = isset($_GET['personal_email']) ? $_GET['personal_email'] : '';
 
 $response = [];
 
-if (!empty($institute_email)) {
+if (!empty($personal_email)) {
     $conn = (new Database())->getConnection();
 
-    $query = "SELECT account_number, institute_email  FROM Students WHERE institute_email = ?";
+    $query = "SELECT account_number, personal_email  FROM `Persons` p JOIN `Students` s ON s.person_id = p.person_id WHERE personal_email = ?";
     $stmt = $conn->prepare($query);
-    $stmt->bind_param('s', $institute_email);
+    $stmt->bind_param('s', $personal_email);
 
     $stmt->execute();
     $result = $stmt->get_result();

@@ -300,4 +300,194 @@ INSERT INTO obsReviews (comment) VALUES ('Faltan firmas o sellos en el documento
 INSERT INTO obsReviews (comment) VALUES ('Datos falsificados detectados');
 
 
-SELECT p.first_name, p.personal_email FROM Applicant a INNER JOIN `Persons` p ON a.person_id = p.person_id
+SELECT p.first_name, p.personal_email FROM Applicant a INNER JOIN `Persons` p ON a.person_id = p.person_id;
+
+WITH LastMessage AS (
+    SELECT
+        chat_id,
+        MAX(sent_at) AS last_message_time
+    FROM Messages
+    GROUP BY chat_id
+),
+MessageDetails AS (
+    SELECT
+        m.chat_id,
+        m.content AS last_message,
+        m.sent_at AS message_time
+    FROM Messages m
+    INNER JOIN LastMessage lm ON m.chat_id = lm.chat_id AND m.sent_at = lm.last_message_time
+)
+SELECT
+    c.chat_id,
+    c.is_group,
+    -- Datos para grupos
+    g.group_name AS group_name,
+    g.group_photo AS group_photo,
+    -- Datos para chats directos
+    p.first_name AS direct_user_name,
+    -- Último mensaje
+    md.last_message,
+    md.message_time
+FROM Chats c
+LEFT JOIN ChatsGroups g ON c.group_id = g.group_id
+LEFT JOIN ChatParticipants cp ON c.chat_id = cp.chat_id
+LEFT JOIN Persons p ON p.person_id = (
+    SELECT person_id
+    FROM ChatParticipants
+    WHERE 
+        (chat_id = c.chat_id AND person_id != (SELECT person_id FROM `Students` WHERE account_number = 20201000005))
+    OR 
+        (chat_id = c.chat_id AND person_id != (SELECT person_id FROM `Employees` WHERE employee_number = 9))
+    LIMIT 1
+)
+LEFT JOIN MessageDetails md ON c.chat_id = md.chat_id
+WHERE 
+    cp.person_id = (SELECT person_id FROM `Students` WHERE account_number = 20201000005)
+OR
+    cp.person_id = (SELECT person_id FROM `Employees` WHERE employee_number = 9)
+ORDER BY md.message_time DESC;
+
+
+SELECT person_id FROM `Persons` p
+WHERE p.person_id = (SELECT person_id FROM `Students` WHERE account_number = NULL)
+    OR 
+    p.person_id = (SELECT person_id FROM `Employees` WHERE employee_number = 9)
+;
+
+SELECT COUNT(*)
+        FROM Messages m
+        WHERE 
+            m.chat_id = 2 
+            AND (m.status = 0 OR m.status = 1) 
+            AND ( m.sender_id != (SELECT person_id FROM `Students` WHERE account_number = ?)
+                OR m.sender_id != (SELECT person_id FROM `Employees` WHERE employee_number = ?));
+
+
+SELECT 
+    c.chat_id,
+    c.is_group,
+    COALESCE(cg.group_name, CONCAT(p.first_name, ' ', p.last_name)) AS chat_name,
+    MAX(la.DATE) AS last_connection
+FROM Chats c
+LEFT JOIN ChatsGroups cg ON c.group_id = cg.group_id
+LEFT JOIN ChatParticipants cp ON c.chat_id = cp.chat_id
+LEFT JOIN Persons p ON cp.person_id = p.person_id
+LEFT JOIN LogAuth la ON p.person_id = la.identifier
+WHERE c.chat_id = 2
+  AND (c.is_group = 1 OR cp.person_id != 0801202400005)
+GROUP BY c.chat_id, c.is_group, chat_name;
+
+
+SELECT 
+    h.student_id,
+    SUM(h.score * c.uv) / SUM(c.uv) AS indice_global,
+    (SELECT 
+        SUM(h1.score * c1.uv) / SUM(c1.uv)  
+     FROM 
+        History h1
+     JOIN 
+        `Section` s1 ON h1.section_id = s1.section_id
+     JOIN 
+        `Classes` c1 ON s1.class_id = c1.class_id
+     JOIN 
+        `Periods` p1 ON s1.period_id = p1.period_id
+     WHERE 
+        h1.student_id = h.student_id
+        AND p1.active = 0 
+        AND s1.period_id = (
+            SELECT MAX(period_id)  
+            FROM `Periods`
+            WHERE active = 0
+        )
+    ) AS indice_ultimo_periodo
+FROM 
+    History h
+JOIN 
+    `Section` s ON h.section_id = s.section_id
+JOIN 
+    `Classes` c ON s.class_id = c.class_id
+WHERE 
+    h.student_id = '20201000005' 
+GROUP BY 
+    h.student_id;
+
+
+SELECT * FROM  `Requests` r
+INNER JOIN `Periods` p on r.period_id = p.period_id
+WHERE p.active = 1 AND  r.student_id = 20201000005
+
+
+
+
+SELECT 
+    e.student_id,
+    COUNT(h.history_id) AS approved_classes
+FROM Enroll e
+JOIN Students st ON e.student_id = st.account_number
+LEFT JOIN History h ON e.student_id = h.student_id AND h.obs_id = 1
+WHERE e.section_id = 159
+GROUP BY e.student_id;
+
+SELECT 
+    e.student_id,
+    COUNT(h.history_id) AS approved_classes,
+    total_classes.total_classes - COUNT(h.history_id) AS pending_classes,
+    CASE 
+        WHEN total_classes.total_classes - COUNT(h.history_id) < 5 THEN TRUE
+        ELSE FALSE
+    END AS has_less_than_5_remaining
+FROM Enroll e
+JOIN Students st ON e.student_id = st.account_number
+LEFT JOIN History h ON e.student_id = h.student_id AND h.obs_id = 1
+JOIN (
+    SELECT 
+        cxc.career_id,
+        COUNT(cxc.class_id) AS total_classes
+    FROM ClassesXCareer cxc
+    GROUP BY cxc.career_id
+) AS total_classes ON st.career_id = total_classes.career_id
+WHERE e.section_id = 159
+GROUP BY e.student_id, total_classes.total_classes;
+
+
+SELECT 
+    s.section_id,
+    c.class_code,
+    c.class_name,
+    e.employee_number,
+    CONCAT(p.first_name, " ", p.last_name) as teacher,
+    (
+        SELECT COUNT(*) FROM `Enroll` en
+        WHERE en.section_id = s.section_id
+    ) as enrolled,
+    s.quotas,
+    cr.classroom_name,
+    b.building_name
+FROM `Section` s
+INNER JOIN `Classes` c 
+ON s.class_id = c.class_id
+INNER JOIN `Employees` e 
+ON s.employee_number = e.employee_number
+INNER JOIN `Persons` p 
+ON e.person_id = p.person_id
+INNER JOIN `Classroom` cr 
+ON s.classroom_id = cr.classroom_id
+INNER JOIN `Building` b 
+ON cr.building_id = b.building_id
+INNER JOIN `Periods` pe
+ON s.period_id = pe.period_id
+INNER JOIN `ClassesXCareer` cxc 
+ON c.class_id = cxc.class_id
+INNER JOIN `Careers` ca
+ON cxc.career_id = ca.career_id
+WHERE pe.active = 1 AND ca.department_id = (
+    SELECT department_id FROM `Employees` WHERE employee_number = 9
+);
+
+
+SELECT p.first_name, p.personal_email, rt.title
+    FROM Requests r 
+    INNER JOIN `RequestTypes` rt ON r.request_type_id = rt.request_type_id
+    INNER JOIN `Students` s ON r.student_id = s.account_number 
+    INNER JOIN `Persons` p ON s.person_id = p.person_id
+    WHERE r.request_id = 1

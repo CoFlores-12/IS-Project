@@ -1,5 +1,5 @@
     SET FOREIGN_KEY_CHECKS = 0;
-    DROP TABLE LogAuth;
+    DROP TABLE `Messages`;
     DROP TABLE `Applicant`;
     DROP TABLE Roles;
     DROP TABLE `Applicant_result`;
@@ -12,7 +12,7 @@
     DROP TABLE `Persons`;
     DROP TABLE `Regional_center`;
     DROP TABLE `Students`;
-    DROP TABLE `Employees`;
+    DROP TABLE `Requests`;
     SET FOREIGN_KEY_CHECKS = 1;
 
     CREATE TABLE Regional_center (
@@ -300,6 +300,74 @@
     is_used BIT(1) DEFAULT 0
     );
 
+CREATE TABLE ChatsGroups (
+    group_id INT AUTO_INCREMENT PRIMARY KEY,
+    group_name VARCHAR(255) NOT NULL,
+    group_photo TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    created_by VARCHAR(20) NOT NULL,
+    FOREIGN KEY (created_by) REFERENCES Persons(person_id)
+);
+CREATE TABLE Chats (
+    chat_id INT AUTO_INCREMENT PRIMARY KEY,
+    is_group BOOLEAN NOT NULL,
+    group_id INT,
+    secret TEXT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    Foreign Key (group_id) REFERENCES ChatsGroups(group_id)
+);
+CREATE TABLE ChatParticipants (
+    participant_id INT AUTO_INCREMENT PRIMARY KEY,
+    chat_id INT NOT NULL, 
+    person_id VARCHAR(20) NOT NULL,
+    FOREIGN KEY (chat_id) REFERENCES Chats(chat_id) ON DELETE CASCADE,
+    FOREIGN KEY (person_id) REFERENCES Persons(person_id) ON DELETE CASCADE
+);
+
+CREATE TABLE Messages (
+    message_id INT AUTO_INCREMENT PRIMARY KEY, 
+    sender_id VARCHAR(20) NOT NULL,
+    chat_id INT, 
+    content TEXT NOT NULL,
+    sent_at DATETIME DEFAULT CURRENT_TIMESTAMP, 
+    status TINYINT(1) DEFAULT 0,
+    FOREIGN KEY (sender_id) REFERENCES Persons(person_id),
+    FOREIGN KEY (chat_id) REFERENCES Chats(chat_id) ON DELETE CASCADE
+);
+
+CREATE TABLE RequestTypes (
+  request_type_id TINYINT PRIMARY key AUTO_INCREMENT,
+  title VARCHAR(50)
+);
+
+CREATE TABLE `Requests` (
+  `request_id` int PRIMARY KEY AUTO_INCREMENT,
+  `student_id` VARCHAR(11) not NULL,
+  `request_type_id` TINYINT,
+  `date` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  `period_id` int,
+  `status` BIT,
+  `comments` TEXT,
+  `response` TEXT,
+  `evidence` mediumblob,
+  `evidence_ext` VARCHAR(5),
+  `career_change_id` int,
+  `campus_change_id` int,
+  classes_cancel JSON,
+  Foreign Key (request_type_id) REFERENCES RequestTypes(request_type_id),
+  Foreign Key (student_id) REFERENCES Students(account_number),
+  Foreign Key (career_change_id) REFERENCES Careers(career_id),
+  Foreign Key (campus_change_id) REFERENCES Regional_center(center_id),
+  Foreign Key (period_id) REFERENCES Periods(period_id)
+);
+
+CREATE TABLE class_resources (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    section_id INT NOT NULL,           
+    video_url VARCHAR(255) NOT NULL,   
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 
 DELIMITER //
 
@@ -486,5 +554,3 @@ WHERE (Employees.employee_number = ?
        OR Persons.person_id = ? 
        OR Employees.institute_email = ?)
   AND Employees.employee_number = ?; -- Filtro para asegurar que solo se traigan empleados del docente autenticado
-
-
