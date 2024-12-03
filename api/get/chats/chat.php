@@ -110,9 +110,9 @@ LEFT JOIN Persons p ON cp.person_id = p.person_id
 LEFT JOIN LogAuth la ON p.person_id = la.identifier
 WHERE c.chat_id = ? 
   AND (c.is_group = 1 OR (
-        p.person_id = (SELECT person_id FROM `Students` WHERE account_number = ?)
+        p.person_id != (SELECT person_id FROM `Students` WHERE account_number = ?)
         OR 
-        p.person_id = (SELECT person_id FROM `Employees` WHERE employee_number = ?)
+        p.person_id != (SELECT person_id FROM `Employees` WHERE employee_number = ?)
     ))
 GROUP BY c.chat_id, c.is_group, chat_name;
 ", [$chatId, $idStudent, $idEmployee]);
