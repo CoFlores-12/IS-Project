@@ -140,7 +140,7 @@
                                 <div class="card-body">
                                     <div class="d-flex justify-content-between align-items-center">
                                         <h5 class="card-title text">Lista de Estudiantes</h5>
-                                        <button id="downloadPdf" class="btn btn-primary d-none mb-3">Descargar Lista de Estudiantes</button>
+                                        <button id="downloadPdf" class="btn btn-success d-none mb-3">Descargar Lista de Estudiantes</button>
                                     </div>
                                     <table class="table table-bordered table-hover" id="studentsTable">
                                         <thead class="table-dark">
