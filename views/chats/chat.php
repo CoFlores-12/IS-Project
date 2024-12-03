@@ -396,17 +396,25 @@ a {
 
                   </div>
   
-                  <div class="text-muted bar d-flex justify-content-start align-items-center">
-                    
-                    <input type="text" class="form-control form-control-lg m-1" id="exampleFormControlInput2"
-                      placeholder="Escribe un mensaje">
-                    <input type="file" name="" class="d-none" id="file">
-                    <label for="file">
-                        <i class="mx-1 text-muted bi bi-paperclip"></i>
-                    </label>
-                    <a id="sendBtn" class="mx-3 ratio1/1 rounded-full square p-2 bg-custom-primary" href="#!"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#fff" class="bi bi-send" viewBox="0 0 16 16">
-                        <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576zm6.787-8.201L1.591 6.602l4.339 2.76z"/>
-                        </svg></a>
+                  <div class="text-muted">
+                    <div class=" ">
+                      <div class="row" id="fileNameOut">
+                      </div>
+                      <div class="row">
+                        <div class="d-flex justify-content-start align-items-center bar">
+
+                          <input type="text" class="form-control form-control-lg m-1" id="exampleFormControlInput2"
+                            placeholder="Escribe un mensaje">
+                          <input type="file" name="" class="d-none" id="file">
+                          <label for="file">
+                              <i class="mx-1 text-muted bi bi-paperclip"></i>
+                          </label>
+                          <a id="sendBtn" class="mx-3 ratio1/1 rounded-full square p-2 bg-custom-primary" href="#!"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#fff" class="bi bi-send" viewBox="0 0 16 16">
+                              <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576zm6.787-8.201L1.591 6.602l4.339 2.76z"/>
+                              </svg></a>
+                        </div>
+                      </div>
+                    </div>
                   </div>
   
                 </div>
@@ -426,6 +434,7 @@ a {
     let params = new URLSearchParams(document.location.search);
     const container = document.getElementById('container');
     const chatName = document.getElementById('chatName');
+    const fileNameOut = document.getElementById('fileNameOut');
     const lastCon = document.getElementById('lastCon');
     const messagesContainer = document.getElementById('messagesContainer');
     let id = params.get("id");
@@ -461,11 +470,27 @@ a {
                 day: 'numeric',
             });
 
+            let fileHTML = '';
+            if (msg.fileContent && msg.file_extension) {
+                const fileURL = `data:application/octet-stream;base64,${msg.fileContent}`;
+                fileHTML = `
+                    <hr>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#fff" class="bi bi-file-earmark-arrow-down mr-1" viewBox="0 0 16 16">
+                        <path d="M8.5 6.5a.5.5 0 0 0-1 0v3.793L6.354 9.146a.5.5 0 1 0-.708.708l2 2a.5.5 0 0 0 .708 0l2-2a.5.5 0 0 0-.708-.708L8.5 10.293z"/>
+                        <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 1 1-1h5.5z"/>
+                    </svg>
+                    <a href="${fileURL}" download="${msg.file_name}" class="text-muted ml-2">${msg.file_name}</a>
+                `;
+            }
+
             const messageHTML = msg.sender_type == "me"
             ? `
             <div class="d-flex flex-row justify-content-end">
                 <div class="msg">
-                    <p class="small p-2 me-3 mb-1 text-white rounded-3 user1">${msg.content}</p>
+                   <div class="user1 small p-2 me-3 mb-1 text-white rounded-3">
+                        <p class="mb-1">${msg.content}</p>
+                        <div class="text-muted">${fileHTML}</div>
+                    </div>
                     <div class="flex  me-3 mb-3  justify-between items-center">
                       <p class="small mb-0 rounded-3 text-muted">${formattedTime} | ${formattedDate} </p>
                         <div class="icon mx-1">
@@ -478,9 +503,11 @@ a {
             : `
             <div class="d-flex flex-row justify-content-start">
                 <div class="msg">
-                    <p class="small p-2 ms-3 mb-1 rounded-3 bg-aux">${msg.content}</p>
-                    <p class="small ms-3 mb-3 rounded-3 text-muted float-end">${formattedTime} | ${formattedDate}</p>
-                    
+                    <div class="bg-aux text small p-2 me-3 mb-1 rounded-3">
+                        <p class="mb-1">${msg.content}</p>
+                        <div class="text-muted">${fileHTML}</div>
+                    </div>
+                    <p class="small mb-3 rounded-3 text-muted">${formattedTime} | ${formattedDate}</p>
                 </div>
             </div>
             `;
@@ -501,12 +528,21 @@ document.getElementById('lastMsg').scrollIntoView({ behavior: 'smooth', block: '
     
     const sendBtn = document.getElementById('sendBtn');
     const exampleFormControlInput2 = document.getElementById('exampleFormControlInput2');
-    const file = document.getElementById('file');
+    const fileInput = document.getElementById('file');
     let messageId = 0;
+
+    file.addEventListener('change', (e)=>{
+      if (file) {
+        fileNameOut.innerHTML = fileInput.files[0].name
+      } else {
+        fileNameOut.innerHTML = ''
+    }
+    })
 
     sendBtn.addEventListener('click', ()=>{
         const messageText = exampleFormControlInput2.value.trim();
-        if (!messageText) {
+        const file = fileInput.files[0];
+        if (!messageText && !file) {
             return;
         }
         const currentMessageId = ++messageId;
@@ -520,9 +556,25 @@ document.getElementById('lastMsg').scrollIntoView({ behavior: 'smooth', block: '
                 month: 'short',
                 day: 'numeric',
             });
+        const formData = new FormData();
+        formData.append("message", messageText)
+        formData.append("chatID", id)
+        let fileHTML = '';
+        if (file) {
+          formData.append("file", file);
+          const fileURL = URL.createObjectURL(file);
+          fileHTML = `<hr><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#fff" class="bi bi-file-earmark-arrow-down mr-1" viewBox="0 0 16 16">
+              <path d="M8.5 6.5a.5.5 0 0 0-1 0v3.793L6.354 9.146a.5.5 0 1 0-.708.708l2 2a.5.5 0 0 0 .708 0l2-2a.5.5 0 0 0-.708-.708L8.5 10.293z"/>
+              <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/>
+            </svg><a href="${fileURL}" download="${file.name}" class="text-muted ml-2">${file.name}</a>`;
+        }
         messagesContainer.innerHTML += `<div class="d-flex flex-row justify-content-end " id="message-${currentMessageId}">
                         <div class="msg">
-                            <p class="small p-2 me-3 mb-1 text-white rounded-3 user1">${messageText}</p>
+                        <div class="user1 small p-2 me-3 mb-1 text-white rounded-3">
+                            <p class="mb-1">${messageText}</p>
+                              <div class="text-muted">${fileHTML}</div>
+                            
+                            </div>
                             <div class="flex  me-3 mb-3  justify-between items-center">
                               <p class="small mb-0 rounded-3 text-muted">${formattedTime} | ${formattedDate}</p>
                                 <div class="icon mx-3">
@@ -534,10 +586,9 @@ document.getElementById('lastMsg').scrollIntoView({ behavior: 'smooth', block: '
         `;
         location.href = `#message-${currentMessageId}`
 
-
-        const formData = new FormData();
-        formData.append("message", messageText)
-        formData.append("chatID", id)
+        fileNameOut.innerHTML = '';
+        exampleFormControlInput2.value = '';
+        fileInput.value = '';
       fetch('/api/post/chats/send.php', {
         method: 'POST',
         body: formData
@@ -551,6 +602,7 @@ document.getElementById('lastMsg').scrollIntoView({ behavior: 'smooth', block: '
         if (statusElement) {
           statusElement.innerHTML = '<i class="bi bi-check2 text-muted"></i>';
         }
+        
       })
       .catch(error => {
         console.error(error);

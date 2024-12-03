@@ -57,6 +57,9 @@ $messagesResult = $db->execute_query("
     m.content,
     m.status,
     C.secret,
+    m.fileContent,
+    m.file_extension,
+    m.file_name,
     IF(
         m.sender_id = (
             SELECT person_id FROM Students WHERE account_number = ?
@@ -69,18 +72,18 @@ $messagesResult = $db->execute_query("
     CONVERT_TZ(m.sent_at, '+00:00', '-06:00') AS sent_at_adjusted,
     p.first_name,
     p.last_name
-FROM 
-    Messages m
-INNER JOIN 
-    Persons p ON m.sender_id = p.person_id
-INNER JOIN 
-    Chats C ON m.chat_id = C.chat_id 
-WHERE 
-    m.chat_id = ?
-ORDER BY 
-    m.sent_at ASC;
+    FROM 
+        Messages m
+    INNER JOIN 
+        Persons p ON m.sender_id = p.person_id
+    INNER JOIN 
+        Chats C ON m.chat_id = C.chat_id 
+    WHERE 
+        m.chat_id = ?
+    ORDER BY 
+        m.sent_at ASC;
 
-", [$idStudent,$idEmployee,$chatId]);
+    ", [$idStudent,$idEmployee,$chatId]);
 
 $messages = [];
 if ($messagesResult) {
@@ -89,6 +92,9 @@ if ($messagesResult) {
             $row['content'] = decryptMessage($row['content'], $row['secret']);
         }
         $row['secret'] = '';
+        if (!empty($row['fileContent'])) {
+            $row['fileContent'] = base64_encode($row['fileContent']);
+        }
         $messages[] = $row;
     }
 }
