@@ -60,6 +60,32 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
+// Lógica de roles para mostrar los botones de "Agregar Video" y "Descargar Lista de Estudiantes"
+fetch('/api/get/admin/getUserRole.php')
+    .then(response => response.json())
+    .then(data => {
+        const teacherInfoDiv = document.getElementById("teacher-profile");
+        const downloadPdfButton = document.getElementById("downloadPdf");
+        const buttonVideoDiv = document.getElementById("butonVideo");
+
+        if (data.role === 'Teacher' || data.role === 'Coordinator' || data.role === 'Department Head') {
+            // Mostrar los botones (Agregar Video y Descargar PDF)
+            buttonVideo();
+            downloadPdfButton.classList.remove('d-none');
+            
+            // Ocultar la información del docente
+            teacherInfoDiv.classList.add('d-none');
+        } else {
+            // Ocultar los botones (Agregar Video y Descargar PDF)
+            downloadPdfButton.classList.add('d-none');
+            
+            // Mostrar la información del docente
+            teacherInfoDiv.classList.remove('d-none');
+        }
+    })
+    .catch(error => console.error('Error obteniendo rol:', error));
+
+
 // Función para manejar el botón de agregar video
 function buttonVideo() {
     const modalVideo = new bootstrap.Modal(document.getElementById('modalVideo'));
@@ -136,71 +162,38 @@ function getVideo(sectionId) {
         .catch(error => console.error('Error:', error));
 }
 
-// Lógica de roles para mostrar los botones de "Agregar Video" y "Descargar Lista de Estudiantes"
-fetch('/api/get/admin/getUserRole.php')
-    .then(response => response.json())
-    .then(data => {
-        if (data.role === 'Teacher' || data.role === 'Coordinator' || data.role === 'Department Head') {
-            buttonVideo();
-            document.getElementById('downloadPdf').classList.remove('d-none');
-        }
-    })
-    .catch(error => console.error('Error obteniendo rol:', error));
+document.addEventListener("DOMContentLoaded", function () {
+    const params = new URLSearchParams(window.location.search);
+    const sectionId = params.get("section_id");
 
-// Función para generar el PDF con los cambios solicitados
-function generatePdf() {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-    const table = document.getElementById('studentsTable');
-    const rows = Array.from(table.querySelectorAll('tbody tr'));
+    // Verificar si el parámetro section_id está presente
+    if (!sectionId) {
+        document.getElementById("teacher-name").textContent = "Parámetro section_id no proporcionado";
+        return;  // Salir si no se encuentra el parámetro section_id
+    }
 
-    // Encabezado del documento
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(16);
-    doc.text('Lista de Estudiantes', 105, 20, null, null, 'center'); // Centrado
-    doc.setFontSize(12);
-    doc.setFont("helvetica", "normal");
-    doc.text(`Fecha: ${new Date().toLocaleDateString()}`, 10, 30);
-    doc.text(`Sección: ${document.getElementById('section-title').textContent}`, 10, 40);
-
-    // Línea divisoria
-    doc.setLineWidth(0.5);
-    doc.line(10, 45, 200, 45); // Línea horizontal
-
-    // Datos de la tabla sin correo institucional y con 5 columnas para firmas
-    const tableData = rows.map((row, rowIndex) => {
-        const cells = Array.from(row.querySelectorAll('td'));
-        return [
-            rowIndex + 1,
-            cells[1]?.textContent || '', // Nombre
-            cells[2]?.textContent || '', // Núm. Cuenta
-            '', '', '', '', '', '', // Espacios en blanco para las firmas (Lunes a Viernes)
-        ];
-    });
-
-    // Configuración de la tabla
-    doc.autoTable({
-        head: [['#', 'Nombre', 'Núm. Cuenta', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes']],
-        body: tableData,
-        startY: 50, // Inicia después del encabezado
-        theme: 'grid', // Tema de la tabla
-        headStyles: {
-            fillColor: [220, 220, 220], // Color de encabezado
-            textColor: 0, // Texto negro
-            fontStyle: 'bold',
-        },
-        bodyStyles: {
-            textColor: [40, 40, 40], // Texto gris oscuro
-        },
-        alternateRowStyles: {
-            fillColor: [245, 245, 245], // Filas alternadas
-        },
-        margin: { left: 10, right: 10 }, // Márgenes
-    });
-
-    // Descargar el archivo
-    doc.save('Lista_de_Estudiantes.pdf');
-}
-
-// Evento del botón
-document.getElementById('downloadPdf').addEventListener('click', generatePdf);
+    // Obtener el nombre del docente
+    fetch(`/api/get/admin/getTeacherById.php?section_id=${sectionId}`)
+        .then(response => {
+            // Verificar si la respuesta es exitosa (código 200)
+            if (!response.ok) {
+                throw new Error("Error al obtener los datos del servidor");
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Verificar si el servidor ha devuelto un error
+            if (data.error) {
+                document.getElementById("teacher-name").textContent = "Error: " + data.error;
+                console.error("Error del servidor:", data.error);
+            } else {
+                document.getElementById("teacher-name").textContent = data.teacher_name;
+                console.log("Datos del docente:", data.teacher_name);
+            }
+        })
+        .catch(error => {
+            // Mostrar el mensaje de error en el UI y en la consola
+            document.getElementById("teacher-name").textContent = "Error al cargar los datos";
+            console.error("Error al consumir la API:", error);
+        });
+});

@@ -9,12 +9,65 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
     <link rel="stylesheet" href="/public/bootstrap-5.3.3-dist/css/bootstrap.min.css">
     <style>
-        #boton {
-            z-index: 10;
-            position: relative;
-            cursor: pointer;
-        }
+    #boton {
+        z-index: 10;
+        position: relative;
+        cursor: pointer;
+    }
+
+    /* Contenedor general con Flexbox */
+    .container {
+        display: flex;
+        justify-content: space-between; /* Para alinear los elementos uno al lado del otro */
+        gap: 10px;
+        flex-wrap: wrap; /* Para permitir que los elementos se ajusten en pantallas más pequeñas */
+    }
+
+    /* Estilos para el contenedor de información general */
+    .info-container {
+        flex: 1; /* Ocupa todo el espacio disponible */
+    }
+
+    /* Estilos para el contenedor de la tarjeta del docente */
+    .teacher-container {
+        flex: 1; /* Ocupa todo el espacio disponible */
+        display: flex;
+        justify-content: center; /* Centra el contenido dentro del contenedor del docente */
+        align-items: center; /* Alinea verticalmente el contenido */
+    }
+
+    /* Estilos para la tarjeta del docente */
+    .teacher-profile-card {
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 10px;
+        width: 250px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+    }
+
+    .teacher-profile-card:hover {
+        background-color: #f1f1f1;
+    }
+
+    .teacher-card-header {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 8px;
+    }
+
+    .teacher-card-body p {
+        font-size: 14px;
+        color: #555;
+    }
+
+    /* Se oculta el div por defecto */
+    .d-none {
+        display: none;
+    }
     </style>
+
 </head>
 <body>
 
@@ -47,9 +100,6 @@
     </div>
   </div>
 </div>
-
-
-
 
     <div class="container-fluid row h-full">
         <!-- Offcanvas -->
@@ -127,9 +177,25 @@
             <div id="section-container" class="p-3">
                 <div class="rounded border shadow p-4 bg-aux">
                     <!-- General Information -->
-                    <div class="mb-4">
-                        <h4 id="section-title" class="text">Información General</h4>
-                        <p class="text">Estudiantes, bienvenidos a este curso.</p>
+                    <div class="container">
+                        <div class="info-container">
+                            <div class="mb-4">
+                                <h4 id="section-title" class="text">Información General</h4>
+                                <p class="text">Estudiantes, bienvenidos a este curso.</p>
+                            </div>
+                        </div>
+
+                        <!-- Teacher Info (visible for teacher role) -->
+                        <div class="teacher-container mb-4" id="teacher-profile">
+                            <div class="teacher-profile-card bg">
+                                <div class="teacher-card-header bg">
+                                    Profesor(a): <span class="text" id="teacher-name"></span>
+                                </div>
+                                <div class="teacher-card-body bg">
+                                    <a class="text" href="/profile">Ver mi perfil</a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Subsections -->
