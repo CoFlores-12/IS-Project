@@ -48,22 +48,7 @@ AuthMiddleware::checkAccess($requiredRole);
         </style>
 </head>
 <body>
-<div class="modal fade" id="academicModal" tabindex="-1" role="dialog">
-  <div class="modal-dialog modal-dialog-scrollable modal-xl modal-dialog-centered" role="document">
-    <div class="modal-content bg">
-      <div class="modal-header">
-        <h5 class="modal-title">Carga académica</h5>
-      </div>
-      <div class="modal-body" id="academicBody">
-        
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-success" onclick="downloadExcel()">Descargar en hoja de calculo</button>
-        <button type="button" class="btn btn-danger" onclick="downloadPDF()">Descargar en PDF</button>
-      </div>
-    </div>
-  </div>
-</div>
+
 <div class="modal fade" id="careerChange" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
     <div class="modal-content bg">
@@ -98,29 +83,6 @@ AuthMiddleware::checkAccess($requiredRole);
   </div>
 </div>
 
-<div class="modal fade" id="historyStudent" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog bg  modal-dialog-scrollable">
-    <div class="modal-content bg">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">View History</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <div class="row p">
-            <div class="col-9 flex justify-center items-center">
-                <input type="text" id="inputHistory" class="w-full" placeholder="Enter Account Number, identity or email of Student">
-            </div>
-            <div class="col-3">
-                <button id="btnSearchHistory" class="btn bg-custom-primary text-white">Search</button>
-            </div>
-        </div>
-        <div id="historyBody">
-
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
 <div class="modal fade" id="modalData" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
     <div class="modal-content bg  ">
@@ -147,18 +109,7 @@ AuthMiddleware::checkAccess($requiredRole);
   </div>
 </div>
 
-<div class="toast-container top-0 start-50 translate-middle-x mt-3">
-    <div class="toast border-0" id="toast" role="alert" aria-live="assertive" aria-atomic="true">
-        <div class="toast-header bg border border-0">
-            <img src="/public/images/logo.png" width="24px" class="rounded me-2" alt="...">
-            <strong class="me-auto text" id="toastTitle"></strong>
-            <small class="text">Justo ahora</small>
-            <button type="button" class="btn-close text" data-bs-dismiss="toast" aria-label="Close"></button>
-        </div>
-        <div class="toast-body bg-aux border border-0" id="toastBody">
-        </div>
-    </div>
-</div>
+
 <div class="container-fluid row h-full"> 
 <div class="offcanvas offcanvas-end bg p-0" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
             <div class="offcanvas-header justify-between">
@@ -185,10 +136,6 @@ AuthMiddleware::checkAccess($requiredRole);
                 </button>
                 <button id="academicBtn" type="button" class="text my-2 list-group-item list-group-item-action bg list-group-item-indent">
                     Ver carga académica
-                </button>
-
-                <button type="button" class="text list-group-item list-group-item-action bg list-group-item-indent" data-bs-toggle="modal" data-bs-target="#historyStudent">
-                    Ver historial
                 </button>
                           
                     

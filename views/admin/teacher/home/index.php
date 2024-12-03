@@ -12,7 +12,7 @@ if ($role === 'Department Head') {
     include 'departamentHeadHome.php';
 }
 if ($role === 'Teacher') {
-    include 'teacherHome.php';
+    include 'TeacherHome.php';
 }
 if ($role === 'Coordinator') {
     include 'coordinatorHome.php';

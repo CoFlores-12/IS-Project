@@ -34,7 +34,7 @@ refreshChats.addEventListener('click', () => {
 });
 
 let optionsBody = async (value) => {
-    let body = `<textarea name="comments" placeholder="Justificación" id="comments" class="form-control bg-aux my-4 text"></textarea>`;
+    let body = `<textarea name="comments" placeholder="Justicación" id="comments" class="form-control bg-aux my-4 text"></textarea>`;
     switch (value) {
         case "2": 
         try {
@@ -47,7 +47,7 @@ let optionsBody = async (value) => {
             const data = await response.json();
         
             if (data.status === true) {
-                const response1 = await fetch(`/api/get/students/getClassesRunning.php`);
+                const response1 = await fetch(`/api/get/students/enrollClass.php`);
                 const data1 = await response1.json();
 
                 body += `
@@ -59,16 +59,12 @@ let optionsBody = async (value) => {
                 body += "<div id='checkboxGroup'>";
 
                 data1.forEach((clase) => {
-                    console.log(clase);
-                    
-                    if (clase.is_waitlist != 1) {
-                        body += `
-                            <label>
-                                <input type="checkbox" name="classToCancel[]" value="${clase.section_id}">
-                                ${clase.class_code} ${clase.class_name} (${clase.hour_start})
-                            </label><br>
-                        `;
-                    }
+                    body += `
+                        <label>
+                            <input type="checkbox" name="class_id[]" value="${clase.nombre_clase}">
+                            ${clase.nombre_clase}
+                        </label><br>
+                    `;
                 });
         
                 body += "</div>";  
@@ -94,7 +90,7 @@ let optionsBody = async (value) => {
             break
         case "3": 
             let HTML = `<select name="careerChange" class="form-control my-4" id="careerChange">
-            <option value="">Seleccionar carrera</option>`
+            <option value="">Select Career</option>`
             const response = await fetch('/api/get/public/allCareers.php');
             const data = await response.json();
 
@@ -120,7 +116,7 @@ let optionsBody = async (value) => {
             break;
 
     }
-    body += `<button id="sendRequestBtn" class="btn bg-custom-primary text-white mt-2 form-control">Enviar</button>`;
+    body += `<button id="sendRequestBtn" class="btn bg-custom-primary text mt-2 form-control">Enviar</button>`;
     
     return body
     
@@ -215,10 +211,10 @@ function fnselect(){
             }
 
             var html = `<tr disabled>
-                        <td>Sección</td>
-                        <td>Cupos</td>
-                        <td>Dias</td>
-                        <td>Docente</td>`;
+                        <td>Section</td>
+                        <td>Quotas</td>
+                        <td>Days</td>
+                        <td>Reacher</td>`;
             res.sections.forEach(element => {
                 html += `<tr data-section-id="${element.section_id}">
                         <td>${element.hour_start}</td>
@@ -348,15 +344,8 @@ function addEvents(key) {
         const formData = new FormData();
         formData.append('request_type_id', document.getElementById('requestType').value);
         formData.append('comments', document.getElementById('comments').value);
-        console.log(document.getElementById('checkboxGroup'));
-        const checkboxes = document.querySelectorAll('input[name="classToCancel[]"]:checked');
-        const selectedValues = Array.from(checkboxes).map(checkbox => checkbox.value);
-        const jsonResult = JSON.stringify(selectedValues);
-        
-        
         try {
             formData.append("evidence", document.getElementById('evidence').files[0])
-            formData.append("sections", jsonResult)
         } catch (error) {}
         try {
             formData.append("career_change_id", document.getElementById('careerChange').value)
@@ -370,22 +359,14 @@ function addEvents(key) {
         })
         .then((response)=>{return response.json()})
         .then((response)=>{
-            toastTitle.innerHTML ='Solicitud guardada'
-            toastBody.innerHTML = `<div class="alert alert-success mb-0" role="alert">
-                ${response.message}
-            </div>`
-            toastBS.show();
-            e.target.innerHTML = `Enviar`;
+            alert(response.message);
+            e.target.innerHTML = `Send`;
             e.target.disabled = false;
             dataForRequest.innerHTML = '';
             modalRequestsBS.hide();
         })
-        .catch((err)=>{
-            toastTitle.innerHTML ='Error'
-            toastBody.innerHTML = `<div class="alert alert-danger mb-0" role="alert">
-                ${err}
-            </div>`
-            toastBS.show();
+        .catch(()=>{
+            alert('error');
             e.target.innerHTML = `Send`;
             e.target.disabled = false;
         })
