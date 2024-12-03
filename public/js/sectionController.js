@@ -197,3 +197,26 @@ document.addEventListener("DOMContentLoaded", function () {
             console.error("Error al consumir la API:", error);
         });
 });
+
+document.addEventListener("DOMContentLoaded", function () {
+    const sectionId = new URLSearchParams(window.location.search).get("section_id");
+    const teacherProfileLink = document.getElementById("viewTeacherProfile");
+
+    // Obtener el employee_number a partir del section_id
+    fetch(`/api/get/admin/getTeacherBySectionId.php?section_id=${sectionId}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                console.error("Error al obtener el docente por sección", data.error);
+            } else {
+                const employeeNumber = data.employee_number;  // Asegúrate de que este campo esté presente en la respuesta
+
+                // Redirigir a la URL con el employee_number
+                teacherProfileLink.href = `/views/admin/teacher/profile/index.php?employee_number=${employeeNumber}`;
+            }
+        })
+        .catch(error => {
+            console.error("Error al consumir la API:", error);
+        });
+});
+

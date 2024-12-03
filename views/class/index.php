@@ -192,7 +192,7 @@
                                     Profesor(a): <span class="text" id="teacher-name"></span>
                                 </div>
                                 <div class="teacher-card-body bg">
-                                    <a class="text" href="/profile">Ver mi perfil</a>
+                                    <a id="viewTeacherProfile" class="text">Ver mi perfil</a>
                                 </div>
                             </div>
                         </div>
