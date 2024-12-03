@@ -1,4 +1,5 @@
 <?php
+date_default_timezone_set('America/Tegucigalpa');
 include '../../../src/modules/database.php';
 $db = (new Database())->getConnection();
 session_start();
