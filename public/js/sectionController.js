@@ -60,18 +60,16 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
-// Funcionalidad de roles y videos (se mantiene igual)
-fetch('/api/get/admin/getUserRole.php')
-    .then(response => response.json())
-    .then(data => {
-        if (data.role === 'Teacher' || data.role === 'Coordinator' || data.role === 'Department Head') {
-            buttonVideo();
-        }
-    })
-    .catch(error => console.error('Error obteniendo rol:', error));
-
+// Función para manejar el botón de agregar video
 function buttonVideo() {
     const modalVideo = new bootstrap.Modal(document.getElementById('modalVideo'));
+    const botonExistente = document.getElementById('addVideo');
+
+    // Evitar duplicación del botón
+    if (botonExistente) {
+        return; // Si el botón ya existe, no hacemos nada
+    }
+
     const boton = document.createElement('button');
 
     boton.textContent = 'Agregar video'; 
@@ -80,7 +78,7 @@ function buttonVideo() {
 
     document.getElementById('butonVideo').appendChild(boton);
 
-    boton.addEventListener('click', function() {
+    boton.addEventListener('click', function () {
         modalVideo.show();
     });
 }
@@ -137,3 +135,72 @@ function getVideo(sectionId) {
         })
         .catch(error => console.error('Error:', error));
 }
+
+// Lógica de roles para mostrar los botones de "Agregar Video" y "Descargar Lista de Estudiantes"
+fetch('/api/get/admin/getUserRole.php')
+    .then(response => response.json())
+    .then(data => {
+        if (data.role === 'Teacher' || data.role === 'Coordinator' || data.role === 'Department Head') {
+            buttonVideo();
+            document.getElementById('downloadPdf').classList.remove('d-none');
+        }
+    })
+    .catch(error => console.error('Error obteniendo rol:', error));
+
+// Función para generar el PDF con los cambios solicitados
+function generatePdf() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    const table = document.getElementById('studentsTable');
+    const rows = Array.from(table.querySelectorAll('tbody tr'));
+
+    // Encabezado del documento
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(16);
+    doc.text('Lista de Estudiantes', 105, 20, null, null, 'center'); // Centrado
+    doc.setFontSize(12);
+    doc.setFont("helvetica", "normal");
+    doc.text(`Fecha: ${new Date().toLocaleDateString()}`, 10, 30);
+    doc.text(`Sección: ${document.getElementById('section-title').textContent}`, 10, 40);
+
+    // Línea divisoria
+    doc.setLineWidth(0.5);
+    doc.line(10, 45, 200, 45); // Línea horizontal
+
+    // Datos de la tabla sin correo institucional y con 5 columnas para firmas
+    const tableData = rows.map((row, rowIndex) => {
+        const cells = Array.from(row.querySelectorAll('td'));
+        return [
+            rowIndex + 1,
+            cells[1]?.textContent || '', // Nombre
+            cells[2]?.textContent || '', // Núm. Cuenta
+            '', '', '', '', '', '', // Espacios en blanco para las firmas (Lunes a Viernes)
+        ];
+    });
+
+    // Configuración de la tabla
+    doc.autoTable({
+        head: [['#', 'Nombre', 'Núm. Cuenta', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes']],
+        body: tableData,
+        startY: 50, // Inicia después del encabezado
+        theme: 'grid', // Tema de la tabla
+        headStyles: {
+            fillColor: [220, 220, 220], // Color de encabezado
+            textColor: 0, // Texto negro
+            fontStyle: 'bold',
+        },
+        bodyStyles: {
+            textColor: [40, 40, 40], // Texto gris oscuro
+        },
+        alternateRowStyles: {
+            fillColor: [245, 245, 245], // Filas alternadas
+        },
+        margin: { left: 10, right: 10 }, // Márgenes
+    });
+
+    // Descargar el archivo
+    doc.save('Lista_de_Estudiantes.pdf');
+}
+
+// Evento del botón
+document.getElementById('downloadPdf').addEventListener('click', generatePdf);
