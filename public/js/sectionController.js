@@ -86,81 +86,99 @@ fetch('/api/get/admin/getUserRole.php')
     .catch(error => console.error('Error obteniendo rol:', error));
 
 
-// Función para manejar el botón de agregar video
-function buttonVideo() {
-    const modalVideo = new bootstrap.Modal(document.getElementById('modalVideo'));
-    const botonExistente = document.getElementById('addVideo');
-
-    // Evitar duplicación del botón
-    if (botonExistente) {
-        return; // Si el botón ya existe, no hacemos nada
+    const div = document.getElementById('butonVideo');
+    function buttonVideo(){
+        const modalVideo = new bootstrap.Modal(document.getElementById('modalVideo'));
+        const boton = document.createElement('button');
+        boton.textContent = 'Agregar video'; 
+        boton.className = 'btn btn-success'; 
+        boton.id = 'addVideo'; 
+        div.appendChild(boton);
+        boton.addEventListener('click', function() {
+            modalVideo.show();
+        });
     }
-
-    const boton = document.createElement('button');
-
-    boton.textContent = 'Agregar video'; 
-    boton.className = 'btn btn-success'; 
-    boton.id = 'addVideo'; 
-
-    document.getElementById('butonVideo').appendChild(boton);
-
-    boton.addEventListener('click', function () {
-        modalVideo.show();
+    const saveVideo = document.getElementById('saveVideo');
+    let alertErrorVideo = document.getElementById('alertErrorVideo');
+    alertErrorVideo.style.display = 'none';
+    let validedVideo = document.getElementById('validedVideo');
+    validedVideo.style.display = 'none';
+    saveVideo.addEventListener('click', function() {
+        const videoUrl = document.getElementById('videoUrl').value;
+        const youtubeRegex = /(?:https?:\/\/)?(?:www\.)?youtube\.com\/watch\?v=([a-zA-Z0-9_-]{11})/;
+        const match = videoUrl.match(youtubeRegex);
+        if (!match) {
+            alertErrorVideo.style.display = "block";
+            setTimeout(function() {
+                alertErrorVideo.style.display = 'none';
+            }, 3000)
+            modalVideo.hide();
+            return;
+        }
+        const videoId = match[1];
+        const embedUrl = `https://www.youtube.com/embed/${videoId}`;
+        guardarEnlace(section, embedUrl);
+        videoUrl.value = "";
     });
-}
-
-const saveVideo = document.getElementById('saveVideo');
-
-saveVideo.addEventListener('click', function () {
-    const videoUrl = document.getElementById('videoUrl').value;
-    const youtubeRegex = /(?:https?:\/\/)?(?:www\.)?youtube\.com\/watch\?v=([a-zA-Z0-9_-]{11})/;
-    const match = videoUrl.match(youtubeRegex);
-
-    if (!match) {
-        document.getElementById('alertErrorVideo').style.display = "block";
-        setTimeout(() => document.getElementById('alertErrorVideo').style.display = 'none', 3000);
-        return;
+    function guardarEnlace(sectionId, videoUrl) {
+        fetch('/api/post/admin/addVideoSection.php', {
+            method: 'POST',
+            body: new URLSearchParams({
+                section_id: sectionId,
+                video_url: videoUrl
+            }),
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status == "save") {
+                validedVideo.style.display = "block";
+                setTimeout(function() {
+                    validedVideo.style.display = 'none';
+                }, 3000)
+            } else {
+                alertErrorVideo.style.display = "block";
+                setTimeout(function() {
+                    alertErrorVideo.style.display = 'none';
+                }, 3000)
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+    
+    function getVideo(sectionId) {
+        fetch(`/api/get/admin/getVideoSection.php?section_id=${sectionId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.video_url){
+                    showVideo(data.video_url);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
     }
 
-    const videoId = match[1];
-    const embedUrl = `https://www.youtube.com/embed/${videoId}`;
+    function showVideo(videoUrl) {
+        const videoContainer = document.getElementById('video-container');
+        videoContainer.innerHTML = `<iframe src="${videoUrl}" title="YouTube video" allowfullscreen style="width: 100%; height: 100%;"></iframe>`;
+    }
 
-    guardarEnlace(section, embedUrl);
-});
+    document.addEventListener('DOMContentLoaded', () => {
+        // Obtener sectionId de la URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const sectionId = urlParams.get('section_id');
 
-function guardarEnlace(sectionId, videoUrl) {
-    fetch('/api/post/admin/addVideoSection.php', {
-        method: 'POST',
-        body: new URLSearchParams({
-            section_id: sectionId,
-            video_url: videoUrl
-        }),
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-    })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === "save") {
-                document.getElementById('validedVideo').style.display = "block";
-                setTimeout(() => document.getElementById('validedVideo').style.display = 'none', 3000);
-            } else {
-                document.getElementById('alertErrorVideo').style.display = "block";
-                setTimeout(() => document.getElementById('alertErrorVideo').style.display = 'none', 3000);
-            }
-        })
-        .catch(error => console.error('Error:', error));
-}
-
-function getVideo(sectionId) {
-    fetch(`/api/get/admin/getVideoSection.php?section_id=${sectionId}`)
-        .then(response => response.json())
-        .then(data => {
-            if (data.video_url) {
-                document.getElementById('video-container').innerHTML = 
-                    `<iframe src="${data.video_url}" title="YouTube video" allowfullscreen style="width: 100%; height: 100%;"></iframe>`;
-            }
-        })
-        .catch(error => console.error('Error:', error));
-}
+        if (sectionId) {
+            getVideo(sectionId);
+        } else {
+            console.error('No se proporcionó un section_id en la URL.');
+        }
+    });
 
 document.addEventListener("DOMContentLoaded", function () {
     const params = new URLSearchParams(window.location.search);
@@ -220,3 +238,54 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 });
 
+// Función para generar el PDF con los cambios solicitados
+function generatePdf() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    const table = document.getElementById('studentsTable');
+    const rows = Array.from(table.querySelectorAll('tbody tr'));
+    // Encabezado del documento
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(16);
+    doc.text('Lista de Estudiantes', 105, 20, null, null, 'center'); // Centrado
+    doc.setFontSize(12);
+    doc.setFont("helvetica", "normal");
+    doc.text(`Fecha: ${new Date().toLocaleDateString()}`, 10, 30);
+    doc.text(`Sección: ${document.getElementById('section-title').textContent}`, 10, 40);
+    // Línea divisoria
+    doc.setLineWidth(0.5);
+    doc.line(10, 45, 200, 45); // Línea horizontal
+    // Datos de la tabla sin correo institucional y con 5 columnas para firmas
+    const tableData = rows.map((row, rowIndex) => {
+        const cells = Array.from(row.querySelectorAll('td'));
+        return [
+            rowIndex + 1,
+            cells[1]?.textContent || '', // Nombre
+            cells[2]?.textContent || '', // Núm. Cuenta
+            '', '', '', '', '', '', // Espacios en blanco para las firmas (Lunes a Viernes)
+        ];
+    });
+    // Configuración de la tabla
+    doc.autoTable({
+        head: [['#', 'Nombre', 'Núm. Cuenta', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes']],
+        body: tableData,
+        startY: 50, // Inicia después del encabezado
+        theme: 'grid', // Tema de la tabla
+        headStyles: {
+            fillColor: [220, 220, 220], // Color de encabezado
+            textColor: 0, // Texto negro
+            fontStyle: 'bold',
+        },
+        bodyStyles: {
+            textColor: [40, 40, 40], // Texto gris oscuro
+        },
+        alternateRowStyles: {
+            fillColor: [245, 245, 245], // Filas alternadas
+        },
+        margin: { left: 10, right: 10 }, // Márgenes
+    });
+    // Descargar el archivo
+    doc.save('Lista_de_Estudiantes.pdf');
+}
+// Evento del botón
+document.getElementById('downloadPdf').addEventListener('click', generatePdf);
