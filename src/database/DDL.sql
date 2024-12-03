@@ -371,6 +371,14 @@ CREATE TABLE class_resources (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE contact_requests (
+    id_contact_requests INT AUTO_INCREMENT PRIMARY KEY,
+    sender_id INT NOT NULL, 
+    receiver_id INT NOT NULL,
+    status ENUM('pending', 'accepted', 'rejected') DEFAULT 'pending', 
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 
 DELIMITER //
 
