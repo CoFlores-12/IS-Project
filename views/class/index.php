@@ -138,26 +138,21 @@
                         <div class="col-md-6">
                             <div class="card shadow-sm border-0 bg">
                                 <div class="card-body">
-                                    <h5 class="card-title">Lista de Estudiantes</h5>
-                                    <table class="table table-bordered table-hover">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <h5 class="card-title text">Lista de Estudiantes</h5>
+                                        <button id="downloadPdf" class="btn btn-primary d-none mb-3">Descargar Lista de Estudiantes</button>
+                                    </div>
+                                    <table class="table table-bordered table-hover" id="studentsTable">
                                         <thead class="table-dark">
                                             <tr>
                                                 <th>#</th>
                                                 <th>Nombre</th>
-                                                <th>Estado</th>
+                                                <th>Núm. Cuenta</th>
+                                                <th>Correo Institucional</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>Juan Pérez</td>
-                                                <td>Activo</td>
-                                            </tr>
-                                            <tr>
-                                                <td>2</td>
-                                                <td>María López</td>
-                                                <td>Activo</td>
-                                            </tr>
+                                        <tbody id="students-table-body">
+                                            <!-- Filas dinámicas generadas desde el JS -->
                                         </tbody>
                                     </table>
                                 </div>
@@ -186,5 +181,8 @@
 
     <script src="/public/js/sectionController.js"></script>
     <script src="/public/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
 </body>
 </html>
