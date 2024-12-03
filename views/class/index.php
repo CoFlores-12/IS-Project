@@ -144,20 +144,12 @@
                                             <tr>
                                                 <th>#</th>
                                                 <th>Nombre</th>
-                                                <th>Estado</th>
+                                                <th>Núm. Cuenta</th>
+                                                <th>Correo Institucional</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>Juan Pérez</td>
-                                                <td>Activo</td>
-                                            </tr>
-                                            <tr>
-                                                <td>2</td>
-                                                <td>María López</td>
-                                                <td>Activo</td>
-                                            </tr>
+                                        <tbody id="students-table-body">
+                                            <!-- Las filas serán generadas dinámicamente por JavaScript -->
                                         </tbody>
                                     </table>
                                 </div>
