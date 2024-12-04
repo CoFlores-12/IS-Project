@@ -323,8 +323,6 @@ let alertUpdateCanceled = document.getElementById('alerCanceled');
         
 alertUpdateCanceled.style.display = 'none';
 
-
-
 saveECBtn.addEventListener("click", ()=>{
     saveECBtn.innerHTML = `<div class="spinner-border text-light" role="status"></div>`;
 
@@ -342,6 +340,7 @@ saveECBtn.addEventListener("click", ()=>{
         })
         .then((response)=>{return response})
         .then((response)=>{
+            alertUpdateCanceled.removeAttribute('hidden');
             alertUpdateCanceled.style.display = "block";
             setTimeout(function() {
                 alertUpdateCanceled.style.display = 'none';
@@ -352,6 +351,43 @@ saveECBtn.addEventListener("click", ()=>{
         })
     
 })
+
+
+let alerUploadNotes = document.getElementById('alerUploadNotes');
+        
+alerUploadNotes.style.display = 'none';
+
+saveUNBtn.addEventListener("click", ()=>{
+    saveUNBtn.innerHTML = `<div class="spinner-border text-light" role="status"></div>`;
+
+    let starExceptional = document.getElementById('start-time-uploadnotes');
+    let endExceptional = document.getElementById('end-time-uploadnotes');
+
+    console.log(starExceptional.value, "   -   ", endExceptional.value)
+
+        const formData = new FormData();
+        formData.append('start_time', starExceptional.value);
+        formData.append('end_time', endExceptional.value);
+
+
+        fetch('/api/put/admin/uploadNotesPeriod.php',{
+        method: 'POST',
+        body: formData
+        })
+        .then((response)=>{return response})
+        .then((response)=>{
+            alerUploadNotes.removeAttribute('hidden');
+            alerUploadNotes.style.display = "block";
+            setTimeout(function() {
+                alerUploadNotes.style.display = 'none';
+              }, 3000)
+
+            saveUNBtn.disabled = false;
+            saveUNBtn.innerHTML = 'Guardar'
+        })
+    
+})
+
 
 let logs = [];
   const roles = {
@@ -453,6 +489,26 @@ fetch('/api/get/admin/adminData.php')
         class="form-control bg-aux"
         name="start-time"
     />`;
+
+    document.getElementById('start-time-UploadNotes').innerHTML = `
+    <input
+        type="datetime-local"
+        id="start-time-uploadnotes"
+        value="${res.uploadNotes.startTime}"
+        class="form-control bg-aux"
+        name="start-time"
+    />`;
+
+    document.getElementById('end-time-UploadNotes').innerHTML = `
+    <input
+        type="datetime-local"
+        id="end-time-uploadnotes"
+        value="${res.uploadNotes.endTime}"
+        class="form-control bg-aux"
+        name="start-time"
+    />`;
+
+
     
     logs = res.logs.reverse();
     initGraph(logs);
