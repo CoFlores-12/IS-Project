@@ -22,6 +22,7 @@
     </div>
 
     <h5 class="text-md font-bold pt-4 pl-4">Historial de clases</h5>
+    <div id="scrollable">
     <div class="courses pl-4 pr-4 pb-4" id="courseHistory">
         <div class="card card-course shadow">
             <div class="p-0 card-bd flex flex-column">
@@ -41,6 +42,7 @@
                 </div>
             </div>
         </div>
+    </div>
     </div>
 </div>
 <script>

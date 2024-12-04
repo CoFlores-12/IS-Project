@@ -34,9 +34,8 @@ INSERT INTO `Persons`(person_id, first_name, last_name) VALUES ('0801202400004',
 CALL `CreateAdministrator`('0801202400001', 5, 'docente', 'docente@unah.hn');
 CALL `CreateAdministrator`('0801202400002', 3, 'jefe', 'jefe@unah.hn');
 CALL `CreateAdministrator`('0801202400004', 4, 'coordinador', 'coordinador@unah.hn');
-INSERT INTO `Persons`(person_id, first_name, last_name) VALUES ('0801202400005', 'estudiante', "1");
-INSERT INTO `Students` (account_number, person_id, institute_email, password) VALUES ('20201000005', '0801202400005', 'estudainte@unah.hn', AES_ENCRYPT('estudiante', 'ISPROJECT'));
-INSERT INTO `Students` (account_number, person_id, institute_email, password) VALUES ('20201000004', '0801202400004', 'prueba@unah.hn', AES_ENCRYPT('prueba', 'ISPROJECT'));
+INSERT INTO `Persons`(person_id, first_name, last_name, personal_email) VALUES ('0801202400005', 'estudiante', "1", "daavilav@unah.hn");
+INSERT INTO `Students` (account_number, person_id, institute_email, password, career_id) VALUES ('20201000004', '0801202400004', 'prueba@unah.hn', AES_ENCRYPT('prueba', 'ISPROJECT'), 1);
 
 INSERT INTO `Classroom`(`classroom_id`,`classroom_name`,`building_id`,`capacity`) VALUES (1, 'FI-403', 1, 15);
 
@@ -578,3 +577,89 @@ WHERE c.department_id = (
 GROUP BY 
     s.period_id
 LIMIT 9;
+
+
+INSERT INTO `Persons` (person_id, first_name, last_name, personal_email) VALUES 
+('0801202111111', 'Estudiante', '1.1', 'daavilav@unah.hn'),
+('0801202400012', 'Estudiante', '2', 'daavilav@unah.hn'),
+('0801202400013', 'Estudiante', '3', 'daavilav@unah.hn'),
+('0801202400014', 'Estudiante', '4', 'daavilav@unah.hn'),
+('0801202400015', 'Estudiante', '5', 'daavilav@unah.hn'),
+('0801202400016', 'Estudiante', '6', 'daavilav@unah.hn'),
+('0801202400017', 'Estudiante', '7', 'daavilav@unah.hn'),
+('0801202400018', 'Estudiante', '8', 'daavilav@unah.hn'),
+('0801202400019', 'Estudiante', '9', 'daavilav@unah.hn'),
+('0801202401110', 'Estudiante', '10', 'daavilav@unah.hn');
+
+INSERT INTO `Students` (account_number, person_id, institute_email, password, career_id) VALUES 
+('20211000001', '0801202111111', 'prueba1@unah.hn', AES_ENCRYPT('prueba', 'ISPROJECT'), 1),
+('20211000002', '0801202400012', 'prueba2@unah.hn', AES_ENCRYPT('prueba', 'ISPROJECT'), 1),
+('20211000003', '0801202400013', 'prueba3@unah.hn', AES_ENCRYPT('prueba', 'ISPROJECT'), 1),
+('20211000004', '0801202400014', 'prueba4@unah.hn', AES_ENCRYPT('prueba', 'ISPROJECT'), 1),
+('20211000005', '0801202400015', 'prueba5@unah.hn', AES_ENCRYPT('prueba', 'ISPROJECT'), 1),
+('20211000006', '0801202400016', 'prueba6@unah.hn', AES_ENCRYPT('prueba', 'ISPROJECT'), 1),
+('20211000007', '0801202400017', 'prueba7@unah.hn', AES_ENCRYPT('prueba', 'ISPROJECT'), 1),
+('20211000008', '0801202400018', 'prueba8@unah.hn', AES_ENCRYPT('prueba', 'ISPROJECT'), 1),
+('20211000009', '0801202400019', 'prueba9@unah.hn', AES_ENCRYPT('prueba', 'ISPROJECT'), 1),
+('20211000010', '0801202401110', 'prueba10@unah.hn', AES_ENCRYPT('prueba', 'ISPROJECT'), 1);
+
+INSERT INTO 
+  `Section` (
+    class_id, 
+    hour_start, 
+    hour_end, 
+    period_id, 
+    classroom_id, 
+    employee_number, 
+    quotas
+  )
+VALUES
+  (1, 1400, 1500, 4, 1, 5, 12),
+  (7, 0900, 1000, 5, 1, 4, 15),
+  (23, 1100, 1200, 6, 1, 9, 14),
+  (12, 0800, 0900, 7, 1, 5, 10),
+  (34, 1300, 1400, 9, 1, 4, 13),
+  (45, 1600, 1700, 8, 1, 9, 14),
+  (6, 1000, 1100, 5, 1, 5, 11),
+  (25, 1500, 1600, 6, 1, 4, 15),
+  (14, 1700, 1800, 7, 1, 9, 10),
+  (36, 1400, 1500, 9, 1, 5, 12),
+  (41, 1200, 1300, 4, 1, 4, 13),
+  (18, 1300, 1400, 5, 1, 9, 11),
+  (29, 0900, 1000, 6, 1, 5, 15),
+  (9, 1100, 1200, 7, 1, 4, 10),
+  (49, 0800, 0900, 8, 1, 9, 14),
+  (32, 1600, 1700, 9, 1, 5, 12),
+  (4, 1500, 1600, 4, 1, 4, 13),
+  (21, 1400, 1500, 5, 1, 9, 10),
+  (38, 1200, 1300, 6, 1, 5, 14),
+  (50, 1100, 1200, 7, 1, 4, 15);
+
+INSERT INTO 
+  `History` (
+    section_id, 
+    student_id, 
+    score, 
+    obs_id
+  )
+VALUES
+  (189, '20211000001', 70, 1),
+  (190, '20211000002', 85, 1),
+  (191, '20211000003', 60, 2),
+  (192, '20211000004', 90, 1),
+  (193, '20211000005', 50, 2),
+  (194, '20211000006', 95, 1),
+  (195, '20211000007', 80, 1),
+  (196, '20211000008', 40, 2),
+  (197, '20211000009', 0, 3),
+  (198, '20211000010', 67, 1),
+  (199, '20211000001', 100, 1),
+  (200, '20211000002', 33, 2),
+  (201, '20211000003', 54, 2),
+  (202, '20211000004', 80, 1),
+  (203, '20211000005', 23, 2),
+  (204, '20211000006', 60, 2),
+  (205, '20211000007', 72, 1),
+  (206, '20211000008', 10, 2),
+  (207, '20211000009', 65, 1),
+  (208, '20211000010', 45, 2);
