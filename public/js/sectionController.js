@@ -1,11 +1,9 @@
 let section = 0;
 
-document.addEventListener("DOMContentLoaded", function () {
-    const params = new URLSearchParams(window.location.search);
-    const sectionId = params.get("section_id");
-    section = sectionId;
-
-    // Obtener y mostrar el título de la sección
+const params = new URLSearchParams(window.location.search);
+const sectionId = params.get("section_id");
+section = sectionId;
+    getVideo(section)
     if (sectionId) {
         fetch(`/api/get/admin/getSectionTitle.php?section_id=${sectionId}`)
             .then(response => response.json())
@@ -58,9 +56,9 @@ document.addEventListener("DOMContentLoaded", function () {
     } else {
         document.getElementById("section-title").textContent = "Parámetro section_id no proporcionado";
     }
-});
 
 // Lógica de roles para mostrar los botones de "Agregar Video" y "Descargar Lista de Estudiantes"
+
 fetch('/api/get/admin/getUserRole.php')
     .then(response => response.json())
     .then(data => {
@@ -238,7 +236,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 });
 
-// Función para generar el PDF con los cambios solicitados
 function generatePdf() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
@@ -289,3 +286,79 @@ function generatePdf() {
 }
 // Evento del botón
 document.getElementById('downloadPdf').addEventListener('click', generatePdf);
+
+function showVideo(videoUrl) {
+    const videoContainer = document.getElementById('video-container');
+    videoContainer.innerHTML = `<iframe src="${videoUrl}" title="YouTube video" allowfullscreen style="width: 100%; height: 100%;"></iframe>`;
+}
+
+const toggleAside = document.getElementById('toggleAside');
+const desktopAside = document.getElementById('desktopAside');
+const participantsBtn = document.getElementById('participantsBtn');
+const participantsModal = document.getElementById('participantsModal');
+const participantsModalBS = new bootstrap.Modal(participantsModal);
+const scoresBtn = document.getElementById('scoresBtn');
+const scoresModal = document.getElementById('scoresModal');
+const scoresModalBS = new bootstrap.Modal(scoresModal);
+const bodyTableScores = document.getElementById('bodyTableScores');
+
+function toggleSidebar() {
+    if (desktopAside.classList.contains('d-md-block')) {
+        desktopAside.classList.remove('d-md-block');
+        desktopAside.classList.add('d-md-none');
+    } else {
+        desktopAside.classList.remove('d-md-none');
+        desktopAside.classList.add('d-md-block');
+    }
+    if (desktopAside.classList.contains('d-none')) {
+        desktopAside.classList.remove('d-none');
+        desktopAside.classList.add('d-block');
+    } else {
+        desktopAside.classList.remove('d-block');
+        desktopAside.classList.add('d-none');
+    }
+    
+}
+
+toggleAside.addEventListener('click', toggleSidebar);
+participantsBtn.addEventListener('click', ()=>{participantsModalBS.show()});
+scoresBtn.addEventListener('click', ()=>{
+    scoresModalBS.show();
+    bodyTableScores.innerHTML = `<p class="card-text placeholder-glow">
+            <span class="placeholder col-7"></span>
+            <span class="placeholder col-4"></span>
+            <span class="placeholder col-7"></span>
+            <span class="placeholder col-4"></span>
+            <span class="placeholder col-7"></span>
+            <span class="placeholder col-4"></span>
+        </p>`
+    fetch('/api/get/class/getScores.php?section_id='+sectionId)
+    .then(async res=>{
+        if (!res.ok) throw new Error(await res.text());
+        return res.text()})
+    .then(res=>{
+        bodyTableScores.innerHTML = res
+    })
+    .catch(err=>{
+        bodyTableScores.innerHTML = `<div class="alert alert-danger" role="alert">
+            ${err}
+        </div>`
+
+    })
+});
+
+
+function scoreEntered(input) {
+    const value = input.value;
+    const select = document.getElementById('select'+input.getAttribute('data-row-id'));
+    if (value>=65) {
+        select.value = 1;
+        select.disabled = true;
+    }else{
+        select.value = 0;
+        select.disabled = false;
+        select.options[0].disabled = true;
+        select.options[2].disabled = true;
+        
+    }
+}

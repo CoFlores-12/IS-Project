@@ -1,9 +1,23 @@
+<?php 
+
+//TODO obtener docente y estudiantes y renderizar en tabla 
+
+//TODO mostrar u ocultar botón nuevo video depende el rol y si ya tiene un video subido
+
+//TODO obtener información de la clase y renderizar
+
+//TODO validar quien accede a la clase
+
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Clase</title>
     <link rel="stylesheet" href="/public/css/theme.css">
     <link rel="icon" type="image/png" href="/public/images/logo.png" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
@@ -66,6 +80,18 @@
     .d-none {
         display: none;
     }
+       
+        .list-group-title {
+            border: none !important;
+            font-weight: bold;
+            outline: none;
+        }
+        .list-group-item-indent {
+            border: none; 
+        }
+        table {
+            width: 100%;
+        }
     </style>
 
 </head>
@@ -101,6 +127,73 @@
   </div>
 </div>
 
+<div class="modal fade" id="participantsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable" role="document">
+    <div class="modal-content bg">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Participantes</h5>
+    </div>
+    <div class="modal-body">
+          <table class="table table-bordered table-hover">
+              <thead class="bg-aux">
+                  <tr>
+                      <th class="bg-aux">Docente</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  <tr>
+                      <td>Juan Pérez</td>
+                  </tr>
+              </tbody>
+          </table>
+          <table class="table table-bordered table-hover">
+              <thead class="bg-aux">
+                  <tr>
+                      <th  class="bg-aux">Estudiantes</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  <tr>
+                      <td>Juan Pérez</td>
+                  </tr>
+                  <tr>
+                      <td>María López</td>
+                  </tr>
+              </tbody>
+          </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success">Descargar Excel</button>
+        <button type="button" class="btn btn-danger">Descargar PDF</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="scoresModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Calificaciones</h5>
+      </div>
+      <div class="modal-body" id="bodyTableScores">
+        <p class="card-text placeholder-glow">
+            <span class="placeholder col-7"></span>
+            <span class="placeholder col-4"></span>
+            <span class="placeholder col-7"></span>
+            <span class="placeholder col-4"></span>
+            <span class="placeholder col-7"></span>
+            <span class="placeholder col-4"></span>
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn bg-custom-primary text-white">Guardar</button>
+        <button type="button" class="btn btn-danger text-white">Finalizar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
     <div class="container-fluid row h-full">
         <!-- Offcanvas -->
         <div class="offcanvas offcanvas-end bg p-0" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
@@ -129,20 +222,13 @@
                 </button>
             </div>
             <div class="list-group">
-                <a class="text bg aux text-decoration-none" data-bs-toggle="collapse" href="#collapseStudents" role="button" aria-expanded="false" aria-controls="collapseStudents">
-                    <div class="list-group-item list-group-title list-group-item bg-aux text fw-bold">
-                        Solicitudes
-                    </div>
-                </a>
+                
                 <div class="list-group-parent">
-                    <button id="careerChangeBtn" type="button" class="text list-group-item list-group-item-action bg list-group-item-indent">
-                        Cambio de carrera
+                    <button id="participantsBtn" type="button" class="text list-group-item list-group-item-action bg list-group-item-indent"  data-toggle="modal" data-target="#participantsModal">
+                        Participantes
                     </button>
-                    <button id="cancelBtn" type="button" class="text my-2 list-group-item list-group-item-action bg list-group-item-indent">
-                        Cancelación excepcional
-                    </button>
-                    <button id="cBtn" type="button" class="text my-2 list-group-item list-group-item-action bg list-group-item-indent">
-                        Cambio de centro
+                    <button id="scoresBtn" type="button" class="text my-2 list-group-item list-group-item-action bg list-group-item-indent">
+                        Calificaciones
                     </button>
                 </div>
             </div>
@@ -174,81 +260,40 @@
             </div>
 
             <!-- Section Container -->
-            <div id="section-container" class="p-3">
-                <div class="rounded border shadow p-4 bg-aux">
-                    <!-- General Information -->
-                    <div class="container">
-                        <div class="info-container">
-                            <div class="mb-4">
-                                <h4 id="section-title" class="text">Información General</h4>
-                                <p class="text">Estudiantes, bienvenidos a este curso.</p>
-                            </div>
-                        </div>
-
-                        <!-- Teacher Info (visible for teacher role) -->
-                        <div class="teacher-container mb-4" id="teacher-profile">
-                            <div class="teacher-profile-card bg">
-                                <div class="teacher-card-header bg">
-                                    Profesor(a): <span class="text" id="teacher-name"></span>
+            <div id="section-container">
+                <div class="pl-4">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="">Inicio</a></li>
+                        <li class="breadcrumb-item active" aria-current="page" id="section-title"></li>
+                    </ol>
+                </nav>
+                </div>
+                <div class="rounded p-3">
+                    <div class="col">
+                        <div class="card shadow-sm border-0 bg-aux">
+                            <div class="card-body">
+                                <h5 class="card-title text">Material de Apoyo</h5>
+                                <div id="butonVideo" class="m-2">
                                 </div>
-                                <div class="teacher-card-body bg">
-                                    <a id="viewTeacherProfile" class="text">Ver mi perfil</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Subsections -->
-                    <div class="row">
-                        <!-- Students Table -->
-                        <div class="col-md-6">
-                            <div class="card shadow-sm border-0 bg">
-                                <div class="card-body">
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <h5 class="card-title text">Lista de Estudiantes</h5>
-                                        <button id="downloadPdf" class="btn btn-success d-none mb-3">Descargar Lista de Estudiantes</button>
-                                    </div>
-                                    <table class="table table-bordered table-hover" id="studentsTable">
-                                        <thead class="table-dark">
-                                            <tr>
-                                                <th>#</th>
-                                                <th>Nombre</th>
-                                                <th>Núm. Cuenta</th>
-                                                <th>Correo Institucional</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="students-table-body">
-                                            <!-- Filas dinámicas generadas desde el JS -->
-                                        </tbody>
-                                    </table>
+                                <div id="video-container" class="ratio ratio-16x9">
+                                    <img id="placeholder" src="/uploads/genericVideo.webp" alt="Video Introductorio" style="width: 100%; height: 100%; object-fit: cover;">
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Video Embed -->
-                        <div class="col-md-6">
-                            <div class="card shadow-sm border-0 bg">
-                                <div class="card-body">
-                                    <h5 class="card-title text">Material de Apoyo</h5>
-                                    <div id="butonVideo" class="m-2">
-                                    </div>
-                                    <div id="video-container" class="ratio ratio-16x9">
-                                        <img id="placeholder" src="/uploads/genericVideo.webp" alt="Video Introductorio" style="width: 100%; height: 100%; object-fit: cover;">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <script src="/public/js/sectionController.js"></script>
     <script src="/public/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+
+    <script src="/public/js/sectionController.js"></script>
+
 </body>
 </html>
