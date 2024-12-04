@@ -28,21 +28,21 @@ $requiredRole = 'Teacher';
 
 
 <div class="main">
-        <div class="offcanvas offcanvas-start bg" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+<div class="offcanvas offcanvas-end bg p-0" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
             <div class="offcanvas-header justify-between">
-                <h5 class="offcanvas-title text" id="offcanvasExampleLabel">Menu</h5>
+                <h5 class="offcanvas-title" id="offcanvasExampleLabel">Chats <button class="btn mx-2" id="refreshChats"><i  id="refreshIcon" class="bi bi-arrow-clockwise text rotate"></i></button></h5>
                 <button type="button" class="btn bg text" data-bs-dismiss="offcanvas" aria-label="Close">
                     <i class="bi bi-x"></i>
                 </button>
             </div>
-            <div class="offcanvas-body">
-                
+            <div class="body h-full" id="bodyOffCanvas">
+                <iframe id="frameChats" src="/views/chats/index.php" class="w-full h-full" frameborder="0"></iframe>
             </div>
         </div>
         <div class="header p-2 text-inverter bg">
             <div class="flex justify-between">
                 <button class="btn bg text" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
-                    <i class="bi bi-list"></i>
+                    
                 </button>
                 
                 <div class="btn-group">
@@ -51,18 +51,17 @@ $requiredRole = 'Teacher';
                         
                     </button>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">My profile</a></li>
-                        <li><a class="dropdown-item" href="#">Messages</a></li>
-                        <li><a class="dropdown-item" href="#">requests</a></li>
+                        <li><a class="dropdown-item" href="#">Mi perfil</a></li>
+                        <li><a class="dropdown-item" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">Chats</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="/api/get/logout.php">Logout <i class="bi bi-box-arrow-right"></i></a></li>
+                        <li><a class="dropdown-item" href="/api/get/logout.php">Salir <i class="bi bi-box-arrow-right"></i></a></li>
                     </ul>
                  </div>
             </div>
         </div>
         <div class="container-fluid">
             <div class=" flex p-2 justify-between items-center">
-                <h4 class="text"><?php echo $role; ?></h4>
+                <h4 class="text">Docente</h4>
                
             </div>
             <?php include '../../../../src/components/teacherClasses.php'; ?>

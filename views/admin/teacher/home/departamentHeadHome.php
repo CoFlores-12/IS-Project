@@ -75,16 +75,16 @@ AuthMiddleware::checkAccess($requiredRole);
   <div class="modal-dialog bg  modal-dialog-scrollable">
     <div class="modal-content bg">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">View History</h1>
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Ver historial</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <div class="row p">
             <div class="col-9 flex justify-center items-center">
-                <input type="text" id="inputHistory" class="w-full" placeholder="Enter Account Number, identity or email of Student">
+                <input type="text" id="inputHistory" class="w-full" placeholder="Ingrese numero de cuenta, identidad o correo institucional de estudiante">
             </div>
             <div class="col-3">
-                <button id="btnSearchHistory" class="btn bg-custom-primary text-white">Search</button>
+                <button id="btnSearchHistory" class="btn bg-custom-primary text-white">Buscar</button>
             </div>
         </div>
         <div id="historyBody">
@@ -142,8 +142,8 @@ AuthMiddleware::checkAccess($requiredRole);
           <table class="table w-100 table-dark table-striped" id="table">
             <thead>
               <tr>
-                <th scope="col">Line</th>
-                <th scope="col">Observation</th>
+                <th scope="col">Linea</th>
+                <th scope="col">Observación</th>
 
               </tr>
             </thead>
@@ -162,7 +162,7 @@ AuthMiddleware::checkAccess($requiredRole);
   <div class="modal-dialog bg modal-lg">
     <div class="modal-content bg">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Agregar nueva seccion</h1>
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Agregar nueva sección</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -222,7 +222,7 @@ AuthMiddleware::checkAccess($requiredRole);
         </div>
         
 
-        <label class="mb-1">Cupos disponibles(aqui la capacidad maxima):</label>
+        <label class="mb-1">Cupos disponibles(aquí la capacidad maxima):</label>
             <input type="number" id="available_spaces" name="cupo"  placeholder="Select..." value="" min="5" max="100" step="1">
         <div class="alert alert-danger" role="alert" id="alertCapacity">
           Capacidad incorrecta.
@@ -244,13 +244,13 @@ AuthMiddleware::checkAccess($requiredRole);
   <div class="modal-dialog bg modal-lg">
     <div class="modal-content bg">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Actualizar seccion</h1>
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Actualizar sección</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
       <div class="row p">
             <div class="col-9 flex justify-center items-center">
-                <input type="text" id="inputSection" class="w-full" placeholder="Ingrese el ID de la seccion">
+                <input type="text" id="inputSection" class="w-full" placeholder="Ingrese el ID de la sección">
             </div>
             <div class="col-3">
                 <button id="btnSearcSection" class="btn bg-custom-primary text-white">Buscar</button>
@@ -303,7 +303,7 @@ AuthMiddleware::checkAccess($requiredRole);
             </tbody>
         </table>
         <div class="mb-3">
-        <label for="exampleFormControlTextarea1" class="form-label">Justification</label>
+        <label for="exampleFormControlTextarea1" class="form-label">Justificacion</label>
         <textarea class="form-control" id="justificationInput" rows="3"></textarea>
         <table class="table w-100 bg-aux mt-2" id="tableSecctionStudent"> 
             <tbody>
@@ -401,7 +401,7 @@ AuthMiddleware::checkAccess($requiredRole);
                        Estudiantes
                       </div>
                     </a>
-                          <div class="collapse" id="collapseStudents">
+                          <div class="" id="collapseStudents">
                             <button type="button" class="text list-group-item list-group-item-action bg list-group-item-indent" data-bs-toggle="modal" data-bs-target="#historyStudent">
                                Ver hitorial
                             </button>
@@ -412,7 +412,7 @@ AuthMiddleware::checkAccess($requiredRole);
                         Docentes
                       </div>
                     </a>
-                          <div class="collapse" id="collapseTeachers">
+                          <div class="" id="collapseTeachers">
                             <button type="button" id="changePassword" class="text list-group-item list-group-item-action bg list-group-item-indent" data-bs-toggle="modal" data-bs-target="#changePassword">
                                Cambiar Contraseña
                             </button>
@@ -422,7 +422,7 @@ AuthMiddleware::checkAccess($requiredRole);
                         Secciones
                       </div>
                     </a>
-                          <div class="collapse" id="collapseClasses">
+                          <div class="" id="collapseClasses">
                             <button type="button" class="text list-group-item list-group-item-action bg list-group-item-indent"  id="newSectionClass">
                               Crear sección
                              </button>
@@ -430,7 +430,7 @@ AuthMiddleware::checkAccess($requiredRole);
                                Lista de espera
                             </button>
                           </div>
-                          <div class="collapse" id="collapseClasses">
+                          <div class="" id="collapseClasses">
                             <button type="button" class="text list-group-item list-group-item-action bg list-group-item-indent"  id="deleteSection" data-bs-toggle="modal" data-bs-target="#deleteSectionModal">
                                 Actualizar Sección
                              </button>

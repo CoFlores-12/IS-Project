@@ -1,13 +1,11 @@
 <?php
 session_start();
-$idTest = $_SESSION['user']['student_id'];
+$idTest = null;
+if (isset($_SESSION['user']['student_id'])) {
+  
+  $idTest = $_SESSION['user']['student_id'];
+}
 $account_number = $_GET['account_number'];
-require_once '../../../src/modules/Auth.php';
-
-$requiredRole = 'Student';
-
-AuthMiddleware::checkAccess($requiredRole);
-
 include './../../../src/modules/database.php';
 
 $db = (new Database())->getConnection();
@@ -65,7 +63,7 @@ $isMyUser = $idTest == $account_number;
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content bg">
       <div class="modal-header bg">
-        <h5 class="modal-title text" id="staticBackdropLabel">Add Photo</h5>
+        <h5 class="modal-title text" id="staticBackdropLabel">Agregar foto</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -74,7 +72,7 @@ $isMyUser = $idTest == $account_number;
           <input type="text" name="photoUrl" placeholder="Enter photo url">
           <p class="mt-3">or</p>
           <input type="file" name="upload" accept="image/*" id="upload">
-          <button type="submit" class="btn bg-custom-primary mt-3 text-white">Upload</button>
+          <button type="submit" class="btn bg-custom-primary mt-3 text-white">Subir</button>
         </form>
       </div>
     </div>
@@ -141,7 +139,7 @@ $isMyUser = $idTest == $account_number;
                           <p class="text-secondary text-xs mb-1"><?php echo $student['faculty_name'] ?></p>
                           <?php
                             if (!$isMyUser) {
-                              echo '<button class="btn btn-primary">Add to contacts</button><button class="btn btn-outline-primary">Message</button>';
+                              echo '<button class="btn btn-primary mr-1">Agregar a contactos</button><button class="btn btn-outline-primary ml-2">Enviar mensaje</button>';
                             }
                           ?>
                         </div>
@@ -155,7 +153,7 @@ $isMyUser = $idTest == $account_number;
                     <div class="card-body">
                       <div class="row">
                         <div class="col-sm-3">
-                          <h6 class="mb-0">Account Number</h6>
+                          <h6 class="mb-0">Numero de cuenta</h6>
                         </div>
                         <div class="col text-secondary">
                             <input type="hidden" readonly data-key="person_id" value="<?php echo $student['person_id'] ?>">
@@ -165,7 +163,7 @@ $isMyUser = $idTest == $account_number;
                       <hr>
                       <div class="row">
                         <div class="col-sm-3">
-                          <h6 class="mb-0">Full Name</h6>
+                          <h6 class="mb-0">Nombre completo</h6>
                         </div>
                         <div class="col-sm-9 text-secondary">
                             <input type="text" readonly data-key="fullName" value="<?php echo $student['first_name'].' '.$student['last_name'] ?>">
@@ -174,7 +172,7 @@ $isMyUser = $idTest == $account_number;
                       <hr>
                       <div class="row">
                         <div class="col-sm-3">
-                          <h6 class="mb-0">Personal Email</h6>
+                          <h6 class="mb-0">Correo personal</h6>
                         </div>
                         <div class="col text-secondary">
                             <input type="text" readonly class="readonly-input"  data-key="personalEmail" value="<?php echo $student['personal_email'] ?>">
@@ -183,7 +181,7 @@ $isMyUser = $idTest == $account_number;
                       <hr>
                       <div class="row">
                         <div class="col-sm-3">
-                          <h6 class="mb-0">Institute Email</h6>
+                          <h6 class="mb-0">Correo institucional</h6>
                         </div>
                         <div class="col text-secondary">
                             <input type="text" readonly  data-key="email" value="<?php echo $student['institute_email'] ?>">
@@ -192,7 +190,7 @@ $isMyUser = $idTest == $account_number;
                       <hr>
                       <div class="row">
                         <div class="col-sm-3">
-                          <h6 class="mb-0">Phone</h6>
+                          <h6 class="mb-0">Teléfono</h6>
                         </div>
                         <div class="col-sm-9 text-secondary">
                             <input type="text" readonly class="readonly-input"  data-key="phone" value="<?php echo $student['phone'] ?>">
@@ -201,7 +199,7 @@ $isMyUser = $idTest == $account_number;
                       <hr>
                       <div class="row">
                         <div class="col-sm-3">
-                          <h6 class="mb-0">Address</h6>
+                          <h6 class="mb-0">Dirección</h6>
                         </div>
                         <div class="col-sm-9 text-secondary">
                             <input type="text" readonly class="readonly-input"  data-key="direction" value="<?php echo $student['direction'] ?>">
@@ -233,7 +231,7 @@ $isMyUser = $idTest == $account_number;
                       <div class="card bg-aux h-100">
                         <div class="card-body">
                           <h6 class="d-flex align-items-center mb-3">
-                            <i class="material-icons text-info mr-2"></i>History</h6>
+                            <i class="material-icons text-info mr-2"></i>Historial</h6>
                           
                         </div>
                       </div>
