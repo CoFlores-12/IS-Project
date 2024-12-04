@@ -12,7 +12,7 @@ refreshChats.addEventListener('click', () => {
 });
 
 let historyBody = document.getElementById('historyBody');
-let inputHistory = document.getElementById('inputHistory');
+        let inputHistory = document.getElementById('inputHistory');
         btnSearchHistory.addEventListener('click', ()=>{
             if (inputHistory.value === '') {return; }
             historyBody.innerHTML = `<center><div class="spinner-grow text-secondary" role="status">

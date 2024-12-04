@@ -315,6 +315,9 @@ CREATE TABLE Messages (
     sender_id VARCHAR(20) NOT NULL,
     chat_id INT, 
     content TEXT NOT NULL,
+    fileContent MEDIUMBLOB,
+    file_extension VARCHAR(10),
+    file_name VARCHAR(255),
     sent_at DATETIME DEFAULT CURRENT_TIMESTAMP, 
     status TINYINT(1) DEFAULT 0,
     FOREIGN KEY (sender_id) REFERENCES Persons(person_id),
@@ -351,6 +354,14 @@ CREATE TABLE class_resources (
     id INT AUTO_INCREMENT PRIMARY KEY,
     section_id INT NOT NULL,           
     video_url VARCHAR(255) NOT NULL,   
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE contact_requests (
+    id_contact_requests INT AUTO_INCREMENT PRIMARY KEY,
+    sender_id INT NOT NULL, 
+    receiver_id INT NOT NULL,
+    status ENUM('pending', 'accepted', 'rejected') DEFAULT 'pending', 
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

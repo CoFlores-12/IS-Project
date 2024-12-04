@@ -23,11 +23,64 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
     <link rel="stylesheet" href="/public/bootstrap-5.3.3-dist/css/bootstrap.min.css">
     <style>
-        #boton {
-            z-index: 10;
-            position: relative;
-            cursor: pointer;
-        }
+    #boton {
+        z-index: 10;
+        position: relative;
+        cursor: pointer;
+    }
+
+    /* Contenedor general con Flexbox */
+    .container {
+        display: flex;
+        justify-content: space-between; /* Para alinear los elementos uno al lado del otro */
+        gap: 10px;
+        flex-wrap: wrap; /* Para permitir que los elementos se ajusten en pantallas más pequeñas */
+    }
+
+    /* Estilos para el contenedor de información general */
+    .info-container {
+        flex: 1; /* Ocupa todo el espacio disponible */
+    }
+
+    /* Estilos para el contenedor de la tarjeta del docente */
+    .teacher-container {
+        flex: 1; /* Ocupa todo el espacio disponible */
+        display: flex;
+        justify-content: center; /* Centra el contenido dentro del contenedor del docente */
+        align-items: center; /* Alinea verticalmente el contenido */
+    }
+
+    /* Estilos para la tarjeta del docente */
+    .teacher-profile-card {
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 10px;
+        width: 250px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+    }
+
+    .teacher-profile-card:hover {
+        background-color: #f1f1f1;
+    }
+
+    .teacher-card-header {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 8px;
+    }
+
+    .teacher-card-body p {
+        font-size: 14px;
+        color: #555;
+    }
+
+    /* Se oculta el div por defecto */
+    .d-none {
+        display: none;
+    }
+       
         .list-group-title {
             border: none !important;
             font-weight: bold;
@@ -40,6 +93,7 @@
             width: 100%;
         }
     </style>
+
 </head>
 <body>
 <div class="toast-container top-0 start-50 translate-middle-x mt-3">
@@ -242,6 +296,12 @@
     </div>
 
     <script src="/public/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+
     <script src="/public/js/sectionController.js"></script>
+
 </body>
 </html>
