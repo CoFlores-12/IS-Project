@@ -44,7 +44,7 @@ section = sectionId;
                     const row = `
                         <tr>
                             <td class="bg-aux text">${index + 1}</td>
-                            <td class="bg-aux text">${student.full_name}</td>
+                            <td class="bg-aux text"><a href="http://localhost/views/students/profile/index.php?account_number=${student.account_number}">${student.full_name}</a></td>
                             <td class="bg-aux text">${student.account_number}</td>
                             <td class="bg-aux text">${student.institute_email}</td>
                         </tr>
@@ -142,7 +142,37 @@ section = sectionId;
         const videoContainer = document.getElementById('video-container');
         videoContainer.innerHTML = `<iframe src="${videoUrl}" title="YouTube video" allowfullscreen style="width: 100%; height: 100%;"></iframe>`;
     }
-
+    function downloadExcel() {
+        const table = document.querySelector("#studentsTable");
+        const tableHTML = table.outerHTML;
+        
+        const excelFileContent = `
+          <html xmlns:o="urn:schemas-microsoft-com:office:office" 
+                xmlns:x="urn:schemas-microsoft-com:office:excel" 
+                xmlns="http://www.w3.org/TR/REC-html40">
+          <head>
+            <style>
+            .bg-custom-primary {background-color: #176b87 !important;}
+            .text-white { color: #ffffff; }
+            </style>
+            <!-- Definir estilos si es necesario -->
+            <meta charset="UTF-8">
+          </head>
+          <body>
+            ${tableHTML}
+          </body>
+          </html>
+        `;
+      
+        const blob = new Blob([excelFileContent], {
+          type: "application/vnd.ms-excel",
+        });
+      
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = `Estudiantes_seccion${sectionId}.xls`;
+        a.click();
+      }
 
 function generatePdf() {
     const { jsPDF } = window.jspdf;
@@ -192,8 +222,6 @@ function generatePdf() {
     // Descargar el archivo
     doc.save('Lista_de_Estudiantes.pdf');
 }
-// Evento del botón
-document.getElementById('downloadPdf').addEventListener('click', generatePdf);
 
 function showVideo(videoUrl) {
     const videoContainer = document.getElementById('video-container');

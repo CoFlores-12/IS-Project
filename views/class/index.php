@@ -1,10 +1,31 @@
 <?php 
+include '../../src/modules/database.php';
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
-//TODO obtener docente y estudiantes y renderizar en tabla 
+if (!isset($_SESSION['user'])) {
+    echo "<script>window.location.href = '/views/admin/login/index.php?error=401';</script>";
+    exit;
+}
+$userRole = $_SESSION['user']['role'];
+$roles = ["Department Head", "Coordinator", "Teacher"];
+
+
+date_default_timezone_set('America/Tegucigalpa');
+$db = (new Database())->getConnection();
+$result = $db->execute_query("SELECT 
+    CONCAT(p.first_name, ' ', p.last_name) as teacher,
+    s.employee_number
+FROM Section s
+INNER JOIN Employees em ON s.employee_number = em.employee_number
+INNER JOIN Persons p ON em.person_id = p.person_id
+WHERE s.section_id = ?
+ ", [$_GET['section_id']]);
+
+$row = $result->fetch_assoc();
 
 //TODO mostrar u ocultar botón nuevo video depende el rol y si ya tiene un video subido
-
-//TODO obtener información de la clase y renderizar
 
 //TODO validar quien accede a la clase
 
@@ -148,19 +169,23 @@
           <table class="table table-bordered table-hover">
               <thead class="bg-aux">
                   <tr>
-                      <th class="bg-aux">Docente</th>
+                      <th class="bg-aux  bg-custom-primary text-white">Docente</th>
                   </tr>
               </thead>
               <tbody>
                   <tr>
-                      <td>Juan Pérez</td>
+                      <td><a href="/views/admin/teacher/profile/index.php?employee_number=<?php echo $row['employee_number'] ?>"><?php echo $row['teacher'] ?></a></td>
                   </tr>
               </tbody>
           </table>
+          <h4>Estudiantes</h4>
           <table class="table table-bordered table-hover" id="studentsTable">
               <thead class="bg-aux">
                   <tr>
-                      <th  class="bg-aux">Estudiantes</th>
+                      <th  class="bg-aux bg-custom-primary text-white">#</th>
+                      <th  class="bg-aux bg-custom-primary text-white">Nombre</th>
+                      <th  class="bg-aux bg-custom-primary text-white">Numero de cuenta</th>
+                      <th  class="bg-aux bg-custom-primary text-white">Correo institucional</th>
                   </tr>
               </thead>
               <tbody id="students-table-body">
@@ -169,8 +194,13 @@
           </table>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-success">Descargar Excel</button>
-        <button type="button" id="downloadPdf" class="btn btn-danger">Descargar PDF</button>
+        <?php
+            if (in_array($userRole, $roles)) {
+                echo '<button type="button" class="btn btn-success" onclick="downloadExcel()">Descargar Excel</button>
+                <button type="button" id="downloadPdf" class="btn btn-danger" onclick="generatePdf()">Descargar PDF</button>';
+            }
+        ?>
+
       </div>
     </div>
   </div>
@@ -267,7 +297,7 @@
                 <div class="pl-4">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="">Inicio</a></li>
+                        <li class="breadcrumb-item"><a href="javascript:history.back()">Inicio</a></li>
                         <li class="breadcrumb-item active" aria-current="page" id="section-title"></li>
                     </ol>
                 </nav>
