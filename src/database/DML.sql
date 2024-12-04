@@ -490,4 +490,27 @@ SELECT p.first_name, p.personal_email, rt.title
     INNER JOIN `RequestTypes` rt ON r.request_type_id = rt.request_type_id
     INNER JOIN `Students` s ON r.student_id = s.account_number 
     INNER JOIN `Persons` p ON s.person_id = p.person_id
-    WHERE r.request_id = 1
+    WHERE r.request_id = 1;
+
+SELECT 
+    CONCAT(p.first_name, " ", p.last_name, "(", s.account_number, ")") as student,
+    e.score,
+    e.obs_id
+FROM `Enroll` e
+INNER JOIN `Students` s 
+ON e.student_id = s.account_number
+INNER JOIN `Persons` p 
+ON s.person_id = p.person_id
+WHERE e.section_id = 168;
+
+SELECT 
+    e.score,
+    o.obs_name
+    FROM `Enroll` e
+    INNER JOIN `Students` s 
+    ON e.student_id = s.account_number
+    INNER JOIN `Persons` p 
+    ON s.person_id = p.person_id
+    LEFT JOIN Obs o
+    ON e.obs_id = o.obs_id
+    WHERE e.section_id = 168 AND e.student_id = 20201000005

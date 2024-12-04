@@ -1,7 +1,7 @@
     SET FOREIGN_KEY_CHECKS = 0;
     DROP TABLE `Messages`;
     DROP TABLE `Applicant`;
-    DROP TABLE Roles;
+    DROP TABLE `Enroll`;
     DROP TABLE `Applicant_result`;
     DROP TABLE `Careers`;
     DROP TABLE `Classes`;
@@ -44,7 +44,7 @@
 
     CREATE TABLE Roles (
         role_id TINYINT PRIMARY KEY,
-        type VARCHAR(20) --(jefe, coordinador, docente, etc)
+        type VARCHAR(20), --(jefe, coordinador, docente, etc)
         route VARCHAR(20) --(admin, teacher, etc)
     );
 
@@ -53,6 +53,7 @@
         person_id VARCHAR(20),
         role_id TINYINT,
         password VARBINARY(255) NOT NULL, 
+        department_id INT,
         institute_email VARCHAR(100) UNIQUE,
         FOREIGN KEY (person_id) REFERENCES Persons(person_id),
         Foreign Key (role_id) REFERENCES Roles(role_id)
@@ -64,7 +65,7 @@
         time_stm TINYINT,
         faculty_id INT,
         coordinator_id INT,
-        Foreign Key (employee_number) REFERENCES Employees(employee_number),
+        Foreign Key (coordinator_id) REFERENCES Employees(employee_number),
         FOREIGN KEY (faculty_id) REFERENCES Faculty(faculty_id)
     );
 
@@ -99,7 +100,7 @@
     );
 
     CREATE TABLE StatusApplicant (
-        status_id TINYINT PRIMARY KEY
+        status_id TINYINT PRIMARY KEY,
         description VARCHAR(20)
     )
 
@@ -119,7 +120,7 @@
         FOREIGN KEY (person_id) REFERENCES Persons(person_id),
         FOREIGN KEY (preferend_career_id) REFERENCES Careers(career_id),
         FOREIGN KEY (secondary_career_id) REFERENCES Careers(career_id),
-        Foreign Key (status_id) REFERENCES StatusApplicant(Status_id)
+        Foreign Key (status_id) REFERENCES StatusApplicant(status_id)
     );
 
     CREATE Table obsReviews (
@@ -143,7 +144,7 @@
         identity_number VARCHAR(20),
         exam_code VARCHAR(20),
         result_exam FLOAT,
-        obs BIT --(1: passed, 0: repro)
+        obs BIT, --(1: passed, 0: repro)
         FOREIGN KEY (identity_number) REFERENCES Persons(person_id),
         FOREIGN KEY (exam_code) REFERENCES Exams(exam_code)
     );
@@ -242,10 +243,13 @@
         enroll_id INT PRIMARY KEY AUTO_INCREMENT,
         section_id INT,
         student_id VARCHAR(11),
-        is_waitlist BIT DEFAULT 0, 
+        is_waitlist BIT DEFAULT 0,
         is_canceled BIT DEFAULT 0,
+        score TINYINT(3),
+        obs_id TINYINT,
         Foreign Key (section_id) REFERENCES Section(section_id),
-        Foreign Key (student_id) REFERENCES Students(account_number)
+        Foreign Key (student_id) REFERENCES Students(account_number),
+        Foreign Key (obs_id) REFERENCES Obs(obs_id)
     )
 
     CREATE TABLE ClassesCanceled (
@@ -263,20 +267,6 @@
     );
 
 
-    CREATE TABLE Waitlist (
-    waitlist_id INT PRIMARY KEY AUTO_INCREMENT,
-    section_id INT,
-    description VARCHAR(100),
-    FOREIGN KEY (section_id) REFERENCES Section(section_id)
-    );
-
-    CREATE TABLE StudentsxWaitlist (
-        student_id VARCHAR(11),
-        waitlist_id INT,
-        FOREIGN KEY (student_id) REFERENCES Students(account_number),
-        FOREIGN KEY (waitlist_id) REFERENCES Waitlist(waitlist_id)
-    );
-
     CREATE TABLE LogAuth (
         log_id INT PRIMARY KEY AUTO_INCREMENT,
         DATE TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -287,10 +277,6 @@
         Foreign Key (role_id) REFERENCES Roles(role_id)
     );
     
-    ALTER TABLE Employees
-    ADD COLUMN department_id INT,
-    ADD FOREIGN KEY (department_id) REFERENCES Departments(department_id);
-
     CREATE TABLE PasswordResetTokens (
     id_passwordResetTokens INT AUTO_INCREMENT PRIMARY KEY,
     identifier VARCHAR(255) NOT NULL,
