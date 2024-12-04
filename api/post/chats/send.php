@@ -14,6 +14,16 @@ if ($idStudent === null && $idEmployee === null) {
     exit;
 }
 
+if (!empty($_FILES['file']['name'])) {
+    $fileName = $_FILES['file']['name'];
+    $fileData = file_get_contents($_FILES['file']['tmp_name']);
+    $fileExtension = pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION); 
+} else {
+    $fileName = null;
+    $fileData = null;
+    $fileExtension = null;
+}
+
 $chatID = $_POST['chatID'];
 $message_plain = $_POST['message'];
 $result = $conn->execute_query('SELECT secret FROM Chats where chat_id = ?', [$chatID]);
@@ -42,10 +52,10 @@ function encryptMessage($message) {
 
 $encryptedContent = encryptMessage($message_plain);
 
-$sql = "INSERT INTO Messages (sender_id, chat_id, content) VALUES (?, ?, ?)";
+$sql = "INSERT INTO Messages (sender_id, chat_id, content, fileContent, file_extension, file_name) VALUES (?, ?, ?, ?, ?, ?)";
 
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("sis", $id, $chatID, $encryptedContent);
+$stmt->bind_param("sissss", $id, $chatID, $encryptedContent, $fileData, $fileExtension, $fileName);
 $stmt->execute();
 
 echo json_encode(["status"=> true]);

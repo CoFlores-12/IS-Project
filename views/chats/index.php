@@ -220,9 +220,9 @@ width: 100%;
             </a>
         </li>
     </ul>
-</div>
+</div> 
     <div class="dropup position-fixed bottom-0 end-0 m-4">
-  <button type="button" class="btn  flex justify-center items-center text-white btn-lg hide-toggle" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">
+  <button type="button" id="btnViewContac"  class="btn  flex justify-center items-center text-white btn-lg hide-toggle" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">
   <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor" class="bi bi-plus bg-custom-primary rounded-circle" viewBox="0 0 16 16">
   <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
 </svg>
@@ -234,6 +234,8 @@ width: 100%;
   </ul>
 </div>
 </div>
+
+
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 <script>
@@ -316,6 +318,97 @@ function getTimeElapsed(messageTime) {
   No se puede acceder a los chats en este momento, vuelva a intentarlo mas tarde.   
 </div>`
     })
+    
+
+    const btnViewContac = document.getElementById('btnViewContac')
+
+document.addEventListener("DOMContentLoaded", () => {
+    const myContactsList = document.getElementById("myContactsList");
+    const sentRequestsList = document.getElementById("sentRequestsList");
+    const receivedRequestsList = document.getElementById("receivedRequestsList");
+
+    async function fetchContacts() {
+        return [
+            { id: 1, name: "Juan Pérez" },
+            { id: 2, name: "María López" },
+        ];
+    }
+
+    async function fetchSentRequests() {
+        return [
+            { id: 3, name: "Carlos Sánchez", status: "pending" },
+        ];
+    }
+
+    async function fetchReceivedRequests() {
+        return [
+            { id: 4, name: "Ana Rodríguez", status: "pending" },
+        ];
+    }
+
+    // Función para cargar datos en las listas
+    async function loadContactsData() {
+        myContactsList.innerHTML = "";
+        sentRequestsList.innerHTML = "";
+        receivedRequestsList.innerHTML = "";
+
+        // Cargar contactos
+        const contacts = await fetchContacts();
+        contacts.forEach(contact => {
+            const li = document.createElement("li");
+            li.className = "list-group-item";
+            li.textContent = contact.name;
+            myContactsList.appendChild(li);
+        });
+
+        // Cargar solicitudes hechas
+        const sentRequests = await fetchSentRequests();
+        sentRequests.forEach(request => {
+            const li = document.createElement("li");
+            li.className = "list-group-item";
+            li.textContent = `${request.name} (${request.status})`;
+            sentRequestsList.appendChild(li);
+        });
+
+        // Cargar solicitudes recibidas
+        const receivedRequests = await fetchReceivedRequests();
+        receivedRequests.forEach(request => {
+            const li = document.createElement("li");
+            li.className = "list-group-item";
+
+            const nameSpan = document.createElement("span");
+            nameSpan.textContent = `${request.name} (${request.status})`;
+
+            const acceptButton = document.createElement("button");
+            acceptButton.className = "btn btn-success btn-sm";
+            acceptButton.textContent = "Aceptar";
+            acceptButton.onclick = () => handleRequestAction(request.id, "accepted");
+
+            const rejectButton = document.createElement("button");
+            rejectButton.className = "btn btn-danger btn-sm";
+            rejectButton.textContent = "Rechazar";
+            rejectButton.onclick = () => handleRequestAction(request.id, "rejected");
+
+            li.appendChild(nameSpan);
+            li.appendChild(acceptButton);
+            li.appendChild(rejectButton);
+            receivedRequestsList.appendChild(li);
+        });
+    }
+
+    // Función para manejar la acción de aceptar/rechazar solicitudes
+    async function handleRequestAction(requestId, action) {
+        console.log(`Request ID: ${requestId}, Action: ${action}`);
+        // Realiza la llamada a tu API para actualizar la solicitud
+        alert(`Solicitud ${action}`);
+        // Recargar datos
+        await loadContactsData();
+    }
+
+   
+    
+});
+
 </script>
 </body>
 </html>

@@ -57,6 +57,9 @@ $messagesResult = $db->execute_query("
     m.content,
     m.status,
     C.secret,
+    m.fileContent,
+    m.file_extension,
+    m.file_name,
     IF(
         m.sender_id = (
             SELECT person_id FROM Students WHERE account_number = ?
@@ -69,18 +72,18 @@ $messagesResult = $db->execute_query("
     CONVERT_TZ(m.sent_at, '+00:00', '-06:00') AS sent_at_adjusted,
     p.first_name,
     p.last_name
-FROM 
-    Messages m
-INNER JOIN 
-    Persons p ON m.sender_id = p.person_id
-INNER JOIN 
-    Chats C ON m.chat_id = C.chat_id 
-WHERE 
-    m.chat_id = ?
-ORDER BY 
-    m.sent_at ASC;
+    FROM 
+        Messages m
+    INNER JOIN 
+        Persons p ON m.sender_id = p.person_id
+    INNER JOIN 
+        Chats C ON m.chat_id = C.chat_id 
+    WHERE 
+        m.chat_id = ?
+    ORDER BY 
+        m.sent_at ASC;
 
-", [$idStudent,$idEmployee,$chatId]);
+    ", [$idStudent,$idEmployee,$chatId]);
 
 $messages = [];
 if ($messagesResult) {
@@ -89,6 +92,9 @@ if ($messagesResult) {
             $row['content'] = decryptMessage($row['content'], $row['secret']);
         }
         $row['secret'] = '';
+        if (!empty($row['fileContent'])) {
+            $row['fileContent'] = base64_encode($row['fileContent']);
+        }
         $messages[] = $row;
     }
 }
@@ -104,9 +110,9 @@ LEFT JOIN Persons p ON cp.person_id = p.person_id
 LEFT JOIN LogAuth la ON p.person_id = la.identifier
 WHERE c.chat_id = ? 
   AND (c.is_group = 1 OR (
-        p.person_id = (SELECT person_id FROM `Students` WHERE account_number = ?)
+        p.person_id != (SELECT person_id FROM `Students` WHERE account_number = ?)
         OR 
-        p.person_id = (SELECT person_id FROM `Employees` WHERE employee_number = ?)
+        p.person_id != (SELECT person_id FROM `Employees` WHERE employee_number = ?)
     ))
 GROUP BY c.chat_id, c.is_group, chat_name;
 ", [$chatId, $idStudent, $idEmployee]);

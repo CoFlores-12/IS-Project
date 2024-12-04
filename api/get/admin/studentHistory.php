@@ -1,6 +1,12 @@
 <?php
 header('Content-Type: application/json');
 
+require_once '../../../src/modules/Auth.php';
+
+$requiredRole = 'Department Head';
+
+AuthMiddleware::checkAccess($requiredRole);
+
 if (!isset($_GET['student_identifier'])) {
     http_response_code(404);
     echo json_encode(['Message' => 'Bad request, missing student identifier']);

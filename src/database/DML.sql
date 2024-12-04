@@ -514,3 +514,4 @@ SELECT
     LEFT JOIN Obs o
     ON e.obs_id = o.obs_id
     WHERE e.section_id = 168 AND e.student_id = 20201000005
+
