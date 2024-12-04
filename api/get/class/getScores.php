@@ -36,6 +36,7 @@ if ($idEmployee != null) {
     $rows = '';
     $result = $db->execute_query("SELECT 
         CONCAT(p.first_name, ' ', p.last_name, ' (', s.account_number, ')') as student,
+        s.account_number,
         e.score,
         e.obs_id
         FROM `Enroll` e
@@ -54,7 +55,7 @@ if ($idEmployee != null) {
             3 => 'NSP',
         ];
         $rows .= ' <tr>
-            <th>'.$row['student'].'</th>
+            <th data-id="'.$row['account_number'].'">'.$row['student'].'</th>
             <th><input type="number" value="'.($row['score']).'" onkeyup="scoreEntered(this)" data-row-id="'.$idRow.'" class="form-control" min="0" max="100"></th>
             <th><select name="" class="form-control" id="select'.$idRow.'">';
         foreach ($options as $value => $label) {
@@ -81,7 +82,10 @@ if ($idEmployee != null) {
                        $rows
                     </tbody>
                 </table>
-
+                <div class="modal-footer">
+                    <button type="button" onclick="saveScores(0)" data-option="0" class="btn btnOptionScores bg-custom-primary text-white">Guardar</button>
+                    <button type="button" onclick="saveScores(1)" data-option="1" class="btn btnOptionScores btn-danger text-white">Finalizar</button>
+                </div>
             HTML;
     exit;
 } elseif ($idStudent != null) {
@@ -122,7 +126,6 @@ if ($idEmployee != null) {
                        $rows
                     </tbody>
                 </table>
-
             HTML;
     exit;
 }

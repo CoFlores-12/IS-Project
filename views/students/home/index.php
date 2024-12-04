@@ -18,17 +18,6 @@ AuthMiddleware::checkAccess($requiredRole);
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
     <link rel="stylesheet" href="/public/bootstrap-5.3.3-dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/public/css/homeStudents.css">
-    <style>
-        .list-group-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .list-group-item button {
-            margin-left: 10px;
-        }
-    </style>
 </head>
 <body>
 <div class="toast-container top-0 start-50 translate-middle-x mt-3">
@@ -94,52 +83,6 @@ AuthMiddleware::checkAccess($requiredRole);
     </div>
   </div>
 </div>
-
-<div class="modal fade" id="contactsModal" tabindex="-1" aria-labelledby="contactsModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="contactsModalLabel">Contactos y Solicitudes</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <!-- Pestañas -->
-                <ul class="nav nav-tabs" id="contactsTabs" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link active" id="myContacts-tab" data-bs-toggle="tab" data-bs-target="#myContacts" type="button" role="tab" aria-controls="myContacts" aria-selected="true">Mis Contactos</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="sentRequests-tab" data-bs-toggle="tab" data-bs-target="#sentRequests" type="button" role="tab" aria-controls="sentRequests" aria-selected="false">Solicitudes Hechas</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="receivedRequests-tab" data-bs-toggle="tab" data-bs-target="#receivedRequests" type="button" role="tab" aria-controls="receivedRequests" aria-selected="false">Solicitudes Recibidas</button>
-                    </li>
-                </ul>
-
-                <!-- Contenido de las pestañas -->
-                <div class="tab-content mt-3" id="contactsTabsContent">
-                    <!-- Mis Contactos -->
-                    <div class="tab-pane fade show active" id="myContacts" role="tabpanel" aria-labelledby="myContacts-tab">
-                        <ul id="myContactsList" class="list-group"></ul>
-                    </div>
-                    <!-- Solicitudes Hechas -->
-                    <div class="tab-pane fade" id="sentRequests" role="tabpanel" aria-labelledby="sentRequests-tab">
-                        <ul id="sentRequestsList" class="list-group"></ul>
-                    </div>
-                    <!-- Solicitudes Recibidas -->
-                    <div class="tab-pane fade" id="receivedRequests" role="tabpanel" aria-labelledby="receivedRequests-tab">
-                        <ul id="receivedRequestsList" class="list-group"></ul>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-
 
 <!-- Modal Enrollment -->
 <div class="modal fade" id="modalEnrolment" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">

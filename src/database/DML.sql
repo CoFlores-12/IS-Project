@@ -513,5 +513,12 @@ SELECT
     ON s.person_id = p.person_id
     LEFT JOIN Obs o
     ON e.obs_id = o.obs_id
-    WHERE e.section_id = 168 AND e.student_id = 20201000005
+    WHERE e.section_id = 168 AND e.student_id = 20201000005;
 
+SELECT e.score, e.obs_id, p.personal_email, class_name
+FROM Enroll e
+INNER JOIN `Students` s ON e.student_id = s.account_number
+INNER JOIN `Persons` p ON s.person_id = p.person_id
+INNER JOIN `Section` se ON e.section_id = se.section_id
+INNER JOIN `Classes` c ON se.class_id = c.class_id
+WHERE e.section_id = 168 AND e.student_id = 20201000005
