@@ -92,7 +92,20 @@ if ($idEmployee != null) {
     //TODO validar la evaluación docente esta realizada
 
     $rows = '';
-    $result = $db->execute_query("SELECT 
+
+    $sql = "SELECT COUNT(*) AS count
+        FROM student_teacher_evaluation
+        WHERE student_account_number = ? 
+          AND section_id = ?";
+    $stmt = $db->prepare($sql);
+    $stmt->bind_param("ii", $idStudent, $section_id);
+
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
+
+    if($row['count'] > 0){
+        $result = $db->execute_query("SELECT 
         e.score,
         o.obs_name
         FROM `Enroll` e
@@ -128,4 +141,46 @@ if ($idEmployee != null) {
                 </table>
             HTML;
     exit;
+    }else{
+        echo <<<HTML
+    <div class="mt-4">
+        <h4>Evaluar Docente</h4>
+        <div>
+            <label for="pregunta1">1. ¿El docente es responsable con la revisión de las evaluaciones?</label>
+            <select id="pregunta1" name="pregunta1" class="form-select mt-2" required>
+                <option value="">Seleccionar una opción</option>
+                <option value="deficiente">Deficiente</option>
+                <option value="malo">Malo</option>
+                <option value="bueno">Bueno</option>
+                <option value="excelente">Excelente</option>
+            </select>
+        </div>
+
+        <div class="mt-3">
+            <label for="pregunta2">2. ¿El docente domina los temas de su clase?</label>
+            <select id="pregunta2" name="pregunta2" class="form-select mt-2" required>
+                <option value="">Seleccionar una opción</option>
+                <option value="deficiente">Deficiente</option>
+                <option value="malo">Malo</option>
+                <option value="bueno">Bueno</option>
+                <option value="excelente">Excelente</option>
+            </select>
+        </div>
+
+        <div class="mt-3">
+            <label for="justificacion">Ha notado actitudes inapropiadas en su docente:</label>
+            <textarea id="justificacion" name="justificacion" class="form-control" rows="4" placeholder="Escriba sus comentarios aquí..."></textarea>
+        </div>
+        <div class="alert alert-danger mt-2" hidden id="alertErrorSendSurvey" role="alert">
+                Error, todos los campos son requeridos
+            </div>
+
+        <div class="mt-4">
+            <button type="button" class="btn btn-success" onclick="save()" id="sendSurvey">Enviar</button>
+        </div>
+    </div>
+HTML;
+
+    }
+    
 }

@@ -365,6 +365,14 @@ CREATE TABLE contact_requests (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE student_teacher_evaluation (
+    evaluation_id INT AUTO_INCREMENT PRIMARY KEY,         
+    student_account_number VARCHAR(20) NOT NULL, 
+    teacher_id INT NOT NULL,                  
+    responses JSON NOT NULL,                  
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ,
+    section_id INT
+);
 
 DELIMITER //
 

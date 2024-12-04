@@ -523,6 +523,49 @@ INNER JOIN `Classes` c ON se.class_id = c.class_id
 WHERE e.section_id = 168 AND e.student_id = 20201000005;
 
 
+-- Insertar centros regionales
+INSERT INTO Regional_center (center_name) VALUES 
+('CU'),
+('VS');
+
+-- Obtener los IDs de los centros regionales
+SET @cu_id = (SELECT center_id FROM Regional_center WHERE center_name = 'CU');
+SET @vs_id = (SELECT center_id FROM Regional_center WHERE center_name = 'VS');
+
+-- Insertar edificios para CU y VS (10 edificios por centro)
+INSERT INTO Building (building_name, center_id)
+SELECT CONCAT(CHAR(64 + n), '1') AS building_name, @cu_id AS center_id
+FROM (SELECT 1 AS n UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 
+      UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9 UNION SELECT 10) t;
+
+INSERT INTO Building (building_name, center_id)
+SELECT CONCAT(CHAR(64 + n), '1') AS building_name, @vs_id AS center_id
+FROM (SELECT 1 AS n UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 
+      UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9 UNION SELECT 10) t;
+
+-- Insertar aulas para cada edificio (4 pisos x 8 aulas = 32 aulas por edificio)
+SET @floor_count = 4;
+SET @rooms_per_floor = 8;
+
+INSERT INTO Classroom (classroom_name, building_id, capacity)
+SELECT 
+    CONCAT(b.building_name, '-', 
+           LPAD(FLOOR((seq-1)/@rooms_per_floor) + 1, 1, '0'), 
+           LPAD((seq-1) MOD @rooms_per_floor + 1, 2, '0')) AS classroom_name,
+    b.building_id,
+    30 AS capacity -- Capacidad estándar
+FROM Building b
+CROSS JOIN (
+    SELECT seq FROM 
+    (SELECT @seq := @seq + 1 AS seq 
+     FROM (SELECT 0 UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 
+           UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9) t1,
+          (SELECT 0 UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 
+           UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9) t2,
+          (SELECT @seq := 0) t0
+    ) seqs 
+    WHERE seq <= @floor_count * @rooms_per_floor
+) rooms;
 
 
 

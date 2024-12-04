@@ -117,6 +117,7 @@ $row = $result->fetch_assoc();
 
 </head>
 <body>
+
 <div class="toast-container top-0 start-50 translate-middle-x mt-3">
     <div class="toast border-0" id="toast" role="alert" aria-live="assertive" aria-atomic="true">
         <div class="toast-header bg border border-0">
@@ -169,7 +170,7 @@ $row = $result->fetch_assoc();
           <table class="table table-bordered table-hover">
               <thead class="bg-aux">
                   <tr>
-                      <th class="bg-aux  bg-custom-primary text-white">Docente</th>
+                      <th class="bg-aux bg-custom-primary text-white">Docente</th>
                   </tr>
               </thead>
               <tbody>
@@ -207,11 +208,18 @@ $row = $result->fetch_assoc();
 </div>
 <div class="modal fade" id="scoresModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
-    <div class="modal-content">
+    <div class="modal-content bg modal-lg">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">Calificaciones</h5>
       </div>
-      <div class="modal-body" id="bodyTableScores">
+
+
+    <?php if ($userRole == "Student"): ?>
+        
+    <?php endif; ?>
+
+
+    <div class="modal-body" id="bodyTableScores">
         <p class="card-text placeholder-glow">
             <span class="placeholder col-7"></span>
             <span class="placeholder col-4"></span>
@@ -221,6 +229,7 @@ $row = $result->fetch_assoc();
             <span class="placeholder col-4"></span>
         </p>
       </div>
+      
 
     </div>
   </div>
@@ -269,6 +278,9 @@ $row = $result->fetch_assoc();
 
         <!-- Main Content -->
         <div class="col">
+        <div class="alert alert-success mt-2" hidden  id="alertSendSurvey" role="alert">
+                Evaluacion guardada Correctamente
+            </div>
             <div class="header p-2 text-inverter bg">
                 <div class="flex justify-between">
                     <button class="btn bg text" type="button" id="toggleAside">
@@ -308,6 +320,11 @@ $row = $result->fetch_assoc();
                             <div class="card-body">
                                 <h5 class="card-title text">Material de Apoyo</h5>
                                 <div id="butonVideo" class="m-2">
+
+                                <?php if (in_array($userRole, $roles)): ?>
+                                    <button class="btn btn-success" id="addVideo">Agregar video</button>
+                                <?php endif; ?>
+                                
                                 </div>
                                 <div id="video-container" class="ratio ratio-16x9">
                                     <img id="placeholder" src="/uploads/genericVideo.webp" alt="Video Introductorio" style="width: 100%; height: 100%; object-fit: cover;">
@@ -319,6 +336,7 @@ $row = $result->fetch_assoc();
             </div>
         </div>
     </div>
+
 
     <script src="/public/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
 

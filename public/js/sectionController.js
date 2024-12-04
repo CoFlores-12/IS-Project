@@ -61,23 +61,26 @@ section = sectionId;
         document.getElementById("section-title").textContent = "Parámetro section_id no proporcionado";
     }
 
-    const div = document.getElementById('butonVideo');
-    function buttonVideo(){
-        const modalVideo = new bootstrap.Modal(document.getElementById('modalVideo'));
-        const boton = document.createElement('button');
-        boton.textContent = 'Agregar video'; 
-        boton.className = 'btn btn-success'; 
-        boton.id = 'addVideo'; 
-        div.appendChild(boton);
-        boton.addEventListener('click', function() {
-            modalVideo.show();
-        });
+    const botonNewVideo = document.getElementById('addVideo');
+
+    let addVideo = document.getElementById('modalVideo');
+    let modalVideobn = new bootstrap.Modal(addVideo);
+
+    modalVideobn.hide()
+
+    if(botonNewVideo){
+        botonNewVideo.addEventListener("click", ()=>{
+            modalVideobn.show();
+        })
     }
+   
+
     const saveVideo = document.getElementById('saveVideo');
     let alertErrorVideo = document.getElementById('alertErrorVideo');
     alertErrorVideo.style.display = 'none';
     let validedVideo = document.getElementById('validedVideo');
     validedVideo.style.display = 'none';
+
     saveVideo.addEventListener('click', function() {
         const videoUrl = document.getElementById('videoUrl').value;
         const youtubeRegex = /(?:https?:\/\/)?(?:www\.)?youtube\.com\/watch\?v=([a-zA-Z0-9_-]{11})/;
@@ -95,6 +98,7 @@ section = sectionId;
         guardarEnlace(section, embedUrl);
         videoUrl.value = "";
     });
+
     function guardarEnlace(sectionId, videoUrl) {
         fetch('/api/post/admin/addVideoSection.php', {
             method: 'POST',
@@ -345,4 +349,70 @@ function saveScores(option) {
         </div>`
         toastBS.show();
     })
+}
+
+
+
+function save() {
+
+    let alertErrorSendSurvey = document.getElementById('alertErrorSendSurvey');
+    alertErrorSendSurvey.style.display = 'none';
+
+    sendSurvey = document.getElementById("sendSurvey");
+    alertSendSurvey = document.getElementById("alertSendSurvey");
+    alertSendSurvey.style.display = "none";
+
+    sendSurvey.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Enviando...`;
+    sendSurvey.disabled = true;
+
+    const pregunta1 = document.getElementById("pregunta1").value;
+    const pregunta2 = document.getElementById("pregunta2").value;
+    const question3 = document.getElementById("justificacion").value;
+
+    if (!pregunta1 || !pregunta2 || !question3) {
+        alertErrorSendSurvey.style.display = "block";
+        alertErrorSendSurvey.removeAttribute('hidden');
+        sendSurvey.innerHTML = `Enviar`;
+    sendSurvey.disabled = false;
+        return;
+    }
+
+    const responses = {
+        question_1: pregunta1,
+        question_2: pregunta2,
+        question_3: question3
+    };
+    const responsesJSON = JSON.stringify(responses);
+
+    const formData = new FormData();
+
+    formData.append('responses', responsesJSON);
+    formData.append('section_id', sectionId);
+
+    fetch('/api/post/students/saveEvaluationTeacher.php', {
+        method: 'POST',
+        body: formData,
+    })
+        .then((res) => res.json()) // Parseamos la respuesta JSON
+        .then((res) => {
+            if (!res.status) throw new Error(res.message); // Validamos el estado de la respuesta
+            scoresModalBS.hide();
+            // Opcional: limpiar los campos después de enviar
+            alertSendSurvey.removeAttribute('hidden');
+            alertSendSurvey.style.display = "block";
+            setTimeout(function() {
+                alertSendSurvey.style.display = 'none';
+            }, 3000)
+            document.getElementById('pregunta1').value = '';
+            document.getElementById('pregunta2').value = '';
+            document.getElementById('justificacion').value = '';
+        })
+        .catch((err) => {
+            console.error(err); // Registramos el error en la consola
+        });
+        
+
+
+
+   
 }
