@@ -61,33 +61,6 @@ section = sectionId;
         document.getElementById("section-title").textContent = "Parámetro section_id no proporcionado";
     }
 
-// Lógica de roles para mostrar los botones de "Agregar Video" y "Descargar Lista de Estudiantes"
-
-fetch('/api/get/admin/getUserRole.php')
-    .then(response => response.json())
-    .then(data => {
-        const teacherInfoDiv = document.getElementById("teacher-profile");
-        const downloadPdfButton = document.getElementById("downloadPdf");
-        const buttonVideoDiv = document.getElementById("butonVideo");
-
-        if (data.role === 'Teacher' || data.role === 'Coordinator' || data.role === 'Department Head') {
-            // Mostrar los botones (Agregar Video y Descargar PDF)
-            buttonVideo();
-            downloadPdfButton.classList.remove('d-none');
-            
-            // Ocultar la información del docente
-            teacherInfoDiv.classList.add('d-none');
-        } else {
-            // Ocultar los botones (Agregar Video y Descargar PDF)
-            downloadPdfButton.classList.add('d-none');
-            
-            // Mostrar la información del docente
-            teacherInfoDiv.classList.remove('d-none');
-        }
-    })
-    .catch(error => console.error('Error obteniendo rol:', error));
-
-
     const div = document.getElementById('butonVideo');
     function buttonVideo(){
         const modalVideo = new bootstrap.Modal(document.getElementById('modalVideo'));
@@ -170,75 +143,6 @@ fetch('/api/get/admin/getUserRole.php')
         videoContainer.innerHTML = `<iframe src="${videoUrl}" title="YouTube video" allowfullscreen style="width: 100%; height: 100%;"></iframe>`;
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
-        // Obtener sectionId de la URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const sectionId = urlParams.get('section_id');
-
-        if (sectionId) {
-            getVideo(sectionId);
-        } else {
-            console.error('No se proporcionó un section_id en la URL.');
-        }
-    });
-
-document.addEventListener("DOMContentLoaded", function () {
-    const params = new URLSearchParams(window.location.search);
-    const sectionId = params.get("section_id");
-
-    // Verificar si el parámetro section_id está presente
-    if (!sectionId) {
-        document.getElementById("teacher-name").textContent = "Parámetro section_id no proporcionado";
-        return;  // Salir si no se encuentra el parámetro section_id
-    }
-
-    // Obtener el nombre del docente
-    fetch(`/api/get/admin/getTeacherById.php?section_id=${sectionId}`)
-        .then(response => {
-            // Verificar si la respuesta es exitosa (código 200)
-            if (!response.ok) {
-                throw new Error("Error al obtener los datos del servidor");
-            }
-            return response.json();
-        })
-        .then(data => {
-            // Verificar si el servidor ha devuelto un error
-            if (data.error) {
-                document.getElementById("teacher-name").textContent = "Error: " + data.error;
-                console.error("Error del servidor:", data.error);
-            } else {
-                document.getElementById("teacher-name").textContent = data.teacher_name;
-                console.log("Datos del docente:", data.teacher_name);
-            }
-        })
-        .catch(error => {
-            // Mostrar el mensaje de error en el UI y en la consola
-            document.getElementById("teacher-name").textContent = "Error al cargar los datos";
-            console.error("Error al consumir la API:", error);
-        });
-});
-
-document.addEventListener("DOMContentLoaded", function () {
-    const sectionId = new URLSearchParams(window.location.search).get("section_id");
-    const teacherProfileLink = document.getElementById("viewTeacherProfile");
-
-    // Obtener el employee_number a partir del section_id
-    fetch(`/api/get/admin/getTeacherBySectionId.php?section_id=${sectionId}`)
-        .then(response => response.json())
-        .then(data => {
-            if (data.error) {
-                console.error("Error al obtener el docente por sección", data.error);
-            } else {
-                const employeeNumber = data.employee_number;  // Asegúrate de que este campo esté presente en la respuesta
-
-                // Redirigir a la URL con el employee_number
-                teacherProfileLink.href = `/views/admin/teacher/profile/index.php?employee_number=${employeeNumber}`;
-            }
-        })
-        .catch(error => {
-            console.error("Error al consumir la API:", error);
-        });
-});
 
 function generatePdf() {
     const { jsPDF } = window.jspdf;

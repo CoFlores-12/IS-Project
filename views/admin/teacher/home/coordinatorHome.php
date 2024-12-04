@@ -133,19 +133,7 @@ AuthMiddleware::checkAccess($requiredRole);
     </div>
   </div>
 </div>
-<div class="modal fade" id="modalAcademic" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
-    <div class="modal-content bg  ">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="careerChangeDataHeader">Carga académica</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body" id="modalDataBody">
 
-      </div>
-    </div>
-  </div>
-</div>
 
 <div class="toast-container top-0 start-50 translate-middle-x mt-3">
     <div class="toast border-0" id="toast" role="alert" aria-live="assertive" aria-atomic="true">

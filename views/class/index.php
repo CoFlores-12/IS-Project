@@ -157,25 +157,20 @@
                   </tr>
               </tbody>
           </table>
-          <table class="table table-bordered table-hover">
+          <table class="table table-bordered table-hover" id="studentsTable">
               <thead class="bg-aux">
                   <tr>
                       <th  class="bg-aux">Estudiantes</th>
                   </tr>
               </thead>
-              <tbody>
-                  <tr>
-                      <td>Juan Pérez</td>
-                  </tr>
-                  <tr>
-                      <td>María López</td>
-                  </tr>
-              </tbody>
+              <tbody id="students-table-body">
+                <!-- Las filas serán generadas dinámicamente por JavaScript -->
+            </tbody>
           </table>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-success">Descargar Excel</button>
-        <button type="button" class="btn btn-danger">Descargar PDF</button>
+        <button type="button" id="downloadPdf" class="btn btn-danger">Descargar PDF</button>
       </div>
     </div>
   </div>
