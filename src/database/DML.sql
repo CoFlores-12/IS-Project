@@ -521,4 +521,60 @@ INNER JOIN `Students` s ON e.student_id = s.account_number
 INNER JOIN `Persons` p ON s.person_id = p.person_id
 INNER JOIN `Section` se ON e.section_id = se.section_id
 INNER JOIN `Classes` c ON se.class_id = c.class_id
-WHERE e.section_id = 168 AND e.student_id = 20201000005
+WHERE e.section_id = 168 AND e.student_id = 20201000005;
+
+
+
+
+
+
+SELECT COUNT(*) FROM `Students` s
+INNER JOIN `Careers` c ON s.career_id = c.career_id
+WHERE c.department_id = (
+    SELECT department_id FROM `Employees` WHERE employee_number = 9
+);
+
+SELECT COUNT(*) FROM `Employees`
+WHERE department_id = (
+    SELECT department_id FROM `Employees` WHERE employee_number = 9
+);
+
+SELECT COUNT(*) FROM
+`ClassesXCareer` cl 
+INNER JOIN `Careers` c ON cl.career_id = c.career_id
+WHERE c.department_id = (
+    SELECT department_id FROM `Employees` WHERE employee_number = 9
+);
+
+SELECT 
+    SUM(CASE WHEN h.obs_id = 1 THEN 1 ELSE 0 END) AS APB,
+    SUM(CASE WHEN h.obs_id = 0 THEN 1 ELSE 0 END) AS RPB,
+    SUM(CASE WHEN h.obs_id = 2 THEN 1 ELSE 0 END) AS ABD,
+    SUM(CASE WHEN h.obs_id = 3 THEN 1 ELSE 0 END) AS NSP
+FROM 
+    History h
+JOIN 
+    Section s ON h.section_id = s.section_id
+JOIN `ClassesXCareer` cxc ON s.class_id = cxc.class_id
+INNER JOIN `Careers` c ON cxc.career_id = c.career_id
+WHERE c.department_id = (
+    SELECT department_id FROM `Employees` WHERE employee_number = 9
+);
+
+SELECT 
+    s.period_id,
+    AVG(h.score) AS average_score
+FROM 
+    History h
+JOIN 
+    Section s ON h.section_id = s.section_id
+JOIN 
+    `ClassesXCareer` cxc ON s.class_id = cxc.class_id
+INNER JOIN 
+    `Careers` c ON cxc.career_id = c.career_id
+WHERE c.department_id = (
+    SELECT department_id FROM `Employees` WHERE employee_number = 9
+)
+GROUP BY 
+    s.period_id
+LIMIT 9;

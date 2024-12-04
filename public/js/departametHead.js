@@ -918,6 +918,9 @@ saveDeleteSection.addEventListener("click", ()=>{
 
 const toggleAside = document.getElementById('toggleAside');
 const desktopAside = document.getElementById('desktopAside');
+const statsStudents = document.getElementById('statsStudents');
+const statsEmployees = document.getElementById('statsEmployees');
+const statsClasses = document.getElementById('statsClasses');
 
 function toggleSidebar() {
     if (desktopAside.classList.contains('d-md-block')) {
@@ -938,3 +941,69 @@ function toggleSidebar() {
 }
 
 toggleAside.addEventListener('click', toggleSidebar);
+
+fetch('/api/get/admin/getStats.php')
+.then(res=>{return res.json()})
+.then(res=>{
+    console.log(res);
+    statsStudents.innerHTML = res.students
+    statsEmployees.innerHTML = res.employees
+    statsClasses.innerHTML = res.classes
+    const tasaValues = Object.values(res.tasa).map(Number); 
+    const tasaLabels = Object.keys(res.tasa); 
+    const pieCtx = document.getElementById("pieChart").getContext("2d");
+    new Chart(pieCtx, {
+        type: "pie",
+        data: {
+            labels: tasaLabels,
+            datasets: [
+                {
+                    data: tasaValues,
+                    backgroundColor: ["#176b87", "#ff6384", "#FF8000", "#ffce56"], 
+                },
+            ],
+        },
+        options: {
+            plugins: {
+                legend: { position: "top" },
+            },
+        },
+    });
+
+    const lineCtx = document.getElementById("lineChart").getContext("2d");
+
+    res.avg.reverse()
+    new Chart(lineCtx, {
+        type: "line",
+        data: {
+            labels: res.avg.map(item => item.period), 
+            datasets: [
+                {
+                    label: "Promedio de Calificaciones",
+                    data: res.avg.map(item => item.average_score),
+                    borderColor: "#176b87",
+                    fill: false,
+                },
+            ],
+        },
+        options: {
+            plugins: {
+                legend: { display: true },
+            },
+            scales: {
+                x: {
+                    title: { display: true, text: "Periodos" },
+                },
+                y: {
+                    title: { display: true, text: "Promedio" },
+                    min: 0,
+                    max: 100,
+                },
+            },
+        },
+    });
+
+})
+.catch(err=>{
+    
+})

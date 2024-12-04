@@ -469,8 +469,53 @@ AuthMiddleware::checkAccess($requiredRole);
             </div>
             <?php include '../../../../src/components/teacherClasses.php'; ?>
             
+            <div class="row">
+              <div class="col">
+                <div class="card">
+                  <div class="card-body bg-aux rounded border-none shadow">
+                    Estudiantes:
+                    <strong id="statsStudents"><p class="card-text placeholder-glow"><span class="placeholder col-7"></span></p></strong>
+                  </div>
+                </div>
+              </div>
+              <div class="col">
+                <div class="card">
+                  <div class="card-body bg-aux rounded border-none shadow">
+                    Empleados:
+                    <strong id="statsEmployees"><p class="card-text placeholder-glow"><span class="placeholder col-7"></span></p></strong>
+                  </div>
+                </div>
+              </div>
+              <div class="col">
+                <div class="card">
+                  <div class="card-body bg-aux rounded border-none shadow">
+                    Clases:
+                    <strong id="statsClasses"><p class="card-text placeholder-glow"><span class="placeholder col-7"></span></p></strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row mt-4">
+              <div class="col">
+                <div class="card">
+                  <div class="card-body bg-aux rounded border-none shadow">
+                    Tasa de aprobados:
+                    <canvas id="pieChart" width="100%"></canvas>
+                  </div>
+                </div>
+              </div>
+              <div class="col">
+                <div class="card">
+                  <div class="card-body bg-aux rounded border-none shadow">
+                    Promedio por periodo:
+                    <canvas id="lineChart" width="100%" ></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
         </div>
 
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="/public/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
     <script src="/public/js/departametHead.js"></script>
 </body>
