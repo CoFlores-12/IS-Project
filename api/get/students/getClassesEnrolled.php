@@ -1,4 +1,5 @@
 <?php
+date_default_timezone_set('America/Tegucigalpa');
 include '../../../src/modules/database.php';
 $db = (new Database())->getConnection();
 session_start();
@@ -83,6 +84,14 @@ if (!isDateInRange($start, $end)) {
     $cancelPeriod = false;
 }
 
+$result = $db->execute_query('SELECT status FROM  `Requests` r
+INNER JOIN `Periods` p on r.period_id = p.period_id
+WHERE p.active = 1 AND request_type_id = 2 AND r.student_id = ?', [$id]);
+$row = $result->fetch_assoc();
+if ($row['status'] != 1) {
+    $cancelPeriod = false;
+}
+
 if (!$enrollPeriod && !$cancelPeriod) {
     header('Content-Type: application/json');
     echo json_encode([
@@ -91,55 +100,6 @@ if (!$enrollPeriod && !$cancelPeriod) {
     ]);
     exit;
     
-}
-
-if ($cancelPeriod) {
-    $result = $db->execute_query('SELECT status, classes_cancel FROM  `Requests` r
-    INNER JOIN `Periods` p on r.period_id = p.period_id
-    WHERE p.active = 1 AND request_type_id = 2 AND r.student_id = ?', [$id]);
-    $numRow = $result->num_rows;
-    $row = $result->fetch_assoc();
-    if ($numRow == 0) {
-        header('Content-Type: application/json');
-        echo json_encode([
-            "status"=>false,
-            "message"=>"No tiene solicitudes de cancelación."
-        ]);
-        exit;
-    }
-    if ($row['status'] != 1) {
-        header('Content-Type: application/json');
-        echo json_encode([
-            "status"=>false,
-            "message"=>"No tiene solicitudes de cancelación aprobadas."
-        ]);
-        exit;
-    }
-    $classes_cancel = $row['classes_cancel'];
-    $section_ids = json_decode(str_replace(['{', '}'], ['[', ']'], $classes_cancel), true);
-    $id_list = implode(',', $section_ids);
-    $query = "SELECT S.section_id, E.enroll_id, S.hour_start, C.class_code, C.class_name class_name, is_waitlist  FROM `Enroll` E
-    INNER JOIN `Section` S
-    ON E.section_id = S.section_id
-    INNER JOIN `Classes` C
-    ON S.class_id = C.class_id
-    WHERE S.section_id IN ($id_list)
-    ";
-    $result = $db->query($query);
-
-    $resultArray = [];
-    if ($result) {
-        while ($row = $result->fetch_assoc()) {
-            $resultArray[] = $row;
-        }
-    }
-
-    header('Content-Type: application/json');
-    echo json_encode([
-        'status'=> true,
-        'data'=>$resultArray
-    ]);
-    exit;
 }
 
 $Carrers = $db->execute_query('SELECT S.section_id, E.enroll_id, S.hour_start, C.class_code, C.class_name class_name, is_waitlist  FROM `Enroll` E
