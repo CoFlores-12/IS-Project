@@ -54,6 +54,9 @@ $result = $db->execute_query("SELECT JSON_UNQUOTE(JSON_EXTRACT(data, '$.cancella
           WHERE config_id = 1;");
 $response['cancellationExceptional'] = json_decode($result->fetch_assoc()['cancellationExceptional']);
 
-
+$result = $db->execute_query("SELECT JSON_UNQUOTE(JSON_EXTRACT(data, '$.uploadNotes')) AS uploadNotes 
+          FROM Config 
+          WHERE config_id = 1;");
+$response['uploadNotes'] = json_decode($result->fetch_assoc()['uploadNotes']);
 
 echo json_encode($response);
