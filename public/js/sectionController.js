@@ -1,4 +1,8 @@
 let section = 0;
+let toast = document.getElementById('toast');
+let toastBody = document.getElementById('toastBody');
+let toastTitle = document.getElementById('toastTitle');
+let toastBS = new bootstrap.Toast(toast);
 
 const params = new URLSearchParams(window.location.search);
 const sectionId = params.get("section_id");
@@ -202,4 +206,52 @@ function scoreEntered(input) {
         select.options[2].disabled = true;
         
     }
+}
+
+function saveScores(option) {
+    document.querySelectorAll('.btnOptionScores').forEach(element => {
+        element.disabled = true;
+    });
+    const formData = new FormData();
+    formData.append('option', option);
+    formData.append('section_id', sectionId);
+    document.querySelectorAll('#bodyTableScores table tbody tr').forEach((row) => {
+        const thElement = row.querySelector('th[data-id]');
+        const studentId = thElement ? thElement.getAttribute('data-id') : "";
+        const scoreInput = row.querySelector('input[type="number"]');
+        const score = scoreInput ? scoreInput.value : "";
+        const selectElement = row.querySelector('select');
+        const obsId = selectElement ? selectElement.value : "";
+        const data = {
+            score: score,
+            obs_id: obsId
+        };
+        formData.append(studentId, JSON.stringify(data));
+    });
+    fetch('/api/put/teacher/updateScores.php',{
+        method: 'POST',
+        body: formData
+    })
+    .then(res=>{return res.json()})
+    .then(res=>{
+        if (!res.status) throw new Error(res.message);
+        scoresModalBS.hide();
+        toastTitle.innerHTML ='Calificaciones guardadas'
+        toastBody.innerHTML = `<div class="alert alert-success mb-0" role="alert">
+            ${res.message}
+        </div>`
+        toastBS.show();
+    })
+    .catch(err=>{
+        console.log(err);
+        
+        document.querySelectorAll('.btnOptionScores').forEach(element => {
+            element.disabled = false;
+        });
+        toastTitle.innerHTML ='Error'
+        toastBody.innerHTML = `<div class="alert alert-danger mb-0" role="alert">
+            ${err}
+        </div>`
+        toastBS.show();
+    })
 }

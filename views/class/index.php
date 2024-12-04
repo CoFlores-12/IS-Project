@@ -42,7 +42,18 @@
     </style>
 </head>
 <body>
-
+<div class="toast-container top-0 start-50 translate-middle-x mt-3">
+    <div class="toast border-0" id="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header bg border border-0">
+            <img src="/public/images/logo.png" width="24px" class="rounded me-2" alt="...">
+            <strong class="me-auto text" id="toastTitle"></strong>
+            <small class="text">Justo ahora</small>
+            <button type="button" class="btn-close text" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body bg-aux border border-0" id="toastBody">
+        </div>
+    </div>
+</div>
 <div class="modal fade" id="modalVideo" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog bg modal-lg">
     <div class="modal-content bg">
@@ -131,10 +142,7 @@
             <span class="placeholder col-4"></span>
         </p>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn bg-custom-primary text-white">Guardar</button>
-        <button type="button" class="btn btn-danger text-white">Finalizar</button>
-      </div>
+
     </div>
   </div>
 </div>
