@@ -1007,3 +1007,55 @@ fetch('/api/get/admin/getStats.php')
 .catch(err=>{
     
 })
+
+let showEnrolled = document.getElementById("showEnrolled");
+let bodyShowEnrolled = document.getElementById("bodyShowEnrolled");
+
+showEnrolled.addEventListener("click", ()=>{
+    fetchStudents();
+})
+
+async function fetchStudents() {
+    try {
+        const response = await fetch(`/api/get/admin/showEnrolled.php?departmentId=1`);
+        const students = await response.json();
+
+        if (!Array.isArray(students)) {
+            throw new Error(students.error || 'Error desconocido');
+        }
+        
+        bodyShowEnrolled.innerHTML = '';
+
+
+            let table = `<table class="table bg-aux mt-2">
+            <thead>
+                <tr class="bg-aux text">
+                <th class="bg-aux text" scope="col">Cuenta</th>
+                <th class="bg-aux text" scope="col">Nombre</th>
+                <th class="bg-aux text" scope="col">Apellido</th>
+                <th class="bg-aux text" scope="col">Clases</th>
+                </tr>
+            </thead>
+            <tbody>`; 
+            students.forEach(student => {
+            table += `<tr class="bg-aux">
+                    <th class="bg-aux text" scope="row">${student['Account Number']}</th>
+                    <td class="bg-aux text">${student['First Name']}</td>
+                    <td class="bg-aux text">${student['Last Name']}</td>
+                    <td class="bg-aux text">${student['Enrolled Classes']}</td>
+                </tr>`
+            });
+
+            table += `</tbody></table>`;
+            bodyShowEnrolled.innerHTML = table
+
+
+
+
+    } catch (error) {
+        console.error('Error fetching students:', error);
+        alert('Error al obtener los datos. Revisa la consola para más detalles.');
+    }
+}
+
+

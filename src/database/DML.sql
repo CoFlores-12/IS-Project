@@ -621,3 +621,21 @@ WHERE c.department_id = (
 GROUP BY 
     s.period_id
 LIMIT 9;
+
+
+SELECT 
+    Students.account_number AS "Account Number",
+    Persons.first_name AS "First Name",
+    Persons.last_name AS "Last Name",
+    GROUP_CONCAT(DISTINCT Classes.class_name SEPARATOR ', ') AS "Enrolled Classes"
+FROM Students
+JOIN Persons ON Students.person_id = Persons.person_id
+JOIN Enroll ON Enroll.student_id = Students.account_number
+JOIN Section ON Section.section_id = Enroll.section_id
+JOIN Classes ON Section.class_id = Classes.class_id
+JOIN Employees AS DepartmentHead ON Section.employee_number = DepartmentHead.employee_number
+WHERE DepartmentHead.department_id = 1 -- ID del departamento
+  AND Section.period_id = (SELECT period_id FROM Periods WHERE active = 1 LIMIT 1) -- ID del período
+  AND Enroll.is_canceled = 0
+GROUP BY 
+    Students.account_number, Persons.first_name, Persons.last_name;
