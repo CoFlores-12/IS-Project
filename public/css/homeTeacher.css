@@ -19,8 +19,22 @@
 .courses {
     display: flex;
     gap: 1rem;
-    overflow-x: auto; 
+    overflow-x: scroll !important;
 }
+#scrollable {
+    overflow: hidden;
+}
+.mw {
+    max-width: 100%;
+}
+@media (min-width: 768px) {
+    #desktopAside.d-md-none + .mw {
+        width: 100% !important;
+      }
+    }
+    #desktopAside.d-md-block + .mw {
+        max-width: 75%;
+    }
 .courses::-webkit-scrollbar {
     display: none; 
     background-color: transparent;

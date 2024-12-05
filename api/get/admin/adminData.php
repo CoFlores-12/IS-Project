@@ -16,6 +16,9 @@ $response['Teachers'] = $result->fetch_assoc()['count'];
 $result = $db->execute_query("SELECT COUNT(*) AS count FROM Students");
 $response['Students'] = $result->fetch_assoc()['count'];
 
+$result = $db->execute_query("SELECT CONCAT(indicator, ' PAC ', year) AS PACNOW FROM Periods WHERE active = 1");
+$response['PACNOW'] = $result->fetch_assoc()['PACNOW'];
+
 $result = $db->execute_query("SELECT COUNT(*) AS count FROM Careers");
 $response['Careers'] = $result->fetch_assoc()['count'];
 

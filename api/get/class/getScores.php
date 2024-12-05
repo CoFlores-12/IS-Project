@@ -169,7 +169,7 @@ if ($idEmployee != null) {
 
         <div class="mt-3">
             <label for="justificacion">Ha notado actitudes inapropiadas en su docente:</label>
-            <textarea id="justificacion" name="justificacion" class="form-control" rows="4" placeholder="Escriba sus comentarios aquí..."></textarea>
+            <textarea id="justificacion" name="justificacion" class="form-control bg-aux" rows="4" placeholder="Escriba sus comentarios aquí..."></textarea>
         </div>
         <div class="alert alert-danger mt-2" hidden id="alertErrorSendSurvey" role="alert">
                 Error, todos los campos son requeridos

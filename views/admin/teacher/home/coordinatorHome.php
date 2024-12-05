@@ -147,7 +147,7 @@ AuthMiddleware::checkAccess($requiredRole);
         </div>
     </div>
 </div>
-<div class="container-fluid row h-full"> 
+<div class="container-fluid row h-full"  style="flex-wrap: nowrap !important;"> 
 <div class="offcanvas offcanvas-end bg p-0" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
             <div class="offcanvas-header justify-between">
                 <h5 class="offcanvas-title" id="offcanvasExampleLabel">Chats <button class="btn mx-2" id="refreshChats"><i  id="refreshIcon" class="bi bi-arrow-clockwise text rotate"></i></button></h5>
@@ -182,7 +182,7 @@ AuthMiddleware::checkAccess($requiredRole);
                     
                 </div>
         </div>
-        <div class="col">
+        <div class="col mw">
           <div class="header p-2 text-inverter bg">
               <div class="flex justify-between">
                   <button class="btn bg text" type="button" id="toggleAside">

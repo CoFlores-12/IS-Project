@@ -354,6 +354,7 @@ saveECBtn.addEventListener("click", ()=>{
 
 
 let alerUploadNotes = document.getElementById('alerUploadNotes');
+let newPACbtn = document.getElementById('newPACbtn');
         
 alerUploadNotes.style.display = 'none';
 
@@ -387,6 +388,26 @@ saveUNBtn.addEventListener("click", ()=>{
         })
     
 })
+newPACbtn.addEventListener("click", ()=>{
+    newPACbtn.disabled = true;
+    newPACbtn.innerHTML = `<div class="spinner-border text-light" role="status"></div>`;
+
+        fetch('/api/put/admin/updatePAC.php',{
+            method: 'PUT'
+        })
+        .then((res)=>{return res.json()})
+        .then((res)=>{
+             document.getElementById('PACNOW').innerHTML = `<strong>${res.message}</strong>`
+            newPACbtn.disabled = false;
+            newPACbtn.innerHTML = 'Generar nuevo periodo académico'
+        })
+        .catch(err=>{
+            newPACbtn.disabled = false;
+            newPACbtn.innerHTML = 'Generar nuevo periodo académico'
+
+        })
+    
+})
 
 
 let logs = [];
@@ -409,6 +430,7 @@ fetch('/api/get/admin/adminData.php')
     document.getElementById('Teachers').innerHTML = `<strong>${res.Teachers}</strong>`
     document.getElementById('Students').innerHTML = `<strong>${res.Students}</strong>`
     document.getElementById('Careers').innerHTML = `<strong>${res.Careers}</strong>`
+    document.getElementById('PACNOW').innerHTML = `<strong>${res.PACNOW}</strong>`
     document.getElementById('inputStartR').innerHTML = `
     <input
         type="datetime-local"

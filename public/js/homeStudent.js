@@ -577,9 +577,9 @@ function getClassesHistory() {
                             <span class=" mb-2"><span class="text-md">${element.hour_start}</span> ${element.class_name}</span>
                             <div class="pr mt-3">
                                 <div class="progress mt-2">
-                                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
+                                    <div class=" ${bgClass} progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
                                     </div>
-                                <div class="text-end"><small class="font-light text-xs">Progress (0%)</small></div>
+                                <div class="text-end"><small class="font-light text-xs">Progress (100%)</small></div>
                             </div>
                         </div>
                     </div>
