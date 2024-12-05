@@ -470,39 +470,61 @@ AuthMiddleware::checkAccess($requiredRole);
                 </div>
             </div>
 
-            <div class="col-12 col-md-4 my-2">
-                    <div class="card bg-aux">
-                        <div class="card-body">
-                            <h5 class="modal-title" id="exampleModalCenterTitle">Periodo de Subida de calificaciones por parte de los Docentes</h5>
-                            <div class="row my-3">
-                                <div class="col-12 col-md-6">
-                                    <center>
-                                        <label for="start-time-UploadNotes">Inicio</label><br>
-                                        <div id="start-time-UploadNotes">
-                                            <p class="card-text placeholder-glow"><span class="placeholder col-12"></span></p>
-                                        </div>
-                                    </center>
-                                </div>
-                                <div class="col-12 col-md-6">
-                                    <center>
-                                    <label for="start-time">Fin</label><br>
-                                        <div id="end-time-UploadNotes">
-                                            <p class="card-text placeholder-glow"><span class="placeholder col-12"></span></p>
-                                        </div>
-                                    </center>
-
-                                </div>
-                            </div>
-                            <div class="row">
+            <div class="row p-2">
+            <div class="col-12 col-md-6 my-2">
+                <div class="card bg-aux">
+                    <div class="card-body">
+                        <h5 class="modal-title" id="exampleModalCenterTitle">Periodo de Subida de calificaciones por parte de los Docentes</h5>
+                        <div class="row my-3">
+                            <div class="col-12 col-md-6">
                                 <center>
-
-                                    <button id="saveUNBtn" type="button" class="btn bg-custom-primary mt-2 text-white">Guardar</button>
-
+                                    <label for="start-time-UploadNotes">Inicio</label><br>
+                                    <div id="start-time-UploadNotes">
+                                        <p class="card-text placeholder-glow"><span class="placeholder col-12"></span></p>
+                                    </div>
                                 </center>
                             </div>
+                            <div class="col-12 col-md-6">
+                                <center>
+                                <label for="start-time">Fin</label><br>
+                                    <div id="end-time-UploadNotes">
+                                        <p class="card-text placeholder-glow"><span class="placeholder col-12"></span></p>
+                                    </div>
+                                </center>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <center>
+
+                                <button id="saveUNBtn" type="button" class="btn bg-custom-primary mt-2 text-white">Guardar</button>
+
+                            </center>
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="col-12 col-md-6 my-2">
+                <div class="card bg-aux">
+                    <div class="card-body">
+                        <h5 class="modal-title" id="exampleModalCenterTitle">Periodo académico actual</h5>
+                        <div class="row my-3">
+                            <div class="col-12 col-md-6">
+                               <h4 id="PACNOW"> <p class="card-text placeholder-glow"><span class="placeholder col-12"></span></p></h4>
+                            </div>
+                            
+                        </div>
+                        <div class="row">
+                            <center>
+
+                                <button id="newPACbtn" type="button" class="btn bg-custom-primary mt-2 text-white">Generar nuevo periodo académico</button>
+
+                            </center>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
 
 
             <div class="row p-2">
