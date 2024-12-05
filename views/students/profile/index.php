@@ -20,13 +20,23 @@ $result = $db->execute_query("SELECT
     B.phone,
     B.personal_email,
     C.career_name,
-    F.faculty_name
+    F.faculty_name,
+    rc.center_name
 FROM Students A 
-    INNER JOIN Persons B ON A.person_id = B.person_id 
-    INNER JOIN Careers C ON A.career_id = C.career_id
-    INNER JOIN Faculty F ON C.faculty_id = F.faculty_id
+    LEFT JOIN Persons B ON A.person_id = B.person_id 
+    LEFT JOIN Careers C ON A.career_id = C.career_id
+    LEFT JOIN Faculty F ON C.faculty_id = F.faculty_id
+    LEFT JOIN Regional_center rc ON B.center_id = rc.center_id
 WHERE A.account_number = ?;", [$account_number]);
 $student = $result->fetch_assoc() ?? null;
+$result = $db->execute_query("SELECT 
+  CONCAT(s.hour_start, ' ', c.class_name) as class
+FROM History h
+INNER JOIN Section s ON h.section_id = s.section_id
+INNER JOIN Classes c ON s.class_id = c.class_id
+WHERE h.student_id = ?
+", [$account_number]);
+
 
 if (is_null($student)) {
   echo 'User not found!';
@@ -34,6 +44,43 @@ if (is_null($student)) {
 }
 
 $isMyUser = $idTest == $account_number;
+
+$index = $db->execute_query("SELECT 
+    SUM(h.score * c.uv) / SUM(c.uv) AS indice_global,
+    (SELECT 
+        SUM(h1.score * c1.uv) / SUM(c1.uv)  
+     FROM 
+        History h1
+     JOIN 
+        `Section` s1 ON h1.section_id = s1.section_id
+     JOIN 
+        `Classes` c1 ON s1.class_id = c1.class_id
+     JOIN 
+        `Periods` p1 ON s1.period_id = p1.period_id
+     WHERE 
+        h1.student_id = h.student_id
+        AND p1.active = 0 
+        AND s1.period_id = (
+            SELECT MAX(period_id)  
+            FROM `Periods`
+            WHERE active = 0
+        )
+    ) AS indice_ultimo_periodo
+    FROM 
+        History h
+    JOIN 
+        `Section` s ON h.section_id = s.section_id
+    JOIN 
+        `Classes` c ON s.class_id = c.class_id
+    WHERE 
+        h.student_id = ?
+    GROUP BY 
+        h.student_id;
+    ", [$account_number]);
+$indexRow = $index->fetch_assoc();
+
+@$indiceGlobal = intval($indexRow['indice_global']);
+@$indiceUltimoPeriodo = intval($indexRow['indice_ultimo_periodo']); 
 ?>
 
 
@@ -83,7 +130,7 @@ $isMyUser = $idTest == $account_number;
     <div class="container pt-3">
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/views//students/home/index.php">Mi campus</a></li>
+            <li class="breadcrumb-item"><a href="javascript:history.back()">Mi campus</a></li>
             <li class="breadcrumb-item active" aria-current="page">Perfil</li>
           </ol>
         </nav>
@@ -137,6 +184,7 @@ $isMyUser = $idTest == $account_number;
                           <h4><?php echo $student['first_name'].' '.$student['last_name'] ?></h4>
                           <p class="text-secondary mb-1"><?php echo $student['career_name'] ?></p>
                           <p class="text-secondary text-xs mb-1"><?php echo $student['faculty_name'] ?></p>
+                          <p class="text-secondary text-xs mb-1"><?php echo $student['center_name'] ?></p>
                           <?php
                             if (!$isMyUser) {
                               echo '<button class="btn btn-primary mr-1">Agregar a contactos</button><button class="btn btn-outline-primary ml-2">Enviar mensaje</button>';
@@ -232,15 +280,34 @@ $isMyUser = $idTest == $account_number;
                         <div class="card-body">
                           <h6 class="d-flex align-items-center mb-3">
                             <i class="material-icons text-info mr-2"></i>Historial</h6>
+                            <?php
+                            while ($row = $result->fetch_assoc()) {
+                              echo '<p class="text-secondary mb-1">'.$row['class'].'</p>';
+                            }
+
+
+                            ?>
                           
                         </div>
                       </div>
                     </div>
-                    <div class="col-sm-6 mb-3">
-                      <div class="card bg-aux h-100">
-                        <div class="card-body">
-                          <h6 class="d-flex align-items-center mb-3"></h6>
-                          
+                    <div class="col-sm-6 mb-3 col-12">
+                      <div class="row">
+                        <div class="col-12 col-md-6">
+                          <div class="card bg-aux h-100">
+                            <div class="card-body">
+                              <h6 class="d-flex align-items-center mb-3">Indice Global</h6>
+                              <?php echo $indiceGlobal.'%'; ?>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                          <div class="card bg-aux h-100">
+                            <div class="card-body">
+                              <h6 class="d-flex align-items-center mb-3">Indice Ultimo periodo</h6>
+                              <?php echo $indiceUltimoPeriodo.'%'; ?>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
