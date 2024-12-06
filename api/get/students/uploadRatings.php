@@ -15,7 +15,7 @@ if ($result->num_rows > 0) {
     exit;
 }
 
-$cancellationData = json_decode($configData['cancellationExceptional'], true);
+$cancellationData = json_decode($configData['uploadNotes'], true);
 $cancellationStart = new DateTime($cancellationData['startTime']);
 $cancellationEnd = new DateTime($cancellationData['endTime']);
 
@@ -23,9 +23,9 @@ $currentDate = new DateTime();
 
 
 if ($currentDate >= $cancellationStart && $currentDate <= $cancellationEnd) {
-    echo json_encode(['status' => true, "inicio" => $cancellationStart, "asd" => $cancellationEnd, "ahora" => $currentDate]);
+    echo json_encode(['status' => true]);
 } else {
-    echo json_encode(['status' => false,"inicio" => $cancellationStart, "asd" => $cancellationEnd, "ahora" => $currentDate]);
+    echo json_encode(['status' => false]);
 }
 
 $conn->close();

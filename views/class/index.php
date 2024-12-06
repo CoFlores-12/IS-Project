@@ -206,6 +206,7 @@ $row = $result->fetch_assoc();
     </div>
   </div>
 </div>
+
 <div class="modal fade" id="scoresModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
     <div class="modal-content bg modal-lg">
@@ -279,8 +280,8 @@ $row = $result->fetch_assoc();
         <!-- Main Content -->
         <div class="col">
         <div class="alert alert-success mt-2" hidden  id="alertSendSurvey" role="alert">
-                Evaluacion guardada Correctamente
-            </div>
+            Evaluacion guardada Correctamente
+        </div>
             <div class="header p-2 text-inverter bg">
                 <div class="flex justify-between">
                     <button class="btn bg text" type="button" id="toggleAside">
