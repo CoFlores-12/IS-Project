@@ -1,3 +1,75 @@
+<?php
+session_start();
+$current_user = $_SESSION['user']['student_id'] ?? null;
+$other_user = $_GET['id'] ?? null;
+
+if (!$current_user || !$other_user) {
+    echo "Faltan datos para realizar la validación.";
+    exit;
+}
+include '../../src/modules/database.php';
+
+$conn = (new Database())->getConnection();
+
+$sql = "
+    SELECT c.chat_id 
+    FROM Chats c
+    JOIN ChatParticipants cp1 ON c.chat_id = cp1.chat_id
+    JOIN ChatParticipants cp2 ON c.chat_id = cp2.chat_id
+    WHERE c.is_group = FALSE
+      AND cp1.person_id = (SELECT person_id FROM Students where account_number = ?)
+      AND cp2.person_id = (SELECT person_id FROM Students where account_number = ?)
+      AND (
+          SELECT COUNT(*) 
+          FROM ChatParticipants 
+          WHERE chat_id = c.chat_id
+      ) = 2
+";
+
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("ss", $current_user, $other_user);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows > 0) {
+    $chat = $result->fetch_assoc();
+    echo "<script>location.href= '/views/chats/chat.php?id=".$chat['chat_id']."'</script>";
+} else {
+    $sql_user = "SELECT CONCAT(p.first_name, ' ', p.last_name) AS full_name, p.person_id FROM Students s INNER JOIN Persons p ON s.person_id = p.person_id  WHERE account_number = ?";
+    $stmt_user = $conn->prepare($sql_user);
+    $stmt_user->bind_param("s", $other_user);
+    $stmt_user->execute();
+    $result_user = $stmt_user->get_result();
+    
+    if ($result_user->num_rows === 0) {
+        echo "El usuario con ID $other_user no existe.";
+        exit;
+    }
+
+    $user_data = $result_user->fetch_assoc();
+    $user_name = $user_data['full_name'];
+    $person_id = $user_data['person_id'];
+
+    $sql_create_chat = "INSERT INTO Chats (is_group, secret) VALUES (FALSE, ?)";
+    $secret = bin2hex(random_bytes(16)); 
+    $stmt_create_chat = $conn->prepare($sql_create_chat);
+    $stmt_create_chat->bind_param("s", $secret);
+    $stmt_create_chat->execute();
+    $new_chat_id = $stmt_create_chat->insert_id;
+
+    $sql_add_participant = "INSERT INTO ChatParticipants (chat_id, person_id) VALUES (?, (SELECT person_id FROM Students where account_number = ?))";
+    $stmt_add_participant = $conn->prepare($sql_add_participant);
+
+    $stmt_add_participant->bind_param("is", $new_chat_id, $current_user);
+    $stmt_add_participant->execute();
+
+    $stmt_add_participant->bind_param("is", $new_chat_id, $other_user);
+    $stmt_add_participant->execute();
+
+    echo "Nuevo chat creado con ID: $new_chat_id. Chat iniciado con $user_name.";
+}
+
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -8,98 +80,6 @@
     <link rel="icon" type="image/png" href="/public/images/logo.png" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
     <link rel="stylesheet" href="/public/bootstrap-5.3.3-dist/css/bootstrap.min.css">
-    <style>
-        *::-webkit-scrollbar {
-        width: 7px;
-        display: block !important;
-        }
-        
-        *::-webkit-scrollbar-track {
-        background: var(--bg);
-        }
-        
-        *::-webkit-scrollbar-thumb {
-        background: var(--primary-color);
-        border-radius: 1rem;
-        }
-        .chat-list {
-            height: 100vh;
-            overflow-y: auto;
-        }
-        .chat-item {
-            display: flex;
-            align-items: center;
-            padding: 10px;
-            border-bottom: 1px solid #ddd;
-            cursor: pointer;
-        }
-        
-        .chat-img {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            margin-right: 10px;
-        }
-        .chat-details {
-            flex-grow: 1;
-        }
-        .chat-name {
-            font-weight: bold;
-            text-decoration: none;
-            color: var(--text);
-        }
-        .chat-message {
-            font-size: 0.85em;
-            color: #555;
-        }
-        .last-message {
-            color: #888;
-        }
-        .badge-dot {
-        border-radius: 50%;
-        height: 10px;
-        width: 10px;
-        margin-left: 2.9rem;
-        margin-top: -.75rem;
-        }
-        img {
-                    width: 50px;
-                    height: 50px;
-                    border-radius: 50%;
-                }
-
-        a {
-            text-decoration: none;
-        }
-        .text-muted {
-                    color: var( --secondary-color) !important;
-                }
-        .msgContent> * {
-            text-overflow: ellipsis; 
-        overflow: hidden; 
-        white-space: nowrap;
-        max-width: 100%;
-        width: 100%;
-        }
-        .msgContent {
-            width: calc(100vw - 150px - .5rem);
-        }
-
-        #chatsContainer > li > a  {
-            max-width: 100%;
-            overflow: hidden;
-        }
-        #chatsContainer > li > a > div {
-            max-width: 100%;
-            overflow: hidden;
-            width: 100% !important;
-        }
-        #chatsContainer > li > a > div > .msgContent {
-            display: block;
-        flex-grow: 1;
-        flex-shrink: 2;
-        }
-    </style>
     <style>
      #chat3 .form-control {
 border-color: transparent;
@@ -195,6 +175,99 @@ a {
     max-width: 80%;
 }
     </style>
+
+<style>
+        *::-webkit-scrollbar {
+        width: 7px;
+        display: block !important;
+        }
+        
+        *::-webkit-scrollbar-track {
+        background: var(--bg);
+        }
+        
+        *::-webkit-scrollbar-thumb {
+        background: var(--primary-color);
+        border-radius: 1rem;
+        }
+        .chat-list {
+            height: 100vh;
+            overflow-y: auto;
+        }
+        .chat-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            cursor: pointer;
+        }
+        
+        .chat-img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .chat-details {
+            flex-grow: 1;
+        }
+        .chat-name {
+            font-weight: bold;
+            text-decoration: none;
+            color: var(--text);
+        }
+        .chat-message {
+            font-size: 0.85em;
+            color: #555;
+        }
+        .last-message {
+            color: #888;
+        }
+        .badge-dot {
+        border-radius: 50%;
+        height: 10px;
+        width: 10px;
+        margin-left: 2.9rem;
+        margin-top: -.75rem;
+        }
+        img {
+                    width: 50px;
+                    height: 50px;
+                    border-radius: 50%;
+                }
+
+        a {
+            text-decoration: none;
+        }
+        .text-muted {
+                    color: var( --secondary-color) !important;
+                }
+        .msgContent> * {
+            text-overflow: ellipsis; 
+        overflow: hidden; 
+        white-space: nowrap;
+        max-width: 100%;
+        width: 100%;
+        }
+        .msgContent {
+            width: calc(100vw - 150px - .5rem);
+        }
+
+        #chatsContainer > li > a  {
+            max-width: 100%;
+            overflow: hidden;
+        }
+        #chatsContainer > li > a > div {
+            max-width: 100%;
+            overflow: hidden;
+            width: 100% !important;
+        }
+        #chatsContainer > li > a > div > .msgContent {
+            display: block;
+        flex-grow: 1;
+        flex-shrink: 2;
+        }
+    </style>
 </head>
 <body>
 
@@ -214,7 +287,7 @@ a {
                       
                       <div id="chatsV" style="position: relative">
                         <div class="input-group rounded mb-3 p-3">
-                          <input type="Buscar" class="form-control rounded" placeholder="Search" aria-label="Search"
+                          <input type="Buscar" class="form-control rounded" placeholder="Buscar" aria-label="Search"
                             aria-describedby="search-addon" />
                           <span class="input-group-text text bg-aux border-0" id="search-addon">
                           <i class="bi bi-search"></i>
@@ -359,30 +432,7 @@ a {
                   <div class="messages p-2" data-mdb-perfect-scrollbar-init
                     style=" overflow-y:scroll" id="messagesContainer">
   
-                    <div class="d-flex flex-row justify-content-start">
-                      <div class="msg w-full">
-                        <p class=" w-full placeholder-glow">
-                          <span class="placeholder col-12  bg-dark"></span>
-                      </p>
-                      </div>
-                    </div>
-  
-                    <div class="d-flex flex-row justify-content-end">
-                    <div class="msg w-full">
-                        <p class=" w-full placeholder-glow">
-                          <span class="placeholder col-12  bg-dark"></span>
-                      </p>
-                      </div>
-                    </div>
                     
-                    <div class="d-flex flex-row justify-content-start">
-                      <div class="msg w-full">
-                        <p class=" w-full placeholder-glow">
-                          <span class="placeholder col-12  bg-dark"></span>
-                      </p>
-                      </div>
-                    </div>
-
                   </div>
   
                   <div class="text-muted">
@@ -419,14 +469,95 @@ a {
 
 
     <script src="/public/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    function getTimeElapsed(messageTime) {
+        if (messageTime === null) {
+            return ''
+        }
+        const now = new Date();
+        const messageDate = new Date(messageTime);
+        const elapsedMilliseconds = now - messageDate;
+
+        const minutes = Math.floor(elapsedMilliseconds / 1000 / 60);
+        const hours = Math.floor(minutes / 60);
+        const days = Math.floor(hours / 24);
+        const months = Math.floor(days / 30);
+        
+
+        if (minutes < 1) {
+            return "Justo ahora";
+        } else if (minutes < 60) {
+            return `Hace ${minutes}m`;
+        } else if (hours < 24) {
+            return `Hace ${hours}h`;
+        } else if (days === 1) {
+            return "Hace 1 día";
+        } else if (days < 30) {
+            return `Hace ${days} días`;
+        } else if (months === 1) {
+            return "Hace 1 mes";
+        } else {
+            return `Hace ${months} meses`;
+        }
+    }
+    const chatsContainer = document.getElementById('chatsContainer')
+  
+    fetch('/api/get/chats/chats.php')
+    .then((res)=>{return res.json()})
+    .then((res)=>{
+        if (res.status) {
+            chatsContainer.innerHTML = '';
+            res.data.forEach(chat => {
+                let name = chat.is_group == 1 ? chat.group_name : chat.direct_user_name
+                let iconToPrint = '';
+                if (chat.unread_messages == 0 && chat.status != null) {
+                    iconToPrint = icon[chat.status];
+
+                }
+                chatsContainer.innerHTML += `
+                <li class="p-2 border-bottom">
+        <a href="/views/chats/chat.php?id=${chat.chat_id}" class="d-flex">
+        <div class="d-flex flex-row">
+            <img
+                src="https://via.placeholder.com/50"
+                alt="avatar" class="d-flex align-self-center me-3" width="60">
+            <div class="pt-1 msgContent">
+                <p class="fw-bold mb-0 text">${name}</p>
+                <p class="small text-muted msg">${iconToPrint}${chat.last_message === null ? '': chat.last_message}</p>
+            </div>
+            <div class="pt-1">
+                <p class="small text-muted mb-1">${getTimeElapsed(chat.message_time)}</p>
+                ${chat.unread_messages == 0 ? '' : `<span class="badge bg-danger rounded-pill float-end">${chat.unread_messages}</span>`}
+            </div>
+        </div>
+        </a>
+    </li>`
+            });
+        }
+        
+    })
+    .catch(err =>{
+        console.log(err);
+        
+        chatsContainer.innerHTML = `<div class="alert alert-danger m-4" role="alert">
+  No se puede acceder a los chats en este momento, vuelva a intentarlo mas tarde.   
+    </div>`
+    })
+    
+
+    const btnViewContac = document.getElementById('btnViewContac')
+
+    
+   
+    
+</script>
 <script>
-    let params = new URLSearchParams(document.location.search);
     const container = document.getElementById('container');
     const chatName = document.getElementById('chatName');
     const fileNameOut = document.getElementById('fileNameOut');
     const lastCon = document.getElementById('lastCon');
     const messagesContainer = document.getElementById('messagesContainer');
-    let id = params.get("id");
+    let id = <?php echo $new_chat_id ?>;
     let icon = [`<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2 mx-1" viewBox="0 0 16 16">
           <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0"/>
         </svg>`, `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-all mx-1" viewBox="0 0 16 16">
@@ -435,85 +566,6 @@ a {
           <path d="M8.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L2.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093L8.95 4.992zm-.92 5.14.92.92a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 1 0-1.091-1.028L9.477 9.417l-.485-.486z"/>
         </svg>`];
 
-    fetch('/api/get/chats/chat.php?id='+id)
-    .then((res)=>{return res.json()})
-    .then(res=>{
-      if (!res.status) throw new Error(res.message);
-      messagesContainer.innerHTML = '';
-      chatName.innerHTML = res.info.chat_name;
-      lastCon.innerHTML = res.info.last_connection == null ? '' : res.info.last_connection;
-      res.data.forEach(msg => {
-            
-            let iconToPrint = '';
-            if (msg.sender_type == "me" && msg.status != null) {
-                iconToPrint = icon[msg.status];
-            }
-            const sentAt = new Date(msg.sent_at_adjusted);
-            const formattedTime = sentAt.toLocaleString('en-US', {
-                hour: 'numeric',
-                minute: '2-digit',
-                hour12: false,
-            });
-            const formattedDate = sentAt.toLocaleDateString('en-US', {
-                month: 'short',
-                day: 'numeric',
-            });
-
-            let fileHTML = '';
-            if (msg.fileContent && msg.file_extension) {
-                const fileURL = `data:application/octet-stream;base64,${msg.fileContent}`;
-                fileHTML = `
-                    <hr>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#fff" class="bi bi-file-earmark-arrow-down mr-1" viewBox="0 0 16 16">
-                        <path d="M8.5 6.5a.5.5 0 0 0-1 0v3.793L6.354 9.146a.5.5 0 1 0-.708.708l2 2a.5.5 0 0 0 .708 0l2-2a.5.5 0 0 0-.708-.708L8.5 10.293z"/>
-                        <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 1 1-1h5.5z"/>
-                    </svg>
-                    <a href="${fileURL}" download="${msg.file_name}" class="text-muted ml-2">${msg.file_name}</a>
-                `;
-            }
-
-            const messageHTML = msg.sender_type == "me"
-            ? `
-            <div class="d-flex flex-row justify-content-end">
-                <div class="msg">
-                   <div class="user1 small p-2 me-3 mb-1 text-white rounded-3">
-                        <p class="mb-1">${msg.content}</p>
-                        <div class="text-muted">${fileHTML}</div>
-                    </div>
-                    <div class="flex  me-3 mb-3  justify-between items-center">
-                      <p class="small mb-0 rounded-3 text-muted">${formattedTime} | ${formattedDate} </p>
-                        <div class="icon mx-1">
-          ${iconToPrint}
-                        </div>
-                    </div>
-                </div>
-            </div>
-            `
-            : `
-            <div class="d-flex flex-row justify-content-start">
-                <div class="msg">
-                    <div class="bg-aux text small p-2 me-3 mb-1 rounded-3">
-                        <p class="mb-1">${msg.content}</p>
-                        <div class="text-muted">${fileHTML}</div>
-                    </div>
-                    <p class="small mb-3 rounded-3 text-muted">${formattedTime} | ${formattedDate}</p>
-                </div>
-            </div>
-            `;
-
-        messagesContainer.innerHTML += messageHTML;
-      });
-      messagesContainer.innerHTML += `<div id="lastMsg"></div>`;
-
-document.getElementById('lastMsg').scrollIntoView({ behavior: 'smooth', block: 'end' });
-    })
-    .catch(err=>{
-      console.log(err);
-      
-      container.innerHTML = `<div class="alert alert-danger mt-4" role="alert">
-    ${err}
-</div>`;
-    })
     
     const sendBtn = document.getElementById('sendBtn');
     const exampleFormControlInput2 = document.getElementById('exampleFormControlInput2');
@@ -603,79 +655,7 @@ document.getElementById('lastMsg').scrollIntoView({ behavior: 'smooth', block: '
 
 
     })
-    function getTimeElapsed(messageTime) {
-        if (messageTime === null) {
-            return ''
-        }
-        const now = new Date();
-        const messageDate = new Date(messageTime);
-        const elapsedMilliseconds = now - messageDate;
-
-        const minutes = Math.floor(elapsedMilliseconds / 1000 / 60);
-        const hours = Math.floor(minutes / 60);
-        const days = Math.floor(hours / 24);
-        const months = Math.floor(days / 30);
-        
-
-        if (minutes < 1) {
-            return "Justo ahora";
-        } else if (minutes < 60) {
-            return `Hace ${minutes}m`;
-        } else if (hours < 24) {
-            return `Hace ${hours}h`;
-        } else if (days === 1) {
-            return "Hace 1 día";
-        } else if (days < 30) {
-            return `Hace ${days} días`;
-        } else if (months === 1) {
-            return "Hace 1 mes";
-        } else {
-            return `Hace ${months} meses`;
-        }
-    }
-    const chatsContainer = document.getElementById('chatsContainer')
     
-    fetch('/api/get/chats/chats.php')
-    .then((res)=>{return res.json()})
-    .then((res)=>{
-        if (res.status) {
-            chatsContainer.innerHTML = '';
-            res.data.forEach(chat => {
-                let name = chat.is_group == 1 ? chat.group_name : chat.direct_user_name
-                let iconToPrint = '';
-                if (chat.unread_messages == 0 && chat.status != null) {
-                    iconToPrint = icon[chat.status];
-
-                }
-                chatsContainer.innerHTML += `
-                <li class="p-2 border-bottom">
-        <a href="/views/chats/chat.php?id=${chat.chat_id}" class="d-flex">
-        <div class="d-flex flex-row">
-            <img
-                src="https://via.placeholder.com/50"
-                alt="avatar" class="d-flex align-self-center me-3" width="60">
-            <div class="pt-1 msgContent">
-                <p class="fw-bold mb-0 text">${name}</p>
-                <p class="small text-muted msg">${iconToPrint}${chat.last_message === null ? '': chat.last_message}</p>
-            </div>
-            <div class="pt-1">
-                <p class="small text-muted mb-1">${getTimeElapsed(chat.message_time)}</p>
-                ${chat.unread_messages == 0 ? '' : `<span class="badge bg-danger rounded-pill float-end">${chat.unread_messages}</span>`}
-            </div>
-        </div>
-        </a>
-    </li>`
-            });
-        }
-        
-    })
-    .catch(err =>{
-        console.log(err);
-        
-        chatsContainer.innerHTML = `<div class="alert alert-danger m-4" role="alert">
-  No se puede acceder a los chats en este momento, vuelva a intentarlo mas tarde.   
-    </div>`
-    })
 </script>
 </body>
 </html>
