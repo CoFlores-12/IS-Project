@@ -131,7 +131,7 @@ $row = $result->fetch_assoc();
     </div>
 </div>
 <div class="modal fade" id="modalVideo" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog bg modal-lg">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content bg">
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="exampleModalLabel">Agregar video introductorio de la clase</h1>

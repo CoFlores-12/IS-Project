@@ -351,8 +351,6 @@ function saveScores(option) {
     })
 }
 
-
-
 function save() {
 
     let alertErrorSendSurvey = document.getElementById('alertErrorSendSurvey');
@@ -365,23 +363,38 @@ function save() {
     sendSurvey.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Enviando...`;
     sendSurvey.disabled = true;
 
-    const pregunta1 = document.getElementById("pregunta1").value;
-    const pregunta2 = document.getElementById("pregunta2").value;
-    const question3 = document.getElementById("justificacion").value;
+    const responses = {};
+    let allFieldsFilled = true;
 
-    if (!pregunta1 || !pregunta2 || !question3) {
+    // Procesar preguntas (1 a 28)
+    for (let i = 1; i <= 28; i++) {
+        const question = document.getElementById(`pregunta${i}`);
+        if (!question || !question.value) {
+            allFieldsFilled = false;
+            break; // Salir si falta una pregunta
+        }
+        responses[`question_${i}`] = question.value;
+    }
+
+    // Procesar justificaciones (1 a 3)
+    for (let i = 1; i <= 3; i++) {
+        const justification = document.getElementById(`justificacion${i}`);
+        if (!justification || !justification.value) {
+            allFieldsFilled = false;
+            break; // Salir si falta una justificación
+        }
+        responses[`justification_${i}`] = justification.value;
+    }
+
+    // Verificar si todos los campos están llenos
+    if (!allFieldsFilled) {
         alertErrorSendSurvey.style.display = "block";
         alertErrorSendSurvey.removeAttribute('hidden');
         sendSurvey.innerHTML = `Enviar`;
-    sendSurvey.disabled = false;
+        sendSurvey.disabled = false;
         return;
     }
 
-    const responses = {
-        question_1: pregunta1,
-        question_2: pregunta2,
-        question_3: question3
-    };
     const responsesJSON = JSON.stringify(responses);
 
     const formData = new FormData();
@@ -393,22 +406,19 @@ function save() {
         method: 'POST',
         body: formData,
     })
-        .then((res) => res.json()) // Parseamos la respuesta JSON
+        .then((res) => res.json()) 
         .then((res) => {
-            if (!res.status) throw new Error(res.message); // Validamos el estado de la respuesta
+            if (!res.status) throw new Error(res.message); 
             scoresModalBS.hide();
-            // Opcional: limpiar los campos después de enviar
+
             alertSendSurvey.removeAttribute('hidden');
             alertSendSurvey.style.display = "block";
             setTimeout(function() {
                 alertSendSurvey.style.display = 'none';
             }, 3000)
-            document.getElementById('pregunta1').value = '';
-            document.getElementById('pregunta2').value = '';
-            document.getElementById('justificacion').value = '';
         })
         .catch((err) => {
-            console.error(err); // Registramos el error en la consola
+            console.error(err); 
         });
         
 

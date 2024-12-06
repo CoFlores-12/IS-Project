@@ -1118,7 +1118,7 @@ btnassessment.addEventListener("click", ()=>{
             row.addEventListener('click', () => {
                 const index = row.getAttribute('data-index');
                 const selectedEval = evals[index];
-                const responses = JSON.parse(selectedEval['responses'] || '{}'); // Definir responses aquí
+                const responses = JSON.parse(selectedEval['responses'] || '{}'); 
     
                 // Mostrar detalles en el modal
                 document.getElementById('modalTeacherName').innerText = selectedEval.teacher_name;
@@ -1135,9 +1135,37 @@ btnassessment.addEventListener("click", ()=>{
                 // Mostrar las respuestas de la pregunta 1 y 2 con las opciones correspondientes
                 const question1Response = responses['question_1'] !== undefined ? questionMapping[parseInt(responses['question_1'])] : "Respuesta no disponible";
                 const question2Response = responses['question_2'] !== undefined ? questionMapping[parseInt(responses['question_2'])] : "Respuesta no disponible";
-    
+                const question3Response = responses['question_3'] !== undefined ? questionMapping[parseInt(responses['question_3'])] : "Respuesta no disponible";
+                const question4Response = responses['question_4'] !== undefined ? questionMapping[parseInt(responses['question_4'])] : "Respuesta no disponible";
+                const question5Response = responses['question_5'] !== undefined ? questionMapping[parseInt(responses['question_5'])] : "Respuesta no disponible";
+                const question6Response = responses['question_6'] !== undefined ? questionMapping[parseInt(responses['question_6'])] : "Respuesta no disponible";
+                const question7Response = responses['question_7'] !== undefined ? questionMapping[parseInt(responses['question_7'])] : "Respuesta no disponible";
+                const question8Response = responses['question_8'] !== undefined ? questionMapping[parseInt(responses['question_8'])] : "Respuesta no disponible";
+                const question9Response = responses['question_9'] !== undefined ? questionMapping[parseInt(responses['question_9'])] : "Respuesta no disponible";
+                const question10Response = responses['question_10'] !== undefined ? questionMapping[parseInt(responses['question_10'])] : "Respuesta no disponible";
+                const question11Response = responses['question_11'] !== undefined ? questionMapping[parseInt(responses['question_11'])] : "Respuesta no disponible";
+                const question12Response = responses['question_12'] !== undefined ? questionMapping[parseInt(responses['question_12'])] : "Respuesta no disponible";
+                const question13Response = responses['question_13'] !== undefined ? questionMapping[parseInt(responses['question_13'])] : "Respuesta no disponible";
+                const question14Response = responses['question_14'] !== undefined ? questionMapping[parseInt(responses['question_14'])] : "Respuesta no disponible";
+                const question15Response = responses['question_15'] !== undefined ? questionMapping[parseInt(responses['question_15'])] : "Respuesta no disponible";
+                const question16Response = responses['question_16'] !== undefined ? questionMapping[parseInt(responses['question_16'])] : "Respuesta no disponible";
+                const question17Response = responses['question_17'] !== undefined ? questionMapping[parseInt(responses['question_17'])] : "Respuesta no disponible";
+                const question18Response = responses['question_18'] !== undefined ? questionMapping[parseInt(responses['question_18'])] : "Respuesta no disponible";
+                const question19Response = responses['question_19'] !== undefined ? questionMapping[parseInt(responses['question_19'])] : "Respuesta no disponible";
+                const question20Response = responses['question_20'] !== undefined ? questionMapping[parseInt(responses['question_20'])] : "Respuesta no disponible";
+                const question21Response = responses['question_21'] !== undefined ? questionMapping[parseInt(responses['question_21'])] : "Respuesta no disponible";
+                const question22Response = responses['question_22'] !== undefined ? questionMapping[parseInt(responses['question_22'])] : "Respuesta no disponible";
+                const question23Response = responses['question_23'] !== undefined ? questionMapping[parseInt(responses['question_23'])] : "Respuesta no disponible";
+                const question24Response = responses['question_24'] !== undefined ? questionMapping[parseInt(responses['question_24'])] : "Respuesta no disponible";
+                const question25Response = responses['question_25'] !== undefined ? questionMapping[parseInt(responses['question_25'])] : "Respuesta no disponible";
+                const question26Response = responses['question_26'] !== undefined ? questionMapping[parseInt(responses['question_26'])] : "Respuesta no disponible";
+                const question27Response = responses['question_27'] !== undefined ? questionMapping[parseInt(responses['question_27'])] : "Respuesta no disponible";
+                const question28Response = responses['question_28'] !== undefined ? questionMapping[parseInt(responses['question_28'])] : "Respuesta no disponible";
+                
                 // Mostrar la respuesta de la pregunta 3 tal como está (texto libre)
-                const question3Response = responses['question_3'] || "Respuesta no disponible";
+                const question29Response = responses['justification_1'] || "Respuesta no disponible";
+                const question30Response = responses['justification_2'] || "Respuesta no disponible";
+                const question31Response = responses['justification_3'] || "Respuesta no disponible";
     
                 // Desplegar las respuestas en el modal
                 document.getElementById('modalResponses').innerHTML = `
@@ -1152,18 +1180,158 @@ btnassessment.addEventListener("click", ()=>{
                     <tbody>
                         <tr>
                             <td class="bg-aux text">1</td>
-                            <td class="bg-aux text">¿El docente es responsable con la revisión de las evaluaciones?</td>
+                            <td class="bg-aux text">Al iniciar la clase ¿le facilitó por escrito el Programa de la asignatura, que contenía los objetivos de aprendizaje, temas, calendarización de clases y exámenes, formas y criterios de evaluación?</td>
                             <td class="bg-aux text"><strong>${question1Response}</strong></td>
                         </tr>
                         <tr>
                             <td class="bg-aux text">2</td>
-                            <td class="bg-aux text">¿El docente domina los temas de su clase?</td>
+                            <td class="bg-aux text">¿Demuestra estar actualizado y tener dominio de la disciplina que imparte?</td>
                             <td class="bg-aux text"><strong>${question2Response}</strong></td>
                         </tr>
                         <tr>
-                            <td>3</td>
-                            <td>¿Ha notado actitudes inapropiadas en su docente?</td>
-                            <td><strong>${question3Response}</strong></td>
+                            <td class="bg-aux text">3</td>
+                            <td class="bg-aux text">¿Establece en la clase relación entre los contenidos teóricos y los prácticos?</td>
+                            <td class="bg-aux text"><strong>${question3Response}</strong></td>
+                        </tr>
+                        <tr>
+                            <td class="bg-aux text">4</td>
+                            <td class="bg-aux text">¿Utiliza en el desarrollo del curso técnicas educativas que facilitan su aprendizaje (investigaciones en grupo, estudio de casos, visitas al campo, seminarios, mesas redondas, simulaciones, audiciones, ejercicio adicionales, sitios web, etc)?</td>
+                            <td class="bg-aux text"><strong>${question4Response}</strong></td>
+                        </tr>
+                        <tr>
+                            <td class="bg-aux text">5</td>
+                            <td class="bg-aux text">¿Utiliza durante la clase medios audiovisuales que facilitan su aprendizaje?</td>
+                            <td class="bg-aux text"><strong>${question5Response}</strong></td>
+                        </tr>
+                        <tr>
+                            <td class="bg-aux text">6</td>
+                            <td class="bg-aux text">¿Relaciona el contenido de esta asignatura con otras asignaturas que usted ya cursó?</td>
+                            <td class="bg-aux text"><strong>${question6Response}</strong></td>
+                        </tr>
+                        <tr>
+                            <td class="bg-aux text">7</td>
+                            <td class="bg-aux text">Desarrolló contenidos adecuados en profundidad para el nivel que usted lleva en la carrera?</td>
+                            <td class="bg-aux text"><strong>${question7Response}</strong></td>
+                        </tr>
+                        <tr>
+                            <td class="bg-aux text">8</td>
+                            <td class="bg-aux text">¿Selecciona temas y experiencias que le sean a Usted útiles en su vida profesional y cotidiana?</td>
+                            <td class="bg-aux text"><strong>${question8Response}</strong></td>
+                        </tr>
+                        <tr>
+                            <td class="bg-aux text">9</td>
+                            <td class="bg-aux text">Además de las explicaciones, le recomendó en esta clase otras fuentes de consulta para el desarrollo de esta asignatura, accesibles a Usted, en cuanto a costo, ubicación, etc.?</td>
+                            <td class="bg-aux text"><strong>${question9Response}</strong></td>
+                        </tr>
+                        <tr>
+                            <td class="bg-aux text">10</td>
+                            <td class="bg-aux text">¿Incentiva la participación de los estudiantes en la clase?</td>
+                            <td class="bg-aux text"><strong>${question10Response}</strong></td>
+                        </tr>
+                        <tr>
+                            <td class="bg-aux text">11</td>
+                            <td class="bg-aux text">¿Asiste a las clases con puntualidad y según lo programado?</td>
+                            <td class="bg-aux text"><strong>${question11Response}</strong></td>
+                        </tr>
+                        <tr>
+                            <td class="bg-aux text">12</td>
+                            <td class="bg-aux text">¿Inicia y finaliza las clases en el tiempo reglamentario?</td>
+                            <td class="bg-aux text"><strong>${question12Response}</strong></td>
+                        </tr>
+                        <tr>
+                            <td class="bg-aux text">13</td>
+                            <td class="bg-aux text">¿Muestra interés en que usted aprenda?</td>
+                            <td class="bg-aux text"><strong>${question13Response}</strong></td>
+                        </tr>
+                        <tr>
+                            <td class="bg-aux text">14</td>
+                            <td class="bg-aux text">¿Relaciona el contenido de la clase con la vida real?</td>
+                            <td class="bg-aux text"><strong>${question14Response}</strong></td>
+                        </tr>
+                        <tr>
+                            <td class="bg-aux text">15</td>
+                            <td class="bg-aux text">¿Logra mantener la atención de los estudiantes durante el desarrollo de la clase?</td>
+                            <td class="bg-aux text"><strong>${question15Response}</strong></td>
+                        </tr>
+                        <tr>
+                            <td class="bg-aux text">16</td>
+                            <td class="bg-aux text">¿Muestra buena disposición para aclarar y ampliar dudas sobre problemas que surgen durante las clases?</td>
+                            <td class="bg-aux text"><strong>${question16Response}</strong></td>
+                        </tr>
+                        <tr>
+                            <td class="bg-aux text">17</td>
+                            <td class="bg-aux text">¿Trata respetuosamente, a los estudiantes, durante todos los momentos de la clase?</td>
+                            <td class="bg-aux text"><strong>${question17Response}</strong></td>
+                        </tr>
+                        <tr>
+                            <td class="bg-aux text">18</td>
+                            <td class="bg-aux text">¿Mantiene un clima de cordialidad y respeto con todo el grupo de alumnos?</td>
+                            <td class="bg-aux text"><strong>${question18Response}</strong></td>
+                        </tr>
+                        <tr>
+                            <td class="bg-aux text">19</td>
+                            <td class="bg-aux text">¿Brinda orientaciones o lineamientos claros sobre cómo hacer y presentar los trabajos asignados durante la clase?</td>
+                            <td class="bg-aux text"><strong>${question19Response}</strong></td>
+                        </tr>
+                        <tr>
+                            <td class="bg-aux text">20</td>
+                            <td class="bg-aux text">¿Al inicio del periodo le explicó el sistema de evaluación a utilizarse durante el desarrollo del curso?</td>
+                            <td class="bg-aux text"><strong>${question20Response}</strong></td>
+                        </tr>
+                        <tr>
+                            <td class="bg-aux text">21</td>
+                            <td class="bg-aux text">¿Practicó evaluaciones de acuerdo a los objetivos propuestos en las clases, los contenidos desarrollados y en las fechas previstas?</td>
+                            <td class="bg-aux text"><strong>${question21Response}</strong></td>
+                        </tr>
+                        <tr>
+                            <td class="bg-aux text">22</td>
+                            <td class="bg-aux text">¿le entregó los resultados de las pruebas o exámenes y trabajos en el termino de 2 semanas. ?</td>
+                            <td class="bg-aux text"><strong>${question22Response}</strong></td>
+                        </tr>
+                        <tr>
+                            <td class="bg-aux text">23</td>
+                            <td class="bg-aux text">¿En la revisión de las evaluaciones le permitió conocer sus aciertos y discutir sus equivocaciones?</td>
+                            <td class="bg-aux text"><strong>${question23Response}</strong></td>
+                        </tr>
+                        <tr>
+                            <td class="bg-aux text">24</td>
+                            <td class="bg-aux text">¿Da a conocer criterios para calificar y los aplica al revisar los exámenes, prueba, trabajos?</td>
+                            <td class="bg-aux text"><strong>${question24Response}</strong></td>
+                        </tr>
+                        <tr>
+                            <td class="bg-aux text">25</td>
+                            <td class="bg-aux text">¿Utiliza los exámenes y la revisión de estos, como medio para afianzar su aprendizaje?</td>
+                            <td class="bg-aux text"><strong>${question25Response}</strong></td>
+                        </tr>
+                        <tr>
+                            <td class="bg-aux text">26</td>
+                            <td class="bg-aux text">¿Cuál fue su nivel de aprendizaje que tuvo, en esta asignatura?</td>
+                            <td class="bg-aux text"><strong>${question26Response}</strong></td>
+                        </tr>
+                        <tr>
+                            <td class="bg-aux text">27</td>
+                            <td class="bg-aux text">¿Que grado de dificultad le asigna a los contenidos de esta asignatura?</td>
+                            <td class="bg-aux text"><strong>${question27Response}</strong></td>
+                        </tr>
+                        <tr>
+                            <td class="bg-aux text">28</td>
+                            <td class="bg-aux text">¿En relación al número de alumnos que valor de la escala, asigna al ambiente académico (tamaño del aula, condiciones del mobiliario, condiciones acústicas)?</td>
+                            <td class="bg-aux text"><strong>${question28Response}</strong></td>
+                        </tr>
+                        <tr>
+                            <td>29</td>
+                            <td>Qué cualidad docente identifica Usted en este profesor(a)?:</td>
+                            <td><strong>${question29Response}</strong></td>
+                        </tr>
+                        <tr>
+                            <td>30</td>
+                            <td>A su criterio, ¿en que aspectos de su desempeño docente, su profesor puede mejorar?</td>
+                            <td><strong>${question30Response}</strong></td>
+                        </tr>
+                        <tr>
+                            <td>31</td>
+                            <td>Ha identificado Usted en su profesor(a) una actitud no acorde con un docente universitario<</td>
+                            <td><strong>${question31Response}</strong></td>
                         </tr>
                     </tbody>
                 </table>
@@ -1179,8 +1347,105 @@ btnassessment.addEventListener("click", ()=>{
     
     .catch(()=>{
         alert('Student not found')
-    })
-
-
-       
+    })       
 })
+
+
+
+let btnastatistics = document.getElementById("btnastatistics");
+let bodyStatistics = document.getElementById("bodyStatistics");
+
+btnastatistics.addEventListener("click", ()=>{
+    fetch('/api/get/admin/teacherEvaluation.php')
+    .then((response)=>{return response.json()})
+    .then((evals) => {
+        const surveyData = [];
+        evals.forEach(response => {
+            surveyData.push(response.responses)
+        })
+
+        console.log(surveyData)
+      const numQuestions = 28; 
+      const scores = Array(numQuestions).fill(0);
+      const responseCounts = Array(numQuestions).fill(0);
+      const comments = [];
+      
+      surveyData.forEach(response => {
+        const parsedResponse = JSON.parse(response);
+        Object.keys(parsedResponse).forEach(key => {
+          if (key.includes('question')) {
+            const index = parseInt(key.split('_')[1]) - 1;
+            scores[index] += parseInt(parsedResponse[key]);
+            responseCounts[index]++;
+          } else if (key.includes('justification')) {
+            comments.push(parsedResponse[key]);
+          }
+        });
+      });
+      
+      const averages = scores.map((score, index) => (score / responseCounts[index]).toFixed(2));
+      
+      const generalAverage = (scores.reduce((a, b) => a + b) / responseCounts.reduce((a, b) => a + b) * 2).toFixed(2);
+      
+
+    // Mostrar Promedio General
+    document.getElementById('average').innerHTML = `Promedio General: ${generalAverage}`;
+
+   
+
+    // Crear gráfico de distribución de respuestas
+    const distributionChartCanvas = document.getElementById('distributionChart');
+const distributionChartCtx = distributionChartCanvas.getContext('2d');
+const responseDistribution = Array(5).fill(0); // Respuestas de 0 a 4
+
+// Recorrer las respuestas y contar la distribución
+surveyData.forEach(response => {
+  const parsedResponse = JSON.parse(response);
+  Object.keys(parsedResponse).forEach(key => {
+    if (key.includes('question')) {
+      const rating = parseInt(parsedResponse[key]); // Obtener la calificación
+      responseDistribution[rating]++; // Contar las respuestas en el rango 0-4
+    }
+  });
+});
+
+// Configuración de las barras del gráfico
+const distributionBarWidth = 50;
+const distributionBarSpacing = 10;
+const distributionMax = Math.max(...responseDistribution); // Máximo número de respuestas
+const distributionScale = distributionChartCanvas.height / distributionMax; // Escala para ajustar las barras
+
+// Dibujar las barras de distribución
+responseDistribution.forEach((count, index) => {
+  const barHeight = count * distributionScale;
+  const x = index * (distributionBarWidth + distributionBarSpacing) + 50; // Posición X
+  const y = distributionChartCanvas.height - barHeight; // Posición Y (invertida, de abajo hacia arriba)
+
+  // Dibujar la barra
+  distributionChartCtx.fillStyle = '#ff6384'; // Color de las barras
+  distributionChartCtx.fillRect(x, y, distributionBarWidth, barHeight);
+
+  // Agregar texto con la distribución
+  distributionChartCtx.fillStyle = '#000';
+  distributionChartCtx.font = '14px Arial';
+  distributionChartCtx.fillText(`Rating ${index + 1}: ${count}`, x, y - 5); // Mostrar Rating 1-5 y el conteo
+});
+
+    // Mostrar comentarios destacados
+    const commentList = document.getElementById('commentList');
+    commentList.innerHTML = "";
+    comments.slice(0, 5).forEach(comment => {
+      const listItem = document.createElement('li');
+      listItem.textContent = comment;
+      commentList.appendChild(listItem);
+    });
+    
+    })
+    .catch(()=>{
+        
+    })       
+})
+
+
+
+ 

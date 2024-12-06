@@ -119,7 +119,7 @@ AuthMiddleware::checkAccess($requiredRole);
 </div>
 
 <div class="modal fade" id="changePassword" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog bg modal-lg">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content bg">
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="exampleModalLabel">Cambio de Contraseña</h1>
@@ -160,6 +160,40 @@ AuthMiddleware::checkAccess($requiredRole);
   </div>
 </div>
 
+
+<div class="modal fade" id="statistics" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content bg">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Estadisticas de los docentes</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row p">
+        </div>
+        <div id="bodyStatistics" class="pt-3">
+          <div class="stats">
+        <h2>Promedio General</h2>
+        <div id="average"></div>
+      </div>
+
+      <!-- Distribución de Respuestas -->
+      <div class="chart-container ">
+        <h2>Distribución de Respuestas</h2>
+        <canvas id="distributionChart" class="mt-2" width="600" height="400"></canvas>
+      </div>
+
+      <!-- Comentarios Destacados -->
+      <div class="comments">
+        <h2>Comentarios Destacados</h2>
+        <ul id="commentList"></ul>
+      </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="modal fade" id="evaluationModal" tabindex="-1" aria-labelledby="evaluationModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-xl">
     <div class="modal-content bg">
@@ -188,7 +222,7 @@ AuthMiddleware::checkAccess($requiredRole);
 
 
 <div class="modal fade" id="newSection" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog bg modal-lg">
+  <div class="modal-dialog  modal-dialog-centered modal-lg">
     <div class="modal-content bg">
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="exampleModalLabel">Agregar nueva sección</h1>
@@ -222,7 +256,7 @@ AuthMiddleware::checkAccess($requiredRole);
 </div>
         
 <div class="modal fade" id="newSectionManual" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog bg modal-lg">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content bg">
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="exampleModalLabel">Agregar nueva sección</h1>
@@ -304,7 +338,7 @@ AuthMiddleware::checkAccess($requiredRole);
 </div>
 
 <div class="modal fade" id="deleteSectionModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog bg modal-lg">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content bg">
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="exampleModalLabel">Actualizar sección</h1>
@@ -350,10 +384,10 @@ AuthMiddleware::checkAccess($requiredRole);
 </div>
 
 <div class="modal fade" id="modalDelete" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog bg modal-lg">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content bg">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Eliminar Seccion</h1>
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Editar Seccion</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -488,6 +522,11 @@ AuthMiddleware::checkAccess($requiredRole);
                           <div class="collapse" id="collapseTeachers">
                             <button type="button"  class="text list-group-item list-group-item-action bg list-group-item-indent" id="btnassessment" data-bs-toggle="modal" data-bs-target="#assessment">
                                Ver evaluaciones
+                            </button>
+                          </div>
+                          <div class="collapse" id="collapseTeachers">
+                            <button type="button"  class="text list-group-item list-group-item-action bg list-group-item-indent" id="btnastatistics" data-bs-toggle="modal" data-bs-target="#statistics">
+                               Ver Estadisticas
                             </button>
                           </div>
                     <a class="text bg aux text-decoration-none" data-bs-toggle="collapse" href="#collapseClasses" role="button" aria-expanded="false" aria-controls="collapseClasses">
