@@ -15,17 +15,18 @@ let toastBody = document.getElementById('toastBody');
 let toastTitle = document.getElementById('toastTitle');
 let toastBS = new bootstrap.Toast(toast);
 
-function validateRequest(value,request_id, e) {
+function validateRequest(value,request_id) {
   const retroRequest = document.getElementById('retroRequest');
   const btnValidateReq = document.getElementById('btnValidateReq');
   const btnValidateReq1 = document.getElementById('btnValidateReq1');
-  btnValidateReq.disabled = true;
-  btnValidateReq1.disabled = true;
   const retroInvalid = document.getElementById('retroInvalid');
   if (retroRequest.value == "" && value == 0) {
     retroRequest.classList.add('border-danger');
     retroInvalid.classList.remove('d-none');
+    return;
   }
+  btnValidateReq.disabled = true;
+  btnValidateReq1.disabled = true;
 
   const formData = new FormData();
   formData.append('value', value);

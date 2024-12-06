@@ -22,6 +22,7 @@ INNER JOIN Persons pe ON s.person_id = pe.person_id
 LEFT JOIN Careers crs ON s.career_id = crs.career_id
 LEFT JOIN Regional_center rc ON pe.center_id = rc.center_id
 where r.request_id = ?", [$_GET['id']]);
+$request_id = $_GET['id'];
 
 $row = $Carrers->fetch_assoc();
 if ($row['request_type_id']===2) {
@@ -71,13 +72,14 @@ if ($row['request_type_id']===2) {
                         <div class="col">
                             <label for="retroRequest">Ingrese un comentario de retroalimentación</label>  
                             <textarea name="" class="form-control bg-aux" id="retroRequest"></textarea>
+                            <p id="retroInvalid" class="d-none text-danger">Ingrese una justificación</p>
                         </div>
                     </div>
                     <div class="row d-flex justify-between">
-                        <button type="button" class="btn col-5 mr-2 btn-danger">
+                    <button type="button" id="btnValidateReq" class="btn col-5 mr-2 btn-danger" onclick="validateRequest(0,$request_id)">
                         Rechazar
                         </button>
-                        <button type="button" class="btn col-5 ml-2 btn-success">
+                        <button type="button" id="btnValidateReq1" class="btn col-5 ml-2 btn-success" onclick="validateRequest(1,$request_id)">
                         Aprobar
                         </button>
                     
@@ -211,15 +213,16 @@ if ($row['request_type_id']===2) {
                       <div class="col">
                           <label for="retroRequest">Ingrese un comentario de retroalimentación</label>  
                           <textarea name="" class="form-control bg-aux" id="retroRequest"></textarea>
+                          <p id="retroInvalid" class="d-none text-danger">Ingrese una justificación</p>
                       </div>
                   </div>
                   <div class="row d-flex justify-between">
-                      <button type="button" class="btn col-5 mr-2 btn-danger">
-                      Rechazar
-                      </button>
-                      <button type="button" class="btn col-5 ml-2 btn-success">
-                      Aprobar
-                      </button>
+                  <button type="button" id="btnValidateReq" class="btn col-5 mr-2 btn-danger" onclick="validateRequest(0,$request_id)">
+                        Rechazar
+                        </button>
+                        <button type="button" id="btnValidateReq1" class="btn col-5 ml-2 btn-success" onclick="validateRequest(1,$request_id)">
+                        Aprobar
+                        </button>
                   
                   </div>
               </div>
@@ -331,16 +334,16 @@ $indexRow = $index->fetch_assoc();
                       <div class="col">
                           <label for="retroRequest">Ingrese un comentario de retroalimentación</label>  
                           <textarea name="" class="form-control bg-aux" id="retroRequest"></textarea>
+                          <p id="retroInvalid" class="d-none text-danger">Ingrese una justificación</p>
                       </div>
                   </div>
                   <div class="row d-flex justify-between">
-                      <button type="button" class="btn col-5 mr-2 btn-danger">
-                      Rechazar
-                      </button>
-                      <button type="button" class="btn col-5 ml-2 btn-success">
-                      Aprobar
-                      </button>
-                  
+                  <button type="button" id="btnValidateReq" class="btn col-5 mr-2 btn-danger" onclick="validateRequest(0,$request_id)">
+                        Rechazar
+                        </button>
+                        <button type="button" id="btnValidateReq1" class="btn col-5 ml-2 btn-success" onclick="validateRequest(1,$request_id)">
+                        Aprobar
+                        </button>
                   </div>
               </div>
            </div>
