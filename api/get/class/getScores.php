@@ -104,7 +104,7 @@ if ($idEmployee != null) {
     $result = $stmt->get_result();
     $row = $result->fetch_assoc();
 
-    if(false){
+    if($row['count'] > 0){
         $result = $db->execute_query("SELECT 
         e.score,
         o.obs_name
@@ -144,9 +144,9 @@ if ($idEmployee != null) {
     }else{
         echo <<<HTML
     <div class="mt-4">
-        <h4>Evaluar A su Docente</h4>
+        <h4>Evaluar Docente</h4>
         <div>
-            <label for="pregunta1">1. Al iniciar la clase ¿le facilitó por escrito el Programa de la asignatura, que contenía los objetivos de aprendizaje, temas, calendarización de clases y exámenes, formas y criterios de evaluación?</label>
+            <label for="pregunta1">1. ¿El docente es responsable con la revisión de las evaluaciones?</label>
             <select id="pregunta1" name="pregunta1" class="form-select mt-2" required>
                 <option value="">Seleccionar una opción</option>
                 <option value=0>Deficiente</option>
@@ -158,7 +158,7 @@ if ($idEmployee != null) {
         </div>
 
         <div class="mt-3">
-            <label for="pregunta2">2. ¿Demuestra estar actualizado y tener dominio de la disciplina que imparte?</label>
+            <label for="pregunta2">2. ¿El docente domina los temas de su clase?</label>
             <select id="pregunta2" name="pregunta2" class="form-select mt-2" required>
                 <option value="">Seleccionar una opción</option>
                 <option value=0>Deficiente</option>
@@ -168,307 +168,14 @@ if ($idEmployee != null) {
                 <option value=4>Excelente</option>
             </select>
         </div>
+
         <div class="mt-3">
-            <label for="pregunta3">3. ¿Establece en la clase relación entre los contenidos teóricos y los prácticos?</label>
-            <select id="pregunta3" name="pregunta3" class="form-select mt-2" required>
-                <option value="">Seleccionar una opción</option>
-                <option value=0>Deficiente</option>
-                <option value=1>Malo</option>
-                <option value=2>Bueno</option>
-                <option value=3>Muy Bueno</option>
-                <option value=4>Excelente</option>
-            </select>
-        </div>
-        <div class="mt-3">
-            <label for="pregunta4">4. ¿Utiliza en el desarrollo del curso técnicas educativas que facilitan su aprendizaje (investigaciones en grupo, estudio de casos, visitas al campo, seminarios, mesas redondas, simulaciones, audiciones, ejercicio adicionales, sitios web, etc)?</label>
-            <select id="pregunta4" name="pregunta4" class="form-select mt-2" required>
-                <option value="">Seleccionar una opción</option>
-                <option value=0>Deficiente</option>
-                <option value=1>Malo</option>
-                <option value=2>Bueno</option>
-                <option value=3>Muy Bueno</option>
-                <option value=4>Excelente</option>
-            </select>
-        </div>
-        <div class="mt-3">
-            <label for="pregunta5">5. ¿Utiliza durante la clase medios audiovisuales que facilitan su aprendizaje?</label>
-            <select id="pregunta5" name="pregunta5" class="form-select mt-2" required>
-                <option value="">Seleccionar una opción</option>
-                <option value=0>Deficiente</option>
-                <option value=1>Malo</option>
-                <option value=2>Bueno</option>
-                <option value=3>Muy Bueno</option>
-                <option value=4>Excelente</option>
-            </select>
-        </div>
-        <div class="mt-3">
-            <label for="pregunta6">6. ¿Relaciona el contenido de esta asignatura con otras asignaturas que usted ya cursó?</label>
-            <select id="pregunta6" name="pregunta6" class="form-select mt-2" required>
-                <option value="">Seleccionar una opción</option>
-                <option value=0>Deficiente</option>
-                <option value=1>Malo</option>
-                <option value=2>Bueno</option>
-                <option value=3>Muy Bueno</option>
-                <option value=4>Excelente</option>
-            </select>
-        </div>
-        <div class="mt-3">
-            <label for="pregunta7">7. ¿Desarrolló contenidos adecuados en profundidad para el nivel que usted lleva en la carrera?</label>
-            <select id="pregunta7" name="pregunta7" class="form-select mt-2" required>
-                <option value="">Seleccionar una opción</option>
-                <option value=0>Deficiente</option>
-                <option value=1>Malo</option>
-                <option value=2>Bueno</option>
-                <option value=3>Muy Bueno</option>
-                <option value=4>Excelente</option>
-            </select>
-        </div>
-        <div class="mt-3">
-            <label for="pregunta8">8. ¿Selecciona temas y experiencias que le sean a Usted útiles en su vida profesional y cotidiana?</label>
-            <select id="pregunta8" name="pregunta8" class="form-select mt-2" required>
-                <option value="">Seleccionar una opción</option>
-                <option value=0>Deficiente</option>
-                <option value=1>Malo</option>
-                <option value=2>Bueno</option>
-                <option value=3>Muy Bueno</option>
-                <option value=4>Excelente</option>
-            </select>
-        </div>
-        <div class="mt-3">
-            <label for="pregunta9">9. Además de las explicaciones, le recomendó en esta clase otras fuentes de consulta para el desarrollo de esta asignatura, accesibles a Usted, en cuanto a costo, ubicación, etc.?</label>
-            <select id="pregunta9" name="pregunta9" class="form-select mt-2" required>
-                <option value="">Seleccionar una opción</option>
-                <option value=0>Deficiente</option>
-                <option value=1>Malo</option>
-                <option value=2>Bueno</option>
-                <option value=3>Muy Bueno</option>
-                <option value=4>Excelente</option>
-            </select>
-        </div>
-        <div class="mt-3">
-            <label for="pregunta10">10. ¿Incentiva la participación de los estudiantes en la clase?</label>
-            <select id="pregunta10" name="pregunta10" class="form-select mt-2" required>
-                <option value="">Seleccionar una opción</option>
-                <option value=0>Deficiente</option>
-                <option value=1>Malo</option>
-                <option value=2>Bueno</option>
-                <option value=3>Muy Bueno</option>
-                <option value=4>Excelente</option>
-            </select>
-        </div>
-        <div class="mt-3">
-            <label for="pregunta11">11. ¿Asiste a las clases con puntualidad y según lo programado?</label>
-            <select id="pregunta11" name="pregunta11" class="form-select mt-2" required>
-                <option value="">Seleccionar una opción</option>
-                <option value=0>Deficiente</option>
-                <option value=1>Malo</option>
-                <option value=2>Bueno</option>
-                <option value=3>Muy Bueno</option>
-                <option value=4>Excelente</option>
-            </select>
-        </div>
-        <div class="mt-3">
-            <label for="pregunta12">12. ¿Inicia y finaliza las clases en el tiempo reglamentario?</label>
-            <select id="pregunta12" name="pregunta12" class="form-select mt-2" required>
-                <option value="">Seleccionar una opción</option>
-                <option value=0>Deficiente</option>
-                <option value=1>Malo</option>
-                <option value=2>Bueno</option>
-                <option value=3>Muy Bueno</option>
-                <option value=4>Excelente</option>
-            </select>
-        </div>
-        <div class="mt-3">
-            <label for="pregunta13">13. ¿Muestra interés en que usted aprenda?</label>
-            <select id="pregunta13" name="pregunta13" class="form-select mt-2" required>
-                <option value="">Seleccionar una opción</option>
-                <option value=0>Deficiente</option>
-                <option value=1>Malo</option>
-                <option value=2>Bueno</option>
-                <option value=3>Muy Bueno</option>
-                <option value=4>Excelente</option>
-            </select>
-        </div>
-        <div class="mt-3">
-            <label for="pregunta14">14. ¿Relaciona el contenido de la clase con la vida real?</label>
-            <select id="pregunta14" name="pregunta14" class="form-select mt-2" required>
-                <option value="">Seleccionar una opción</option>
-                <option value=0>Deficiente</option>
-                <option value=1>Malo</option>
-                <option value=2>Bueno</option>
-                <option value=3>Muy Bueno</option>
-                <option value=4>Excelente</option>
-            </select>
-        </div>
-        <div class="mt-3">
-            <label for="pregunta15">15. ¿Logra mantener la atención de los estudiantes durante el desarrollo de la clase?</label>
-            <select id="pregunta15" name="pregunta15" class="form-select mt-2" required>
-                <option value="">Seleccionar una opción</option>
-                <option value=0>Deficiente</option>
-                <option value=1>Malo</option>
-                <option value=2>Bueno</option>
-                <option value=3>Muy Bueno</option>
-                <option value=4>Excelente</option>
-            </select>
-        </div>
-        <div class="mt-3">
-            <label for="pregunta16">16. ¿Muestra buena disposición para aclarar y ampliar dudas sobre problemas que surgen durante las clases?</label>
-            <select id="pregunta16" name="pregunta16" class="form-select mt-2" required>
-                <option value="">Seleccionar una opción</option>
-                <option value=0>Deficiente</option>
-                <option value=1>Malo</option>
-                <option value=2>Bueno</option>
-                <option value=3>Muy Bueno</option>
-                <option value=4>Excelente</option>
-            </select>
-        </div>
-        <div class="mt-3">
-            <label for="pregunta17">17. ¿Trata respetuosamente, a los estudiantes, durante todos los momentos de la clase?</label>
-            <select id="pregunta17" name="pregunta17" class="form-select mt-2" required>
-                <option value="">Seleccionar una opción</option>
-                <option value=0>Deficiente</option>
-                <option value=1>Malo</option>
-                <option value=2>Bueno</option>
-                <option value=3>Muy Bueno</option>
-                <option value=4>Excelente</option>
-            </select>
-        </div>
-        <div class="mt-3">
-            <label for="pregunta18">18. ¿Mantiene un clima de cordialidad y respeto con todo el grupo de alumnos?</label>
-            <select id="pregunta18" name="pregunta18" class="form-select mt-2" required>
-                <option value="">Seleccionar una opción</option>
-                <option value=0>Deficiente</option>
-                <option value=1>Malo</option>
-                <option value=2>Bueno</option>
-                <option value=3>Muy Bueno</option>
-                <option value=4>Excelente</option>
-            </select>
-        </div>
-        <div class="mt-3">
-            <label for="pregunta19">19. ¿Brinda orientaciones o lineamientos claros sobre cómo hacer y presentar los trabajos asignados durante la clase?</label>
-            <select id="pregunta19" name="pregunta19" class="form-select mt-2" required>
-                <option value="">Seleccionar una opción</option>
-                <option value=0>Deficiente</option>
-                <option value=1>Malo</option>
-                <option value=2>Bueno</option>
-                <option value=3>Muy Bueno</option>
-                <option value=4>Excelente</option>
-            </select>
-        </div>
-        <div class="mt-3">
-            <label for="pregunta20">20. ¿Al inicio del periodo le explicó el sistema de evaluación a utilizarse durante el desarrollo del curso?</label>
-            <select id="pregunta20" name="pregunta20" class="form-select mt-2" required>
-                <option value="">Seleccionar una opción</option>
-                <option value=0>Deficiente</option>
-                <option value=1>Malo</option>
-                <option value=2>Bueno</option>
-                <option value=3>Muy Bueno</option>
-                <option value=4>Excelente</option>
-            </select>
-        </div>
-        <div class="mt-3">
-            <label for="pregunta21">21. ¿Practicó evaluaciones de acuerdo a los objetivos propuestos en las clases, los contenidos desarrollados y en las fechas previstas?</label>
-            <select id="pregunta21" name="pregunta21" class="form-select mt-2" required>
-                <option value="">Seleccionar una opción</option>
-                <option value=0>Deficiente</option>
-                <option value=1>Malo</option>
-                <option value=2>Bueno</option>
-                <option value=3>Muy Bueno</option>
-                <option value=4>Excelente</option>
-            </select>
-        </div>
-        <div class="mt-3">
-            <label for="pregunta22">22. ¿le entregó los resultados de las pruebas o exámenes y trabajos en el termino de 2 semanas. ?</label>
-            <select id="pregunta22" name="pregunta22" class="form-select mt-2" required>
-                <option value="">Seleccionar una opción</option>
-                <option value=0>Deficiente</option>
-                <option value=1>Malo</option>
-                <option value=2>Bueno</option>
-                <option value=3>Muy Bueno</option>
-                <option value=4>Excelente</option>
-            </select>
-        </div>
-        <div class="mt-3">
-            <label for="pregunta23">23. ¿En la revisión de las evaluaciones le permitió conocer sus aciertos y discutir sus equivocaciones?</label>
-            <select id="pregunta23" name="pregunta23" class="form-select mt-2" required>
-                <option value="">Seleccionar una opción</option>
-                <option value=0>Deficiente</option>
-                <option value=1>Malo</option>
-                <option value=2>Bueno</option>
-                <option value=3>Muy Bueno</option>
-                <option value=4>Excelente</option>
-            </select>
-        </div>
-        <div class="mt-3">
-            <label for="pregunta24">24. ¿Da a conocer criterios para calificar y los aplica al revisar los exámenes, prueba, trabajos?</label>
-            <select id="pregunta24" name="pregunta24" class="form-select mt-2" required>
-                <option value="">Seleccionar una opción</option>
-                <option value=0>Deficiente</option>
-                <option value=1>Malo</option>
-                <option value=2>Bueno</option>
-                <option value=3>Muy Bueno</option>
-                <option value=4>Excelente</option>
-            </select>
-        </div>
-        <div class="mt-3">
-            <label for="pregunta25">25. ¿Utiliza los exámenes y la revisión de estos, como medio para afianzar su aprendizaje?</label>
-            <select id="pregunta25" name="pregunta25" class="form-select mt-2" required>
-                <option value="">Seleccionar una opción</option>
-                <option value=0>Deficiente</option>
-                <option value=1>Malo</option>
-                <option value=2>Bueno</option>
-                <option value=3>Muy Bueno</option>
-                <option value=4>Excelente</option>
-            </select>
-        </div>
-        <div class="mt-3">
-            <label for="pregunta26">26. ¿Cuál fue su nivel de aprendizaje que tuvo, en esta asignatura?</label>
-            <select id="pregunta26" name="pregunta26" class="form-select mt-2" required>
-                <option value="">Seleccionar una opción</option>
-                <option value=0>Deficiente</option>
-                <option value=1>Malo</option>
-                <option value=2>Bueno</option>
-                <option value=3>Muy Bueno</option>
-                <option value=4>Excelente</option>
-            </select>
-        </div>
-        <div class="mt-3">
-            <label for="pregunta27">27. ¿Que grado de dificultad le asigna a los contenidos de esta asignatura?</label>
-            <select id="pregunta27" name="pregunta27" class="form-select mt-2" required>
-                <option value="">Seleccionar una opción</option>
-                <option value=0>Deficiente</option>
-                <option value=1>Malo</option>
-                <option value=2>Bueno</option>
-                <option value=3>Muy Bueno</option>
-                <option value=4>Excelente</option>
-            </select>
-        </div>
-        <div class="mt-3">
-            <label for="pregunta28">28. ¿En relación al número de alumnos que valor de la escala, asigna al ambiente académico (tamaño del aula, condiciones del mobiliario, condiciones acústicas)?</label>
-            <select id="pregunta28" name="pregunta28" class="form-select mt-2" required>
-                <option value="">Seleccionar una opción</option>
-                <option value=0>Deficiente</option>
-                <option value=1>Malo</option>
-                <option value=2>Bueno</option>
-                <option value=3>Muy Bueno</option>
-                <option value=4>Excelente</option>
-            </select>
-        </div>
-        <div class="mt-3">
-            <label for="justificacion1">29. Qué cualidad docente identifica Usted en este profesor(a):?</label>
-            <textarea id="justificacion1" name="justificacion1" class="form-control bg-aux" rows="4" placeholder="Escriba sus comentarios aquí..."></textarea>
-        </div>
-        <div class="mt-3">
-            <label for="justificacion2">30. A su criterio, ¿en que aspectos de su desempeño docente, su profesor puede mejorar?</label>
-            <textarea id="justificacion2" name="justificacion2" class="form-control bg-aux" rows="4" placeholder="Escriba sus comentarios aquí..."></textarea>
-        </div>
-        <div class="mt-3">
-            <label for="justificacion3">31. Ha identificado Usted en su profesor(a) una actitud no acorde con un docente universitario</label>
-            <textarea id="justificacion3" name="justificacion3" class="form-control bg-aux" rows="4" placeholder="Escriba sus comentarios aquí..."></textarea>
+            <label for="justificacion">3. ¿Ha notado actitudes inapropiadas en su docente?:</label>
+            <textarea id="justificacion" name="justificacion" class="form-control bg-aux" rows="4" placeholder="Escriba sus comentarios aquí..."></textarea>
         </div>
         <div class="alert alert-danger mt-2" hidden id="alertErrorSendSurvey" role="alert">
-            Error, todos los campos son requeridos
-        </div>
+                Error, todos los campos son requeridos
+            </div>
 
         <div class="mt-4">
             <button type="button" class="btn btn-success" onclick="save()" id="sendSurvey">Enviar</button>
