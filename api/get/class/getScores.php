@@ -149,10 +149,11 @@ if ($idEmployee != null) {
             <label for="pregunta1">1. ¿El docente es responsable con la revisión de las evaluaciones?</label>
             <select id="pregunta1" name="pregunta1" class="form-select mt-2" required>
                 <option value="">Seleccionar una opción</option>
-                <option value="deficiente">Deficiente</option>
-                <option value="malo">Malo</option>
-                <option value="bueno">Bueno</option>
-                <option value="excelente">Excelente</option>
+                <option value=0>Deficiente</option>
+                <option value=1>Malo</option>
+                <option value=2>Bueno</option>
+                <option value=3>Muy Bueno</option>
+                <option value=4>Excelente</option>
             </select>
         </div>
 
@@ -160,15 +161,16 @@ if ($idEmployee != null) {
             <label for="pregunta2">2. ¿El docente domina los temas de su clase?</label>
             <select id="pregunta2" name="pregunta2" class="form-select mt-2" required>
                 <option value="">Seleccionar una opción</option>
-                <option value="deficiente">Deficiente</option>
-                <option value="malo">Malo</option>
-                <option value="bueno">Bueno</option>
-                <option value="excelente">Excelente</option>
+                <option value=0>Deficiente</option>
+                <option value=1>Malo</option>
+                <option value=2>Bueno</option>
+                <option value=3>Muy Bueno</option>
+                <option value=4>Excelente</option>
             </select>
         </div>
 
         <div class="mt-3">
-            <label for="justificacion">Ha notado actitudes inapropiadas en su docente:</label>
+            <label for="justificacion">3. ¿Ha notado actitudes inapropiadas en su docente?:</label>
             <textarea id="justificacion" name="justificacion" class="form-control bg-aux" rows="4" placeholder="Escriba sus comentarios aquí..."></textarea>
         </div>
         <div class="alert alert-danger mt-2" hidden id="alertErrorSendSurvey" role="alert">

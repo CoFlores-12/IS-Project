@@ -80,7 +80,7 @@ let historyBody = document.getElementById('historyBody');
 
                 if(response.status == 0){
                     teacher = ` 
-                    <table class="w-full mx-4" border="0">
+                    <table class="bg-aux" border="0">
                     <tbody>
                     <tr>
                         <th>Nombre</th>
@@ -89,10 +89,10 @@ let historyBody = document.getElementById('historyBody');
                     <tr>
                         <td>Telefono</td>
                         <td>${response.row.phone}</td>
-                      </tr>
+                    </tr>
                      <tr>
                         <td>Correo personal(de recuperacion)</td>
-                        <td><input type="text" id="newEmail" placeholder="Email" value="${response.row.personal_email}"></td>
+                        <td><input class="bg" type="text" id="newEmail" placeholder="Email" value="${response.row.personal_email}"></td>
                     </tr>
                     </tbody>
                     </table>
@@ -1059,3 +1059,128 @@ async function fetchStudents() {
 }
 
 
+let btnassessment = document.getElementById("btnassessment");
+let bodyEvaluations = document.getElementById("bodyEvaluations");
+
+btnassessment.addEventListener("click", ()=>{
+    fetch('/api/get/admin/teacherEvaluation.php')
+    .then((response)=>{return response.json()})
+    .then((evals) => {
+        console.log(evals);
+        let table = `<table class="table bg-aux mt-2">
+                        <thead>
+                            <tr class="bg-aux text">
+                                <th class="bg-aux text" scope="col">Num. Emple</th>
+                                <th class="bg-aux text" scope="col">Nombre</th>
+                                <th class="bg-aux text" scope="col">Sección</th>
+                                <th class="bg-aux text" scope="col">Estudiante</th>
+                                <th class="bg-aux text" scope="col">Evaluación</th>
+                            </tr>
+                        </thead>
+                        <tbody>`; 
+    
+        evals.forEach((eval, index) => {
+            const responses = JSON.parse(eval['responses'] || '{}');
+            let scoreSum = 0; 
+            let questionCount = 0;
+    
+            // Procesar respuestas
+            for (const key in responses) {
+                const value = responses[key]; 
+                const numValue = parseFloat(value); 
+    
+                if (!isNaN(numValue) && numValue >= 0 && numValue <= 4) {
+                    scoreSum += numValue; 
+                    questionCount++;
+                    console.log(numValue);
+                }
+            }
+    
+            // Calcular el puntaje ajustado en base a 10
+            const adjustedScore = (scoreSum / (questionCount * 4)) * 10;
+    
+            // Añadir fila a la tabla
+            table += `<tr class="bg-aux" data-index="${index}">
+                        <th class="bg-aux text" scope="row">${eval['employee_number']}</th>
+                        <th class="bg-aux text" scope="row">${eval['teacher_name']}</th>
+                        <th class="bg-aux text" scope="row">${eval['section_id']}</th>
+                        <th class="bg-aux text" scope="row">${eval['student_account_number']}</th>
+                        <th class="bg-aux text" scope="row">${adjustedScore.toFixed(2)}</th>
+                    </tr>`;
+        });
+    
+        table += `</tbody></table>`;
+        bodyEvaluations.innerHTML = table;
+    
+        // Agregar el evento de clic a las filas
+        const rows = document.querySelectorAll('tr[data-index]');
+        rows.forEach(row => {
+            row.addEventListener('click', () => {
+                const index = row.getAttribute('data-index');
+                const selectedEval = evals[index];
+                const responses = JSON.parse(selectedEval['responses'] || '{}'); // Definir responses aquí
+    
+                // Mostrar detalles en el modal
+                document.getElementById('modalTeacherName').innerText = selectedEval.teacher_name;
+                document.getElementById('modalEmployessNumber').innerText = selectedEval.employee_number;
+                document.getElementById('modalSection').innerText = selectedEval.section_id;
+                document.getElementById('modalStudentNumber').innerText = selectedEval.student_account_number;
+                document.getElementById('modalStudentQualification').innerText = selectedEval.student_score;
+                
+                
+    
+                // Mostrar las respuestas de las preguntas 1 y 2 como texto
+                const questionMapping = ["Deficiente", "Malo", "Bueno", "Muy Bueno", "Excelente"];
+                
+                // Mostrar las respuestas de la pregunta 1 y 2 con las opciones correspondientes
+                const question1Response = responses['question_1'] !== undefined ? questionMapping[parseInt(responses['question_1'])] : "Respuesta no disponible";
+                const question2Response = responses['question_2'] !== undefined ? questionMapping[parseInt(responses['question_2'])] : "Respuesta no disponible";
+    
+                // Mostrar la respuesta de la pregunta 3 tal como está (texto libre)
+                const question3Response = responses['question_3'] || "Respuesta no disponible";
+    
+                // Desplegar las respuestas en el modal
+                document.getElementById('modalResponses').innerHTML = `
+                    <table class="table bg-aux mt-2">
+                    <thead>
+                        <tr>
+                            <th class="bg-aux text" scope="col">#</th>
+                            <th class="bg-aux text" scope="col">Pregunta</th>
+                            <th class="bg-aux text" scope="col">Respuesta</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="bg-aux text">1</td>
+                            <td class="bg-aux text">¿El docente es responsable con la revisión de las evaluaciones?</td>
+                            <td class="bg-aux text"><strong>${question1Response}</strong></td>
+                        </tr>
+                        <tr>
+                            <td class="bg-aux text">2</td>
+                            <td class="bg-aux text">¿El docente domina los temas de su clase?</td>
+                            <td class="bg-aux text"><strong>${question2Response}</strong></td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>¿Ha notado actitudes inapropiadas en su docente?</td>
+                            <td><strong>${question3Response}</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+                `;
+    
+                // Mostrar el modal
+                const modal = new bootstrap.Modal(document.getElementById('evaluationModal'));
+                modal.show();
+            });
+        });
+    })
+    
+    
+    .catch(()=>{
+        alert('Student not found')
+    })
+
+
+       
+})

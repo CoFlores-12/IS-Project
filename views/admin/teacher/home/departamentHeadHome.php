@@ -142,6 +142,50 @@ AuthMiddleware::checkAccess($requiredRole);
   </div>
 </div>
 
+<div class="modal fade" id="assessment" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content bg">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Evaluaciones</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row p">
+        </div>
+        <div id="bodyEvaluations" class="pt-3">
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="evaluationModal" tabindex="-1" aria-labelledby="evaluationModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content bg">
+      <div class="modal-header">
+        <h5 class="modal-title" id="evaluationModalLabel">Detalles de Evaluación</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Nombre del Docente:<span id="modalTeacherName"></span><br>
+        Numero Empleado: <span id="modalEmployessNumber"></span><br>
+        Sección:<span id="modalSection"></span><br>
+        Estudiante: <span id="modalStudentNumber"></span><br>
+        Calificacion Estudiante: <span id="modalStudentQualification"></span><br>
+        Evaluación: <span id="modalScore"></span><br>
+        <div id="modalResponses">
+          
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 
 <div class="modal fade" id="newSection" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog bg modal-lg">
@@ -439,6 +483,11 @@ AuthMiddleware::checkAccess($requiredRole);
                           <div class="collapse" id="collapseTeachers">
                             <button type="button" id="changePassword" class="text list-group-item list-group-item-action bg list-group-item-indent" data-bs-toggle="modal" data-bs-target="#changePassword">
                                Cambiar Contraseña
+                            </button>
+                          </div>
+                          <div class="collapse" id="collapseTeachers">
+                            <button type="button"  class="text list-group-item list-group-item-action bg list-group-item-indent" id="btnassessment" data-bs-toggle="modal" data-bs-target="#assessment">
+                               Ver evaluaciones
                             </button>
                           </div>
                     <a class="text bg aux text-decoration-none" data-bs-toggle="collapse" href="#collapseClasses" role="button" aria-expanded="false" aria-controls="collapseClasses">

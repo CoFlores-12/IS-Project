@@ -829,3 +829,24 @@ WHERE r.status IS NULL
     inner join Applicant_result ap on p.person_id = ap.identity_number
     WHERE s.account_number = 20211000002
 
+SELECT 
+    ste.evaluation_id,
+    ste.student_account_number,
+    CONCAT(p.first_name, ' ', p.last_name) AS teacher_name,
+    ste.responses,
+    ste.created_at,
+    se.section_id,
+    COALESCE(e.score, h.score) AS student_score 
+FROM student_teacher_evaluation ste
+JOIN Employees emp ON ste.teacher_id = emp.employee_number
+JOIN Persons p ON emp.person_id = p.person_id
+JOIN Section se ON ste.section_id = se.section_id
+LEFT JOIN Enroll e ON e.student_id = ste.student_account_number AND e.section_id = se.section_id
+LEFT JOIN History h ON h.student_id = ste.student_account_number AND h.section_id = se.section_id
+WHERE emp.department_id = (
+    SELECT department_id
+    FROM Employees
+    WHERE employee_number = 5 
+)
+ORDER BY ste.created_at DESC;
+
