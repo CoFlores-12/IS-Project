@@ -27,7 +27,15 @@ try {
         throw new Exception("No se encontró la solicitud o no se pudo actualizar.");
     }
 
-    $applicantQuery = "SELECT p.first_name, p.personal_email, rt.title
+    $applicantQuery = "SELECT 
+        p.first_name, 
+        p.personal_email, 
+        rt.title, 
+        r.career_change_id, 
+        r.campus_change_id, 
+        r.request_type_id,
+        s.account_number,
+        p.person_id
     FROM Requests r 
     INNER JOIN `RequestTypes` rt ON r.request_type_id = rt.request_type_id
     INNER JOIN `Students` s ON r.student_id = s.account_number 
@@ -115,7 +123,22 @@ try {
         if (!$emailResult) {
             throw new Exception("Error al enviar el correo al estudiante.");
         }
-    
+        if (intval($value) === 1) {
+            if (intval($applicant['request_type_id']) === 3) {
+                $sql = "UPDATE Students SET career_id = ? where account_number = ?";
+                $result = $conn->execute_query($sql,[$applicant['career_change_id'], $applicant['account_number']]);
+                if (!$result) {
+                    throw new Exception("Error al cambiar al estudiante de carrera.");
+                }
+                
+            } elseif (intval($applicant['request_type_id']) === 4) {
+                $sql = "UPDATE Persons SET center_id = ? where person_id = ?";
+                $result = $conn->execute_query($sql,[$applicant['campus_change_id'], $applicant['person_id']]);
+                if (!$result) {
+                    throw new Exception("Error al cambiar al estudiante de centro.");
+                }
+            }
+        }
 
     $conn->commit();
 
