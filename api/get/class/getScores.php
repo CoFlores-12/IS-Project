@@ -32,6 +32,27 @@ if (!$section_id) {
     exit;
 }
 
+
+
+$query = "SELECT data FROM Config LIMIT 1";
+    $result = $db->query($query);
+
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        $configData = json_decode($row['data'], true);
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'Config not found']);
+        exit;
+    }
+
+    $cancellationData = json_decode($configData['uploadNotes'], true);
+    $cancellationStart = new DateTime($cancellationData['startTime']);
+    $cancellationEnd = new DateTime($cancellationData['endTime']);
+
+    $currentDate = new DateTime();
+
+
+if ($currentDate >= $cancellationStart && $currentDate <= $cancellationEnd) {
 if ($idEmployee != null) {
     $rows = '';
     $result = $db->execute_query("SELECT 
@@ -70,26 +91,6 @@ if ($idEmployee != null) {
         $idRow++;
     }
 
-
-    $query = "SELECT data FROM Config LIMIT 1";
-    $result = $db->query($query);
-
-    if ($result->num_rows > 0) {
-        $row = $result->fetch_assoc();
-        $configData = json_decode($row['data'], true);
-    } else {
-        echo json_encode(['status' => 'error', 'message' => 'Config not found']);
-        exit;
-    }
-
-    $cancellationData = json_decode($configData['uploadNotes'], true);
-    $cancellationStart = new DateTime($cancellationData['startTime']);
-    $cancellationEnd = new DateTime($cancellationData['endTime']);
-
-    $currentDate = new DateTime();
-
-
-    if ($currentDate >= $cancellationStart && $currentDate <= $cancellationEnd) {
         echo <<<HTML
                 <table>
                     <thead>
@@ -108,13 +109,7 @@ if ($idEmployee != null) {
                     <button type="button" onclick="saveScores(1)" data-option="1" class="btn btnOptionScores btn-danger text-white">Finalizar</button>
                 </div>
             HTML;
-    } else {
-        echo <<<HTML
-            <div class="alert alert-danger" role="alert">
-                Proceso inactivo
-            </div>
-            HTML;
-    }
+ 
 
     
     exit;
@@ -216,3 +211,11 @@ HTML;
     }
     
 }
+} else {
+    echo <<<HTML
+        <div class="alert alert-danger" role="alert">
+            Proceso inactivo
+        </div>
+    HTML;
+}
+
