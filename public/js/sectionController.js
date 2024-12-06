@@ -260,6 +260,21 @@ function toggleSidebar() {
     
 }
 
+
+function uploadNotes (){
+    fetch('/api/get/students/uploadRatings.php')
+    .then(response => response.json())
+    .then(data => {
+        if (data.status == true){
+            showVideo(data.video_url);
+        }
+        })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
+
 toggleAside.addEventListener('click', toggleSidebar);
 participantsBtn.addEventListener('click', ()=>{participantsModalBS.show()});
 scoresBtn.addEventListener('click', ()=>{

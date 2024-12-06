@@ -1,6 +1,7 @@
 <?php
 
 include_once '../../../src/modules/database.php';
+date_default_timezone_set('America/Tegucigalpa');
 $conn = (new Database())->getConnection();
 
 $startTime = $_POST['start_time'];

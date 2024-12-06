@@ -837,10 +837,14 @@ function modalDeleteSection(item){
         
         modalDeleteleSection.hide();
         alertDelete.style.display = 'block';
+        alertDelete.removeAttribute('hidden');
+        saveDeleteSection.disabled = false;
+        saveDeleteSection.innerHTML = `<i class="bi bi-trash"></i>`
         setTimeout(function() {
             alertDelete.style.display = 'none';
           }, 3000); 
        console.log(data)
+        
     })
     .catch(error => {
       console.log(error)
@@ -908,7 +912,7 @@ saveDeleteSection.addEventListener("click", ()=>{
         return;
     }
     saveDeleteSection.disabled = true;
-    saveDeleteSection.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Loading...`;
+    saveDeleteSection.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Cargando...`;
 
     const foundItem = sections.find(item => item.section_id === idSectionDelete);
 
