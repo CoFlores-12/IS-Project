@@ -114,12 +114,12 @@ $indexRow = $index->fetch_assoc();
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form action="/api/post/students/photo.php" method="POST"  enctype="multipart/form-data">
+        <form id="uploadForm" action="/api/post/students/photo.php" method="POST"  enctype="multipart/form-data">
           <?php echo '<input type="hidden" name="account_number" value="'.$student['account_number'].'">'; ?>
-          <input type="text" name="photoUrl" placeholder="Enter photo url">
-          <p class="mt-3">or</p>
+          <input type="text" name="photoUrl" placeholder="Ingresar URL de la foto">
+          <p class="mt-3">o</p>
           <input type="file" name="upload" accept="image/*" id="upload">
-          <button type="submit" class="btn bg-custom-primary mt-3 text-white">Subir</button>
+          <button type="submit" id="uploadBtn" class="btn bg-custom-primary mt-3 text-white">Subir</button>
         </form>
       </div>
     </div>
@@ -153,17 +153,24 @@ $indexRow = $index->fetch_assoc();
                                 } else {
                                     echo '<div class="carousel-item relative">';
                                 }
-                                if (isset($photos["$i"])) { 
-                                  echo '<img src="/uploads/'.$photos["$i"].'" class="d-block w-100" alt="...">';
-                                  echo "<form class='d-inline deletePhotoForm'>";
-                                  echo '<input type="hidden" name="filename" value="'.$photos["$i"].'">';
-                                  echo '<input type="hidden" name="account_number" value="'.$student['account_number'].'">';
-                                  echo "<button name='delete' value='".$photos["$i"]."' class='btn btn-danger'><i class='bi bi-trash'></i></button>";
-                                  echo '</form>';
+                                if (isset($photos["$i"]) && $photos["$i"] != '') {
+                                  echo '<img src="'.$photos["$i"].'" class="d-block w-100" alt="...">';
+                                  if ($isMyUser) {
+                                    echo "<form class='d-inline deletePhotoForm'>";
+                                    echo '<input type="hidden" name="filename" value="'.$photos["$i"].'">';
+                                    echo '<input type="hidden" name="account_number" value="'.$student['account_number'].'">';
+                                    echo "<button name='delete' value='".$photos["$i"]."' class='btn btn-danger'><i class='bi bi-trash'></i></button>";
+                                    echo '</form>';
+                                  } 
                                   echo '</div>';
                                 }else {
-                                  echo '<img src="/public/images/upload.webp" class="d-block w-100" alt="...">';
-                                  echo "<button class='btn btn-primary'  data-bs-toggle='modal' data-bs-target='#uploadPhotoModal'><i class='bi bi-plus'></i></button>";
+                                  if ($isMyUser) {
+                                    echo '<img src="/public/images/upload.webp" class="d-block w-100" alt="...">';
+                                    echo "<button class='btn btn-primary'  data-bs-toggle='modal' data-bs-target='#uploadPhotoModal'><i class='bi bi-plus'></i></button>";
+                                  }else{
+                                    echo '<img src="/uploads/default.jpg" class="d-block w-100" alt="...">';
+                                    
+                                  }
                                   echo '</div>';
 
                                 }
@@ -187,7 +194,9 @@ $indexRow = $index->fetch_assoc();
                           <p class="text-secondary text-xs mb-1"><?php echo $student['center_name'] ?></p>
                           <?php
                             if (!$isMyUser) {
-                              echo '<button class="btn btn-primary mr-1">Agregar a contactos</button><button class="btn btn-outline-primary ml-2">Enviar mensaje</button>';
+                              echo '<button class="btn btn-primary mr-1">Agregar a contactos</button>
+                              
+                              <a href="/views/chats/new.php?id='.$student['account_number'].'"><button class="btn btn-outline-primary mx-2">Enviar mensaje</button></a>';
                             }
                           ?>
                         </div>
@@ -330,6 +339,36 @@ $indexRow = $index->fetch_assoc();
       let saveButton = document.getElementById('saveButton'); 
       let cancelButton = document.getElementById('cancelButton'); 
       let LoadingButton = document.getElementById('LoadingButton'); 
+
+  document.getElementById("uploadForm").addEventListener("submit", async function (event) {
+    event.preventDefault();
+    document.getElementById('uploadBtn').innerHTML = `<div class="spinner-border text-light" role="status"></div>`
+    document.getElementById('uploadBtn').disabled = true;
+
+    const form = event.target;
+    const photoUrlInput = form.querySelector('input[name="photoUrl"]');
+    const fileInput = form.querySelector('input[name="upload"]');
+    const accountNumber = form.querySelector('input[name="account_number"]').value;
+
+    const photoUrl = photoUrlInput.value.trim();
+    const file = fileInput.files[0];
+
+    let imageUrl;
+
+    try {
+        if (photoUrl) {
+            imageUrl = await uploadImageFromUrl(photoUrl);
+        } else if (file) {
+            imageUrl = await uploadImageFromFile(file);
+        } else {
+            throw new Error("Debes ingresar una URL o seleccionar un archivo.");
+        }
+
+        await sendToApi(imageUrl, accountNumber);
+    } catch (error) {
+        alert(`Error: ${error.message}`);
+    }
+});
       
       btnEditProfile.addEventListener('click', function() {
         let inputs = document.querySelectorAll('.readonly-input');
@@ -401,6 +440,8 @@ $indexRow = $index->fetch_assoc();
           const form = event.target;
           const filename = form.querySelector('input[name="filename"]').value;
           const account_number = form.querySelector('input[name="account_number"]').value;
+          form.querySelector('button[name="delete"]').disabled=true;
+          form.querySelector('button[name="delete"]').innerHTML = `<div class="spinner-border text-light" role="status"></div>`;
 
 
           fetch('/api/delete/students/photo.php', {
@@ -417,7 +458,7 @@ $indexRow = $index->fetch_assoc();
               return response.json();
           })
           .then(data => {
-              alert(data.message);
+              
               window.location.reload()
           })
           .catch(error => {
@@ -427,6 +468,63 @@ $indexRow = $index->fetch_assoc();
         }
       
     });
+
+ 
+
+async function uploadImageFromUrl(url) {
+    // Validar si es una URL válida
+    if (!/^https?:\/\//i.test(url)) {
+        throw new Error("La URL ingresada no es válida.");
+    }
+
+    // Descargar la imagen y subirla a ImgBB
+    const response = await fetch(url);
+    if (!response.ok) {
+        throw new Error("No se pudo descargar la imagen desde la URL.");
+    }
+    const blob = await response.blob();
+    return uploadToImgBB(blob);
+}
+
+async function uploadImageFromFile(file) {
+    // Validar el archivo
+    if (!file.type.startsWith("image/")) {
+        throw new Error("El archivo seleccionado no es una imagen.");
+    }
+    return uploadToImgBB(file);
+}
+
+async function uploadToImgBB(file) {
+    const formData = new FormData();
+    formData.append("image", file);
+
+    const apiKey = "cee84319e470684665a483c6b90b9ce8";
+    const response = await fetch(`https://api.imgbb.com/1/upload?key=${apiKey}`, {
+        method: "POST",
+        body: formData,
+    });
+
+    if (!response.ok) {
+        throw new Error("No se pudo subir la imagen ala servidor CDN.");
+    }
+
+    const result = await response.json();
+    return result.data.url;
+}
+
+async function sendToApi(imageUrl, accountNumber) {
+    const response = await fetch("/api/post/students/photo.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ account_number: accountNumber, photo_url: imageUrl }),
+    });
+
+    if (!response.ok) {
+        throw new Error("No se pudo enviar la URL de la imagen a la API.");
+    }
+    window.location.reload()
+}
+
     </script>
 </body>
 </html>

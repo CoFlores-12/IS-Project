@@ -8,19 +8,19 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
     <link rel="stylesheet" href="/public/bootstrap-5.3.3-dist/css/bootstrap.min.css">
     <style>
-*::-webkit-scrollbar {
-  width: 7px;
-  display: block !important;
-}
- 
-*::-webkit-scrollbar-track {
-  background: var(--bg);
-}
- 
-*::-webkit-scrollbar-thumb {
-  background: var(--primary-color);
-  border-radius: 1rem;
-}
+        *::-webkit-scrollbar {
+        width: 7px;
+        display: block !important;
+        }
+        
+        *::-webkit-scrollbar-track {
+        background: var(--bg);
+        }
+        
+        *::-webkit-scrollbar-thumb {
+        background: var(--primary-color);
+        border-radius: 1rem;
+        }
         .chat-list {
             height: 100vh;
             overflow-y: auto;
@@ -55,49 +55,49 @@
             color: #888;
         }
         .badge-dot {
-border-radius: 50%;
-height: 10px;
-width: 10px;
-margin-left: 2.9rem;
-margin-top: -.75rem;
-}
-img {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
+        border-radius: 50%;
+        height: 10px;
+        width: 10px;
+        margin-left: 2.9rem;
+        margin-top: -.75rem;
+        }
+        img {
+                    width: 50px;
+                    height: 50px;
+                    border-radius: 50%;
+                }
+
+        a {
+            text-decoration: none;
+        }
+        .text-muted {
+                    color: var( --secondary-color) !important;
+                }
+        .msgContent> * {
+            text-overflow: ellipsis; 
+        overflow: hidden; 
+        white-space: nowrap;
+        max-width: 100%;
+        width: 100%;
+        }
+        .msgContent {
+            width: calc(100vw - 150px - .5rem);
         }
 
-a {
-    text-decoration: none;
-}
-.text-muted {
-            color: var( --secondary-color) !important;
+        #chatsContainer > li > a  {
+            max-width: 100%;
+            overflow: hidden;
         }
-.msgContent> * {
-    text-overflow: ellipsis; 
-overflow: hidden; 
-white-space: nowrap;
-max-width: 100%;
-width: 100%;
-}
-.msgContent {
-    width: calc(100vw - 150px - .5rem);
-}
-
-#chatsContainer > li > a  {
-    max-width: 100%;
-    overflow: hidden;
-}
-#chatsContainer > li > a > div {
-    max-width: 100%;
-    overflow: hidden;
-    width: 100% !important;
-}
-#chatsContainer > li > a > div > .msgContent {
-    display: block;
-  flex-grow: 1;
-  flex-shrink: 2;
-}
+        #chatsContainer > li > a > div {
+            max-width: 100%;
+            overflow: hidden;
+            width: 100% !important;
+        }
+        #chatsContainer > li > a > div > .msgContent {
+            display: block;
+        flex-grow: 1;
+        flex-shrink: 2;
+        }
     </style>
 </head>
 <body>
@@ -239,44 +239,44 @@ width: 100%;
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-function getTimeElapsed(messageTime) {
-    if (messageTime === null) {
-        return ''
-    }
-    const now = new Date();
-    const messageDate = new Date(messageTime);
-    const elapsedMilliseconds = now - messageDate;
+    function getTimeElapsed(messageTime) {
+        if (messageTime === null) {
+            return ''
+        }
+        const now = new Date();
+        const messageDate = new Date(messageTime);
+        const elapsedMilliseconds = now - messageDate;
 
-    const minutes = Math.floor(elapsedMilliseconds / 1000 / 60);
-    const hours = Math.floor(minutes / 60);
-    const days = Math.floor(hours / 24);
-    const months = Math.floor(days / 30);
-    
+        const minutes = Math.floor(elapsedMilliseconds / 1000 / 60);
+        const hours = Math.floor(minutes / 60);
+        const days = Math.floor(hours / 24);
+        const months = Math.floor(days / 30);
+        
 
-    if (minutes < 1) {
-        return "Justo ahora";
-    } else if (minutes < 60) {
-        return `Hace ${minutes}m`;
-    } else if (hours < 24) {
-        return `Hace ${hours}h`;
-    } else if (days === 1) {
-        return "Hace 1 día";
-    } else if (days < 30) {
-        return `Hace ${days} días`;
-    } else if (months === 1) {
-        return "Hace 1 mes";
-    } else {
-        return `Hace ${months} meses`;
+        if (minutes < 1) {
+            return "Justo ahora";
+        } else if (minutes < 60) {
+            return `Hace ${minutes}m`;
+        } else if (hours < 24) {
+            return `Hace ${hours}h`;
+        } else if (days === 1) {
+            return "Hace 1 día";
+        } else if (days < 30) {
+            return `Hace ${days} días`;
+        } else if (months === 1) {
+            return "Hace 1 mes";
+        } else {
+            return `Hace ${months} meses`;
+        }
     }
-}
     const chatsContainer = document.getElementById('chatsContainer')
     let icon = [`<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2 mx-1" viewBox="0 0 16 16">
-<path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0"/>
-</svg>`, `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-all mx-1" viewBox="0 0 16 16">
-<path d="M8.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L2.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093L8.95 4.992zm-.92 5.14.92.92a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 1 0-1.091-1.028L9.477 9.417l-.485-.486z"/>
-</svg>`, `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#176b87" class="bi bi-check-all mx-1" viewBox="0 0 16 16">
-<path d="M8.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L2.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093L8.95 4.992zm-.92 5.14.92.92a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 1 0-1.091-1.028L9.477 9.417l-.485-.486z"/>
-</svg>`];
+    <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0"/>
+    </svg>`, `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-all mx-1" viewBox="0 0 16 16">
+    <path d="M8.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L2.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093L8.95 4.992zm-.92 5.14.92.92a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 1 0-1.091-1.028L9.477 9.417l-.485-.486z"/>
+    </svg>`, `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#176b87" class="bi bi-check-all mx-1" viewBox="0 0 16 16">
+    <path d="M8.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L2.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093L8.95 4.992zm-.92 5.14.92.92a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 1 0-1.091-1.028L9.477 9.417l-.485-.486z"/>
+    </svg>`];
     fetch('/api/get/chats/chats.php')
     .then((res)=>{return res.json()})
     .then((res)=>{
@@ -316,13 +316,13 @@ function getTimeElapsed(messageTime) {
         
         chatsContainer.innerHTML = `<div class="alert alert-danger m-4" role="alert">
   No se puede acceder a los chats en este momento, vuelva a intentarlo mas tarde.   
-</div>`
+    </div>`
     })
     
 
     const btnViewContac = document.getElementById('btnViewContac')
 
-document.addEventListener("DOMContentLoaded", () => {
+    document.addEventListener("DOMContentLoaded", () => {
     const myContactsList = document.getElementById("myContactsList");
     const sentRequestsList = document.getElementById("sentRequestsList");
     const receivedRequestsList = document.getElementById("receivedRequestsList");
@@ -407,7 +407,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
    
     
-});
+    });
 
 </script>
 </body>
