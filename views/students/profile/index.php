@@ -146,7 +146,7 @@ $indexRow = $index->fetch_assoc();
 
                             <?php
 
-                              $photos = json_decode($student['photos'], true);
+                              @$photos = json_decode($student['photos'] ?? "", true);
                               for ($i=0; $i < 3; $i++) { 
                                 if ($i === 0) {
                                     echo '<div class="carousel-item active relative">';
