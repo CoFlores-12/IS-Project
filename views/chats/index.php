@@ -102,6 +102,85 @@
 </head>
 <body>
 
+
+<!-- Modal -->
+<!-- Modal de Solicitudes de Contacto -->
+<div class="modal fade" id="contactsModal" tabindex="-1" aria-labelledby="requestsModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content bg">
+      <div class="modal-header">
+        <h5 class="modal-title" id="requestsModalLabel">Solicitudes de Contacto</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Pestañas -->
+<ul class="nav nav-tabs" id="requestsTabs" role="tablist">
+    <li class="nav-item" role="presentation">
+        <button class="nav-link active bg-aux text" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="true">Contactos</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link bg-aux text" id="sent-tab" data-bs-toggle="tab" data-bs-target="#sent" type="button" role="tab" aria-controls="sent" aria-selected="false">Enviadas</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link bg-aux text" id="received-tab" data-bs-toggle="tab" data-bs-target="#received" type="button" role="tab" aria-controls="received" aria-selected="false">Recibidas</button>
+    </li>
+</ul>
+
+<!-- Contenido de las Pestañas -->
+<div class="tab-content" id="requestsTabsContent">
+    <div class="tab-pane fade show active table-responsive" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+        <table id="contacts" class="table mt-3 table-striped table-hover">
+            <thead>
+                <tr>
+                    <th class="bg-aux text">Estudiante</th>
+                    <th class="bg-aux text">Correo</th>
+                    <th class="bg-aux text">Telefono</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Las filas de solicitudes pendientes se llenarán aquí -->
+            </tbody>
+        </table>
+    </div>
+    <div class="tab-pane fade table-responsive" id="sent" role="tabpanel" aria-labelledby="sent-tab">
+        <table id="pendingRequestsTable" class="table mt-3 table-striped table-hover">
+            <thead>
+                <tr>
+                    <th class="bg-aux text">Estudiante</th>
+                    <th class="bg-aux text">Número de cuenta</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Las filas de solicitudes enviadas se llenarán aquí -->
+            </tbody>
+        </table>
+    </div>
+    <div class="tab-pane fade table-responsive" id="received" role="tabpanel" aria-labelledby="received-tab">
+        <table id="receivedRequestsTable" class="table mt-3 table-striped table-hover">
+            <thead>
+                <tr>
+                    <th class="bg-aux text">Estudiante</th>
+                    <th class="bg-aux text">Correo</th>
+                    <th class="bg-aux text">Telefono</th>
+                    <th class="bg-aux text">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Las filas de solicitudes recibidas se llenarán aquí -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
 <div id="chatsV" style="position: relative">
     <div class="input-group rounded mb-3 p-3">
         <input type="Buscar" class="form-control rounded" placeholder="Search" aria-label="Search"
@@ -222,9 +301,9 @@
     </ul>
 </div> 
     <div class="dropup position-fixed bottom-0 end-0 m-4">
-  <button type="button" id="btnViewContac"  class="btn  flex justify-center items-center text-white btn-lg hide-toggle" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">
-  <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor" class="bi bi-plus bg-custom-primary rounded-circle" viewBox="0 0 16 16">
-  <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+    <button type="button" id="btnViewContac"  class="btn  flex justify-center items-center text-white btn-lg hide-toggle" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">
+    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor"  id="requestsBTN" class="bi bi-plus bg-custom-primary rounded-circle" viewBox="0 0 16 16">
+    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
 </svg>
   </button>
   <ul class="dropdown-menu">
@@ -408,6 +487,117 @@
    
     
     });
+
+    
+    const requestsBTN = document.getElementById("requestsBTN");
+    let requestsModal = document.getElementById("contactsModal");
+    let myModal = new bootstrap.Modal(requestsModal);
+   
+
+    requestsBTN.addEventListener("click", ()=>{
+        myModal.show();
+        fetch(`/api/get/chats/getRequests.php`)
+        .then(response => response.json())
+        .then(data => {
+            const pendingRequestsTable = document.getElementById('pendingRequestsTable').getElementsByTagName('tbody')[0];
+            
+            pendingRequestsTable.innerHTML = '';
+
+            if (data.length > 0) {
+                data.forEach(request => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td class="bg-aux text">${request.first_name} ${request.last_name}</td>
+                        <td class="bg-aux text">${request.account_number}</td>
+                    `;
+                    pendingRequestsTable.appendChild(row);
+                });
+            } else {
+                pendingRequestsTable.innerHTML = '<tr><td colspan="2" class="bg-aux text">No tienes solicitudes pendientes.</td></tr>';
+            }
+        })
+        .catch(error => console.error('Error al obtener solicitudes pendientes:', error));
+
+
+        fetch(`/api/get/chats/getContacts.php`)
+        .then(response => response.json())
+        .then(data => {
+            const contactsTable = document.getElementById('contacts').getElementsByTagName('tbody')[0];
+
+            // Limpiar la tabla de contactos antes de llenarla
+            contactsTable.innerHTML = '';
+
+            if (data.length > 0) {
+                data.forEach(contact => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td class="bg-aux text">${contact.first_name} ${contact.last_name}</td>
+                        <td class="bg-aux text">${contact.email}</td>
+                        <td class="bg-aux text">${contact.phone_number}</td>
+                    `;
+                    contactsTable.appendChild(row);
+                });
+            } else {
+                // Si no hay contactos, mostrar mensaje
+                contactsTable.innerHTML = '<tr><td colspan="3" class="bg-aux text">No tienes contactos.</td></tr>';
+            }
+        })
+        .catch(error => console.error('Error al obtener los contactos:', error));
+
+       
+
+
+        fetch(`/api/get/chats/requestsReceived.php`)
+        .then(response => response.json())
+        .then(data => {
+            const receivedRequestsTable = document.getElementById('receivedRequestsTable').getElementsByTagName('tbody')[0];
+
+            receivedRequestsTable.innerHTML = '';
+
+            if (data.length > 0) {
+                data.forEach(request => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td class="bg-aux text">${request.first_name} ${request.last_name}</td>
+                        <td class="bg-aux text">${request.personal_email}</td>
+                        <td class="bg-aux text">${request.phone}</td>
+                        <td class="bg-aux text">
+                            <button class="btn btn-success btn-sm" onclick="updateRequestStatus(${request.request_id}, 'accepted')">Aceptar</button>
+                            <button class="btn btn-danger btn-sm" onclick="updateRequestStatus(${request.request_id}, 'rejected')">Rechazar</button>
+                        </td>
+                    `;
+                    receivedRequestsTable.appendChild(row);
+                });
+            } else {
+                receivedRequestsTable.innerHTML = '<tr><td colspan="4" class="bg-aux text">No tienes solicitudes recibidas.</td></tr>';
+            }
+            })
+        .catch(error => console.error('Error al obtener los contactos:', error));
+
+})
+
+function updateRequestStatus(request_id, status) {
+            fetch('/api/put/chat/updateRequestStatus.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: `request_id=${request_id}&status=${status}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message) {
+                    
+                    alert(data.message);
+
+                    receivedRequestsBTN.click(); 
+                } else {
+                    alert(data.error || 'Hubo un error al actualizar la solicitud.');
+                }
+            })
+            .catch(error => console.error('Error al actualizar la solicitud:', error));
+        }
+    
 
 </script>
 </body>

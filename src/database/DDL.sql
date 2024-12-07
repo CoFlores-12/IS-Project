@@ -359,11 +359,22 @@ CREATE TABLE class_resources (
 
 CREATE TABLE contact_requests (
     id_contact_requests INT AUTO_INCREMENT PRIMARY KEY,
-    sender_id INT NOT NULL, 
-    receiver_id INT NOT NULL,
+    sender_id VARCHAR(20) NOT NULL, 
+    receiver_id VARCHAR(20) NOT NULL,
     status ENUM('pending', 'accepted', 'rejected') DEFAULT 'pending', 
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE contact_requests (
+    request_id INT PRIMARY KEY AUTO_INCREMENT,
+    sender_id VARCHAR(20) NOT NULL, 
+    receiver_id VARCHAR(20) NOT NULL, 
+    status ENUM('pending', 'accepted', 'rejected') DEFAULT 'pending',  
+    request_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
+    FOREIGN KEY (sender_id) REFERENCES Students(account_number) ON DELETE CASCADE,  
+    FOREIGN KEY (receiver_id) REFERENCES Students(account_number) ON DELETE CASCADE 
+);
+
 
 CREATE TABLE student_teacher_evaluation (
     evaluation_id INT AUTO_INCREMENT PRIMARY KEY,         
@@ -559,3 +570,4 @@ WHERE (Employees.employee_number = ?
        OR Persons.person_id = ? 
        OR Employees.institute_email = ?)
   AND Employees.employee_number = ?; -- Filtro para asegurar que solo se traigan empleados del docente autenticado
+

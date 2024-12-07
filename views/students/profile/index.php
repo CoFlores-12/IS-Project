@@ -81,6 +81,24 @@ $indexRow = $index->fetch_assoc();
 
 @$indiceGlobal = intval($indexRow['indice_global']);
 @$indiceUltimoPeriodo = intval($indexRow['indice_ultimo_periodo']); 
+
+function getResquest($receiver_id){
+  $db = (new Database())->getConnection();
+  $sql = "SELECT * FROM contact_requests WHERE sender_id = ? AND receiver_id = ?";
+  $stmt = $db->prepare($sql);
+  $stmt->bind_param("ii", $isMyUser, $receiver_id);
+  $stmt->execute();
+  $result1 = $stmt->get_result();
+
+  if ($result1->num_rows > 0) {
+    return true;
+  } else {
+    return false;
+  }
+
+}
+
+
 ?>
 
 
@@ -194,9 +212,21 @@ $indexRow = $index->fetch_assoc();
                           <p class="text-secondary text-xs mb-1"><?php echo $student['center_name'] ?></p>
                           <?php
                             if (!$isMyUser) {
-                              echo '<button class="btn btn-primary mr-1">Agregar a contactos</button>
+                              $var = getResquest( $student['account_number']);
+
+                              if($var){
+                                echo '<button class="btn btn-primary mr-1" id="btncreateRequest" onclick="createRequest(' . $student['account_number'] . ')">Agregar a contactos</button>
+
+                                <a href="/views/chats/new.php?id=' . $student['account_number'] . '">
+                                    <button class="btn btn-outline-primary mx-2">Enviar mensaje</button>
+                                </a>';
+                              }else{
+                                echo '<a href="/views/chats/new.php?id=' . $student['account_number'] . '">
+                                    <button class="btn btn-outline-primary mx-2">Enviar mensaje</button>
+                                </a>';
+                              }
                               
-                              <a href="/views/chats/new.php?id='.$student['account_number'].'"><button class="btn btn-outline-primary mx-2">Enviar mensaje</button></a>';
+                              
                             }
                           ?>
                         </div>
@@ -524,6 +554,29 @@ async function sendToApi(imageUrl, accountNumber) {
     }
     window.location.reload()
 }
+
+let btncreateRequest = document.getElementById('btncreateRequest'); 
+
+function createRequest(otherStudent){
+  fetch("/api/post/chats/createRequest.php", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      receiver_id: otherStudent
+    }),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data); 
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
+  }
+
+
 
     </script>
 </body>
