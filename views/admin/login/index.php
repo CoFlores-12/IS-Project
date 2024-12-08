@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Students</title>
+    <title>Inicio de sesión - Administradores</title>
     <meta name="author" content="cofloresf@unah.hn">
         <meta name="version" content="0.1.0">
         <meta name="date" content="30/10/2014">
@@ -27,7 +27,7 @@
     <div class="row flex justify-center items-center h-full">
       <div class="col-md-9 col-lg-6 col-xl-5 flex justify-center items-center mb-4">
         <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
-          class="img-fluid" width="70%" alt="Sample image">
+          class="img-fluid" width="70%" alt="Imagen de ejemplo">
       </div>
       <div class="col-md-8 col-lg-4 col-xl-4 offset-xl-1">
         <form>

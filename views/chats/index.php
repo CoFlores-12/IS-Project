@@ -183,7 +183,7 @@
 
 <div id="chatsV" style="position: relative">
     <div class="input-group rounded mb-3 p-3">
-        <input type="Buscar" class="form-control rounded" placeholder="Search" aria-label="Search"
+        <input type="Buscar" class="form-control rounded" placeholder="Buscar" aria-label="Buscar"
         aria-describedby="search-addon" />
         <span class="input-group-text text bg-aux border-0" id="search-addon">
         <i class="bi bi-search"></i>

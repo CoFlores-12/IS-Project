@@ -155,7 +155,7 @@ if ($idEmployee != null) {
                 <table>
                     <thead>
                         <tr>
-                            <th class="bg-aux">Item</th>
+                            <th class="bg-aux">Puntaje</th>
                             <th class="bg-aux">Calificación</th>
                             <th class="bg-aux">Observación</th>
                         </tr>

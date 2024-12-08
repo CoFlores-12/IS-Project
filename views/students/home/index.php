@@ -115,7 +115,7 @@ AuthMiddleware::checkAccess($requiredRole);
     <div class="container-fluid row h-full">
         <div class="offcanvas offcanvas-end bg p-0" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
             <div class="offcanvas-header justify-between">
-                <h5 class="offcanvas-title" id="offcanvasExampleLabel">Chats <button class="btn mx-2" id="refreshChats"><i  id="refreshIcon" class="bi bi-arrow-clockwise text rotate"></i></button></h5>
+                <h5 class="offcanvas-title" id="offcanvasExampleLabel">Mensajería <button class="btn mx-2" id="refreshChats"><i  id="refreshIcon" class="bi bi-arrow-clockwise text rotate"></i></button></h5>
                 <button type="button" class="btn bg text" data-bs-dismiss="offcanvas" aria-label="Close">
                     <i class="bi bi-x"></i>
                 </button>
@@ -162,7 +162,7 @@ AuthMiddleware::checkAccess($requiredRole);
                         </button>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="/views/students/profile/index.php?account_number=<?php echo $_SESSION['user']['student_id'] ?>">Mi perfil</a></li>
-                            <li><a class="dropdown-item" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">Chats</a></li>
+                            <li><a class="dropdown-item" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">Mensajería</a></li>
                             
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="/api/get/logout.php">Salir <i class="bi bi-box-arrow-right"></i></a></li>

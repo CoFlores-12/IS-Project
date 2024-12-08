@@ -15,7 +15,7 @@ $roles = ["Department Head", "Coordinator", "Teacher"];
 date_default_timezone_set('America/Tegucigalpa');
 $db = (new Database())->getConnection();
 $result = $db->execute_query("SELECT 
-    CONCAT(p.first_name, ' ', p.last_name) as teacher,
+    CONCAT(p.first_name, ' ', p.last_name) as teacher, institute_email,
     s.employee_number
 FROM Section s
 INNER JOIN Employees em ON s.employee_number = em.employee_number
@@ -167,18 +167,21 @@ $row = $result->fetch_assoc();
         <h5 class="modal-title" id="exampleModalLabel">Participantes</h5>
     </div>
     <div class="modal-body">
+        <h4>Docente</h4>
           <table class="table table-bordered table-hover">
               <thead class="bg-aux">
                   <tr>
-                      <th class="bg-aux bg-custom-primary text-white">Docente</th>
+                      <th class="bg-aux bg-custom-primary text-white">Nombre</th>
+                      <th class="bg-aux bg-custom-primary text-white">Correo</th>
                   </tr>
               </thead>
               <tbody>
                   <tr>
-                      <td><a href="/views/admin/teacher/profile/index.php?employee_number=<?php echo $row['employee_number'] ?>"><?php echo $row['teacher'] ?></a></td>
+                      <td class="bg-aux text"><a href="/views/admin/teacher/profile/index.php?employee_number=<?php echo $row['employee_number'] ?>"><?php echo $row['teacher'] ?></a></td>
+                      <td class="bg-aux text"><?php echo $row['institute_email'] ?></td>
                   </tr>
               </tbody>
-          </table>
+          </table> 
           <h4>Estudiantes</h4>
           <table class="table table-bordered table-hover" id="studentsTable">
               <thead class="bg-aux">
@@ -241,8 +244,8 @@ $row = $result->fetch_assoc();
         <!-- Offcanvas -->
         <div class="offcanvas offcanvas-end bg p-0" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
             <div class="offcanvas-header justify-between">
-                <h5 class="offcanvas-title" id="offcanvasExampleLabel">
-                    Chats
+                <h5 class="offcanvas-title text" id="offcanvasExampleLabel">
+                    Mensajeria
                     <button class="btn mx-2" id="refreshChats">
                         <i id="refreshIcon" class="bi bi-arrow-clockwise text rotate"></i>
                     </button>
@@ -259,7 +262,7 @@ $row = $result->fetch_assoc();
         <!-- Sidebar -->
         <div class="col-md-3 d-none d-md-block bg-aux" id="desktopAside">
             <div class="offcanvas-header py-3 justify-between">
-                <h5 class="offcanvas-title text" id="offcanvasExampleLabel">Menu</h5>
+                <h5 class="offcanvas-title text" id="offcanvasExampleLabel">Menú</h5>
                 <button type="button" class="btn d-md-none" aria-label="Close" onclick="toggleSidebar()">
                     <i class="bi bi-x-lg"></i>
                 </button>
@@ -295,7 +298,7 @@ $row = $result->fetch_assoc();
                             <li><a class="dropdown-item" href="#">Mi perfil</a></li>
                             <li>
                                 <a class="dropdown-item" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
-                                    Chats
+                                    Mensajeria
                                 </a>
                             </li>
                             <li><hr class="dropdown-divider"></li>
@@ -311,7 +314,7 @@ $row = $result->fetch_assoc();
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="javascript:history.back()">Inicio</a></li>
-                        <li class="breadcrumb-item active" aria-current="page" id="section-title"></li>
+                        <li class="breadcrumb-item active text" aria-current="page" id="section-title"></li>
                     </ol>
                 </nav>
                 </div>

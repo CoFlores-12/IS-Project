@@ -23,7 +23,7 @@ $currentTime = new DateTime();
     <meta name="version" content="0.2.0">
     <meta name="date" content="29/10/2014">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admissions</title>
+    <title>Admisiones</title>
     <link rel="stylesheet" href="/public/css/theme.css">
     <link rel="icon" type="image/png" href="/public/images/logo.png" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
@@ -35,8 +35,8 @@ $currentTime = new DateTime();
     
     if ($currentTime < $startTime || $currentTime > $endTime) {
         echo '<div class="alert alert-warning text-center m-4" role="alert">
-  non-active registration period
-</div>' ;
+            Período de admisiones aún no activo
+        </div>' ;
         return;
     }
     
