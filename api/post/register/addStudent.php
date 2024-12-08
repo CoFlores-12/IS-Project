@@ -149,13 +149,6 @@ if (mb_detect_encoding($dataString, 'UTF-8', true) === false) {
 
 $calculatedHash = hash('sha256', $dataString);
 
-/*
-if ($receivedHash !== $calculatedHash) {
-    echo json_encode(["success" => false, "message" => "Data integrity check failed. The hash does not match."]);
-    exit;
-}
-*/
-
     foreach ($parsedData as $student) {
         $person_id = $student['person_id'];
         $first_name = $student['first_name'];
