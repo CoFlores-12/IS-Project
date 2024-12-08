@@ -31,9 +31,7 @@ sendButton.addEventListener("click", () => {
             if (data.success) {
                 sendButton.disabled = false;
                 sendButton.innerHTML = `Enviar`;
-            } else {
-                console.error(data.message);
-            }
+            } 
         })
         .catch(error => console.error('Error:', error));
     };

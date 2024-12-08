@@ -571,3 +571,7 @@ WHERE (Employees.employee_number = ?
        OR Employees.institute_email = ?)
   AND Employees.employee_number = ?; -- Filtro para asegurar que solo se traigan empleados del docente autenticado
 
+SELECT p.first_name, p.last_name, s.account_number
+FROM `Students` s 
+JOIN `Persons` p ON p.person_id = s.person_id 
+WHERE s.account_number = 20201000005;

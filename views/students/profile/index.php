@@ -1,5 +1,6 @@
 <?php
 session_start();
+$idStudent = $_SESSION['user']['student_id'] ?? null;
 $idTest = null;
 if (isset($_SESSION['user']['student_id'])) {
   
@@ -82,22 +83,16 @@ $indexRow = $index->fetch_assoc();
 @$indiceGlobal = intval($indexRow['indice_global']);
 @$indiceUltimoPeriodo = intval($indexRow['indice_ultimo_periodo']); 
 
-function getResquest($receiver_id){
-  $db = (new Database())->getConnection();
-  $sql = "SELECT * FROM contact_requests WHERE sender_id = ? AND receiver_id = ?";
-  $stmt = $db->prepare($sql);
-  $stmt->bind_param("ii", $isMyUser, $receiver_id);
-  $stmt->execute();
-  $result1 = $stmt->get_result();
 
-  if ($result1->num_rows > 0) {
-    return true;
-  } else {
-    return false;
-  }
+$sql = "SELECT * FROM contact_requests WHERE sender_id = ? AND receiver_id = ?";
+$stmt = $db->prepare($sql);
+$stmt->bind_param("ii", $isMyUser, $account_number);
+$stmt->execute();
+$result1 = $stmt->get_result();
 
+if ($result1->num_rows > 0) {
+  
 }
-
 
 ?>
 
@@ -210,23 +205,16 @@ function getResquest($receiver_id){
                           <p class="text-secondary mb-1"><?php echo $student['career_name'] ?></p>
                           <p class="text-secondary text-xs mb-1"><?php echo $student['faculty_name'] ?></p>
                           <p class="text-secondary text-xs mb-1"><?php echo $student['center_name'] ?></p>
+                          <div class="alert alert-success" hidden id="alertRequest" role="alert">
+                            Solicitud enviada Correctamente!
+                          </div>
                           <?php
-                            if (!$isMyUser) {
-                              $var = getResquest( $student['account_number']);
-
-                              if($var){
-                                echo '<button class="btn btn-primary mr-1" id="btncreateRequest" onclick="createRequest(' . $student['account_number'] . ')">Agregar a contactos</button>
-
-                                <a href="/views/chats/new.php?id=' . $student['account_number'] . '">
-                                    <button class="btn btn-outline-primary mx-2">Enviar mensaje</button>
-                                </a>';
-                              }else{
-                                echo '<a href="/views/chats/new.php?id=' . $student['account_number'] . '">
-                                    <button class="btn btn-outline-primary mx-2">Enviar mensaje</button>
-                                </a>';
-                              }
-                              
-                              
+                            if (!$isMyUser) { 
+                            if ($result1->num_rows === 0) {
+                              echo '<button class="btn btn-primary mr-1" id="btncreateRequest" onclick="createRequest(' . $student['account_number'] . ')">Agregar a contactos</button>';
+                             }
+                             
+                             echo '<a href="/views/chats/new.php?id=' . $student['account_number'] . '"><button class="btn btn-outline-primary mx-2">Enviar mensaje</button></a>';                              
                             }
                           ?>
                         </div>
@@ -555,9 +543,15 @@ async function sendToApi(imageUrl, accountNumber) {
     window.location.reload()
 }
 
-let btncreateRequest = document.getElementById('btncreateRequest'); 
+
 
 function createRequest(otherStudent){
+  let btncreateRequest = document.getElementById('btncreateRequest'); 
+  btncreateRequest.disabled = true;
+  btncreateRequest.innerHTML = '<div class="spinner-border text-secondary" role="status"></div>'
+  const alertRequest = document.getElementById('alertRequest');
+  alertRequest.style.display = "none"
+
   fetch("/api/post/chats/createRequest.php", {
     method: "POST",
     headers: {
@@ -570,6 +564,13 @@ function createRequest(otherStudent){
     .then((response) => response.json())
     .then((data) => {
       console.log(data); 
+      alertRequest.removeAttribute('hidden');
+      alertRequest.style.display = "block"
+      setTimeout(() => {
+        alertRequest.style.display = "none"
+    }, 3000); 
+      btncreateRequest.disabled = false;
+      btncreateRequest.innerHTML = 'Agregar a contactos'
     })
     .catch((error) => {
       console.error("Error:", error);

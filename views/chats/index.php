@@ -562,8 +562,8 @@
                         <td class="bg-aux text">${request.personal_email}</td>
                         <td class="bg-aux text">${request.phone}</td>
                         <td class="bg-aux text">
-                            <button class="btn btn-success btn-sm" onclick="updateRequestStatus(${request.request_id}, 'accepted')">Aceptar</button>
-                            <button class="btn btn-danger btn-sm" onclick="updateRequestStatus(${request.request_id}, 'rejected')">Rechazar</button>
+                            <button class="btn btn-success btn-sm m-1" onclick="updateRequestStatus(${request.request_id}, 'accepted')">Aceptar</button>
+                            <button class="btn btn-danger btn-sm m-1" onclick="updateRequestStatus(${request.request_id}, 'rejected')">Rechazar</button>
                         </td>
                     `;
                     receivedRequestsTable.appendChild(row);
