@@ -219,6 +219,8 @@ AuthMiddleware::checkAccess($requiredRole);
     </div>
 
     <script src="/public/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
     <script src="/public/js/homeStudent.js"></script>
-</body>
+    </body>
 </html>

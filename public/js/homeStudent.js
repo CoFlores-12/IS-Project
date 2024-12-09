@@ -612,3 +612,115 @@ function toggleSidebar() {
 }
 
 toggleAside.addEventListener('click', toggleSidebar);
+
+const { jsPDF } = window.jspdf;
+
+// Función para generar el PDF
+function generarPDF(data) {
+  console.log("Datos recibidos para el PDF:", data); // Depuración
+  const doc = new jsPDF();
+
+  // Cambiar el color de fondo de la página a un tono muy leve de rosa
+  doc.setFillColor(255, 234, 244); // Color rosa claro
+  doc.rect(0, 0, doc.internal.pageSize.width, doc.internal.pageSize.height, 'F');
+
+  try {
+    const width = doc.internal.pageSize.width; // Ancho total de la página
+
+    // Título centrado
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(14);
+    const title = "UNIVERSIDAD NACIONAL AUTÓNOMA DE HONDURAS";
+    const titleWidth = doc.getTextWidth(title); // Medir el ancho del texto
+    doc.text(title, (width - titleWidth) / 2, 10); // Centrado en el eje X
+
+    // Subtítulos centrados
+    doc.setFontSize(12);
+    doc.setFont("helvetica", "normal");
+    const subtitle1 = "DIRECCIÓN DE INGRESO PERMANENTE Y PROMOCIÓN";
+    const subtitle2 = "SECCIÓN DE CALIFICACIONES";
+    const subtitle1Width = doc.getTextWidth(subtitle1);
+    const subtitle2Width = doc.getTextWidth(subtitle2);
+
+    doc.text(subtitle1, (width - subtitle1Width) / 2, 20); // Centrado
+    doc.text(subtitle2, (width - subtitle2Width) / 2, 30); // Centrado
+
+    // Cuerpo del texto alineado a la izquierda
+    doc.setFontSize(10);
+    const texto = `El suscrito Director de la Dirección de Ingreso, Permanencia y Promoción, 
+    certifica que ${data.header.first_name} ${data.header.last_name}, matrícula número ${data.header.account_number}, 
+    ha cursado las asignaturas correspondientes a la carrera de ${data.header.career_name}.`;
+
+    // Asegurarse de que el texto esté alineado a la izquierda y no se corte
+    const startX = 10; // Margen izquierdo
+    const startY = 40; // Margen superior
+
+    // Escribir el texto alineado a la izquierda con un máximo de 190 de ancho
+    doc.text(texto, startX, startY, { maxWidth: width - 20 });
+
+    // Generar tabla de calificaciones con fondo rosa claro
+    const columnas = ["Código", "Asignatura", "Calificación", "UV"];
+    const filas = data.classes.map(clase => [
+      clase.class_code,
+      clase.class_name,
+      clase.score,
+      clase.uv
+    ]);
+
+    doc.autoTable({
+      startY: startY + 20, // Ajustar la posición de inicio de la tabla
+      head: [columnas],
+      body: filas,
+      theme: "grid",  // Usar un diseño sin colores de fondo
+      styles: {
+        fontSize: 10,
+        cellPadding: 3,
+        valign: 'middle',
+        fillColor: [255, 228, 237], // Fondo rosa claro en la tabla
+      },
+      headStyles: {
+        fillColor: [255, 228, 237], // Fondo rosa claro en los encabezados
+        textColor: [0, 0, 0] // Texto en color negro
+      },
+      alternateRowStyles: {
+        fillColor: [255, 228, 237] // Fondo rosa claro en las filas alternas
+      }
+    });
+
+    // Guardar el archivo
+    doc.save("certificacion.pdf");
+  } catch (error) {
+    console.error("Error al generar el PDF:", error);
+  }
+}
+
+// Función para obtener los datos desde el API y generar el PDF
+async function obtenerDatosYGenerarPDF() {
+  try {
+    const accountNumber = 20201000005; // Aquí puedes obtener dinámicamente el número de cuenta
+
+    const response = await fetch('/api/get/students/getCertifyData.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      body: new URLSearchParams({ account_number: accountNumber })
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      alert(`Error: ${error.error}`);
+      return;
+    }
+
+    const data = await response.json();
+    generarPDF(data);
+  } catch (error) {
+    console.error("Error al obtener los datos para el PDF:", error);
+  }
+}
+
+// Asociar al botón en HTML
+document
+  .getElementById("btnDownloadCertify")
+  .addEventListener("click", obtenerDatosYGenerarPDF);
