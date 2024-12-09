@@ -465,6 +465,21 @@ AuthMiddleware::checkAccess($requiredRole);
     </div>
 </div>
 
+<!-- Modal to show grades -->
+<div class="modal fade" id="gradesModal" tabindex="-1" aria-labelledby="gradesModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content bg">
+            <div class="modal-header bg">
+                <h5 class="modal-title text" id="resultsModalLabel">Calificaciones subidas para el PAC en curso</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="gradesModalBody">
+                <!-- Aquí se generará la tabla -->
+            </div>
+        </div>
+    </div>
+</div>
+
 
     <div class="container-fluid row h-full" style="flex-wrap: nowrap !important;"> 
           <div class="offcanvas offcanvas-end bg p-0" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
@@ -502,12 +517,15 @@ AuthMiddleware::checkAccess($requiredRole);
                     </a>
                           <div class="" id="collapseStudents">
                             <button type="button" class="text list-group-item list-group-item-action bg list-group-item-indent" data-bs-toggle="modal" data-bs-target="#historyStudent">
-                               Ver hitorial
+                               Ver historial
                             </button>
                             <button type="button" class="text list-group-item list-group-item-action bg list-group-item-indent" data-bs-toggle="modal" data-bs-target="#modalShowEnrolled" id="showEnrolled">
                                Ver Matriculados Actualmente
                             </button>
-                            <a href="#" class="list-group-item list-group-item-action bg list-group-item-indent">View Requests</a>
+                            <button id="showGrades" type="button" class="text list-group-item list-group-item-action bg list-group-item-indent" data-bs-toggle="modal" data-bs-target="#gradesModal">
+                               Ver Calificaciones del Periodo en Curso
+                            </button>
+                            <a href="#" class="list-group-item list-group-item-action bg list-group-item-indent">Ver solicitudes</a>
                           </div>
                     <a class="text bg aux text-decoration-none my-2" data-bs-toggle="collapse" href="#collapseTeachers" role="button" aria-expanded="false" aria-controls="collapseTeachers">
                       <div class="list-group-item list-group-title list-group-item- bg-aux text fw-bold">
