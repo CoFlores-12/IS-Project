@@ -29,7 +29,6 @@ function activateEmailSend() {
         .then(response => response.json())
         .then(data => {
 
-            console.log(data)
             if (data == true) {
                 alertSuccesMails.style.display = "block"
                 setTimeout(function() {

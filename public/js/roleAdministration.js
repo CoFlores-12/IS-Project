@@ -364,8 +364,6 @@ saveUNBtn.addEventListener("click", ()=>{
     let starExceptional = document.getElementById('start-time-uploadnotes');
     let endExceptional = document.getElementById('end-time-uploadnotes');
 
-    console.log(starExceptional.value, "   -   ", endExceptional.value)
-
         const formData = new FormData();
         formData.append('start_time', starExceptional.value);
         formData.append('end_time', endExceptional.value);

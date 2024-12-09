@@ -347,20 +347,16 @@ let historyBody = document.getElementById('historyBody');
                     alertTeacher.style.display = 'block';
                     alertTeacher.removeAttribute('hidden');
                     alertClassroom.removeAttribute('hidden');
-                    console.log(data.message);
                 } else if (data.status == 1) {
                     alertClassroom.style.display = 'block';
                     alertClassroom.removeAttribute('hidden');
-                    console.log(data.message);
                 }else if (data.status == 2) {
                     alertTeacher.style.display = 'block';
                     alertTeacher.removeAttribute('hidden');
-                    console.log(data.message);
                 } 
                 else if (data.status == 3) {
                     alertCapacity.style.display = 'block';
                     alertCapacity.removeAttribute('hidden');
-                    console.log(data.message);
                 }else  {
                     modalNewSection.hide();
                     modalNewSectionManual.hide();
@@ -842,9 +838,7 @@ function modalDeleteSection(item){
         saveDeleteSection.innerHTML = `<i class="bi bi-trash"></i>`
         setTimeout(function() {
             alertDelete.style.display = 'none';
-          }, 3000); 
-       console.log(data)
-        
+          }, 3000);  
     })
     .catch(error => {
       console.log(error)
@@ -949,7 +943,6 @@ toggleAside.addEventListener('click', toggleSidebar);
 fetch('/api/get/admin/getStats.php')
 .then(res=>{return res.json()})
 .then(res=>{
-    console.log(res);
     statsStudents.innerHTML = res.students
     statsEmployees.innerHTML = res.employees
     statsClasses.innerHTML = res.classes
@@ -1070,7 +1063,6 @@ btnassessment.addEventListener("click", ()=>{
     fetch('/api/get/admin/teacherEvaluation.php')
     .then((response)=>{return response.json()})
     .then((evals) => {
-        console.log(evals);
         let table = `<table class="table bg-aux mt-2">
                         <thead>
                             <tr class="bg-aux text">
@@ -1096,7 +1088,6 @@ btnassessment.addEventListener("click", ()=>{
                 if (!isNaN(numValue) && numValue >= 0 && numValue <= 4) {
                     scoreSum += numValue; 
                     questionCount++;
-                    console.log(numValue);
                 }
             }
     
@@ -1368,7 +1359,6 @@ btnastatistics.addEventListener("click", ()=>{
             surveyData.push(response.responses)
         })
 
-        console.log(surveyData)
       const numQuestions = 28; 
       const scores = Array(numQuestions).fill(0);
       const responseCounts = Array(numQuestions).fill(0);

@@ -40,6 +40,9 @@ AuthMiddleware::checkAccess($requiredRole);
             </div>
         </div>
         <div class="container-fluid">
+        <div class="alert alert-success"  hidden id="alertUploadSuccess" role="alert">
+            Enviado - Todo salio bien.
+        </div>
             <div class=" flex p-2 justify-between items-center">
                 <h4 class="text">Registro</h4>
                
@@ -53,6 +56,9 @@ AuthMiddleware::checkAccess($requiredRole);
                                 <div class="my-3">
                                     <label for="formFile" class="form-label">Cargar el archivo CSV con los datos de los proximos estudiantes</label>
                                     <input class="form-control"  accept=".csv" type="file" id="csvFile">
+                                </div>
+                                <div class="alert alert-warning mt-3" hidden id="alertUploadFile" role="alert" >
+                                    Cargar archivo
                                 </div>
                                     <button type="button" class="btn btn-success mt-4 btn-sm" id="sendCSV">Enviar</button>
                             </div>

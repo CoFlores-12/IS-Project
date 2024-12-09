@@ -1,5 +1,5 @@
 <?php
-
+date_default_timezone_set('America/Tegucigalpa');
 session_start();
 $idStudent = $_SESSION['user']['student_id'] ?? null;
 $idEmployee = $_SESSION['user']['employeenumber'] ?? null;

@@ -1,11 +1,19 @@
 const fileInput = document.getElementById('csvFile');
 const sendButton = document.getElementById('sendCSV');
 
+let alertUploadFile = document.getElementById('alertUploadFile');
+alertUploadFile.style.display = 'none';
+
+let alertUploadSuccess = document.getElementById('alertUploadSuccess');
+alertUploadSuccess.style.display = 'none';
+
 sendButton.addEventListener("click", () => {
+    alertUploadFile.style.display = 'none';
     const file = fileInput.files[0];
 
     if (!file) {
-        alert("Por favor seleccione un archivo.");
+        alertUploadFile.style.display = 'block';
+        alertUploadFile.removeAttribute('hidden');
         return;
     }
 
@@ -31,9 +39,18 @@ sendButton.addEventListener("click", () => {
             if (data.success) {
                 sendButton.disabled = false;
                 sendButton.innerHTML = `Enviar`;
+                alertUploadSuccess.style.display = 'block';
+                alertUploadSuccess.removeAttribute('hidden');
+                setTimeout(function() {
+                    alertUploadSuccess.style.display = 'none';
+                  }, 3000);
             } 
         })
-        .catch(error => console.error('Error:', error));
+        .catch(error => {
+            console.error('Error:', error)
+            sendButton.disabled = false;
+            sendButton.innerHTML = `Enviar`;
+        });
     };
 
     reader.readAsText(file); 

@@ -43,7 +43,6 @@ const newToken = (ID) => {
         sendEmail.style.display = "block"
         sendEmail.removeAttribute('hidden');
         loading.style.display = "none";
-        console.log(data.status)
     })
     .catch(error => {
             

@@ -36,7 +36,7 @@ section = sectionId;
                 }
 
                 if (data.length === 0) {
-                    tableBody.innerHTML = `<tr><td colspan="4" class="text-center">No hay estudiantes en esta sección</td></tr>`;
+                    tableBody.innerHTML = `<tr><td colspan="4" class="text-center bg-aux text">No hay estudiantes en esta sección</td></tr>`;
                     return;
                 }
 

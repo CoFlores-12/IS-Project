@@ -500,7 +500,7 @@ AuthMiddleware::checkAccess($requiredRole);
                        Estudiantes
                       </div>
                     </a>
-                          <div class="collapse" id="collapseStudents">
+                          <div class="" id="collapseStudents">
                             <button type="button" class="text list-group-item list-group-item-action bg list-group-item-indent" data-bs-toggle="modal" data-bs-target="#historyStudent">
                                Ver hitorial
                             </button>
@@ -514,17 +514,17 @@ AuthMiddleware::checkAccess($requiredRole);
                         Docentes
                       </div>
                     </a>
-                          <div class="collapse" id="collapseTeachers">
+                          <div class="" id="collapseTeachers">
                             <button type="button" id="changePassword" class="text list-group-item list-group-item-action bg list-group-item-indent" data-bs-toggle="modal" data-bs-target="#changePassword">
                                Cambiar Contraseña
                             </button>
                           </div>
-                          <div class="collapse" id="collapseTeachers">
+                          <div class="" id="collapseTeachers">
                             <button type="button"  class="text list-group-item list-group-item-action bg list-group-item-indent" id="btnassessment" data-bs-toggle="modal" data-bs-target="#assessment">
                                Ver evaluaciones
                             </button>
                           </div>
-                          <div class="collapse" id="collapseTeachers">
+                          <div class="" id="collapseTeachers">
                             <button type="button"  class="text list-group-item list-group-item-action bg list-group-item-indent" id="btnastatistics" data-bs-toggle="modal" data-bs-target="#statistics">
                                Ver Estadisticas
                             </button>
@@ -534,7 +534,7 @@ AuthMiddleware::checkAccess($requiredRole);
                         Secciones
                       </div>
                     </a>
-                          <div class="collapse" id="collapseClasses">
+                          <div class="" id="collapseClasses">
                             <button type="button" class="text list-group-item list-group-item-action bg list-group-item-indent"  id="newSectionClass">
                               Crear sección
                              </button>
@@ -542,7 +542,7 @@ AuthMiddleware::checkAccess($requiredRole);
                                Lista de espera
                             </button>
                           </div>
-                          <div class="collapse" id="collapseClasses">
+                          <div class="" id="collapseClasses">
                             <button type="button" class="text list-group-item list-group-item-action bg list-group-item-indent"  id="deleteSection" data-bs-toggle="modal" data-bs-target="#deleteSectionModal">
                                 Actualizar Sección
                              </button>
