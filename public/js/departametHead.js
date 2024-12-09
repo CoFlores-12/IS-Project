@@ -1441,5 +1441,74 @@ responseDistribution.forEach((count, index) => {
 })
 
 
+document.getElementById('showGrades').addEventListener('click', function () {
+    loadGrades(1, 10); // Cargar la primera página con 10 items por defecto
+});
+
+function loadGrades(page, itemsPerPage) {
+    fetch(`/api/get/admin/getActivePeriodGrades.php?page=${page}&itemsPerPage=${itemsPerPage}`)
+        .then(response => response.json())
+        .then(data => {
+            renderTable(data.data);
+            renderPagination(data.total, data.page, data.itemsPerPage);
+        })
+        .catch(error => console.error('Error:', error));
+}
+
+function renderTable(data) {
+    const tableBody = document.getElementById('gradesModalBody');
+    const rows = data.map(row => `
+        <tr>
+            <td>${row.class_code}</td>
+            <td>${row.first_name} ${row.last_name}</td>
+            <td>${row.student_id}</td>
+            <td>${row.indicator} PAC ${row.year}</td>
+            <td>${row.score}</td>
+        </tr>
+    `).join('');
+    tableBody.innerHTML = `
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Docente</th>
+                    <th>Num. Cuenta Estudiante</th>
+                    <th>Periodo</th>
+                    <th>Calificación</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${rows}
+            </tbody>
+        </table>
+    `;
+}
+
+function renderPagination(total, currentPage, itemsPerPage) {
+    const totalPages = Math.ceil(total / itemsPerPage);
+    let paginationHTML = '';
+
+    for (let i = 1; i <= totalPages; i++) {
+        paginationHTML += `
+            <button class="btn btn-sm ${i === currentPage ? 'btn-primary' : 'btn-secondary'}" onclick="loadGrades(${i}, ${itemsPerPage})">
+                ${i}
+            </button>
+        `;
+    }
+
+    const footer = `
+        <div>
+            <select id="itemsPerPage" onchange="loadGrades(1, this.value)">
+                <option value="5" ${itemsPerPage == 5 ? 'selected' : ''}>5</option>
+                <option value="10" ${itemsPerPage == 10 ? 'selected' : ''}>10</option>
+                <option value="20" ${itemsPerPage == 20 ? 'selected' : ''}>20</option>
+            </select>
+            <span>Páginas totales: ${totalPages}</span>
+        </div>
+    `;
+
+    document.getElementById('gradesModalBody').insertAdjacentHTML('beforeend', footer);
+}
+
 
  

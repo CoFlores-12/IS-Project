@@ -143,9 +143,9 @@ AuthMiddleware::checkAccess($requiredRole);
                             <button id="btnModalEnrollment" type="button" class="text bg btn my-1">
                                 Matricula
                             </button>
-                            
-                            
-                    
+                            <button id="btnDownloadCertify" type="button" class="text bg btn my-1">
+                                Descargar Certificado Académico
+                            </button>
                 </div>
         </div>
         <div class="col">
