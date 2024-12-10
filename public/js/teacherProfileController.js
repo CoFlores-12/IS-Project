@@ -29,10 +29,10 @@ document.addEventListener("DOMContentLoaded", () => {
     function createCard(sectionId, hourStart, classCode, className) {
         return `
             <div class="col-md-4 mb-3">
-                <div class="card bg-light border-secondary">
+                <div class="card bg border-secondary">
                     <div class="card-body">
-                        <h5 class="card-title">${className} (${classCode})</h5>
-                        <p class="card-text">
+                        <h5 class="card-title text">${className} (${classCode})</h5>
+                        <p class="card-text text">
                             <strong>Sección ID:</strong> ${sectionId}<br>
                             <strong>Hora de inicio:</strong> ${hourStart}
                         </p>
@@ -42,36 +42,54 @@ document.addEventListener("DOMContentLoaded", () => {
         `;
     }
 
-    // Función para cargar las tarjetas desde el backend
+    // Función para obtener parámetros de la URL
+    function getEmployeeNumberFromURL() {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get('employee_number');
+    }
+
+
     async function loadClassesHistory() {
         const historyContainer = document.getElementById('history');
         historyContainer.innerHTML = '<p>Cargando...</p>';
-
+    
+        // Obtener employee_number de la URL
+        const employeeNumber = getEmployeeNumberFromURL();
+    
+        if (!employeeNumber) {
+            historyContainer.innerHTML = '<p>Error: Número de empleado no definido en la URL.</p>';
+            return;
+        }
+    
         try {
-            const response = await fetch('/api/get/admin/classesHistory.php');
+            const url = `/api/get/admin/classesHistoryByEmpId.php?employee_number=${employeeNumber}`;
+            console.log('URL generada:', url);
+    
+            const response = await fetch(url);
             if (!response.ok) {
                 throw new Error(`Error al obtener los datos: ${response.statusText}`);
             }
             const data = await response.json();
-
-            // Verificar si hay datos
+    
+            if (data.error) {
+                historyContainer.innerHTML = `<p>Error: ${data.error}</p>`;
+                return;
+            }
+    
             if (data.length === 0) {
                 historyContainer.innerHTML = '<p>No hay clases asignadas en el historial.</p>';
                 return;
             }
-
-            // Generar las tarjetas
-            const cards = data.map(item => 
+    
+            const cards = data.map(item =>
                 createCard(item.section_id, item.hour_start, item.class_code, item.class_name)
             ).join('');
-
-            // Colocar las tarjetas en el contenedor
             historyContainer.innerHTML = cards;
         } catch (error) {
             console.error('Error al cargar el historial de clases:', error);
             historyContainer.innerHTML = '<p>Error al cargar el historial de clases.</p>';
         }
-    }
+    }    
 
     // Cargar el historial al cargar la página
     document.addEventListener('DOMContentLoaded', loadClassesHistory);

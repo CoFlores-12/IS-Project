@@ -31,11 +31,6 @@
                                 <div class="w-full">
                                     <img src="/public/images/upload.webp" class="d-block w-100" alt="Imagen de perfil">
                                 </div>
-                                <div class="mt-3">
-                                    <h4 id="studentName">Nombre del Estudiante</h4>
-                                    <p class="text-secondary mb-1" id="careerName">Carrera</p>
-                                    <p class="text-secondary text-xs mb-1" id="facultyName">Facultad</p>
-                                </div>
                             </div>
                         </div>
                     </div>
