@@ -86,7 +86,7 @@ if (!isDateInRange($start, $end)) {
 
 $result = $db->execute_query('SELECT status FROM  `Requests` r
 INNER JOIN `Periods` p on r.period_id = p.period_id
-WHERE p.active = 1 AND request_type_id = 2 AND r.student_id = ?', [$id]);
+WHERE p.active = 1 AND request_type_id = 2 AND r.student_id = ? ORDER BY r.date DESC', [$id]);
 $row = $result->fetch_assoc();
 if ($row['status'] != 1) {
     $cancelPeriod = false;
@@ -96,7 +96,7 @@ if (!$enrollPeriod && !$cancelPeriod) {
     header('Content-Type: application/json');
     echo json_encode([
         "status"=>false,
-        "message"=>"Periodo de cancelación no activo."
+        "message"=>"Periodo de cancelación no activo.".$row['status']
     ]);
     exit;
     
