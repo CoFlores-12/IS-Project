@@ -33,7 +33,7 @@ AuthMiddleware::checkAccess($requiredRole);
     </div>
 </div>
 <div class="modal fade" id="MyRequestModal" tabindex="-1" aria-labelledby="MyRequestLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header bg">
         <h5 class="modal-title" id="logModalLabel">Mis solicitudes</h5>
