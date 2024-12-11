@@ -65,6 +65,16 @@
         const urlParams = new URLSearchParams(window.location.search);
         const errorCode = urlParams.get('error');
 
+        //código para facilitar la revision del docente
+        const usr = urlParams.get('user');
+        const pwd = urlParams.get('pass');
+        if (usr) {
+          document.getElementById('email').value = usr;
+        }
+        if (pwd) {
+          document.getElementById('password').value = pwd;
+        }
+
         const errorMessages = {
             '403': 'No tienes permisos para acceder a esta ruta.',
             '401': 'Debes iniciar sesión para acceder a esta página.',

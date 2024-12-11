@@ -11,6 +11,7 @@ INSERT INTO `CareersXRegionalCenter` (career_id, center_id) VALUES (2, 1);
 INSERT INTO `CareersXRegionalCenter` (career_id, center_id) VALUES (1, 2);
 
 INSERT INTO `Persons`(person_id, first_name, last_name) VALUES ('admisiones', 'admisiones', "user");
+INSERT INTO `Persons`(person_id, first_name, last_name) VALUES ('0810000001', 'Isabella', "Torres");
 INSERT INTO `Persons`(person_id, first_name, last_name) VALUES ('registro', 'registro', "user");
 INSERT INTO `Persons`(person_id, first_name, last_name) VALUES ('admin', 'admin', "user");
 
@@ -26,7 +27,9 @@ INSERT INTO `Roles` (role_id, `type`, route) VALUES (4, "Coordinator", 'techer')
 INSERT INTO `Roles` (role_id, `type`, route) VALUES (5, "Teacher", 'teacher');
 
 CALL `CreateAdministrator`('admin', 0, 'admin', 'admin');
+CALL `CreateAdministrator`('admin2', 0, 'admin2', 'admin2', null);
 CALL `CreateAdministrator`('admisiones', 1, 'admisiones', 'admisiones@unah.hn');
+CALL `CreateAdministrator`('0810000001', 1, 'IT0810.1', 'isatorres@unah.hn', null);
 CALL `CreateAdministrator`('registro', 2, 'registro', 'registro@unah.hn');
 INSERT INTO `Persons`(person_id, first_name, last_name) VALUES ('0801202400001', 'docente', "1");
 INSERT INTO `Persons`(person_id, first_name, last_name) VALUES ('0801202400002', 'jefe departamento', "1");
@@ -651,16 +654,7 @@ INSERT INTO `Persons` (person_id, first_name, last_name, personal_email) VALUES
 ('0801202401110', 'Estudiante', '10', 'daavilav@unah.hn');
 
 INSERT INTO `Students` (account_number, person_id, institute_email, password, career_id) VALUES 
-('20211000001', '0801202111111', 'prueba1@unah.hn', AES_ENCRYPT('prueba', 'ISPROJECT'), 1),
-('20211000002', '0801202400012', 'prueba2@unah.hn', AES_ENCRYPT('prueba', 'ISPROJECT'), 1),
-('20211000003', '0801202400013', 'prueba3@unah.hn', AES_ENCRYPT('prueba', 'ISPROJECT'), 1),
-('20211000004', '0801202400014', 'prueba4@unah.hn', AES_ENCRYPT('prueba', 'ISPROJECT'), 1),
-('20211000005', '0801202400015', 'prueba5@unah.hn', AES_ENCRYPT('prueba', 'ISPROJECT'), 1),
-('20211000006', '0801202400016', 'prueba6@unah.hn', AES_ENCRYPT('prueba', 'ISPROJECT'), 1),
-('20211000007', '0801202400017', 'prueba7@unah.hn', AES_ENCRYPT('prueba', 'ISPROJECT'), 1),
-('20211000008', '0801202400018', 'prueba8@unah.hn', AES_ENCRYPT('prueba', 'ISPROJECT'), 1),
-('20211000009', '0801202400019', 'prueba9@unah.hn', AES_ENCRYPT('prueba', 'ISPROJECT'), 1),
-('20211000010', '0801202401110', 'prueba10@unah.hn', AES_ENCRYPT('prueba', 'ISPROJECT'), 1);
+('20211000002', '0810000011', 'luciacas@unah.hn', AES_ENCRYPT('prueba', 'ISPROJECT'), 1);
 
 INSERT INTO 
   `Section` (
@@ -850,3 +844,30 @@ WHERE emp.department_id = (
 )
 ORDER BY ste.created_at DESC;
 
+-- Register Agent
+INSERT INTO `Persons`(person_id, first_name, last_name) VALUES ('0810000002', 'Daniel', 'Rivera');
+CALL `CreateAdministrator`('0810000002', 2, 'DR0810.2', 'danielrivera@unah.hn', null);
+INSERT INTO `Persons`(person_id, first_name, last_name) VALUES ('0810000003', 'Sofía', 'López');
+CALL `CreateAdministrator`('0810000003', 2, 'SL0810.2', 'sofialopez@unah.hn', null);
+
+-- Department Head
+INSERT INTO `Persons`(person_id, first_name, last_name) VALUES ('0810000004', 'Mateo', 'García');
+CALL `CreateAdministrator`('0810000004', 3, 'MG0810.3', 'mateogar@unah.hn', 1);
+INSERT INTO `Persons`(person_id, first_name, last_name) VALUES ('0810000005', 'Maria', 'Torres');
+CALL `CreateAdministrator`('0810000005', 3, 'IT0810.3', 'mariatorres@unah.hn', 2);
+
+-- Coordinator
+INSERT INTO `Persons`(person_id, first_name, last_name) VALUES ('0810000006', 'Diego', 'Martínez');
+CALL `CreateAdministrator`('0810000006', 4, 'DM0810.6', 'diegomartinez@unah.hn', 1);
+INSERT INTO `Persons`(person_id, first_name, last_name) VALUES ('0810000007', 'Camila', 'Sánchez');
+CALL `CreateAdministrator`('0810000007', 4, 'CS0810.7', 'camilasanchez@unah.hn', 2);
+
+-- Teacher
+INSERT INTO `Persons`(person_id, first_name, last_name) VALUES ('0810000008', 'Javier', 'Gómez');
+CALL `CreateAdministrator`('0810000008', 5, 'JG0810.8', 'javiergomez@unah.hn', 1);
+INSERT INTO `Persons`(person_id, first_name, last_name) VALUES ('0810000009', 'Valentina', 'Herrera');
+CALL `CreateAdministrator`('0810000009', 5, 'VH0810.9', 'valentinaherrera@unah.hn', 2);
+
+-- Students
+INSERT INTO `Persons`(person_id, first_name, last_name) VALUES ('0810000010', 'Samuel', 'Pérez');
+INSERT INTO `Persons`(person_id, first_name, last_name) VALUES ('0810000011', 'Lucía', 'Castillo');
