@@ -44,7 +44,7 @@ section = sectionId;
                     const row = `
                         <tr>
                             <td class="bg-aux text">${index + 1}</td>
-                            <td class="bg-aux text"><a href="http://localhost/views/students/profile/index.php?account_number=${student.account_number}">${student.full_name}</a></td>
+                            <td class="bg-aux text"><a href="/views/students/profile/index.php?account_number=${student.account_number}">${student.full_name}</a></td>
                             <td class="bg-aux text">${student.account_number}</td>
                             <td class="bg-aux text">${student.institute_email}</td>
                         </tr>
