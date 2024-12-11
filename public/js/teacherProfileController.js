@@ -25,30 +25,27 @@ document.addEventListener("DOMContentLoaded", () => {
         .catch(error => console.error("Error al obtener los datos del perfil:", error));
 });
 
-    // Función para crear las tarjetas
-    function createCard(sectionId, hourStart, classCode, className) {
-        return `
-            <div class="col-md-4 mb-3">
-                <div class="card bg-light border-secondary">
-                    <div class="card-body">
-                        <h5 class="card-title">${className} (${classCode})</h5>
-                        <p class="card-text">
-                            <strong>Sección ID:</strong> ${sectionId}<br>
-                            <strong>Hora de inicio:</strong> ${hourStart}
-                        </p>
-                    </div>
-                </div>
-            </div>
-        `;
-    }
+// Función para obtener parámetros de la URL
+function getEmployeeNumberFromURL() {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get('employee_number');
+}
 
-    // Función para cargar las tarjetas desde el backend
+// Obtener el número de empleado desde la URL
+const employeeNumber = getEmployeeNumberFromURL();
+
+// Verificar si employeeNumber está definido antes de cargar las clases
+if (!employeeNumber) {
+    console.error('El número de empleado no está presente en la URL');
+    document.querySelector('#classesHistoryTable tbody').innerHTML = '<tr><td colspan="4">Error: Falta el número de empleado en la URL.</td></tr>';
+} else {
+    // Función para cargar el historial de clases
     async function loadClassesHistory() {
-        const historyContainer = document.getElementById('history');
-        historyContainer.innerHTML = '<p>Cargando...</p>';
+        const tableBody = document.querySelector('#classesHistoryTable tbody');
+        tableBody.innerHTML = '<tr><td colspan="4">Cargando...</td></tr>';
 
         try {
-            const response = await fetch('/api/get/admin/classesHistory.php');
+            const response = await fetch(`/api/get/admin/classesHistoryByEmpId.php?employee_number=${employeeNumber}`);
             if (!response.ok) {
                 throw new Error(`Error al obtener los datos: ${response.statusText}`);
             }
@@ -56,22 +53,31 @@ document.addEventListener("DOMContentLoaded", () => {
 
             // Verificar si hay datos
             if (data.length === 0) {
-                historyContainer.innerHTML = '<p>No hay clases asignadas en el historial.</p>';
+                tableBody.innerHTML = '<tr><td colspan="4">No hay clases asignadas en el historial.</td></tr>';
                 return;
             }
 
-            // Generar las tarjetas
-            const cards = data.map(item => 
-                createCard(item.section_id, item.hour_start, item.class_code, item.class_name)
-            ).join('');
+            // Generar las filas de la tabla
+            const rows = data.map(item => `
+                <tr>
+                    <td>${item.section_id}</td>
+                    <td>${item.hour_start}</td>
+                    <td>${item.class_code}</td>
+                    <td>${item.class_name}</td>
+                </tr>
+            `).join('');
 
-            // Colocar las tarjetas en el contenedor
-            historyContainer.innerHTML = cards;
+            // Colocar las filas en la tabla
+            tableBody.innerHTML = rows;
+
+            // Inicializar o recargar la paginación
+            $('#classesHistoryTable').DataTable();
         } catch (error) {
             console.error('Error al cargar el historial de clases:', error);
-            historyContainer.innerHTML = '<p>Error al cargar el historial de clases.</p>';
+            tableBody.innerHTML = '<tr><td colspan="4">Error al cargar el historial de clases.</td></tr>';
         }
     }
 
     // Cargar el historial al cargar la página
     document.addEventListener('DOMContentLoaded', loadClassesHistory);
+}
